@@ -1,8 +1,7 @@
 package com.example.training.controller;
 
 
-import com.example.training.model.AppUser;
-import com.example.training.model.AppUserResponseDto;
+import com.example.training.dto.AppUserResponseDto;
 import com.example.training.service.AppUserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -30,6 +29,13 @@ public class AppUserController {
         AppUserResponseDto userResponseDto= appUserService.getUserById(id);
         return new ResponseEntity<>(userResponseDto, HttpStatus.OK);
     }
+
+
+//   @PostMapping
+//   public ResponseEntity<AppUserResponseDto> login(@RequestBody LoginRequestDto loginRequestDto) {
+//       AppUserResponseDto userResponseDto = traineeRegistrationService.login(loginRequestDto);
+//       return new ResponseEntity<>(userResponseDto, HttpStatus.OK);
+//   }
 
 
 

@@ -1,5 +1,6 @@
-package com.example.training.model;
+package com.example.training.dto;
 
+import com.example.training.model.AppUserRole;
 import jakarta.persistence.Column;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;

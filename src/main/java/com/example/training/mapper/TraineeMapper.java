@@ -15,8 +15,8 @@ public interface TraineeMapper {
     TraineeMapper INSTANCE = Mappers.getMapper(TraineeMapper.class);
 
     @Mapping(source = "username",target = "username")
-    @Mapping(source = "email",target = "email")
     @Mapping(source = "password",target = "password")
+    @Mapping(source = "firstName",target = "firstName")
     AppUser registeredTraineeToUser(TraineeRegistrationDto traineeRegistrationDto);
 
 

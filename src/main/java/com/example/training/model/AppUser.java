@@ -20,15 +20,11 @@ public class AppUser {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank(message = "Email cannot be blank")
-    @Size(max = 50)
-    private String email;
-
-    @NotBlank(message = "Username cannot be blank")
-    @Column(length = 100)
+    // should be unique
+    @Column(nullable=false, unique=true)
     private String username;
 
-    @NotBlank(message = "Password cannot be blank")
+    @Column(nullable=false)
     private String password;
 
     @Enumerated(EnumType.STRING)
@@ -40,6 +36,7 @@ public class AppUser {
 
     private String fullName;
 
+    // should be enabled when registration is valid
     private boolean isEnabled=false;
 
 }

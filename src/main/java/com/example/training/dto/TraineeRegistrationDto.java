@@ -12,10 +12,14 @@ import lombok.Setter;
 @Getter
 public class TraineeRegistrationDto {
 
+    @NotEmpty(message = "Email should not be empty")
     private String username;
 
-    private String email;
-
+    @NotEmpty(message = "Password should not be empty")
     private String password;
+
+    @NotEmpty
+    private String firstName;
+
 
 }

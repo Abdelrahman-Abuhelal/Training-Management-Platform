@@ -4,7 +4,7 @@ import com.example.training.dto.TraineeRegistrationDto;
 import com.example.training.mapper.AppUserMapper;
 import com.example.training.mapper.TraineeMapper;
 import com.example.training.model.AppUser;
-import com.example.training.model.AppUserResponseDto;
+import com.example.training.dto.AppUserResponseDto;
 import com.example.training.repository.TraineeRepository;
 import com.example.training.service.TraineeRegistrationService;
 import org.junit.jupiter.api.BeforeEach;

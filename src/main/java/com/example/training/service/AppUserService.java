@@ -3,14 +3,10 @@ package com.example.training.service;
 import com.example.training.exception.AppUserNotFoundException;
 import com.example.training.mapper.AppUserMapper;
 import com.example.training.model.AppUser;
-import com.example.training.model.AppUserResponseDto;
+import com.example.training.dto.AppUserResponseDto;
 import com.example.training.repository.AppUserRepository;
-import jakarta.validation.constraints.Null;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
 
@@ -33,6 +29,9 @@ public class AppUserService {
         }
         return appUserMapper.userToUserDto(users);
     }
+
+
+
 
 
 }

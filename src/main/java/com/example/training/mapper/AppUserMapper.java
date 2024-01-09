@@ -2,7 +2,7 @@ package com.example.training.mapper;
 
 
 import com.example.training.model.AppUser;
-import com.example.training.model.AppUserResponseDto;
+import com.example.training.dto.AppUserResponseDto;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
