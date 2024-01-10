@@ -1,10 +1,6 @@
 package com.example.training.dto;
 
 import com.example.training.model.AppUserRole;
-import jakarta.persistence.Column;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.Id;
 import lombok.*;
 
 
@@ -12,7 +8,7 @@ import lombok.*;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class AppUserResponseDto {
+public class AppUserResponse {
 
 
     private Long userId;

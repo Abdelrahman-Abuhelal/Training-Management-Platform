@@ -1,8 +1,8 @@
 package com.example.training.mapper;
 
 
+import com.example.training.dto.AppUserResponse;
 import com.example.training.model.AppUser;
-import com.example.training.dto.AppUserResponseDto;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
@@ -21,20 +21,20 @@ public interface AppUserMapper {
     @Mapping(source = "appUser.id",target = "userId")
     @Mapping(source = "appUser.username",target = "userUsername")
     @Mapping(source = "appUser.role",target = "userRole")
-    AppUserResponseDto userToUserDto(AppUser appUser);
+    AppUserResponse userToUserDto(AppUser appUser);
 
     @Mapping(source = "appUser.id",target = "userId")
     @Mapping(source = "appUser.username",target = "userUsername")
     @Mapping(source = "appUser.role",target = "userRole")
-    List<AppUserResponseDto> userToUserDto(List<AppUser> appUser);
-    @Mapping(source = "appUserResponseDto.userId",target = "id")
-    @Mapping(source = "appUserResponseDto.userUsername",target = "username")
-    @Mapping(source = "appUserResponseDto.userRole",target = "role")
-    AppUser userDtoToUser(AppUserResponseDto appUserResponseDto);
+    List<AppUserResponse> userToUserDto(List<AppUser> appUser);
+    @Mapping(source = "appUserResponse.userId",target = "id")
+    @Mapping(source = "appUserResponse.userUsername",target = "username")
+    @Mapping(source = "appUserResponse.userRole",target = "role")
+    AppUser userDtoToUser(AppUserResponse appUserResponse);
 
-    @Mapping(source = "appUserResponseDto.userId",target = "id")
-    @Mapping(source = "appUserResponseDto.userUsername",target = "username")
-    @Mapping(source = "appUserResponseDto.userRole",target = "role")
-    AppUser userDtoToUser(AppUserResponseDto appUserResponseDto, @MappingTarget AppUser appUser);
+    @Mapping(source = "appUserResponse.userId",target = "id")
+    @Mapping(source = "appUserResponse.userUsername",target = "username")
+    @Mapping(source = "appUserResponse.userRole",target = "role")
+    AppUser userDtoToUser(AppUserResponse appUserResponse, @MappingTarget AppUser appUser);
 
 }

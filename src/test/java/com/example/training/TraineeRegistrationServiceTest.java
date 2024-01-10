@@ -1,10 +1,10 @@
 package com.example.training;
 
+import com.example.training.dto.AppUserResponse;
 import com.example.training.dto.RegistrationRequest;
 import com.example.training.mapper.AppUserMapper;
 import com.example.training.mapper.TraineeMapper;
 import com.example.training.model.AppUser;
-import com.example.training.dto.AppUserResponseDto;
 import com.example.training.repository.TraineeRepository;
 import com.example.training.service.TraineeRegistrationService;
 import org.junit.jupiter.api.BeforeEach;
@@ -48,10 +48,10 @@ class TraineeRegistrationServiceTest {
 
         when(traineeMapper.registeredTraineeToUser(registrationDto)).thenReturn(appUser);
         when(traineeRepository.save(any(AppUser.class))).thenReturn(appUser);
-        when(appUserMapper.userToUserDto(appUser)).thenReturn(new AppUserResponseDto());
+        when(appUserMapper.userToUserDto(appUser)).thenReturn(new AppUserResponse());
 
         // When
-        AppUserResponseDto response = traineeService.registerTrainee(registrationDto);
+        AppUserResponse response = traineeService.registerTrainee(registrationDto);
 
         // Then
         // Add assertions or verifications based on expected behavior or returned response

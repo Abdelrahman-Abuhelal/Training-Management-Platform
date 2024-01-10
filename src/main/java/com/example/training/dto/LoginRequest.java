@@ -1,14 +1,13 @@
 package com.example.training.dto;
 
 
-import jakarta.validation.constraints.NotEmpty;
 import lombok.*;
 
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class LoginRequestDto {
+public class LoginRequest {
 
     private String username;
     private String password;

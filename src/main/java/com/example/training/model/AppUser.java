@@ -39,6 +39,8 @@ public class AppUser implements UserDetails {
 
     private String fullName;
 
+    @OneToMany(mappedBy = "user")
+    private List<Token> tokens;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

@@ -1,7 +1,7 @@
 package com.example.training.controller;
 
 
-import com.example.training.dto.AppUserResponseDto;
+import com.example.training.dto.AppUserResponse;
 import com.example.training.service.AppUserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -19,21 +19,21 @@ public class AppUserController {
 
 
     @GetMapping
-    public ResponseEntity<List<AppUserResponseDto>> getAllUsers(){
-        List<AppUserResponseDto> userList= appUserService.getAllUsers();
+    public ResponseEntity<List<AppUserResponse>> getAllUsers(){
+        List<AppUserResponse> userList= appUserService.getAllUsers();
         return new ResponseEntity<>(userList, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<AppUserResponseDto> getUserById(@PathVariable Long id){
-        AppUserResponseDto userResponseDto= appUserService.getUserById(id);
+    public ResponseEntity<AppUserResponse> getUserById(@PathVariable Long id){
+        AppUserResponse userResponseDto= appUserService.getUserById(id);
         return new ResponseEntity<>(userResponseDto, HttpStatus.OK);
     }
 
 
 //   @PostMapping
-//   public ResponseEntity<AppUserResponseDto> login(@RequestBody LoginRequestDto loginRequestDto) {
-//       AppUserResponseDto userResponseDto = traineeRegistrationService.login(loginRequestDto);
+//   public ResponseEntity<AppUserResponse> login(@RequestBody LoginRequestDto loginRequestDto) {
+//       AppUserResponse userResponseDto = traineeRegistrationService.login(loginRequestDto);
 //       return new ResponseEntity<>(userResponseDto, HttpStatus.OK);
 //   }
 

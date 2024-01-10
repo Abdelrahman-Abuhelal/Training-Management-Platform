@@ -1,9 +1,9 @@
 package com.example.training.service;
 
+import com.example.training.dto.AppUserResponse;
 import com.example.training.exception.AppUserNotFoundException;
 import com.example.training.mapper.AppUserMapper;
 import com.example.training.model.AppUser;
-import com.example.training.dto.AppUserResponseDto;
 import com.example.training.model.AppUserRole;
 import com.example.training.repository.TraineeRepository;
 import lombok.RequiredArgsConstructor;
@@ -17,12 +17,12 @@ import java.util.Optional;
 @Slf4j
 @RequiredArgsConstructor
 
-public class AdminTraineeService {
+public class AdminService {
 
     private final TraineeRepository traineeRepository;
 
     private final AppUserMapper userMapper;
-    public AppUserResponseDto getTraineeById(Long id){
+    public AppUserResponse getTraineeById(Long id){
         Optional<AppUser> trainee=traineeRepository.findById(id);
         if (trainee.isEmpty()){
             String message=String.format("the trainee with the id %s  is not found",id);
@@ -33,7 +33,7 @@ public class AdminTraineeService {
     }
 
 
-    public List<AppUserResponseDto> getAllTrainees(){
+    public List<AppUserResponse> getAllTrainees(){
         Optional<List<AppUser>> trainees=traineeRepository.findByRole(AppUserRole.TRAINEE);
         if (trainees.isEmpty()){
             String message= "there are no trainees";
