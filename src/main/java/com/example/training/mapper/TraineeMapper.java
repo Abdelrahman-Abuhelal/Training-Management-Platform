@@ -1,6 +1,6 @@
 package com.example.training.mapper;
 
-import com.example.training.dto.TraineeRegistrationDto;
+import com.example.training.dto.RegistrationRequest;
 import com.example.training.model.AppUser;
 import com.example.training.model.AppUserRole;
 import org.mapstruct.AfterMapping;
@@ -17,7 +17,7 @@ public interface TraineeMapper {
     @Mapping(source = "username",target = "username")
     @Mapping(source = "password",target = "password")
     @Mapping(source = "firstName",target = "firstName")
-    AppUser registeredTraineeToUser(TraineeRegistrationDto traineeRegistrationDto);
+    AppUser registeredTraineeToUser(RegistrationRequest registrationRequest);
 
 
     @AfterMapping

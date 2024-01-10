@@ -1,6 +1,6 @@
 package com.example.training;
 
-import com.example.training.dto.TraineeRegistrationDto;
+import com.example.training.dto.RegistrationRequest;
 import com.example.training.mapper.AppUserMapper;
 import com.example.training.mapper.TraineeMapper;
 import com.example.training.model.AppUser;
@@ -38,13 +38,13 @@ class TraineeRegistrationServiceTest {
     @Test
     void testRegisterTrainee() {
         // Given
-        TraineeRegistrationDto registrationDto = new TraineeRegistrationDto();
+        RegistrationRequest registrationDto = new RegistrationRequest();
         // Set properties of registrationDto
         registrationDto.setUsername("Abdelrahman");
         registrationDto.setPassword("1241241");
-        registrationDto.setEmail("abd.hilal@gmail.com");
+        registrationDto.setUsername("abd.hilal@gmail.com");
         AppUser appUser = new AppUser();
-        // Set properties of appUser (based on TraineeRegistrationDto)
+        // Set properties of appUser (based on RegistrationRequest)
 
         when(traineeMapper.registeredTraineeToUser(registrationDto)).thenReturn(appUser);
         when(traineeRepository.save(any(AppUser.class))).thenReturn(appUser);

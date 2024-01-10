@@ -1,7 +1,6 @@
 package com.example.training.controller;
 
 
-import com.example.training.dto.TraineeRegistrationDto;
 import com.example.training.dto.AppUserResponseDto;
 import com.example.training.service.AdminTraineeService;
 import com.example.training.service.TraineeRegistrationService;
@@ -14,7 +13,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/auth/trainees")
+@RequestMapping("/api/v1/trainees")
 public class AuthTraineeController {
 
 
@@ -22,12 +21,11 @@ public class AuthTraineeController {
     private final AdminTraineeService adminTraineeService;
 
 
-    @PostMapping
-    public ResponseEntity<AppUserResponseDto> registerTrainee(@RequestBody TraineeRegistrationDto traineeRegistrationDto){
+/*    @PostMapping
+    public ResponseEntity<AppUserResponseDto> registerTrainee(@RequestBody RegistrationRequest traineeRegistrationDto){
         AppUserResponseDto userResponseDto = traineeRegistrationService.registerTrainee(traineeRegistrationDto);
         return new ResponseEntity<>(userResponseDto, HttpStatus.OK);
-    }
-
+    }*/
 
 
     @GetMapping("/{id}")

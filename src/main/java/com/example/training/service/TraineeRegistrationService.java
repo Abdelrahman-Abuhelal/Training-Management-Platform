@@ -1,7 +1,7 @@
 package com.example.training.service;
 
 
-import com.example.training.dto.TraineeRegistrationDto;
+import com.example.training.dto.RegistrationRequest;
 import com.example.training.mapper.AppUserMapper;
 import com.example.training.mapper.TraineeMapper;
 import com.example.training.model.AppUser;
@@ -25,8 +25,8 @@ public class TraineeRegistrationService {
 
 
 
-    public AppUserResponseDto registerTrainee(TraineeRegistrationDto traineeRegistrationDto){
-        AppUser appUser= traineeMapper.registeredTraineeToUser(traineeRegistrationDto);
+    public AppUserResponseDto registerTrainee(RegistrationRequest registrationRequest){
+        AppUser appUser= traineeMapper.registeredTraineeToUser(registrationRequest);
         AppUser savedTraineeUser=traineeRepository.save(appUser);
         return appUserMapper.userToUserDto(savedTraineeUser);
     }
