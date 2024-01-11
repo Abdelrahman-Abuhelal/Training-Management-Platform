@@ -8,10 +8,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 
@@ -20,14 +17,14 @@ import java.io.IOException;
 @RequiredArgsConstructor
 public class AuthenticationController {
 
-    private final AuthenticationService service;
+    private final AuthenticationService authService;
 
 
     // I should make one dto for registration then in the method specify the role
     @PostMapping("/register")
-    public ResponseEntity<AuthenticationResponse> registerTrainee(@RequestBody RegistrationRequest request
+    public ResponseEntity<String> registerTrainee(@RequestBody RegistrationRequest request
     ) {
-        return ResponseEntity.ok(service.registerUser(request));
+        return ResponseEntity.ok(authService.registerUser(request));
     }
 
 
@@ -35,7 +32,12 @@ public class AuthenticationController {
     public ResponseEntity<AuthenticationResponse> authenticate(
             @RequestBody LoginRequest request
     ) {
-        return ResponseEntity.ok(service.authenticate(request));
+        return ResponseEntity.ok(authService.authenticate(request));
+    }
+
+    @GetMapping(value="/confirm-account")
+    public String confirmUserAccount(@RequestParam("token")String confirmationToken) {
+        return authService.confirmEmail(confirmationToken);
     }
 
     @PostMapping("/refresh-token")
@@ -43,7 +45,7 @@ public class AuthenticationController {
             HttpServletRequest request,
             HttpServletResponse response
     ) throws IOException {
-        service.refreshToken(request, response);
+        authService.refreshToken(request, response);
     }
 
 }

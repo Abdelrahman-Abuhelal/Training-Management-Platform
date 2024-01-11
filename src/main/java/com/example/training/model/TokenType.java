@@ -1,5 +1,5 @@
 package com.example.training.model;
 
 public enum TokenType {
-    BEARER
+    BEARER,CONFIRMATION_TOKEN
 }

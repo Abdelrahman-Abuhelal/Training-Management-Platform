@@ -39,6 +39,8 @@ public class AppUser implements UserDetails {
 
     private String fullName;
 
+    private Boolean enabled = false;
+
     @OneToMany(mappedBy = "user")
     private List<Token> tokens;
 
@@ -72,6 +74,6 @@ public class AppUser implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return true;
+        return enabled;
     }
 }
