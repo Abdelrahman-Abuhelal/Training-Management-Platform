@@ -4,6 +4,7 @@ import com.example.training.config.JwtService;
 import com.example.training.dto.AuthenticationResponse;
 import com.example.training.dto.LoginRequest;
 import com.example.training.dto.RegistrationRequest;
+import com.example.training.exception.UserAlreadyExistsException;
 import com.example.training.model.AppUser;
 import com.example.training.model.AppUserRole;
 import com.example.training.model.Token;
@@ -34,13 +35,18 @@ public class AuthenticationService {
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
 
-    public AuthenticationResponse registerTrainee(RegistrationRequest request) {
+    public AuthenticationResponse registerUser(RegistrationRequest request) {
+        if (userAlreadyExists(request.getUsername())){
+            throw new UserAlreadyExistsException(request.getUsername() + " already exists!");
+        }
+        //  Currently it register only as trainee
         var user = AppUser.builder()
                 .firstName(request.getFirstName())
                 .username(request.getUsername())
                 .password(passwordEncoder.encode(request.getPassword()))
                 .role(AppUserRole.TRAINEE)
                 .build();
+
         var savedTrainee = traineeRepository.save(user);
         var jwtToken = jwtService.generateToken(user);
         var refreshToken = jwtService.generateRefreshToken(user);
@@ -49,6 +55,10 @@ public class AuthenticationService {
                 .accessToken(jwtToken)
                 .refreshToken(refreshToken)
                 .build();
+    }
+
+    public boolean userAlreadyExists(String username){
+        return appUserRepository.findByUsername(username).isPresent();
     }
 
     public AuthenticationResponse authenticate(LoginRequest request) {
