@@ -12,7 +12,8 @@ import java.util.Optional;
 
 @Repository
 public interface TraineeRepository extends JpaRepository<AppUser, Long> {
+
     Optional <List<AppUser>> findByRole(AppUserRole role);
-    Optional <AppUser> findByUsername(String username);
+    Optional<AppUser> findByEmail(String email);
 
 }

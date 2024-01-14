@@ -44,7 +44,7 @@ public class AdminService {
     }
 
     public void deleteTraineeByUsername(String username){
-        Optional<AppUser> appUser = traineeRepository.findByUsername(username);
+        Optional<AppUser> appUser = traineeRepository.findByEmail(username);
         if (appUser.isEmpty()){
             String message=String.format("the trainee with the username %s  is not found",username);
             log.info(message);

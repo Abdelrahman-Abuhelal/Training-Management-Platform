@@ -19,21 +19,21 @@ public interface AppUserMapper {
     AppUserMapper INSTANCE = Mappers.getMapper(AppUserMapper.class);
 
     @Mapping(source = "appUser.id",target = "userId")
-    @Mapping(source = "appUser.username",target = "userUsername")
+    @Mapping(source = "appUser.email",target = "userEmail")
     @Mapping(source = "appUser.role",target = "userRole")
     AppUserResponse userToUserDto(AppUser appUser);
 
     @Mapping(source = "appUser.id",target = "userId")
-    @Mapping(source = "appUser.username",target = "userUsername")
+    @Mapping(source = "appUser.email",target = "userEmail")
     @Mapping(source = "appUser.role",target = "userRole")
     List<AppUserResponse> userToUserDto(List<AppUser> appUser);
     @Mapping(source = "appUserResponse.userId",target = "id")
-    @Mapping(source = "appUserResponse.userUsername",target = "username")
+    @Mapping(source = "appUserResponse.userEmail",target = "email")
     @Mapping(source = "appUserResponse.userRole",target = "role")
     AppUser userDtoToUser(AppUserResponse appUserResponse);
 
     @Mapping(source = "appUserResponse.userId",target = "id")
-    @Mapping(source = "appUserResponse.userUsername",target = "username")
+    @Mapping(source = "appUserResponse.userEmail",target = "email")
     @Mapping(source = "appUserResponse.userRole",target = "role")
     AppUser userDtoToUser(AppUserResponse appUserResponse, @MappingTarget AppUser appUser);
 

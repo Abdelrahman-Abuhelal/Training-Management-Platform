@@ -14,9 +14,11 @@ import org.mapstruct.factory.Mappers;
 public interface TraineeMapper {
     TraineeMapper INSTANCE = Mappers.getMapper(TraineeMapper.class);
 
-    @Mapping(source = "username",target = "username")
+    @Mapping(source = "email",target = "email")
     @Mapping(source = "password",target = "password")
     @Mapping(source = "firstName",target = "firstName")
+    @Mapping(source = "lastName",target = "lastName")
+    @Mapping(source = "role",target = "role")
     AppUser registeredTraineeToUser(RegistrationRequest registrationRequest);
 
 
