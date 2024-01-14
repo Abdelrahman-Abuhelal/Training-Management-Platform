@@ -13,7 +13,7 @@ public class AppUserResponse {
 
     private Long userId;
 
-    private String userEmail;
+    private String userUsername;
 
     private AppUserRole userRole;
 

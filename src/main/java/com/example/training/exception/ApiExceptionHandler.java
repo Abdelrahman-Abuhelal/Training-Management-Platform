@@ -30,9 +30,4 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
     public ResponseEntity<String> handleInvalidTokenException(InvalidTokenException ex) {
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
     }
-
-    @ExceptionHandler(AccountAlreadyActivatedException.class)
-    public ResponseEntity<String> handleAccountAlreadyActivatedException(AccountAlreadyActivatedException ex) {
-        return new ResponseEntity<>(ex.getMessage(), HttpStatus.CONFLICT);
-    }
 }

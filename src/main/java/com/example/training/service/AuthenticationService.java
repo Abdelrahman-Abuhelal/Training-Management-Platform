@@ -1,7 +1,13 @@
 package com.example.training.service;
 
-import com.example.training.dto.*;
-import com.example.training.exception.*;
+import com.example.training.dto.AuthenticationResponse;
+import com.example.training.dto.ChangePasswordRequest;
+import com.example.training.dto.LoginRequest;
+import com.example.training.dto.RegistrationRequest;
+import com.example.training.exception.AppUserNotFoundException;
+import com.example.training.exception.InvalidTokenException;
+import com.example.training.exception.TokenNotFoundException;
+import com.example.training.exception.UserAlreadyExistsException;
 import com.example.training.model.AppUser;
 import com.example.training.model.AppUserRole;
 import com.example.training.model.Token;
@@ -21,6 +27,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.security.Principal;
 
 @Service
 @RequiredArgsConstructor
@@ -34,15 +41,15 @@ public class AuthenticationService {
     private final EmailService emailService;
 
     public String registerUser(RegistrationRequest request) {
-        if (userAlreadyExists(request.getEmail())){
-            throw new UserAlreadyExistsException(request.getEmail() + " already exists!");
+        if (userAlreadyExists(request.getUsername())){
+            throw new UserAlreadyExistsException(request.getUsername() + " already exists!");
         }
+        //  Currently it register only as trainee
         var user = AppUser.builder()
-                .email(request.getEmail())
-                .password(passwordEncoder.encode(request.getPassword()))
                 .firstName(request.getFirstName())
-                .lastName(request.getLastName())
-                .role(request.getRole())
+                .username(request.getUsername())
+                .password(passwordEncoder.encode(request.getPassword()))
+                .role(AppUserRole.TRAINEE)
                 .enabled(false)
                 .build();
 
@@ -54,16 +61,15 @@ public class AuthenticationService {
         if(tokenRepository.findByToken(jwtToken).isPresent()){
             sendEmailMessage(user,tokenRepository.findByToken(jwtToken).get());
         }
-        log.info("account need verification (NOT ACTIVE)");
         // Should better return a json object
-        return "Verify your account by the link sent into your email address: " +user.getEmail();
+        return "Verify your account by the link sent into your email address: " +user.getUsername();
     }
 
     public void sendEmailMessage(AppUser user,Token token){
         SimpleMailMessage mailMessage = new SimpleMailMessage();
-        mailMessage.setTo(user.getEmail());
+        mailMessage.setTo(user.getUsername());
         mailMessage.setSubject("Complete Registration!");
-        mailMessage.setText("To confirm your account in the Exalt Training Application, please click here : "
+        mailMessage.setText("To confirm your account, please click here : "
                 +"http://localhost:8080/api/v1/auth/confirm-account?token="+token.getToken());
         emailService.sendEmail(mailMessage);
         log.info("Confirmation Token: " + token.getToken());
@@ -71,17 +77,17 @@ public class AuthenticationService {
     }
 
     public boolean userAlreadyExists(String username){
-        return appUserRepository.findByEmail(username).isPresent();
+        return appUserRepository.findByUsername(username).isPresent();
     }
 
     public AuthenticationResponse authenticate(LoginRequest request) {
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
-                        request.getEmail(),
+                        request.getUsername(),
                         request.getPassword()
                 )
         );
-        var user = appUserRepository.findByEmail(request.getEmail())
+        var user = appUserRepository.findByUsername(request.getUsername())
                 .orElseThrow();
         var jwtToken = jwtService.generateToken(user);
         var refreshToken = jwtService.generateRefreshToken(user);
@@ -117,7 +123,7 @@ public class AuthenticationService {
 
 
     private void revokeAllUserTokens(AppUser user) {
-        var validUserTokens = appUserRepository.findAllValidTokenByUser(user.getId());
+        var validUserTokens = tokenRepository.findAllValidTokenByUser(user.getId());
         if (validUserTokens.isEmpty())
             return;
         validUserTokens.forEach(token -> {
@@ -127,31 +133,21 @@ public class AuthenticationService {
         tokenRepository.saveAll(validUserTokens);
     }
 
-    public ConfirmedAccountResponse confirmAccount(String confirmationToken) {
-        ConfirmedAccountResponse confirmedAccountResponse=new ConfirmedAccountResponse();
+    public String confirmEmail(String confirmationToken) {
        Token token=  tokenRepository.findByToken(confirmationToken).orElseThrow(
                ()-> new TokenNotFoundException("Given Token not found stored"));
-       AppUser user = appUserRepository.findByEmail(token.getUser().getEmail()).orElseThrow(
+       AppUser user = appUserRepository.findByUsername(token.getUser().getUsername()).orElseThrow(
                () -> new AppUserNotFoundException("User not found with this token")
        );
         if(!jwtService.isTokenValid(token.getToken(), token.getUser())){
             throw new InvalidTokenException("Token expired, try confirm your email again");
         }
-        if(user.getEnabled()){
-            confirmedAccountResponse.setStatus("ACTIVE");
-            confirmedAccountResponse.setMessage("Account is activated before");
-            throw new AccountAlreadyActivatedException("Account is activated before");
-        }
         user.setEnabled(true);
-        log.info("account has been enabled (ACTIVE)");
-        appUserRepository.save(user);
-        confirmedAccountResponse.setStatus("ACTIVE");
-        confirmedAccountResponse.setMessage("Account has been activated");
-        log.info("%s account has been activated", user.getFirstName());
-        return confirmedAccountResponse;
+       appUserRepository.save(user);
+       return "User "+ user.getFirstName() +" account has been activated";
     }
 
-   /* public void changePassword(ChangePasswordRequest request, Principal connectedUser) {
+    public void changePassword(ChangePasswordRequest request, Principal connectedUser) {
 
         var user = (AppUser) ((UsernamePasswordAuthenticationToken) connectedUser).getPrincipal();
 
@@ -169,8 +165,7 @@ public class AuthenticationService {
 
         // save the new password
         appUserRepository.save(user);
-    }*/
-
+    }
     public void refreshToken(
             HttpServletRequest request,
             HttpServletResponse response
@@ -182,9 +177,9 @@ public class AuthenticationService {
             return;
         }
         refreshToken = authHeader.substring(7);
-        userEmail = jwtService.extractEmail(refreshToken);
+        userEmail = jwtService.extractUsername(refreshToken);
         if (userEmail != null) {
-            var user = this.appUserRepository.findByEmail(userEmail)
+            var user = this.appUserRepository.findByUsername(userEmail)
                     .orElseThrow();
             if (jwtService.isTokenValid(refreshToken, user)) {
                 var accessToken = jwtService.generateToken(user);

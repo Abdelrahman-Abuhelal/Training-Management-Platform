@@ -24,14 +24,11 @@ public class AppUser implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Getter
     @Column(nullable=false, unique=true)
-    private String email;
+    private String username;
 
     @Column(nullable=false)
     private String password;
-
-    private String username;
 
     @Enumerated(EnumType.STRING)
     private AppUserRole role;
@@ -54,6 +51,10 @@ public class AppUser implements UserDetails {
     @Override
     public String getPassword() {
         return password;
+    }
+    @Override
+    public String getUsername() {
+        return username;
     }
 
     @Override

@@ -1,13 +1,11 @@
 package com.example.training.controller;
 
 import com.example.training.dto.AuthenticationResponse;
-import com.example.training.dto.ConfirmedAccountResponse;
 import com.example.training.dto.LoginRequest;
 import com.example.training.dto.RegistrationRequest;
 import com.example.training.service.AuthenticationService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -24,7 +22,7 @@ public class AuthenticationController {
 
     // I should make one dto for registration then in the method specify the role
     @PostMapping("/register")
-    public ResponseEntity<String> registerTrainee(@RequestBody @Valid RegistrationRequest request
+    public ResponseEntity<String> registerTrainee(@RequestBody RegistrationRequest request
     ) {
         return ResponseEntity.ok(authService.registerUser(request));
     }
@@ -38,8 +36,8 @@ public class AuthenticationController {
     }
 
     @GetMapping(value="/confirm-account")
-    public ResponseEntity<ConfirmedAccountResponse> confirmUserAccount(@RequestParam("token")String confirmationToken) {
-        return ResponseEntity.ok(authService.confirmAccount(confirmationToken));
+    public String confirmUserAccount(@RequestParam("token")String confirmationToken) {
+        return authService.confirmEmail(confirmationToken);
     }
 
     @PostMapping("/refresh-token")
