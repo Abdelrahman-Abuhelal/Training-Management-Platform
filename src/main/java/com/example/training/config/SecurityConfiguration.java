@@ -47,12 +47,12 @@ public class SecurityConfiguration {
 
     private final AuthenticationProvider authenticationProvider;
     private final JwtAuthenticationFilter jwtAuthFilter;
-    @Qualifier("delegatedAuthenticationEntryPoint")
-    AuthenticationEntryPoint authEntryPoint;
+    private final LogoutHandler logoutHandler;
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .csrf().disable()
+                .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(
                         req ->
                                 req.requestMatchers(AUTH_WHITELIST)
@@ -62,7 +62,11 @@ public class SecurityConfiguration {
                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(STATELESS))
                 .authenticationProvider(authenticationProvider)
-                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
+                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
+                .logout(logout ->
+                        logout.logoutUrl("/api/v1/auth/logout")
+                                .addLogoutHandler(logoutHandler)
+                                .logoutSuccessHandler((request, response, authentication) -> SecurityContextHolder.clearContext()));
         ;
 
         return http.build();

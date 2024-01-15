@@ -1,6 +1,7 @@
 package com.example.training.model;
 
 import jakarta.persistence.*;
+import org.springframework.lang.Nullable;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.*;
@@ -43,6 +44,10 @@ public class AppUser implements UserDetails {
     private String fullName;
 
     private Boolean enabled = false;
+
+    @Nullable
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    private Trainee trainee;
 
     @OneToMany(mappedBy = "user")
     private List<Token> tokens;

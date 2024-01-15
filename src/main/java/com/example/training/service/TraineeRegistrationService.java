@@ -25,11 +25,7 @@ public class TraineeRegistrationService {
 
 
 
-    public AppUserResponse registerTrainee(RegistrationRequest registrationRequest){
-        AppUser appUser= traineeMapper.registeredTraineeToUser(registrationRequest);
-        AppUser savedTraineeUser=traineeRepository.save(appUser);
-        return appUserMapper.userToUserDto(savedTraineeUser);
-    }
+
 
 
 

@@ -4,7 +4,10 @@ package com.example.training.dto;
 import com.example.training.model.AppUserRole;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 @Data
@@ -13,19 +16,21 @@ import lombok.*;
 @NoArgsConstructor
 public class RegistrationRequest {
 
+    @Email(message = "Please provide a valid email address")
     @NotEmpty(message = "Email should not be empty")
     private String email;
 
     @NotEmpty(message = "Password should not be empty")
     private String password;
 
-    @NotEmpty
+    @NotEmpty(message = "First name should not be empty")
     private String firstName;
 
-    @NotEmpty
+    @NotEmpty(message = "Last name should not be empty")
     private String lastName;
 
     @Enumerated(EnumType.STRING)
+    @NotNull(message = "Role should not be empty")
     private AppUserRole role;
 
 

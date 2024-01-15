@@ -14,6 +14,8 @@ import org.mapstruct.factory.Mappers;
 public interface TraineeMapper {
     TraineeMapper INSTANCE = Mappers.getMapper(TraineeMapper.class);
 
+
+    //this is now wrong
     @Mapping(source = "email",target = "email")
     @Mapping(source = "password",target = "password")
     @Mapping(source = "firstName",target = "firstName")
