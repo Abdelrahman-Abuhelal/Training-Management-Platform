@@ -2,12 +2,15 @@ package exalt.training.management.controller;
 
 
 import exalt.training.management.dto.AppUserResponse;
+import exalt.training.management.dto.ChangePasswordRequest;
 import exalt.training.management.service.AppUserService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.List;
 
 @RestController
@@ -16,6 +19,14 @@ import java.util.List;
 public class AppUserController {
 
     private final AppUserService appUserService;
+
+
+    @PostMapping("/change-password")
+    public ResponseEntity<String> changePassword(@RequestBody
+                                                     @Valid ChangePasswordRequest request, Principal user
+    )  {
+        return ResponseEntity.ok(appUserService.changePassword(request, user));
+    }
 
 
     @GetMapping

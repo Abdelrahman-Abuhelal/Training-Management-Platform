@@ -1,12 +1,14 @@
 package exalt.training.management.dto;
 
 
+import exalt.training.management.config.password.StrongPassword;
 import exalt.training.management.model.AppUserRole;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.*;
 
 @Data
@@ -20,6 +22,7 @@ public class RegistrationRequest {
     private String email;
 
     @NotEmpty(message = "Password should not be empty")
+    @StrongPassword
     private String password;
 
     @NotEmpty(message = "First name should not be empty")

@@ -1,9 +1,7 @@
 package exalt.training.management.service;
 
 
-import exalt.training.management.dto.ConfirmedAccountResponse;
-import exalt.training.management.dto.LoginRequest;
-import exalt.training.management.dto.RegistrationRequest;
+import exalt.training.management.dto.*;
 import exalt.training.management.exception.*;
 import exalt.training.management.model.AppUser;
 import exalt.training.management.model.Token;
@@ -11,7 +9,6 @@ import exalt.training.management.model.TokenType;
 import exalt.training.management.repository.AppUserRepository;
 import exalt.training.management.repository.TokenRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import exalt.training.management.dto.AuthenticationResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -24,6 +21,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.security.Principal;
 
 @Service
 @RequiredArgsConstructor
@@ -143,7 +141,7 @@ public class AuthenticationService {
         if(user.getEnabled()){
             confirmedAccountResponse.setStatus("ACTIVE");
             confirmedAccountResponse.setMessage("Account is activated before");
-            throw new AccountAlreadyActivatedException("Account is activated before");
+            return confirmedAccountResponse;
         }
         user.setEnabled(true);
         log.info("account has been enabled (ACTIVE)");
@@ -154,25 +152,7 @@ public class AuthenticationService {
         return confirmedAccountResponse;
     }
 
-   /* public void changePassword(ChangePasswordRequest request, Principal connectedUser) {
 
-        var user = (AppUser) ((UsernamePasswordAuthenticationToken) connectedUser).getPrincipal();
-
-        // check if the current password is correct
-        if (!passwordEncoder.matches(request.getCurrentPassword(), user.getPassword())) {
-            throw new IllegalStateException("Wrong password");
-        }
-        // check if the two new passwords are the same
-        if (!request.getNewPassword().equals(request.getConfirmationPassword())) {
-            throw new IllegalStateException("Password are not the same");
-        }
-
-        // update the password
-        user.setPassword(passwordEncoder.encode(request.getNewPassword()));
-
-        // save the new password
-        appUserRepository.save(user);
-    }*/
 
     public void refreshToken(
             HttpServletRequest request,
