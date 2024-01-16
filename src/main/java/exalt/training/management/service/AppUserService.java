@@ -54,6 +54,11 @@ public class AppUserService {
         return appUserMapper.userToUserDto(appUser);
     }
 
+    public AppUser getUserByEmail(String email){
+        AppUser appUser = appUserRepository.findByEmail(email).orElseThrow(()-> new AppUserNotFoundException("There is no registered user with this email: "+ email));
+        return appUser;
+    }
+
     public List<AppUserResponse> getAllUsers(){
         List<AppUser>users= appUserRepository.findAll();
         if (users.isEmpty()){

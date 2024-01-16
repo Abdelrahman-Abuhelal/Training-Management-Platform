@@ -1,5 +1,5 @@
 package exalt.training.management.model;
 
 public enum TokenType {
-    BEARER,CONFIRMATION_TOKEN
+    LOGIN,CONFIRMATION_TOKEN,FORGOT_PASS
 }

@@ -21,13 +21,14 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
-import java.security.Principal;
 
 @Service
 @RequiredArgsConstructor
 @Slf4j
 public class AuthenticationService {
+    //should use only service here !! I have to change it
     private final AppUserRepository appUserRepository;
+    private final AppUserService appUserService;
     private final TokenRepository tokenRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
@@ -53,17 +54,32 @@ public class AuthenticationService {
         var refreshToken = jwtService.generateRefreshToken(user);
         saveUserConfirmationToken(savedUser, jwtToken);
         if(tokenRepository.findByToken(jwtToken).isPresent()){
-            sendEmailMessage(user,tokenRepository.findByToken(jwtToken).get());
+            sendAccountConfirmationEmail(user,tokenRepository.findByToken(jwtToken).get());
         }
         log.info("account need verification (NOT ACTIVE)");
         // Should better return a json object
         return "Verify your account by the link sent into your email address: " +user.getEmail();
     }
 
-    public void sendEmailMessage(AppUser user,Token token){
+
+
+
+    public String forgotPasswordViaEmail(String email){
+        AppUser user = appUserService.getUserByEmail(email);
+        var forgotPasswordToken = jwtService.generateToken(user);
+        saveUserForgotPasswordToken(user,forgotPasswordToken);
+        if(tokenRepository.findByToken(forgotPasswordToken).isPresent()){
+            sendForgotPasswordEmail(user,tokenRepository.findByToken(forgotPasswordToken).get());
+        }
+        log.info("An email has sent to you to change your password");
+        return "An email has sent to you to change your password ";
+    }
+
+
+    public void sendAccountConfirmationEmail(AppUser user,Token token){
         SimpleMailMessage mailMessage = new SimpleMailMessage();
         mailMessage.setTo(user.getEmail());
-        mailMessage.setSubject("Complete Registration!");
+        mailMessage.setSubject("[Training Management System] Complete Registration!");
         mailMessage.setText("To confirm your account in the Exalt Training Application, please click here : "
                 +"http://localhost:8080/api/v1/auth/confirm-account?token="+token.getToken());
         emailService.sendEmail(mailMessage);
@@ -71,6 +87,17 @@ public class AuthenticationService {
         log.info("Confirmation Token id : " + token.getId());
     }
 
+
+    public void sendForgotPasswordEmail(AppUser user,Token token){
+        SimpleMailMessage mailMessage = new SimpleMailMessage();
+        mailMessage.setTo(user.getEmail());
+        mailMessage.setSubject("[Training Management System] Please reset your password");
+        mailMessage.setText("To change your password in the Exalt Training Application, please click here : "
+                +"http://localhost:8080/api/v1/auth/forgot-password?token="+token.getToken());
+        emailService.sendEmail(mailMessage);
+        log.info("Confirmation Token: " + token.getToken());
+        log.info("Confirmation Token id : " + token.getId());
+    }
     public boolean userAlreadyExists(String username){
         return appUserRepository.findByEmail(username).isPresent();
     }
@@ -86,7 +113,7 @@ public class AuthenticationService {
                 .orElseThrow();
         var jwtToken = jwtService.generateToken(user);
         var refreshToken = jwtService.generateRefreshToken(user);
-        saveUserToken(user, jwtToken);
+        saveUserLoginToken(user, jwtToken);
         return AuthenticationResponse.builder()
                 .accessToken(jwtToken)
                 .refreshToken(refreshToken)
@@ -94,11 +121,11 @@ public class AuthenticationService {
     }
 
 
-    private void saveUserToken(AppUser user, String jwtToken) {
+    private void saveUserLoginToken(AppUser user, String jwtToken) {
         var token = Token.builder()
                 .user(user)
                 .token(jwtToken)
-                .tokenType(TokenType.BEARER)
+                .tokenType(TokenType.LOGIN)
                 .expired(false)
                 .revoked(false)
                 .build();
@@ -116,6 +143,18 @@ public class AuthenticationService {
         tokenRepository.save(token);
     }
 
+    private void saveUserForgotPasswordToken(AppUser user, String jwtToken) {
+        var token = Token.builder()
+                .user(user)
+                .token(jwtToken)
+                .tokenType(TokenType.FORGOT_PASS)
+                .expired(false)
+                .revoked(false)
+                .build();
+        tokenRepository.save(token);
+    }
+
+
 
     private void revokeAllUserTokens(AppUser user) {
         var validUserTokens = appUserRepository.findAllValidTokenByUser(user.getId());
@@ -127,7 +166,25 @@ public class AuthenticationService {
         });
         tokenRepository.saveAll(validUserTokens);
     }
-
+    public String changePasswordViaEmail(String forgotPasswordToken,ForgotPasswordRequest forgotPasswordRequest) {
+        Token token=  tokenRepository.findByToken(forgotPasswordToken).orElseThrow(
+                ()-> new TokenNotFoundException("Given Token not found stored"));
+        AppUser user = appUserRepository.findByEmail(token.getUser().getEmail()).orElseThrow(
+                () -> new AppUserNotFoundException("User not found with this token")
+        );
+        if(!jwtService.isTokenValid(token.getToken(), token.getUser())){
+            throw new InvalidTokenException("Token expired, try confirm your email again");
+        }
+        String newPass =forgotPasswordRequest.getNewPassword();
+        String confirmationPass=forgotPasswordRequest.getConfirmationPassword();
+        if(!newPass.equals(confirmationPass)){
+            throw new IllegalStateException("Passwords are not the same");
+        }
+        user.setPassword(passwordEncoder.encode(newPass));
+        appUserRepository.save(user);
+        log.info("Password has been changed");
+        return "Your password has been changed";
+    }
     public ConfirmedAccountResponse confirmAccount(String confirmationToken) {
         ConfirmedAccountResponse confirmedAccountResponse=new ConfirmedAccountResponse();
         Token token=  tokenRepository.findByToken(confirmationToken).orElseThrow(
@@ -172,7 +229,7 @@ public class AuthenticationService {
             if (jwtService.isTokenValid(refreshToken, user)) {
                 var accessToken = jwtService.generateToken(user);
                 revokeAllUserTokens(user);
-                saveUserToken(user, accessToken);
+                saveUserLoginToken(user, accessToken);
                 var authResponse = AuthenticationResponse.builder()
                         .accessToken(accessToken)
                         .refreshToken(refreshToken)

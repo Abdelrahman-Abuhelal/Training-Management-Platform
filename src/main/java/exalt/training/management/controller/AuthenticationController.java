@@ -5,12 +5,13 @@ import exalt.training.management.service.AuthenticationService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotEmpty;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
-import java.security.Principal;
 
 @RestController
 @RequestMapping("/api/v1/auth")
@@ -35,14 +36,22 @@ public class AuthenticationController {
         return ResponseEntity.ok(authService.authenticate(request));
     }
 
+    @PostMapping(value="/password-reset")
+    public ResponseEntity<String> confirmPassword(@RequestParam("token")String forgotPasswordToken,
+                                                                    @Valid @RequestBody ForgotPasswordRequest forgotPasswordRequest) {
+        return ResponseEntity.ok(authService.changePasswordViaEmail(forgotPasswordToken,forgotPasswordRequest));
+    }
+
     @GetMapping(value="/confirm-account")
     public ResponseEntity<ConfirmedAccountResponse> confirmUserAccount(@RequestParam("token")String confirmationToken) {
         return ResponseEntity.ok(authService.confirmAccount(confirmationToken));
     }
 
-    @PostMapping("forgot-password")
-    public ResponseEntity<String> forgotPassword(){
 
+    @PostMapping("forgot-password")
+    public ResponseEntity<String> forgotPassword(@Email(message = "Please provide a valid email address")
+                                                   @RequestParam  String email){
+       return ResponseEntity.ok(authService.forgotPasswordViaEmail(email));
     }
 
     @PostMapping("/refresh-token")
