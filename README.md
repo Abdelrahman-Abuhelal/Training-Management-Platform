@@ -1,5 +1,8 @@
 ﻿# Exalt-Training-Management
 
 
-# What will this Project help you with?
+# What this Project will help you with?
 Till now nothing :) 
+
+# Features
+Nothing
