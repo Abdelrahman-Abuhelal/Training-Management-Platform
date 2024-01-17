@@ -6,6 +6,7 @@ import exalt.training.management.mapper.AppUserMapper;
 import exalt.training.management.model.AppUser;
 import exalt.training.management.model.AppUserRole;
 import exalt.training.management.model.Trainee;
+import exalt.training.management.repository.AppUserRepository;
 import exalt.training.management.repository.TraineeRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,7 +23,19 @@ public class AdminService {
 
     private final TraineeRepository traineeRepository;
 
+    private final AppUserRepository appUserRepository;
+
     private final AppUserMapper userMapper;
+
+
+    public String deactivateUser(Long id){
+        if(appUserRepository.findById(id).isEmpty()){
+            throw new AppUserNotFoundException("There is no user with this ID");
+        }
+        appUserRepository.findById(id).get().setEnabled(false);
+        return "User has been deactivated";
+    }
+
     public Trainee getTraineeById(Long id){
         Optional<Trainee> trainee=traineeRepository.findById(id);
         if (trainee.isEmpty()){

@@ -215,7 +215,7 @@ public class AuthenticationService {
         appUserRepository.save(user);
         confirmedAccountResponse.setStatus("ACTIVE");
         confirmedAccountResponse.setMessage("Account has been activated");
-        log.info("%s account has been activated", user.getFirstName());
+        log.info(user.getFirstName()+" account has been activated");
         return confirmedAccountResponse;
     }
 
