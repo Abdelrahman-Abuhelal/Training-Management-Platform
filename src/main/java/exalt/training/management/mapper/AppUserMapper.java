@@ -1,7 +1,7 @@
 package exalt.training.management.mapper;
 
 
-import exalt.training.management.dto.AppUserResponse;
+import exalt.training.management.dto.AppUserDto;
 import exalt.training.management.model.AppUser;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -21,20 +21,24 @@ public interface AppUserMapper {
     @Mapping(source = "appUser.id",target = "userId")
     @Mapping(source = "appUser.email",target = "userEmail")
     @Mapping(source = "appUser.role",target = "userRole")
-    AppUserResponse userToUserDto(AppUser appUser);
+    @Mapping(source = "appUser.firstName",target = "userFirstName")
+    AppUserDto userToUserDto(AppUser appUser);
 
     @Mapping(source = "appUser.id",target = "userId")
     @Mapping(source = "appUser.email",target = "userEmail")
     @Mapping(source = "appUser.role",target = "userRole")
-    List<AppUserResponse> userToUserDto(List<AppUser> appUser);
-    @Mapping(source = "appUserResponse.userId",target = "id")
-    @Mapping(source = "appUserResponse.userEmail",target = "email")
-    @Mapping(source = "appUserResponse.userRole",target = "role")
-    AppUser userDtoToUser(AppUserResponse appUserResponse);
+    @Mapping(source = "appUser.firstName",target = "userFirstName")
+    List<AppUserDto> userToUserDto(List<AppUser> appUser);
+    @Mapping(source = "appUserDto.userId",target = "id")
+    @Mapping(source = "appUserDto.userEmail",target = "email")
+    @Mapping(source = "appUserDto.userRole",target = "role")
+    @Mapping(source = "appUserDto.userFirstName",target = "firstName")
+    AppUser userDtoToUser(AppUserDto appUserDto);
 
-    @Mapping(source = "appUserResponse.userId",target = "id")
-    @Mapping(source = "appUserResponse.userEmail",target = "email")
-    @Mapping(source = "appUserResponse.userRole",target = "role")
-    AppUser userDtoToUser(AppUserResponse appUserResponse, @MappingTarget AppUser appUser);
+    @Mapping(source = "appUserDto.userId",target = "id")
+    @Mapping(source = "appUserDto.userEmail",target = "email")
+    @Mapping(source = "appUserDto.userRole",target = "role")
+    @Mapping(source = "appUserDto.userFirstName",target = "firstName")
+    AppUser userDtoToUser(AppUserDto appUserDto, @MappingTarget AppUser appUser);
 
 }

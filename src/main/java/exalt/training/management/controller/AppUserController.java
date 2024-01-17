@@ -1,7 +1,7 @@
 package exalt.training.management.controller;
 
 
-import exalt.training.management.dto.AppUserResponse;
+import exalt.training.management.dto.AppUserDto;
 import exalt.training.management.dto.ChangePasswordRequest;
 import exalt.training.management.service.AppUserService;
 import jakarta.validation.Valid;
@@ -30,14 +30,14 @@ public class AppUserController {
 
 
     @GetMapping
-    public ResponseEntity<List<AppUserResponse>> getAllUsers(){
-        List<AppUserResponse> userList= appUserService.getAllUsers();
+    public ResponseEntity<List<AppUserDto>> getAllUsers(){
+        List<AppUserDto> userList= appUserService.getAllUsers();
         return new ResponseEntity<>(userList, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<AppUserResponse> getUserById(@PathVariable Long id){
-        AppUserResponse userResponseDto= appUserService.getUserById(id);
+    public ResponseEntity<AppUserDto> getUserById(@PathVariable Long id){
+        AppUserDto userResponseDto= appUserService.getUserById(id);
         return new ResponseEntity<>(userResponseDto, HttpStatus.OK);
     }
 

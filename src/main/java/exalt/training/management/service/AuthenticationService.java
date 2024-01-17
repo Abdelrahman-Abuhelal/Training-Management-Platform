@@ -3,6 +3,7 @@ package exalt.training.management.service;
 
 import exalt.training.management.dto.*;
 import exalt.training.management.exception.*;
+import exalt.training.management.mapper.AppUserMapper;
 import exalt.training.management.model.AppUser;
 import exalt.training.management.model.Token;
 import exalt.training.management.model.TokenType;
@@ -28,10 +29,11 @@ import java.io.IOException;
 public class AuthenticationService {
     //should use only service here !! I have to change it
     private final AppUserRepository appUserRepository;
+    private final AppUserMapper appUserMapper;
     private final AppUserService appUserService;
+    private final TokenService tokenService;
     private final TokenRepository tokenRepository;
     private final PasswordEncoder passwordEncoder;
-    private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
     private final EmailService emailService;
 
@@ -49,12 +51,12 @@ public class AuthenticationService {
                 .build();
 
         var savedUser = appUserRepository.save(user);
-        var jwtToken = jwtService.generateToken(user);
+        var jwtToken = tokenService.generateToken(user);
         //would I need to store the refresh token?
-        var refreshToken = jwtService.generateRefreshToken(user);
+        var refreshToken = tokenService.generateRefreshToken(user);
         saveUserConfirmationToken(savedUser, jwtToken);
-        if(tokenRepository.findByToken(jwtToken).isPresent()){
-            sendAccountConfirmationEmail(user,tokenRepository.findByToken(jwtToken).get());
+        if(tokenService.isTokenValid(jwtToken,savedUser)){
+            sendAccountConfirmationEmail(user,tokenService.findByToken(jwtToken));
         }
         log.info("account need verification (NOT ACTIVE)");
         // Should better return a json object
@@ -66,10 +68,10 @@ public class AuthenticationService {
 
     public String forgotPasswordViaEmail(String email){
         AppUser user = appUserService.getUserByEmail(email);
-        var forgotPasswordToken = jwtService.generateToken(user);
+        var forgotPasswordToken = tokenService.generateToken(user);
         saveUserForgotPasswordToken(user,forgotPasswordToken);
-        if(tokenRepository.findByToken(forgotPasswordToken).isPresent()){
-            sendForgotPasswordEmail(user,tokenRepository.findByToken(forgotPasswordToken).get());
+        if(tokenService.tokenExists(forgotPasswordToken)){
+            sendForgotPasswordEmail(user,tokenService.findByToken(forgotPasswordToken));
         }
         log.info("An email has sent to you to change your password");
         return "An email has sent to you to change your password ";
@@ -111,12 +113,14 @@ public class AuthenticationService {
         );
         var user = appUserRepository.findByEmail(request.getEmail())
                 .orElseThrow();
-        var jwtToken = jwtService.generateToken(user);
-        var refreshToken = jwtService.generateRefreshToken(user);
+        var jwtToken = tokenService.generateToken(user);
+        var refreshToken = tokenService.generateRefreshToken(user);
         saveUserLoginToken(user, jwtToken);
+        AppUserDto appUserDto = appUserMapper.userToUserDto(user);
         return AuthenticationResponse.builder()
                 .accessToken(jwtToken)
                 .refreshToken(refreshToken)
+                .appUserDto(appUserDto)
                 .build();
     }
 
@@ -167,12 +171,11 @@ public class AuthenticationService {
         tokenRepository.saveAll(validUserTokens);
     }
     public String changePasswordViaEmail(String forgotPasswordToken,ForgotPasswordRequest forgotPasswordRequest) {
-        Token token=  tokenRepository.findByToken(forgotPasswordToken).orElseThrow(
-                ()-> new TokenNotFoundException("Given Token not found stored"));
+        Token token=  tokenService.findByToken(forgotPasswordToken);
         AppUser user = appUserRepository.findByEmail(token.getUser().getEmail()).orElseThrow(
                 () -> new AppUserNotFoundException("User not found with this token")
         );
-        if(!jwtService.isTokenValid(token.getToken(), token.getUser())){
+        if(!tokenService.isTokenValid(token.getToken(), token.getUser())){
             throw new InvalidTokenException("Token expired, try confirm your email again");
         }
         String newPass =forgotPasswordRequest.getNewPassword();
@@ -187,12 +190,11 @@ public class AuthenticationService {
     }
     public ConfirmedAccountResponse confirmAccount(String confirmationToken) {
         ConfirmedAccountResponse confirmedAccountResponse=new ConfirmedAccountResponse();
-        Token token=  tokenRepository.findByToken(confirmationToken).orElseThrow(
-                ()-> new TokenNotFoundException("Given Token not found stored"));
+        Token token=  tokenService.findByToken(confirmationToken);
         AppUser user = appUserRepository.findByEmail(token.getUser().getEmail()).orElseThrow(
                 () -> new AppUserNotFoundException("User not found with this token")
         );
-        if(!jwtService.isTokenValid(token.getToken(), token.getUser())){
+        if(!tokenService.isTokenValid(token.getToken(), token.getUser())){
             throw new InvalidTokenException("Token expired, try confirm your email again");
         }
         if(user.getEnabled()){
@@ -222,12 +224,12 @@ public class AuthenticationService {
             return;
         }
         refreshToken = authHeader.substring(7);
-        userEmail = jwtService.extractEmail(refreshToken);
+        userEmail = tokenService.extractEmail(refreshToken);
         if (userEmail != null) {
             var user = this.appUserRepository.findByEmail(userEmail)
                     .orElseThrow();
-            if (jwtService.isTokenValid(refreshToken, user)) {
-                var accessToken = jwtService.generateToken(user);
+            if (tokenService.isTokenValid(refreshToken, user)) {
+                var accessToken = tokenService.generateToken(user);
                 revokeAllUserTokens(user);
                 saveUserLoginToken(user, accessToken);
                 var authResponse = AuthenticationResponse.builder()

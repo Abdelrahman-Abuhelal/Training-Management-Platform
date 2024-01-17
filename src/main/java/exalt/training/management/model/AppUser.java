@@ -26,11 +26,14 @@ public class AppUser implements UserDetails {
     @Column(nullable=false, unique=true)
     private String email;
 
+    @Column(nullable=false)
     private String password;
 
+    @Column(unique=true)
     private String username;
 
     @Enumerated(EnumType.STRING)
+    @Column(nullable=false)
     private AppUserRole role;
 
     private String firstName;
@@ -39,6 +42,7 @@ public class AppUser implements UserDetails {
 
     private String fullName;
 
+    @Column(nullable=false)
     private Boolean enabled = false;
 
     @Nullable

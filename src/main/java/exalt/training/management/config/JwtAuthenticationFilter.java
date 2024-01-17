@@ -2,7 +2,7 @@ package exalt.training.management.config;
 
 import exalt.training.management.model.AppUser;
 import exalt.training.management.repository.TokenRepository;
-import exalt.training.management.service.JwtService;
+import exalt.training.management.service.TokenService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -24,7 +24,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
-    private final JwtService jwtService;
+    private final TokenService tokenService;
     private final UserDetailsService userDetailsService;
     private final TokenRepository tokenRepository;
 
@@ -47,13 +47,13 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             return;
         }
         jwt = authHeader.substring(7);
-        userEmail = jwtService.extractEmail(jwt);
+        userEmail = tokenService.extractEmail(jwt);
         if (userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             AppUser appUser = (AppUser) this.userDetailsService.loadUserByUsername(userEmail);
             var isTokenValid = tokenRepository.findByToken(jwt)
                     .map(t -> !t.isExpired() && !t.isRevoked())
                     .orElse(false);
-            if (jwtService.isTokenValid(jwt, appUser) && isTokenValid) {
+            if (tokenService.isTokenValid(jwt, appUser) && isTokenValid) {
                 //give the authentication to the user
                 UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
                         appUser,

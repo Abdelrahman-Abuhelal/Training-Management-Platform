@@ -1,6 +1,6 @@
 package exalt.training.management.service;
 
-import exalt.training.management.dto.AppUserResponse;
+import exalt.training.management.dto.AppUserDto;
 import exalt.training.management.dto.ChangePasswordRequest;
 import exalt.training.management.exception.AppUserNotFoundException;
 import exalt.training.management.mapper.AppUserMapper;
@@ -49,7 +49,7 @@ public class AppUserService {
         return "Your password has been changed";
     }
 
-    public AppUserResponse getUserById(Long id){
+    public AppUserDto getUserById(Long id){
         AppUser appUser = appUserRepository.findById(id).orElseThrow(()-> new AppUserNotFoundException("There is no user with this ID: "+ id));
         return appUserMapper.userToUserDto(appUser);
     }
@@ -59,7 +59,7 @@ public class AppUserService {
         return appUser;
     }
 
-    public List<AppUserResponse> getAllUsers(){
+    public List<AppUserDto> getAllUsers(){
         List<AppUser>users= appUserRepository.findAll();
         if (users.isEmpty()){
             throw new AppUserNotFoundException("There are no Users in the System");

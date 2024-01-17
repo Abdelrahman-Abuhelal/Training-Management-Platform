@@ -1,5 +1,8 @@
 package exalt.training.management.service;
+import exalt.training.management.exception.InvalidTokenException;
 import exalt.training.management.model.AppUser;
+import exalt.training.management.model.Token;
+import exalt.training.management.repository.TokenRepository;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -11,11 +14,13 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 @Service
-public class JwtService {
+@RequiredArgsConstructor
+public class TokenService {
 
     @Value("${application.security.jwt.secret-key}")
     private String secretKey;
@@ -23,6 +28,17 @@ public class JwtService {
     private long jwtExpiration;
     @Value("${application.security.jwt.refresh-token.expiration}")
     private long refreshExpiration;
+    private final TokenRepository tokenRepository;
+
+
+    public Token findByToken(String token){
+        return tokenRepository.findByToken(token).orElseThrow(
+                ()-> new InvalidTokenException("Token is not Valid"));
+    }
+
+    public boolean tokenExists(String token){
+        return tokenRepository.findByToken(token).isPresent();
+    }
 
     public String extractEmail(String token) {
         return extractClaim(token, Claims::getSubject);

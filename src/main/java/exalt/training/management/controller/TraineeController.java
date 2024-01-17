@@ -1,7 +1,7 @@
 package exalt.training.management.controller;
 
 
-import exalt.training.management.dto.AppUserResponse;
+import exalt.training.management.dto.AppUserDto;
 import exalt.training.management.service.AdminService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -27,14 +27,14 @@ public class TraineeController {
 
 
     @GetMapping("/{id}")
-    public ResponseEntity<AppUserResponse> getTraineeById(@PathVariable Long id){
-        AppUserResponse userResponseDto = adminService.getTraineeById(id);
+    public ResponseEntity<AppUserDto> getTraineeById(@PathVariable Long id){
+        AppUserDto userResponseDto = adminService.getTraineeById(id);
         return new ResponseEntity<>(userResponseDto, HttpStatus.OK);
     }
 
     @GetMapping
-    public ResponseEntity <List<AppUserResponse>> getAllTrainees(){
-        List <AppUserResponse> userResponseDto = adminService.getAllTrainees();
+    public ResponseEntity <List<AppUserDto>> getAllTrainees(){
+        List <AppUserDto> userResponseDto = adminService.getAllTrainees();
         return new ResponseEntity<>(userResponseDto, HttpStatus.OK);
     }
 

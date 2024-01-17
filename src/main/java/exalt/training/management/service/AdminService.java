@@ -1,6 +1,6 @@
 package exalt.training.management.service;
 
-import exalt.training.management.dto.AppUserResponse;
+import exalt.training.management.dto.AppUserDto;
 import exalt.training.management.exception.AppUserNotFoundException;
 import exalt.training.management.mapper.AppUserMapper;
 import exalt.training.management.model.AppUser;
@@ -22,7 +22,7 @@ public class AdminService {
     private final TraineeRepository traineeRepository;
 
     private final AppUserMapper userMapper;
-    public AppUserResponse getTraineeById(Long id){
+    public AppUserDto getTraineeById(Long id){
         Optional<AppUser> trainee=traineeRepository.findById(id);
         if (trainee.isEmpty()){
             String message=String.format("the trainee with the id %s  is not found",id);
@@ -33,7 +33,7 @@ public class AdminService {
     }
 
 
-    public List<AppUserResponse> getAllTrainees(){
+    public List<AppUserDto> getAllTrainees(){
         Optional<List<AppUser>> trainees=traineeRepository.findByRole(AppUserRole.TRAINEE);
         if (trainees.isEmpty()){
             String message= "there are no trainees";

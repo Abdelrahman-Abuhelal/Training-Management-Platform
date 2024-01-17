@@ -8,12 +8,14 @@ import lombok.*;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class AppUserResponse {
+public class AppUserDto {
 
 
     private Long userId;
 
     private String userEmail;
+
+    private String userFirstName;
 
     private AppUserRole userRole;
 
