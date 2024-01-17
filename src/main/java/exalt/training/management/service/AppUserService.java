@@ -5,7 +5,9 @@ import exalt.training.management.dto.ChangePasswordRequest;
 import exalt.training.management.exception.AppUserNotFoundException;
 import exalt.training.management.mapper.AppUserMapper;
 import exalt.training.management.model.AppUser;
+import exalt.training.management.model.AppUserRole;
 import exalt.training.management.repository.AppUserRepository;
+import exalt.training.management.repository.TraineeRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -21,7 +23,14 @@ public class AppUserService {
     private final AppUserRepository appUserRepository;
     private final AppUserMapper appUserMapper;
     private final PasswordEncoder passwordEncoder;
+    private final TraineeRepository traineeRepository;
+    private final TraineeService traineeService;
 
+/*    public void saveUser(AppUser user){
+        if (user.getRole().equals(AppUserRole.TRAINEE)){
+            traineeService.saveTrainee(user.getId());
+        }
+    }*/
 
     public String changePassword(ChangePasswordRequest request, Principal connectedUser) {
 

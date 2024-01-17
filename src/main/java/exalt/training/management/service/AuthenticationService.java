@@ -4,9 +4,7 @@ package exalt.training.management.service;
 import exalt.training.management.dto.*;
 import exalt.training.management.exception.*;
 import exalt.training.management.mapper.AppUserMapper;
-import exalt.training.management.model.AppUser;
-import exalt.training.management.model.Token;
-import exalt.training.management.model.TokenType;
+import exalt.training.management.model.*;
 import exalt.training.management.repository.AppUserRepository;
 import exalt.training.management.repository.TokenRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -33,6 +31,7 @@ public class AuthenticationService {
     private final AppUserService appUserService;
     private final TokenService tokenService;
     private final TokenRepository tokenRepository;
+    private final TraineeService traineeService;
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
     private final EmailService emailService;
@@ -203,6 +202,15 @@ public class AuthenticationService {
             return confirmedAccountResponse;
         }
         user.setEnabled(true);
+
+        // This logic could be done in the appUserService
+        if (user.getRole().equals(AppUserRole.TRAINEE)){
+            Trainee trainee=new Trainee();
+            user.setTrainee(trainee);
+            trainee.setUser(user);
+            traineeService.saveTrainee(trainee);
+            log.info("account has been enabled (ACTIVE)");
+        }
         log.info("account has been enabled (ACTIVE)");
         appUserRepository.save(user);
         confirmedAccountResponse.setStatus("ACTIVE");
