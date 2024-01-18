@@ -1,12 +1,19 @@
 package exalt.training.management.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Size;
+import org.springframework.data.annotation.CreatedBy;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedBy;
+import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.lang.Nullable;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.time.Instant;
 import java.util.Collection;
 import java.util.List;
 
@@ -36,16 +43,24 @@ public class AppUser implements UserDetails {
     @Column(nullable=false)
     private AppUserRole role;
 
+    @Size(max = 50)
     private String firstName;
 
+    @Size(max = 50)
     private String lastName;
 
     private String fullName;
+
+    @Size(max = 256)
+    @Column(length = 256)
+    private String imageUrl;
+
 
     @Column(nullable=false)
     private Boolean enabled = false;
 
     @Nullable
+    @JsonIgnore
     @OneToOne(mappedBy = "user")
     private Trainee trainee;
 

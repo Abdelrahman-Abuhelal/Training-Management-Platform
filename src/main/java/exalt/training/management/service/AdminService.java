@@ -35,6 +35,16 @@ public class AdminService {
         appUserRepository.findById(id).get().setEnabled(false);
         return "User has been deactivated";
     }
+    public AppUser getUserById(Long id){
+        return appUserRepository.findById(id).orElseThrow(()-> new AppUserNotFoundException("There is no user with this ID: "+ id));
+    }
+    public List<AppUser> getAllUsers(){
+        List<AppUser>users= appUserRepository.findAll();
+        if (users.isEmpty()){
+            throw new AppUserNotFoundException("There are no Users in the System");
+        }
+        return users;
+    }
 
     public Trainee getTraineeById(Long id){
         Optional<Trainee> trainee=traineeRepository.findById(id);

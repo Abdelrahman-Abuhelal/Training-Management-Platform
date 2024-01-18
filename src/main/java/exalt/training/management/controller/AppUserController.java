@@ -29,17 +29,7 @@ public class AppUserController {
     }
 
 
-    @GetMapping
-    public ResponseEntity<List<AppUserDto>> getAllUsers(){
-        List<AppUserDto> userList= appUserService.getAllUsers();
-        return new ResponseEntity<>(userList, HttpStatus.OK);
-    }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<AppUserDto> getUserById(@PathVariable Long id){
-        AppUserDto userResponseDto= appUserService.getUserById(id);
-        return new ResponseEntity<>(userResponseDto, HttpStatus.OK);
-    }
 
 
 //   @PostMapping

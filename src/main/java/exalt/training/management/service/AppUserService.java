@@ -58,23 +58,13 @@ public class AppUserService {
         return "Your password has been changed";
     }
 
-    public AppUserDto getUserById(Long id){
-        AppUser appUser = appUserRepository.findById(id).orElseThrow(()-> new AppUserNotFoundException("There is no user with this ID: "+ id));
-        return appUserMapper.userToUserDto(appUser);
-    }
+
 
     public AppUser getUserByEmail(String email){
-        AppUser appUser = appUserRepository.findByEmail(email).orElseThrow(()-> new AppUserNotFoundException("There is no registered user with this email: "+ email));
-        return appUser;
+        return appUserRepository.findByEmail(email).orElseThrow(()-> new AppUserNotFoundException("There is no registered user with this email: "+ email));
     }
 
-    public List<AppUserDto> getAllUsers(){
-        List<AppUser>users= appUserRepository.findAll();
-        if (users.isEmpty()){
-            throw new AppUserNotFoundException("There are no Users in the System");
-        }
-        return appUserMapper.userToUserDto(users);
-    }
+
 
 
 
