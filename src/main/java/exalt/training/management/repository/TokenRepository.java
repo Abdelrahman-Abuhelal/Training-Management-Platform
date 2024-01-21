@@ -23,7 +23,7 @@ public interface TokenRepository extends JpaRepository<Token, Long> {
 
 
     // should be used in the JWT AUTH FILTER when token type is login
-    Optional<Token> findTokensByTokenTypeAndToken(String token, TokenType tokenType);
+    Optional<Token> findTokensByTokenTypeAndToken(TokenType tokenType, String token);
 
 
 }

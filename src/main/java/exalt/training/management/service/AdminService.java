@@ -1,15 +1,19 @@
 package exalt.training.management.service;
 
-import exalt.training.management.dto.AppUserDto;
+import exalt.training.management.dto.CreatedUserResponse;
+import exalt.training.management.dto.UserCreationRequest;
 import exalt.training.management.exception.AppUserNotFoundException;
+import exalt.training.management.exception.UserAlreadyExistsException;
 import exalt.training.management.mapper.AppUserMapper;
 import exalt.training.management.model.AppUser;
-import exalt.training.management.model.AppUserRole;
+import exalt.training.management.model.Token;
 import exalt.training.management.model.Trainee;
 import exalt.training.management.repository.AppUserRepository;
 import exalt.training.management.repository.TraineeRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -25,9 +29,59 @@ public class AdminService {
 
     private final AppUserRepository appUserRepository;
 
+    private final AppUserService appUserService;
+
+    private final PasswordEncoder passwordEncoder;
+    private final TokenService tokenService;
+
+    private final AuthenticationService authenticationService;
+    private final EmailService emailService;
+
     private final AppUserMapper userMapper;
 
 
+
+
+    public CreatedUserResponse createUser(UserCreationRequest request) {
+        if (appUserService.userAlreadyExists(request.getEmail())){
+            throw new UserAlreadyExistsException(request.getEmail() + " already exists!");
+        }
+        var user = AppUser.builder()
+                .email(request.getEmail())
+                .firstName(request.getFirstName())
+                .lastName(request.getLastName())
+                .username(request.getUsername())
+                .role(request.getRole())
+                .enabled(false)
+                .build();
+
+        var savedUser = appUserRepository.save(user);
+        var jwtToken = tokenService.generateToken(user);
+        //would I need to store the refresh token?
+        var refreshToken = tokenService.generateRefreshToken(user);
+        // Save the token as Confirmation token
+        authenticationService.saveUserConfirmationToken(savedUser, jwtToken);
+        if(tokenService.isTokenValid(jwtToken,savedUser)){
+            sendCompleteRegistrationEmail(user);
+        }
+        log.info("account need verification (NOT ACTIVE)");
+        // Should better return a json object
+        return CreatedUserResponse.builder()
+                .accessToken(jwtToken)
+                .refreshToken(refreshToken)
+                .message("Verification Account Sent to your email").build();
+    }
+
+
+    public void sendCompleteRegistrationEmail(AppUser user){
+        SimpleMailMessage mailMessage = new SimpleMailMessage();
+        mailMessage.setTo(user.getEmail());
+        mailMessage.setSubject("[Training Management System] Complete Registration!");
+        mailMessage.setText("To confirm your account in the Exalt Training Application, please complete registration here : "
+                +"http://localhost:8080/api/v1/user/complete-registration?email="+user.getEmail());
+        emailService.sendEmail(mailMessage);
+
+    }
     public String deactivateUser(Long id){
         if(appUserRepository.findById(id).isEmpty()){
             throw new AppUserNotFoundException("There is no user with this ID");

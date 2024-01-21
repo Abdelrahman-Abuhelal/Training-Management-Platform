@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class ForgotPasswordRequest {
+public class PasswordRequest {
     @StrongPassword
     private String newPassword;
     @StrongPassword

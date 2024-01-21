@@ -1,6 +1,7 @@
 package exalt.training.management.controller;
 
 import exalt.training.management.dto.*;
+import exalt.training.management.service.AdminService;
 import exalt.training.management.service.AuthenticationService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -19,14 +20,10 @@ import java.io.IOException;
 public class AuthenticationController {
 
     private final AuthenticationService authService;
+    private final AdminService adminService;
 
 
     // I should make one dto for registration then in the method specify the role
-    @PostMapping("/register")
-    public ResponseEntity<String> registerTrainee(@RequestBody @Valid RegistrationRequest request
-    ) {
-        return ResponseEntity.ok(authService.registerUser(request));
-    }
 
 
     @PostMapping("/login")
@@ -36,17 +33,19 @@ public class AuthenticationController {
         return ResponseEntity.ok(authService.authenticate(request));
     }
 
-    @PostMapping(value="/password-reset")
+
+
+// should be in the admin APIs but for testing now
+    @PostMapping("/create-user")
+    public ResponseEntity<CreatedUserResponse> createUser(@RequestBody @Valid UserCreationRequest request) {
+        return ResponseEntity.ok(adminService.createUser(request));
+    }
+
+    @PutMapping(value="/password-reset")
     public ResponseEntity<String> confirmPassword(@RequestParam("token")String forgotPasswordToken,
-                                                                    @Valid @RequestBody ForgotPasswordRequest forgotPasswordRequest) {
-        return ResponseEntity.ok(authService.changePasswordViaEmail(forgotPasswordToken,forgotPasswordRequest));
+                                                  @Valid @RequestBody PasswordRequest passwordRequest) {
+        return ResponseEntity.ok(authService.changePasswordViaEmail(forgotPasswordToken,passwordRequest));
     }
-
-    @GetMapping(value="/confirm-account")
-    public ResponseEntity<ConfirmedAccountResponse> confirmUserAccount(@RequestParam("token")String confirmationToken) {
-        return ResponseEntity.ok(authService.confirmAccount(confirmationToken));
-    }
-
 
     @PostMapping("forgot-password")
     public ResponseEntity<String> forgotPassword(@Email(message = "Please provide a valid email address")

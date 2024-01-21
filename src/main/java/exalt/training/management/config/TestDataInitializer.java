@@ -4,7 +4,6 @@ import exalt.training.management.model.AppUser;
 import exalt.training.management.model.AppUserRole;
 import exalt.training.management.repository.AppUserRepository;
 import exalt.training.management.service.AdminService;
-import exalt.training.management.service.AppUserService;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -26,7 +25,7 @@ public class TestDataInitializer implements ApplicationRunner {
         // Create a test user and register them
         AppUser user = AppUser.builder()
                 .email("abd.hilal14@gmail.com")
-                .password("{bcrypt}$2a$10$GRLdNijSQMUvl/au9ofL.eDwmoohzzS7.rmNSJZ.0FxO/BTk76klW")
+                .password("$2a$10$GRLdNijSQMUvl/au9ofL.eDwmoohzzS7.rmNSJZ.0FxO/BTk76klW")
                 .username("adasdasd")
                 .role(AppUserRole.SUPER_ADMIN)
                 .enabled(true)

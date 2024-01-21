@@ -1,7 +1,6 @@
 package exalt.training.management.controller;
 
-import exalt.training.management.dto.AppUserDto;
-import exalt.training.management.dto.ChangePasswordRequest;
+import exalt.training.management.dto.UserCreationRequest;
 import exalt.training.management.model.AppUser;
 import exalt.training.management.service.AdminService;
 import jakarta.validation.Valid;
@@ -10,7 +9,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.security.Principal;
 import java.util.List;
 
 @RestController
@@ -20,6 +18,9 @@ public class AdminController {
 
 
     private final AdminService adminService;
+
+
+
 
 
     @PutMapping("/users/deactivate/{id}")

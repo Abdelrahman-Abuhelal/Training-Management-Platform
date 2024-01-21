@@ -1,6 +1,5 @@
 package exalt.training.management.dto;
 
-
 import exalt.training.management.config.password.StrongPassword;
 import exalt.training.management.model.AppUserRole;
 import jakarta.persistence.EnumType;
@@ -15,15 +14,14 @@ import lombok.*;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class RegistrationRequest {
+public class UserCreationRequest {
 
     @Email(message = "Please provide a valid email address")
     @NotEmpty(message = "Email should not be empty")
     private String email;
 
-    @NotEmpty(message = "Password should not be empty")
-    @StrongPassword
-    private String password;
+    @NotEmpty(message = "Username should not be empty")
+    private String username;
 
     @NotEmpty(message = "First name should not be empty")
     private String firstName;
@@ -34,6 +32,4 @@ public class RegistrationRequest {
     @Enumerated(EnumType.STRING)
     @NotNull(message = "Role should not be empty")
     private AppUserRole role;
-
-
 }

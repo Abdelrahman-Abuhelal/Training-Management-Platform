@@ -1,17 +1,16 @@
 package exalt.training.management.controller;
 
 
-import exalt.training.management.dto.AppUserDto;
 import exalt.training.management.dto.ChangePasswordRequest;
+import exalt.training.management.dto.ConfirmedAccountResponse;
+import exalt.training.management.dto.PasswordRequest;
 import exalt.training.management.service.AppUserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
-import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -21,7 +20,22 @@ public class AppUserController {
     private final AppUserService appUserService;
 
 
-    @PostMapping("/change-password")
+
+
+/*    @PostMapping("/register")
+    public ResponseEntity<String> registerTrainee(@RequestBody @Valid RegistrationRequest request
+    ) {
+        return ResponseEntity.ok(appUserService.registerUser(request));
+    }*/
+
+
+    @PostMapping(value="/complete-registration")
+    public ResponseEntity<ConfirmedAccountResponse> confirmUserAccount(
+            @RequestParam("email") String email,
+            @Valid @RequestBody PasswordRequest passwordRequest) {
+        return ResponseEntity.ok(appUserService.confirmAccount(email,passwordRequest));
+    }
+    @PutMapping("/change-password")
     public ResponseEntity<String> changePassword(@RequestBody
                                                      @Valid ChangePasswordRequest request, Principal user
     )  {

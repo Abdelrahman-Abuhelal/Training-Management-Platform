@@ -36,31 +36,7 @@ public class AuthenticationService {
     private final AuthenticationManager authenticationManager;
     private final EmailService emailService;
 
-    public String registerUser(RegistrationRequest request) {
-        if (userAlreadyExists(request.getEmail())){
-            throw new UserAlreadyExistsException(request.getEmail() + " already exists!");
-        }
-        var user = AppUser.builder()
-                .email(request.getEmail())
-                .password(passwordEncoder.encode(request.getPassword()))
-                .firstName(request.getFirstName())
-                .lastName(request.getLastName())
-                .role(request.getRole())
-                .enabled(false)
-                .build();
 
-        var savedUser = appUserRepository.save(user);
-        var jwtToken = tokenService.generateToken(user);
-        //would I need to store the refresh token?
-        var refreshToken = tokenService.generateRefreshToken(user);
-        saveUserConfirmationToken(savedUser, jwtToken);
-        if(tokenService.isTokenValid(jwtToken,savedUser)){
-            sendAccountConfirmationEmail(user,tokenService.findByToken(jwtToken));
-        }
-        log.info("account need verification (NOT ACTIVE)");
-        // Should better return a json object
-        return "Verify your account by the link sent into your email address: " +user.getEmail();
-    }
 
 
 
@@ -69,6 +45,7 @@ public class AuthenticationService {
         AppUser user = appUserService.getUserByEmail(email);
         var forgotPasswordToken = tokenService.generateToken(user);
         saveUserForgotPasswordToken(user,forgotPasswordToken);
+        // not valid token is not handled here!
         if(tokenService.tokenExists(forgotPasswordToken)){
             sendForgotPasswordEmail(user,tokenService.findByToken(forgotPasswordToken));
         }
@@ -77,16 +54,7 @@ public class AuthenticationService {
     }
 
 
-    public void sendAccountConfirmationEmail(AppUser user,Token token){
-        SimpleMailMessage mailMessage = new SimpleMailMessage();
-        mailMessage.setTo(user.getEmail());
-        mailMessage.setSubject("[Training Management System] Complete Registration!");
-        mailMessage.setText("To confirm your account in the Exalt Training Application, please click here : "
-                +"http://localhost:8080/api/v1/auth/confirm-account?token="+token.getToken());
-        emailService.sendEmail(mailMessage);
-        log.info("Confirmation Token: " + token.getToken());
-        log.info("Confirmation Token id : " + token.getId());
-    }
+
 
 
     public void sendForgotPasswordEmail(AppUser user,Token token){
@@ -99,9 +67,7 @@ public class AuthenticationService {
         log.info("Confirmation Token: " + token.getToken());
         log.info("Confirmation Token id : " + token.getId());
     }
-    public boolean userAlreadyExists(String username){
-        return appUserRepository.findByEmail(username).isPresent();
-    }
+
 
     public AuthenticationResponse authenticate(LoginRequest request) {
         authenticationManager.authenticate(
@@ -111,7 +77,10 @@ public class AuthenticationService {
                 )
         );
         var user = appUserRepository.findByEmail(request.getEmail())
-                .orElseThrow();
+                .orElseThrow(()->new AppUserNotFoundException("User login with this email doesn't exist "));
+        if(!user.isEnabled()){
+            throw new InvalidUserException("User is not activated, Your account need registration or confirmation via Email");
+        }
         var jwtToken = tokenService.generateToken(user);
         var refreshToken = tokenService.generateRefreshToken(user);
         saveUserLoginToken(user, jwtToken);
@@ -135,7 +104,7 @@ public class AuthenticationService {
         tokenRepository.save(token);
     }
 
-    private void saveUserConfirmationToken(AppUser user, String jwtToken) {
+    public void saveUserConfirmationToken(AppUser user, String jwtToken) {
         var token = Token.builder()
                 .user(user)
                 .token(jwtToken)
@@ -169,7 +138,7 @@ public class AuthenticationService {
         });
         tokenRepository.saveAll(validUserTokens);
     }
-    public String changePasswordViaEmail(String forgotPasswordToken,ForgotPasswordRequest forgotPasswordRequest) {
+    public String changePasswordViaEmail(String forgotPasswordToken,PasswordRequest forgotPasswordRequest) {
         Token token=  tokenService.findByToken(forgotPasswordToken);
         AppUser user = appUserRepository.findByEmail(token.getUser().getEmail()).orElseThrow(
                 () -> new AppUserNotFoundException("User not found with this token")
@@ -187,37 +156,7 @@ public class AuthenticationService {
         log.info("Password has been changed");
         return "Your password has been changed";
     }
-    public ConfirmedAccountResponse confirmAccount(String confirmationToken) {
-        ConfirmedAccountResponse confirmedAccountResponse=new ConfirmedAccountResponse();
-        Token token=  tokenService.findByToken(confirmationToken);
-        AppUser user = appUserRepository.findByEmail(token.getUser().getEmail()).orElseThrow(
-                () -> new AppUserNotFoundException("User not found with this token")
-        );
-        if(!tokenService.isTokenValid(token.getToken(), token.getUser())){
-            throw new InvalidTokenException("Token expired, try confirm your email again");
-        }
-        if(user.getEnabled()){
-            confirmedAccountResponse.setStatus("ACTIVE");
-            confirmedAccountResponse.setMessage("Account is activated before");
-            return confirmedAccountResponse;
-        }
-        user.setEnabled(true);
 
-        // This logic could be done in the appUserService
-        if (user.getRole().equals(AppUserRole.TRAINEE)){
-            Trainee trainee=new Trainee();
-            user.setTrainee(trainee);
-            trainee.setUser(user);
-            traineeService.saveTrainee(trainee);
-            log.info("account has been enabled (ACTIVE)");
-        }
-        log.info("account has been enabled (ACTIVE)");
-        appUserRepository.save(user);
-        confirmedAccountResponse.setStatus("ACTIVE");
-        confirmedAccountResponse.setMessage("Account has been activated");
-        log.info(user.getFirstName()+" account has been activated");
-        return confirmedAccountResponse;
-    }
 
 
 

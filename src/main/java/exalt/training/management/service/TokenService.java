@@ -15,11 +15,14 @@ import java.util.Map;
 import java.util.function.Function;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.mail.SimpleMailMessage;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class TokenService {
 
     @Value("${application.security.jwt.secret-key}")
@@ -29,6 +32,8 @@ public class TokenService {
     @Value("${application.security.jwt.refresh-token.expiration}")
     private long refreshExpiration;
     private final TokenRepository tokenRepository;
+    private final EmailService emailService;
+
 
 
     public Token findByToken(String token){
