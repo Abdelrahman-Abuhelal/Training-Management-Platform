@@ -56,20 +56,20 @@ public class AdminService {
                 .build();
 
         var savedUser = appUserRepository.save(user);
-        var jwtToken = tokenService.generateToken(user);
+        var jwtConfirmationToken = tokenService.generateToken(user);
         //would I need to store the refresh token?
         var refreshToken = tokenService.generateRefreshToken(user);
         // Save the token as Confirmation token
-        authenticationService.saveUserConfirmationToken(savedUser, jwtToken);
-        if(tokenService.isTokenValid(jwtToken,savedUser)){
+        authenticationService.saveUserConfirmationToken(savedUser, jwtConfirmationToken);
+        if(tokenService.isTokenValid(jwtConfirmationToken,savedUser)){
             sendCompleteRegistrationEmail(user);
         }
         log.info("account need verification (NOT ACTIVE)");
         // Should better return a json object
         return CreatedUserResponse.builder()
-                .accessToken(jwtToken)
+                .confirmationToken(jwtConfirmationToken)
                 .refreshToken(refreshToken)
-                .message("Verification Account Sent to your email").build();
+                .message("Account Complete Registration sent to the user email: " +savedUser.getEmail()).build();
     }
 
 

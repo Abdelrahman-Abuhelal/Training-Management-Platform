@@ -34,12 +34,7 @@ public class AuthenticationController {
     }
 
 
-
 // should be in the admin APIs but for testing now
-    @PostMapping("/create-user")
-    public ResponseEntity<CreatedUserResponse> createUser(@RequestBody @Valid UserCreationRequest request) {
-        return ResponseEntity.ok(adminService.createUser(request));
-    }
 
     @PutMapping(value="/password-reset")
     public ResponseEntity<String> confirmPassword(@RequestParam("token")String forgotPasswordToken,

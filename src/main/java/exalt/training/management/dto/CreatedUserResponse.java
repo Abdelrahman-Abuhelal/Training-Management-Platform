@@ -14,8 +14,8 @@ import lombok.NoArgsConstructor;
 public class CreatedUserResponse {
 
     private String message;
-    @JsonProperty("access_token")
-    private String accessToken;
+    @JsonProperty("confirmation_token")
+    private String confirmationToken;
     @JsonProperty("refresh_token")
     private String refreshToken;
 }

@@ -1,5 +1,6 @@
 package exalt.training.management.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -18,6 +19,6 @@ public class Trainee {
     private Long id;
 
     @OneToOne
-    @JoinColumn()
+    @JsonBackReference
     private AppUser user;
 }

@@ -1,5 +1,6 @@
 package exalt.training.management.controller;
 
+import exalt.training.management.dto.CreatedUserResponse;
 import exalt.training.management.dto.UserCreationRequest;
 import exalt.training.management.model.AppUser;
 import exalt.training.management.service.AdminService;
@@ -20,6 +21,10 @@ public class AdminController {
     private final AdminService adminService;
 
 
+    @PostMapping("/create-user")
+    public ResponseEntity<CreatedUserResponse> createUser(@RequestBody @Valid UserCreationRequest request) {
+        return ResponseEntity.ok(adminService.createUser(request));
+    }
 
 
 

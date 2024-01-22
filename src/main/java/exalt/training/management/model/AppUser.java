@@ -1,6 +1,7 @@
 package exalt.training.management.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
 import org.springframework.data.annotation.CreatedBy;
@@ -59,7 +60,7 @@ public class AppUser implements UserDetails {
     private Boolean enabled = false;
 
     @Nullable
-    @JsonIgnore
+    @JsonManagedReference
     @OneToOne(mappedBy = "user")
     private Trainee trainee;
 
