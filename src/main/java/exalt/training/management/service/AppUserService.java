@@ -25,7 +25,6 @@ import java.security.Principal;
 public class AppUserService {
 
     private final AppUserRepository appUserRepository;
-    private final AppUserMapper appUserMapper;
     private final PasswordEncoder passwordEncoder;
     private final TraineeService traineeService;
 

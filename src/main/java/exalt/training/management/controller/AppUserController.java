@@ -8,6 +8,7 @@ import exalt.training.management.service.AppUserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
@@ -15,18 +16,10 @@ import java.security.Principal;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/users")
+@PreAuthorize("hasAnyRole('TRAINEE','SUPERVISOR','SUPER_ADMIN')")
 public class AppUserController {
 
     private final AppUserService appUserService;
-
-
-
-
-/*    @PostMapping("/register")
-    public ResponseEntity<String> registerTrainee(@RequestBody @Valid RegistrationRequest request
-    ) {
-        return ResponseEntity.ok(appUserService.registerUser(request));
-    }*/
 
 
     @PostMapping(value="/complete-registration")

@@ -52,7 +52,6 @@ public class SecurityConfiguration {
                         req ->
                                 req.requestMatchers(AUTH_WHITELIST)
                                         .permitAll()
-                                        .requestMatchers("/api/v1/trainees/**").hasAnyRole(AppUserRole.SUPER_ADMIN.name())
                                         .anyRequest()
                                         .authenticated()
                 )

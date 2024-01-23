@@ -27,17 +27,7 @@ public class TraineeController {
     }*/
 
 
-    @GetMapping("/{id}")
-    public ResponseEntity<Trainee> getTraineeById(@PathVariable Long id){
-        Trainee trainee = adminService.getTraineeById(id);
-        return new ResponseEntity<>(trainee, HttpStatus.OK);
-    }
 
-    @GetMapping
-    public ResponseEntity <List<Trainee>> getAllTrainees(){
-        List <Trainee> trainees = adminService.getAllTrainees();
-        return new ResponseEntity<>(trainees, HttpStatus.OK);
-    }
 
 /*    @DeleteMapping("/{username}")
     public ResponseEntity<String> deleteTraineeByUsername(@PathVariable String username){

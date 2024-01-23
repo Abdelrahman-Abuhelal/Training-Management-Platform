@@ -20,7 +20,6 @@ import java.io.IOException;
 public class AuthenticationController {
 
     private final AuthenticationService authService;
-    private final AdminService adminService;
 
 
     // I should make one dto for registration then in the method specify the role
