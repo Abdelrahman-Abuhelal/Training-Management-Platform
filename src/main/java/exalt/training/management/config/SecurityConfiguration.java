@@ -1,6 +1,7 @@
 package exalt.training.management.config;
 
 import exalt.training.management.config.apiKeyFilter.ApiKeyAuthFilter;
+import exalt.training.management.model.AppUserRole;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -14,6 +15,8 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.security.web.authentication.logout.LogoutHandler;
 
 
+import static exalt.training.management.model.Permission.*;
+import static org.springframework.http.HttpMethod.*;
 import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
 
 @Configuration
@@ -49,9 +52,11 @@ public class SecurityConfiguration {
                         req ->
                                 req.requestMatchers(AUTH_WHITELIST)
                                         .permitAll()
+                                        .requestMatchers("/api/v1/trainees/**").hasAnyRole(AppUserRole.SUPER_ADMIN.name())
                                         .anyRequest()
                                         .authenticated()
                 )
+
                 .sessionManagement(session -> session.sessionCreationPolicy(STATELESS))
                 .authenticationProvider(authenticationProvider)
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
