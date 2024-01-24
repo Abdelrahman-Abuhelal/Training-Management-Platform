@@ -1,5 +1,6 @@
 package exalt.training.management.controller;
 
+import exalt.training.management.dto.AppUserDto;
 import exalt.training.management.dto.CreatedUserResponse;
 import exalt.training.management.dto.UserCreationRequest;
 import exalt.training.management.model.AppUser;
@@ -41,17 +42,17 @@ public class AdminController {
     @Operation(summary = "Get All Users", security =  @SecurityRequirement(name = "loginAuth"))
     @PreAuthorize("hasRole('SUPER_ADMIN')")
     @GetMapping("/users")
-    public ResponseEntity<List<AppUser>> getAllUsers(){
-        List<AppUser> userList= adminService.getAllUsers();
+    public ResponseEntity<List<AppUserDto>> getAllUsers(){
+        List<AppUserDto> userList= adminService.getAllUsers();
         return new ResponseEntity<>(userList, HttpStatus.OK);
     }
 
     @Operation(summary = "Get User By Id", security =  @SecurityRequirement(name = "loginAuth"))
     @PreAuthorize("hasRole('SUPER_ADMIN')")
     @GetMapping("/users/{id}")
-    public ResponseEntity<AppUser> getUserById(@PathVariable Long id){
-        AppUser appUser= adminService.getUserById(id);
-        return new ResponseEntity<>(appUser, HttpStatus.OK);
+    public ResponseEntity<AppUserDto> getUserById(@PathVariable Long id){
+        AppUserDto appUserDto= adminService.getUserById(id);
+        return new ResponseEntity<>(appUserDto, HttpStatus.OK);
     }
 
     @Operation(summary = "Get Trainee By Id", security =  @SecurityRequirement(name = "loginAuth"))

@@ -23,7 +23,7 @@ public class AppUserController {
 
     private final AppUserService appUserService;
 
-        @Operation(summary = "Comgitplete Your Registration (Confirmation-Token Required)", security =  @SecurityRequirement(name = "confirmationAuth"))
+        @Operation(summary = "Complete Your Registration (Confirmation-Token Required)", security =  @SecurityRequirement(name = "confirmationAuth"))
     @PostMapping(value="/complete-registration")
     public ResponseEntity<ConfirmedAccountResponse> confirmUserAccount(
             @RequestParam("email") String email,

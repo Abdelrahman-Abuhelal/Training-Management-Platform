@@ -1,5 +1,6 @@
 package exalt.training.management.service;
 
+import exalt.training.management.dto.AppUserDto;
 import exalt.training.management.dto.CreatedUserResponse;
 import exalt.training.management.dto.UserCreationRequest;
 import exalt.training.management.exception.AppUserNotFoundException;
@@ -38,7 +39,6 @@ public class AdminService {
     private final EmailService emailService;
 
     private final AppUserMapper userMapper;
-
 
 
 
@@ -89,15 +89,16 @@ public class AdminService {
         appUserRepository.findById(id).get().setEnabled(false);
         return "User has been deactivated";
     }
-    public AppUser getUserById(Long id){
-        return appUserRepository.findById(id).orElseThrow(()-> new AppUserNotFoundException("There is no user with this ID: "+ id));
+    public AppUserDto getUserById(Long id){
+        AppUser appUser= appUserRepository.findById(id).orElseThrow(()-> new AppUserNotFoundException("There is no user with this ID: "+ id));
+        return userMapper.userToUserDto(appUser);
     }
-    public List<AppUser> getAllUsers(){
+    public List<AppUserDto> getAllUsers(){
         List<AppUser>users= appUserRepository.findAll();
         if (users.isEmpty()){
             throw new AppUserNotFoundException("There are no Users in the System");
         }
-        return users;
+        return userMapper.userToUserDto(users);
     }
 
     public Trainee getTraineeById(Long id){
