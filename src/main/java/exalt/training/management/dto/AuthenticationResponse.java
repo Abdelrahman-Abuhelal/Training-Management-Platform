@@ -13,8 +13,8 @@ import lombok.NoArgsConstructor;
 public class AuthenticationResponse {
 
     private AppUserDto appUserDto;
-    @JsonProperty("access_token")
-    private String accessToken;
+    @JsonProperty("login_token")
+    private String loginToken;
     @JsonProperty("refresh_token")
     private String refreshToken;
 }

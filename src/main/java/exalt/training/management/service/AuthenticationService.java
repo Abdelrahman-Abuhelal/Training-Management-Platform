@@ -86,7 +86,7 @@ public class AuthenticationService {
         saveUserLoginToken(user, jwtToken);
         AppUserDto appUserDto = appUserMapper.userToUserDto(user);
         return AuthenticationResponse.builder()
-                .accessToken(jwtToken)
+                .loginToken(jwtToken)
                 .refreshToken(refreshToken)
                 .appUserDto(appUserDto)
                 .build();
@@ -139,7 +139,9 @@ public class AuthenticationService {
         tokenRepository.saveAll(validUserTokens);
     }
     public String changePasswordViaEmail(String forgotPasswordToken,PasswordRequest forgotPasswordRequest) {
-        Token token=  tokenService.findByToken(forgotPasswordToken);
+        Token token = tokenRepository.findTokenByTokenTypeAndToken(TokenType.FORGOT_PASS,forgotPasswordToken).orElseThrow(
+                () -> new TokenNotFoundException("Token not found")
+        );
         AppUser user = appUserRepository.findByEmail(token.getUser().getEmail()).orElseThrow(
                 () -> new AppUserNotFoundException("User not found with this token")
         );
@@ -176,11 +178,11 @@ public class AuthenticationService {
             var user = this.appUserRepository.findByEmail(userEmail)
                     .orElseThrow();
             if (tokenService.isTokenValid(refreshToken, user)) {
-                var accessToken = tokenService.generateToken(user);
+                var loginToken = tokenService.generateToken(user);
                 revokeAllUserTokens(user);
-                saveUserLoginToken(user, accessToken);
+                saveUserLoginToken(user, loginToken);
                 var authResponse = AuthenticationResponse.builder()
-                        .accessToken(accessToken)
+                        .loginToken(loginToken)
                         .refreshToken(refreshToken)
                         .build();
                 new ObjectMapper().writeValue(response.getOutputStream(), authResponse);

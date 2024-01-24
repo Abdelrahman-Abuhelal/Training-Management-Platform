@@ -64,6 +64,16 @@ public class AppUser implements UserDetails {
     @OneToOne(mappedBy = "user")
     private Trainee trainee;
 
+    @Nullable
+    @JsonManagedReference
+    @OneToOne(mappedBy = "user")
+    private Supervisor supervisor;
+
+    @Nullable
+    @JsonManagedReference
+    @OneToOne(mappedBy = "user")
+    private SuperAdmin superAdmin;
+
     @OneToMany(mappedBy = "user")
     @Nullable
     private List<Token> tokens;
