@@ -57,7 +57,7 @@ public class AdminService {
 
         var savedUser = appUserRepository.save(user);
         var jwtConfirmationToken = tokenService.generateToken(user);
-        //would I need to store the refresh token?
+        // Would I need to store the refresh token?
         var refreshToken = tokenService.generateRefreshToken(user);
         // Save the token as Confirmation token
         authenticationService.saveUserConfirmationToken(savedUser, jwtConfirmationToken);
@@ -78,7 +78,7 @@ public class AdminService {
         mailMessage.setTo(user.getEmail());
         mailMessage.setSubject("[Training Management System] Complete Registration!");
         mailMessage.setText("To confirm your account in the Exalt Training Application, please complete registration here : "
-                +"http://localhost:8080/api/v1/user/complete-registration");
+                +"http://localhost:8080/api/v1/user/complete-registration?email="+user.getEmail());
         emailService.sendEmail(mailMessage);
 
     }

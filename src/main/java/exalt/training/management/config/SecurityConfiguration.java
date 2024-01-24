@@ -37,6 +37,7 @@ public class SecurityConfiguration {
             "/api/public/authenticate",
             "/actuator/*",
             "/swagger-ui/**",
+            "/"
     };
 
     private final AuthenticationProvider authenticationProvider;

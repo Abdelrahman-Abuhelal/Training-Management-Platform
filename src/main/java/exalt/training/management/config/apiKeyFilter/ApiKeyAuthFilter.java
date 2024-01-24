@@ -20,9 +20,10 @@ public class ApiKeyAuthFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException, ServletException {
+        if (request.getServletPath().contains("/api/v1/admin/create-user") ) {
             extractor.extract(request)
                     .ifPresent(SecurityContextHolder.getContext()::setAuthentication);
-
+        }
         filterChain.doFilter(request, response);
     }
 }
