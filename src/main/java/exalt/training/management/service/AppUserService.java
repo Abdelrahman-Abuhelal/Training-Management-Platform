@@ -7,9 +7,7 @@ import exalt.training.management.exception.AccountAlreadyActivatedException;
 import exalt.training.management.exception.AppUserNotFoundException;
 import exalt.training.management.exception.UserAlreadyExistsException;
 import exalt.training.management.mapper.AppUserMapper;
-import exalt.training.management.model.AppUser;
-import exalt.training.management.model.AppUserRole;
-import exalt.training.management.model.Trainee;
+import exalt.training.management.model.*;
 import exalt.training.management.repository.AppUserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -27,7 +25,28 @@ public class AppUserService {
     private final AppUserRepository appUserRepository;
     private final PasswordEncoder passwordEncoder;
     private final TraineeService traineeService;
+    private final SupervisorService supervisorService;
+    private final SuperAdminService superAdminService;
 
+
+    public void handleUserRole(AppUser user) {
+        if (user.getRole().equals(AppUserRole.TRAINEE)) {
+            Trainee trainee = new Trainee();
+            user.setTrainee(trainee);
+            trainee.setUser(user);
+            traineeService.saveTrainee(trainee);
+        } else if (user.getRole().equals(AppUserRole.SUPERVISOR)) {
+            Supervisor supervisor = new Supervisor();
+            user.setSupervisor(supervisor);
+            supervisor.setUser(user);
+            supervisorService.saveSupervisor(supervisor);
+        } else if (user.getRole().equals(AppUserRole.SUPER_ADMIN)){
+            SuperAdmin superAdmin = new SuperAdmin();
+            user.setSuperAdmin(superAdmin);
+            superAdmin.setUser(user);
+            superAdminService.saveSuperAdmin(superAdmin);
+        }
+    }
 
     public ConfirmedAccountResponse confirmAccount(String userEmail, PasswordRequest passwordRequest) {
         ConfirmedAccountResponse confirmedAccountResponse=new ConfirmedAccountResponse();
@@ -44,14 +63,8 @@ public class AppUserService {
         }
         user.setPassword(passwordEncoder.encode(newPass));
         user.setEnabled(true);
-        appUserRepository.save(user);
         // This logic could be done in the appUserService
-        if (user.getRole().equals(AppUserRole.TRAINEE)){
-            Trainee trainee=new Trainee();
-            user.setTrainee(trainee);
-            trainee.setUser(user);
-            traineeService.saveTrainee(trainee);
-        }
+        handleUserRole(user);
         appUserRepository.save(user);
         confirmedAccountResponse.setStatus("ACTIVE");
         confirmedAccountResponse.setMessage("Account has been activated");
