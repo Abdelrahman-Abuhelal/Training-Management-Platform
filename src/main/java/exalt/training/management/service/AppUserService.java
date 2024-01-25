@@ -5,10 +5,13 @@ import exalt.training.management.dto.ConfirmedAccountResponse;
 import exalt.training.management.dto.PasswordRequest;
 import exalt.training.management.exception.AccountAlreadyActivatedException;
 import exalt.training.management.exception.AppUserNotFoundException;
+import exalt.training.management.exception.TokenNotFoundException;
 import exalt.training.management.exception.UserAlreadyExistsException;
 import exalt.training.management.mapper.AppUserMapper;
 import exalt.training.management.model.*;
 import exalt.training.management.repository.AppUserRepository;
+import exalt.training.management.repository.TokenRepository;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -27,7 +30,7 @@ public class AppUserService {
     private final TraineeService traineeService;
     private final SupervisorService supervisorService;
     private final SuperAdminService superAdminService;
-
+    private final TokenService tokenService;
 
     public void handleUserRole(AppUser user) {
         if (user.getRole().equals(AppUserRole.TRAINEE)) {
@@ -48,11 +51,17 @@ public class AppUserService {
         }
     }
 
-    public ConfirmedAccountResponse confirmAccount(String userEmail, PasswordRequest passwordRequest) {
+    public ConfirmedAccountResponse confirmAccount(HttpServletRequest request, PasswordRequest passwordRequest) {
         ConfirmedAccountResponse confirmedAccountResponse=new ConfirmedAccountResponse();
-        AppUser user = appUserRepository.findByEmail(userEmail).orElseThrow(
-                () -> new AppUserNotFoundException("User not found with this token")
-        );
+        final String authHeader = request.getHeader("Authorization");
+        final String jwt;
+        final String userEmail;
+        if (authHeader == null ||!authHeader.startsWith("Bearer ")) {
+            throw new TokenNotFoundException("Token not found");
+        }
+        jwt = authHeader.substring(7);
+        userEmail = tokenService.extractEmail(jwt);
+        AppUser user=getUserByEmail(userEmail);
         if(user.getEnabled()){
             throw new AccountAlreadyActivatedException("Account is activated before");
         }
@@ -63,7 +72,6 @@ public class AppUserService {
         }
         user.setPassword(passwordEncoder.encode(newPass));
         user.setEnabled(true);
-        // This logic could be done in the appUserService
         handleUserRole(user);
         appUserRepository.save(user);
         confirmedAccountResponse.setStatus("ACTIVE");
@@ -72,38 +80,6 @@ public class AppUserService {
         return confirmedAccountResponse;
     }
 
-
-/*    public void saveUser(AppUser user){
-        if (user.getRole().equals(AppUserRole.TRAINEE)){
-            traineeService.saveTrainee(user.getId());
-        }
-    }*/
-
-/*    public String registerUser(RegistrationRequest request) {
-        if (appUserService.userAlreadyExists(request.getEmail())){
-            throw new UserAlreadyExistsException(request.getEmail() + " already exists!");
-        }
-        var user = AppUser.builder()
-                .email(request.getEmail())
-                .password(passwordEncoder.encode(request.getPassword()))
-                .firstName(request.getFirstName())
-                .lastName(request.getLastName())
-                .role(request.getRole())
-                .enabled(false)
-                .build();
-
-        var savedUser = appUserRepository.save(user);
-        var jwtToken = tokenService.generateToken(user);
-        //would I need to store the refresh token?
-        var refreshToken = tokenService.generateRefreshToken(user);
-        authenticationService.saveUserConfirmationToken(savedUser, jwtToken);
-        if(tokenService.isTokenValid(jwtToken,savedUser)){
-            authenticationService.sendAccountConfirmationEmail(user,tokenService.findByToken(jwtToken));
-        }
-        log.info("account need verification (NOT ACTIVE)");
-        // Should better return a json object
-        return "Verify your account by the link sent into your email address: " +user.getEmail();
-    }*/
 
     public boolean userAlreadyExists(String username){
         return appUserRepository.findByEmail(username).isPresent();

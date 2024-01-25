@@ -7,6 +7,7 @@ import exalt.training.management.dto.PasswordRequest;
 import exalt.training.management.service.AppUserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -26,9 +27,9 @@ public class AppUserController {
         @Operation(summary = "Complete Your Registration (Confirmation-Token Required)", security =  @SecurityRequirement(name = "confirmationAuth"))
     @PostMapping(value="/complete-registration")
     public ResponseEntity<ConfirmedAccountResponse> confirmUserAccount(
-            @RequestParam("email") String email,
+                HttpServletRequest request,
             @Valid @RequestBody PasswordRequest passwordRequest) {
-        return ResponseEntity.ok(appUserService.confirmAccount(email,passwordRequest));
+        return ResponseEntity.ok(appUserService.confirmAccount(request,passwordRequest));
     }
 
     @Operation(summary = "Change Password (Logged-in User)", security =  @SecurityRequirement(name = "loginAuth"))

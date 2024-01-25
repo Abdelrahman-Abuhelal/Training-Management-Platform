@@ -1,6 +1,7 @@
 package exalt.training.management.controller;
 
 import exalt.training.management.dto.AppUserDto;
+import exalt.training.management.dto.AppUserRequestDto;
 import exalt.training.management.dto.CreatedUserResponse;
 import exalt.training.management.dto.UserCreationRequest;
 import exalt.training.management.model.AppUser;
@@ -53,6 +54,15 @@ public class AdminController {
     public ResponseEntity<AppUserDto> getUserById(@PathVariable Long id){
         AppUserDto appUserDto= adminService.getUserById(id);
         return new ResponseEntity<>(appUserDto, HttpStatus.OK);
+    }
+
+    @Operation(summary = "Update User using his Id", security =  @SecurityRequirement(name = "loginAuth"))
+    @PreAuthorize("hasAnyRole('SUPER_ADMIN','SUPERVISOR')")
+    @PutMapping("/users/{id}")
+    public ResponseEntity<String> updateUserDetails(@PathVariable Long id
+            ,@RequestBody AppUserRequestDto appUserRequestDto){
+        String message = adminService.updateUserById(id,appUserRequestDto);
+        return new ResponseEntity<>(message, HttpStatus.OK);
     }
 
     @Operation(summary = "Get Trainee By Id", security =  @SecurityRequirement(name = "loginAuth"))

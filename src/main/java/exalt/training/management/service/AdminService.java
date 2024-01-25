@@ -1,13 +1,13 @@
 package exalt.training.management.service;
 
 import exalt.training.management.dto.AppUserDto;
+import exalt.training.management.dto.AppUserRequestDto;
 import exalt.training.management.dto.CreatedUserResponse;
 import exalt.training.management.dto.UserCreationRequest;
 import exalt.training.management.exception.AppUserNotFoundException;
 import exalt.training.management.exception.UserAlreadyExistsException;
 import exalt.training.management.mapper.AppUserMapper;
 import exalt.training.management.model.AppUser;
-import exalt.training.management.model.Token;
 import exalt.training.management.model.Trainee;
 import exalt.training.management.repository.AppUserRepository;
 import exalt.training.management.repository.TraineeRepository;
@@ -78,10 +78,10 @@ public class AdminService {
         mailMessage.setTo(user.getEmail());
         mailMessage.setSubject("[Training Management System] Complete Registration!");
         mailMessage.setText("To confirm your account in the Exalt Training Application, please complete registration here : "
-                +"http://localhost:8080/api/v1/user/complete-registration?email="+user.getEmail());
+                +"http://localhost:8080/api/v1/user/complete-registration");
         emailService.sendEmail(mailMessage);
-
     }
+
     public String deactivateUser(Long id){
         if(appUserRepository.findById(id).isEmpty()){
             throw new AppUserNotFoundException("There is no user with this ID");
@@ -92,6 +92,16 @@ public class AdminService {
     public AppUserDto getUserById(Long id){
         AppUser appUser= appUserRepository.findById(id).orElseThrow(()-> new AppUserNotFoundException("There is no user with this ID: "+ id));
         return userMapper.userToUserDto(appUser);
+    }
+
+    public String updateUserById(Long id, AppUserRequestDto appUserRequestDto){
+        AppUser appUser= getFullUserById(id);
+        appUserRepository.save(userMapper.userRequestDtoToUser(appUserRequestDto,appUser));
+        return "User with ID : " + appUser.getId() +" have been updated";
+    }
+
+    public AppUser getFullUserById(Long id){
+        return appUserRepository.findById(id).orElseThrow(()-> new AppUserNotFoundException("There is no user with this ID: "+ id));
     }
     public List<AppUserDto> getAllUsers(){
         List<AppUser>users= appUserRepository.findAll();
