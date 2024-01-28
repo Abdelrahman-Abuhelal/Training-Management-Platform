@@ -9,9 +9,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.validation.constraints.Size;
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.MappingTarget;
+import org.mapstruct.*;
 import org.mapstruct.factory.Mappers;
 
 import java.util.List;
@@ -47,14 +45,11 @@ public interface AppUserMapper {
     @Mapping(source = "appUserDto.userFirstName",target = "firstName")
     AppUser userDtoToUser(AppUserDto appUserDto, @MappingTarget AppUser appUser);
 
-    @Mapping(source = "appUserRequestDto.email",target = "email")
-    @Mapping(source = "appUserRequestDto.role",target = "role")
     @Mapping(source = "appUserRequestDto.firstName",target = "firstName")
     @Mapping(source = "appUserRequestDto.lastName",target = "lastName")
     @Mapping(source = "appUserRequestDto.fullName",target = "fullName")
     @Mapping(source = "appUserRequestDto.username",target = "username")
-    @Mapping(source = "appUserRequestDto.imageUrl",target = "imageUrl")
-    @Mapping(source = "appUserRequestDto.enabled",target = "enabled")
+    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     AppUser userRequestDtoToUser(AppUserRequestDto appUserRequestDto,@MappingTarget AppUser appUser);
 
 

@@ -15,7 +15,6 @@ public class ApiKeyAuthExtractor {
     @Value("${application.security.api-key}")
     private String apiKey;
 
-
     // the last line should be changed to let authorities used here instead of NO_AUTHORITIES
     public Optional<Authentication> extract(HttpServletRequest request) {
         String providedKey = request.getHeader("API-KEY");

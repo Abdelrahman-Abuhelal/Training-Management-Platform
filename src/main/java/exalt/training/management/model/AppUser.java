@@ -21,8 +21,8 @@ import java.util.List;
 @Entity
 @Table
 @Data
-@Builder
 @ToString
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class AppUser implements UserDetails {

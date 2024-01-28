@@ -27,11 +27,13 @@ import java.io.IOException;
 public class AuthenticationService {
     //should use only service here !! I have to change it
     private final AppUserRepository appUserRepository;
+    private final  AppUserService appUserService;
     private final AppUserMapper appUserMapper;
-    private final AppUserService appUserService;
     private final TokenService tokenService;
     private final TokenRepository tokenRepository;
     private final TraineeService traineeService;
+    private final SupervisorService supervisorService;
+    private final SuperAdminService superAdminService;
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
     private final EmailService emailService;
@@ -43,11 +45,11 @@ public class AuthenticationService {
 
     public String forgotPasswordViaEmail(String email){
         AppUser user = appUserService.getUserByEmail(email);
-        var forgotPasswordToken = tokenService.generateToken(user);
+        String forgotPasswordToken = tokenService.generateToken(user);
         saveUserForgotPasswordToken(user,forgotPasswordToken);
         // not valid token is not handled here!
         if(tokenService.tokenExists(forgotPasswordToken)){
-            sendForgotPasswordEmail(user,tokenService.findByToken(forgotPasswordToken));
+            sendForgotPasswordEmail(user,forgotPasswordToken);
         }
         log.info("An email has sent to you to change your password");
         return "An email has sent to you to change your password ";
@@ -55,17 +57,38 @@ public class AuthenticationService {
 
 
 
+    public ConfirmedAccountResponse confirmAccount(String token, PasswordRequest passwordRequest) {
+        ConfirmedAccountResponse confirmedAccountResponse=new ConfirmedAccountResponse();
+        String userEmail= tokenService.extractEmail(token);
+        log.debug(userEmail);
+        AppUser user=appUserService.getUserByEmail(userEmail);
+        log.debug(user.getFirstName());
+        if(user.getEnabled()){
+            throw new AccountAlreadyActivatedException("Account is already activated before");
+        }
+        String newPass =passwordRequest.getNewPassword();
+        String confirmationPass=passwordRequest.getConfirmationPassword();
+        if(!newPass.equals(confirmationPass)){
+            throw new IllegalStateException("Passwords are not the same");
+        }
+        user.setPassword(passwordEncoder.encode(newPass));
+        user.setEnabled(true);
+        appUserService.saveUser(user);
+        confirmedAccountResponse.setStatus("ACTIVE");
+        confirmedAccountResponse.setMessage("Account has been activated");
+        log.info(user.getFirstName()+" account has been activated (ACTIVE)");
+        return confirmedAccountResponse;
+    }
 
 
-    public void sendForgotPasswordEmail(AppUser user,Token token){
+    public void sendForgotPasswordEmail(AppUser user,String token){
         SimpleMailMessage mailMessage = new SimpleMailMessage();
         mailMessage.setTo(user.getEmail());
         mailMessage.setSubject("[Training Management System] Please reset your password");
         mailMessage.setText("To change your password in the Exalt Training Application, please click here : "
-                +"http://localhost:8080/api/v1/auth/forgot-password?token="+token.getToken());
+                +"http://localhost:8080/api/v1/auth/forgot-password?token="+token);
         emailService.sendEmail(mailMessage);
-        log.info("Confirmation Token: " + token.getToken());
-        log.info("Confirmation Token id : " + token.getId());
+        log.info("Forgot-Pass Token: " + token);
     }
 
 

@@ -34,9 +34,16 @@ public class AuthenticationController {
         return ResponseEntity.ok(authService.authenticate(request));
     }
 
+    @Operation(summary = "Complete Your Registration (Confirmation-Token Required in the URL)")
+    @PostMapping(value="/complete-registration")
+    public ResponseEntity<ConfirmedAccountResponse> confirmUserAccount(
+            @RequestParam("token") String token,
+            @Valid @RequestBody PasswordRequest passwordRequest) {
+        return ResponseEntity.ok(authService.confirmAccount(token,passwordRequest));
+    }
 
 // should be in the admin APIs but for testing now
-    @Operation(summary = "Confirm New Password", security =  @SecurityRequirement(name = "forgotPasswordAuth"))
+    @Operation(summary = "Confirm New Password")
     @PutMapping(value="/password-reset")
     public ResponseEntity<String> confirmPassword(@RequestParam("token")String forgotPasswordToken,
                                                   @Valid @RequestBody PasswordRequest passwordRequest) {

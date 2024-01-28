@@ -28,14 +28,14 @@ public class AdminController {
 
     @Operation(summary = "Create User (SUPER_ADMIN, SUPERVISOR, or TRAINEE)", security =  @SecurityRequirement(name = "apiKey"))
     @PostMapping("/create-user")
-    public ResponseEntity<CreatedUserResponse> createUser(@RequestBody @Valid UserCreationRequest request) {
+    public ResponseEntity<String> createUser(@RequestBody @Valid UserCreationRequest request) {
         return ResponseEntity.ok(adminService.createUser(request));
     }
 
 
     @Operation(summary = "Deactivate User", security =  @SecurityRequirement(name = "loginAuth"))
     @PreAuthorize("hasRole('SUPER_ADMIN')")
-    @PutMapping("/users/deactivate/{id}")
+    @PutMapping("/users/{id}/deactivate")
     public ResponseEntity<String> deactivateUser(@PathVariable Long id)  {
         return ResponseEntity.ok(adminService.deactivateUser(id));
     }

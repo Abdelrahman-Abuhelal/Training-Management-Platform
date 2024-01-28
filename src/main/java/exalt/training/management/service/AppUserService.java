@@ -32,6 +32,13 @@ public class AppUserService {
     private final SuperAdminService superAdminService;
     private final TokenService tokenService;
 
+
+
+
+    public boolean userAlreadyExists(String username){
+        return appUserRepository.findByEmail(username).isPresent();
+    }
+
     public void handleUserRole(AppUser user) {
         if (user.getRole().equals(AppUserRole.TRAINEE)) {
             Trainee trainee = new Trainee();
@@ -51,38 +58,9 @@ public class AppUserService {
         }
     }
 
-    public ConfirmedAccountResponse confirmAccount(HttpServletRequest request, PasswordRequest passwordRequest) {
-        ConfirmedAccountResponse confirmedAccountResponse=new ConfirmedAccountResponse();
-        final String authHeader = request.getHeader("Authorization");
-        final String jwt;
-        final String userEmail;
-        if (authHeader == null ||!authHeader.startsWith("Bearer ")) {
-            throw new TokenNotFoundException("Token not found");
-        }
-        jwt = authHeader.substring(7);
-        userEmail = tokenService.extractEmail(jwt);
-        AppUser user=getUserByEmail(userEmail);
-        if(user.getEnabled()){
-            throw new AccountAlreadyActivatedException("Account is activated before");
-        }
-        String newPass =passwordRequest.getNewPassword();
-        String confirmationPass=passwordRequest.getConfirmationPassword();
-        if(!newPass.equals(confirmationPass)){
-            throw new IllegalStateException("Passwords are not the same");
-        }
-        user.setPassword(passwordEncoder.encode(newPass));
-        user.setEnabled(true);
-        handleUserRole(user);
-        appUserRepository.save(user);
-        confirmedAccountResponse.setStatus("ACTIVE");
-        confirmedAccountResponse.setMessage("Account has been activated");
-        log.info(user.getFirstName()+" account has been activated (ACTIVE)");
-        return confirmedAccountResponse;
-    }
-
-
-    public boolean userAlreadyExists(String username){
-        return appUserRepository.findByEmail(username).isPresent();
+    public void saveUser(AppUser appUser){
+        handleUserRole(appUser);
+        appUserRepository.save(appUser);
     }
 
     public String changePassword(ChangePasswordRequest request, Principal connectedUser) {
@@ -114,7 +92,8 @@ public class AppUserService {
 
 
     public AppUser getUserByEmail(String email){
-        return appUserRepository.findByEmail(email).orElseThrow(()-> new AppUserNotFoundException("There is no registered user with this email: "+ email));
+        return appUserRepository.findByEmail(email)
+                .orElseThrow(()-> new AppUserNotFoundException("There is no registered user with this email: "+ email));
     }
 
 

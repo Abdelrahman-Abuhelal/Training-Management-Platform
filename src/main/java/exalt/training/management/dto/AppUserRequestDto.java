@@ -18,12 +18,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class AppUserRequestDto {
 
-    private String email;
 
     private String username;
-
-    @Enumerated(EnumType.STRING)
-    private AppUserRole role;
 
     @Size(max = 50)
     private String firstName;
@@ -34,11 +30,7 @@ public class AppUserRequestDto {
     @Size(max = 50)
     private String fullName;
 
-    @Size(max = 256)
-    private String imageUrl;
 
-
-    private Boolean enabled;
 
 
 }
