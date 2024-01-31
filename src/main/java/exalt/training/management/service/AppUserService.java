@@ -35,7 +35,7 @@ public class AppUserService {
     public AppUserService(AppUserRepository appUserRepository,
                           @Lazy AuthenticationService authenticationService,
                           PasswordEncoder passwordEncoder,
-                          TraineeService traineeService,
+                          @Lazy TraineeService traineeService,
                           SupervisorService supervisorService,
                           SuperAdminService superAdminService,
                           TokenService tokenService,

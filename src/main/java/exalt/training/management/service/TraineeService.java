@@ -28,7 +28,7 @@ public class TraineeService {
     private final AcademicGradesService academicGradesService;
 
     public TraineeService(TraineeRepository traineeRepository,
-                          @Lazy AuthenticationService authenticationService,
+                          AuthenticationService authenticationService,
                           TraineeMapper traineeMapper, AcademicGradesMapper academicGradesMapper,
                           AcademicGradesService academicGradesService) {
         this.traineeRepository = traineeRepository;

@@ -54,6 +54,12 @@ public class TokenService {
                 .orElse(false);
     }
 
+    public boolean isLoginTokenValid(String jwt) {
+        return tokenRepository.findTokenByTokenTypeAndToken(TokenType.LOGIN, jwt)
+                .map(t -> !t.isExpired() && !t.isRevoked())
+                .orElse(false);
+    }
+
     public boolean tokenExists(String token){
         return tokenRepository.findByToken(token).isPresent();
     }

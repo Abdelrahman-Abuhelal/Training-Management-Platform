@@ -59,6 +59,14 @@ public class AdminController {
         return new ResponseEntity<>(appUserDto, HttpStatus.OK);
     }
 
+    @Operation(summary = "Get All info for User By Id", security =  @SecurityRequirement(name = "loginAuth"))
+    @PreAuthorize("hasRole('SUPER_ADMIN')")
+    @GetMapping("/users/{id}/all-info")
+    public ResponseEntity<AppUser> getUserInfoById(@PathVariable Long id){
+        AppUser appUser= adminService.getFullUserById(id);
+        return new ResponseEntity<>(appUser, HttpStatus.OK);
+    }
+
     @Operation(summary = "Update User using his Id", security =  @SecurityRequirement(name = "loginAuth"))
     @PreAuthorize("hasAnyRole('SUPER_ADMIN','SUPERVISOR')")
     @PutMapping("/users/{id}")

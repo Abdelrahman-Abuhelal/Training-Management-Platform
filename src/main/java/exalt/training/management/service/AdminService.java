@@ -22,7 +22,6 @@ import java.util.Optional;
 
 @Service
 @Slf4j
-@RequiredArgsConstructor
 
 public class AdminService {
 
@@ -32,7 +31,6 @@ public class AdminService {
 
     private final AppUserService appUserService;
 
-    private final PasswordEncoder passwordEncoder;
     private final TokenService tokenService;
 
     private final AuthenticationService authenticationService;
@@ -40,9 +38,18 @@ public class AdminService {
 
     private final AppUserMapper userMapper;
 
+    public AdminService(TraineeRepository traineeRepository, AppUserRepository appUserRepository, AppUserService appUserService, TokenService tokenService, AuthenticationService authenticationService, EmailService emailService, AppUserMapper userMapper) {
+        this.traineeRepository = traineeRepository;
+        this.appUserRepository = appUserRepository;
+        this.appUserService = appUserService;
+        this.tokenService = tokenService;
+        this.authenticationService = authenticationService;
+        this.emailService = emailService;
+        this.userMapper = userMapper;
+    }
 
 
-        public String createUser(UserCreationRequest request) {
+    public String createUser(UserCreationRequest request) {
         if (appUserService.userAlreadyExists(request.getEmail())){
             throw new UserAlreadyExistsException(request.getEmail() + " already exists!");
         }

@@ -8,10 +8,13 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
-@RequiredArgsConstructor
 public class SupervisorService {
 
     private final SupervisorRepository supervisorRepository;
+
+    public SupervisorService(SupervisorRepository supervisorRepository) {
+        this.supervisorRepository = supervisorRepository;
+    }
 
 
     public void saveSupervisor(Supervisor supervisor){
