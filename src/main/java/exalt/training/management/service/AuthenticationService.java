@@ -20,9 +20,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.security.Principal;
 
 @Service
-@RequiredArgsConstructor
 @Slf4j
 public class AuthenticationService {
     //should use only service here !! I have to change it
@@ -31,16 +31,27 @@ public class AuthenticationService {
     private final AppUserMapper appUserMapper;
     private final TokenService tokenService;
     private final TokenRepository tokenRepository;
-    private final TraineeService traineeService;
-    private final SupervisorService supervisorService;
-    private final SuperAdminService superAdminService;
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
     private final EmailService emailService;
 
-
-
-
+    public AuthenticationService(AppUserRepository appUserRepository,
+                                 AppUserService appUserService,
+                                 AppUserMapper appUserMapper,
+                                 TokenService tokenService,
+                                 TokenRepository tokenRepository,
+                                 PasswordEncoder passwordEncoder,
+                                 AuthenticationManager authenticationManager,
+                                 EmailService emailService) {
+        this.appUserRepository = appUserRepository;
+        this.appUserService = appUserService;
+        this.appUserMapper = appUserMapper;
+        this.tokenService = tokenService;
+        this.tokenRepository = tokenRepository;
+        this.passwordEncoder = passwordEncoder;
+        this.authenticationManager = authenticationManager;
+        this.emailService = emailService;
+    }
 
 
     public String forgotPasswordViaEmail(String email){
@@ -57,29 +68,6 @@ public class AuthenticationService {
 
 
 
-    public ConfirmedAccountResponse confirmAccount(String token, PasswordRequest passwordRequest) {
-        ConfirmedAccountResponse confirmedAccountResponse=new ConfirmedAccountResponse();
-        String userEmail= tokenService.extractEmail(token);
-        log.debug(userEmail);
-        AppUser user=appUserService.getUserByEmail(userEmail);
-        log.debug(user.getFirstName());
-        if(user.getEnabled()){
-            throw new AccountAlreadyActivatedException("Account is already activated before");
-        }
-        String newPass =passwordRequest.getNewPassword();
-        String confirmationPass=passwordRequest.getConfirmationPassword();
-        if(!newPass.equals(confirmationPass)){
-            throw new IllegalStateException("Passwords are not the same");
-        }
-        user.setPassword(passwordEncoder.encode(newPass));
-        user.setEnabled(true);
-        appUserService.saveUser(user);
-        confirmedAccountResponse.setStatus("ACTIVE");
-        confirmedAccountResponse.setMessage("Account has been activated");
-        log.info(user.getFirstName()+" account has been activated (ACTIVE)");
-        return confirmedAccountResponse;
-    }
-
 
     public void sendForgotPasswordEmail(AppUser user,String token){
         SimpleMailMessage mailMessage = new SimpleMailMessage();
@@ -91,7 +79,11 @@ public class AuthenticationService {
         log.info("Forgot-Pass Token: " + token);
     }
 
-
+    public void checkConnectedUserAuthentication(Principal connectedAppUser) {
+        if (!(connectedAppUser instanceof UsernamePasswordAuthenticationToken)) {
+            throw new InvalidUserAuthenticationException("Invalid user authentication");
+        }
+    }
     public AuthenticationResponse authenticate(LoginRequest request) {
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
@@ -161,18 +153,30 @@ public class AuthenticationService {
         });
         tokenRepository.saveAll(validUserTokens);
     }
-    public String changePasswordViaEmail(String forgotPasswordToken,PasswordRequest forgotPasswordRequest) {
-        Token token = tokenRepository.findTokenByTokenTypeAndToken(TokenType.FORGOT_PASS,forgotPasswordToken).orElseThrow(
-                () -> new TokenNotFoundException("Token not found")
-        );
-        AppUser user = appUserRepository.findByEmail(token.getUser().getEmail()).orElseThrow(
-                () -> new AppUserNotFoundException("User not found with this token")
-        );
-        if(!tokenService.isTokenValid(token.getToken(), token.getUser())){
-            throw new InvalidTokenException("Token expired, try confirm your email again");
+    public String changePasswordViaEmail (HttpServletRequest request,PasswordRequest forgotPasswordRequest)  throws IOException {
+        // Duplicated code should be replaced
+        final String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
+        final String forgotPassJwt;
+        final String userEmail;
+        //check if the JWT token doesn't  exist
+        if (authHeader == null ||!authHeader.startsWith("Bearer ")) {
+            throw new InvalidTokenException("Token not found");
         }
+        forgotPassJwt = authHeader.substring(7);
+        var isTokenValid = tokenRepository.findTokenByTokenTypeAndToken(TokenType.FORGOT_PASS,forgotPassJwt)
+                .map(t -> !t.isExpired() && !t.isRevoked())
+                .orElse(false);
+
+        userEmail = tokenService.extractEmail(forgotPassJwt);
+        AppUser user=appUserService.getUserByEmail(userEmail);
+
+        if (!(tokenService.isTokenValid(forgotPassJwt, user) && isTokenValid)){
+            throw new InvalidTokenException("token is not valid");
+        }
+
         String newPass =forgotPasswordRequest.getNewPassword();
         String confirmationPass=forgotPasswordRequest.getConfirmationPassword();
+
         if(!newPass.equals(confirmationPass)){
             throw new IllegalStateException("Passwords are not the same");
         }

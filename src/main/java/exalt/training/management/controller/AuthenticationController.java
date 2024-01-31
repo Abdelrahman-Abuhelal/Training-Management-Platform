@@ -2,6 +2,7 @@ package exalt.training.management.controller;
 
 import exalt.training.management.dto.*;
 import exalt.training.management.service.AdminService;
+import exalt.training.management.service.AppUserService;
 import exalt.training.management.service.AuthenticationService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -12,6 +13,7 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
@@ -22,6 +24,7 @@ import java.io.IOException;
 public class AuthenticationController {
 
     private final AuthenticationService authService;
+    private final AppUserService appUserService;
 
 
     // I should make one dto for registration then in the method specify the role
@@ -33,21 +36,20 @@ public class AuthenticationController {
     ) {
         return ResponseEntity.ok(authService.authenticate(request));
     }
-
-    @Operation(summary = "Complete Your Registration (Confirmation-Token Required in the URL)")
+    @Operation(summary = "Complete Your Registration (Confirmation-Token Required)", security =  @SecurityRequirement(name = "confirmationAuth") )
     @PostMapping(value="/complete-registration")
-    public ResponseEntity<ConfirmedAccountResponse> confirmUserAccount(
-            @RequestParam("token") String token,
-            @Valid @RequestBody PasswordRequest passwordRequest) {
-        return ResponseEntity.ok(authService.confirmAccount(token,passwordRequest));
+    public ResponseEntity<ConfirmedAccountResponse> confirmUserAccount(HttpServletRequest request,
+                                                                       @Valid @RequestBody PasswordRequest passwordRequest) {
+        return ResponseEntity.ok(appUserService.confirmAccount(request,passwordRequest));
     }
 
+
 // should be in the admin APIs but for testing now
-    @Operation(summary = "Confirm New Password")
+    @Operation(summary = "Confirm New Password" , security =  @SecurityRequirement(name = "forgotPasswordAuth"))
     @PutMapping(value="/password-reset")
-    public ResponseEntity<String> confirmPassword(@RequestParam("token")String forgotPasswordToken,
-                                                  @Valid @RequestBody PasswordRequest passwordRequest) {
-        return ResponseEntity.ok(authService.changePasswordViaEmail(forgotPasswordToken,passwordRequest));
+    public ResponseEntity<String> confirmPassword(HttpServletRequest request,
+                                                  @Valid @RequestBody PasswordRequest passwordRequest) throws IOException {
+        return ResponseEntity.ok(authService.changePasswordViaEmail(request,passwordRequest));
     }
 
     @Operation(summary = "Send a Reset Password Email (Not Logged-in User)")

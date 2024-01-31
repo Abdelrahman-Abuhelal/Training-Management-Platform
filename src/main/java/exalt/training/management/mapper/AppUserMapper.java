@@ -17,7 +17,7 @@ import java.util.List;
 
 // try to find constant way for doing it in pom.xml
 // @Mapper(componentModel = "spring")
-@Mapper(componentModel = "spring")
+@Mapper
 public interface AppUserMapper {
 
     AppUserMapper INSTANCE = Mappers.getMapper(AppUserMapper.class);

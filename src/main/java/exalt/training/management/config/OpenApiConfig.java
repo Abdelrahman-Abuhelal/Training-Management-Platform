@@ -30,6 +30,12 @@ public class OpenApiConfig {
                                 .bearerFormat("JWT")
                                 .name("login-token")
                         )
+                        .addSecuritySchemes("confirmationAuth", new SecurityScheme()
+                                .type(SecurityScheme.Type.HTTP)
+                                .scheme("bearer")
+                                .bearerFormat("JWT")
+                                .name("confirmation-token")
+                        )
                         .addSecuritySchemes("forgotPasswordAuth", new SecurityScheme()
                                 .type(SecurityScheme.Type.HTTP)
                                 .scheme("bearer")
@@ -43,12 +49,12 @@ public class OpenApiConfig {
 
     private Paths definePaths() {
         Paths paths = new Paths();
-        paths.put("/api/v1/auth/logout",
+        paths.put("/api/v1/users/logout",
                 new PathItem()
                         .post(new Operation()
                                 .summary("Logs out the current user")
                                 .description("Invalidates the current session and logs out the user")
-                                .tags(List.of("authentication-controller"))
+                                .tags(List.of("app-user-controller"))
                                 .responses(new ApiResponses().addApiResponse("204", new ApiResponse().description("Logout successful")))
                                 .security(List.of(new SecurityRequirement().addList("loginAuth")))
                         )

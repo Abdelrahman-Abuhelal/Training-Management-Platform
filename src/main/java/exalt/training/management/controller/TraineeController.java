@@ -1,32 +1,33 @@
 package exalt.training.management.controller;
 
 
-import exalt.training.management.dto.AppUserDto;
-import exalt.training.management.model.Trainee;
-import exalt.training.management.service.AdminService;
+import exalt.training.management.dto.TraineeDataDto;
+import exalt.training.management.service.TraineeService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
-import java.util.List;
+import java.io.IOException;
+import java.security.Principal;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/trainees")
+@RequestMapping("/api/v1/trainee-operations")
 public class TraineeController {
 
 
-    private final AdminService adminService;
+    private final TraineeService traineeService;
 
 
-/*    @PostMapping
-    public ResponseEntity<AppUserResponse> registerTrainee(@RequestBody RegistrationRequest traineeRegistrationDto){
-        AppUserResponse userResponseDto = traineeRegistrationService.registerTrainee(traineeRegistrationDto);
-        return new ResponseEntity<>(userResponseDto, HttpStatus.OK);
-    }*/
-
-
+    @PutMapping("/update-me")
+    @PreAuthorize("hasAnyRole('TRAINEE')")
+    public ResponseEntity<String> registerTraineeData(
+            @RequestBody @Valid TraineeDataDto traineeDataDTO, Principal user) {
+        return ResponseEntity.ok(traineeService.registerTraineeData(traineeDataDTO, user));
+    }
 
 
 /*    @DeleteMapping("/{username}")
