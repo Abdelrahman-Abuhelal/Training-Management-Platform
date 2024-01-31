@@ -51,23 +51,14 @@ public class AppUserService {
     }
 
 
-    public ConfirmedAccountResponse confirmAccount(HttpServletRequest request,PasswordRequest passwordRequest) {
-        ConfirmedAccountResponse confirmedAccountResponse=new ConfirmedAccountResponse();
-        final String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
-        final String jwt;
+    public String confirmAccount(HttpServletRequest request,PasswordRequest passwordRequest) {
+        final String confirmAccountJwt = authenticationService.checkAuthHeader(request);
         final String userEmail;
-        //check if the JWT token doesn't  exist
-        if (authHeader == null ||!authHeader.startsWith("Bearer ")) {
-            throw new InvalidTokenException("Token not found");
-        }
-        jwt = authHeader.substring(7);
-        var isTokenValid = tokenRepository.findTokenByTokenTypeAndToken(TokenType.CONFIRMATION_TOKEN,jwt)
-                .map(t -> !t.isExpired() && !t.isRevoked())
-                .orElse(false);
-        userEmail = tokenService.extractEmail(jwt);
+        userEmail = tokenService.extractEmail(confirmAccountJwt);
         log.info(userEmail+" is trying to activate his account");
         AppUser user=getUserByEmail(userEmail);
-        if (!(tokenService.isTokenValid(jwt, user) && isTokenValid)){
+        var isTokenValid = tokenService.isConfirmationTokenValid(confirmAccountJwt);
+        if (!(tokenService.isTokenValid(confirmAccountJwt, user) && isTokenValid)){
             throw new InvalidTokenException("token is not valid");
         }
         if(user.getEnabled()){
@@ -75,16 +66,12 @@ public class AppUserService {
         }
         String newPass =passwordRequest.getNewPassword();
         String confirmationPass=passwordRequest.getConfirmationPassword();
-        if(!newPass.equals(confirmationPass)){
-            throw new IllegalStateException("Passwords are not the same");
-        }
+        authenticationService.checkValidPasswordMatch(newPass,confirmationPass);
         user.setPassword(passwordEncoder.encode(newPass));
         user.setEnabled(true);
         saveUser(user);
-        confirmedAccountResponse.setStatus("ACTIVE");
-        confirmedAccountResponse.setMessage("Account has been activated");
         log.info(user.getFirstName()+" account has been activated (ACTIVE)");
-        return confirmedAccountResponse;
+        return "Account has been activated";
     }
 
     public boolean userAlreadyExists(String username){

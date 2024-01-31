@@ -2,6 +2,7 @@ package exalt.training.management.service;
 import exalt.training.management.exception.InvalidTokenException;
 import exalt.training.management.model.AppUser;
 import exalt.training.management.model.Token;
+import exalt.training.management.model.TokenType;
 import exalt.training.management.repository.TokenRepository;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -39,6 +40,18 @@ public class TokenService {
     public Token findByToken(String token){
         return tokenRepository.findByToken(token).orElseThrow(
                 ()-> new InvalidTokenException("Token is not Valid"));
+    }
+
+    public boolean isConfirmationTokenValid(String jwt) {
+        return tokenRepository.findTokenByTokenTypeAndToken(TokenType.CONFIRMATION_TOKEN, jwt)
+                .map(t -> !t.isExpired() && !t.isRevoked())
+                .orElse(false);
+    }
+
+    public boolean isForgetPasswordTokenValid(String jwt) {
+        return tokenRepository.findTokenByTokenTypeAndToken(TokenType.FORGOT_PASS, jwt)
+                .map(t -> !t.isExpired() && !t.isRevoked())
+                .orElse(false);
     }
 
     public boolean tokenExists(String token){

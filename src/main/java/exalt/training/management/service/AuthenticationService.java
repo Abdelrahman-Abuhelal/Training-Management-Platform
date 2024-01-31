@@ -10,7 +10,6 @@ import exalt.training.management.repository.TokenRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.mail.SimpleMailMessage;
@@ -107,7 +106,16 @@ public class AuthenticationService {
                 .build();
     }
 
-
+    public String checkAuthHeader(HttpServletRequest request){
+        final String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
+        final String jwt;
+        //check if the JWT token doesn't  exist
+        if (authHeader == null ||!authHeader.startsWith("Bearer ")) {
+            throw new InvalidTokenException("Token not found");
+        }
+        jwt = authHeader.substring(7);
+        return jwt;
+    }
     private void saveUserLoginToken(AppUser user, String jwtToken) {
         var token = Token.builder()
                 .user(user)
@@ -153,34 +161,24 @@ public class AuthenticationService {
         });
         tokenRepository.saveAll(validUserTokens);
     }
-    public String changePasswordViaEmail (HttpServletRequest request,PasswordRequest forgotPasswordRequest)  throws IOException {
-        // Duplicated code should be replaced
-        final String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
-        final String forgotPassJwt;
-        final String userEmail;
-        //check if the JWT token doesn't  exist
-        if (authHeader == null ||!authHeader.startsWith("Bearer ")) {
-            throw new InvalidTokenException("Token not found");
-        }
-        forgotPassJwt = authHeader.substring(7);
-        var isTokenValid = tokenRepository.findTokenByTokenTypeAndToken(TokenType.FORGOT_PASS,forgotPassJwt)
-                .map(t -> !t.isExpired() && !t.isRevoked())
-                .orElse(false);
 
+    public void checkValidPasswordMatch(String password, String confirmPassword) {
+        if(!password.equals(confirmPassword)){
+            throw new IllegalStateException("Passwords are not the same");
+        }
+    }
+
+    public String changePasswordViaEmail (HttpServletRequest request,PasswordRequest forgotPasswordRequest)  throws IOException {
+        final String userEmail;
+        final String forgotPassJwt = checkAuthHeader(request);
+        var isTokenValid = tokenService.isForgetPasswordTokenValid(forgotPassJwt);
         userEmail = tokenService.extractEmail(forgotPassJwt);
         AppUser user=appUserService.getUserByEmail(userEmail);
-
         if (!(tokenService.isTokenValid(forgotPassJwt, user) && isTokenValid)){
             throw new InvalidTokenException("token is not valid");
         }
-
-        String newPass =forgotPasswordRequest.getNewPassword();
-        String confirmationPass=forgotPasswordRequest.getConfirmationPassword();
-
-        if(!newPass.equals(confirmationPass)){
-            throw new IllegalStateException("Passwords are not the same");
-        }
-        user.setPassword(passwordEncoder.encode(newPass));
+        checkValidPasswordMatch(forgotPasswordRequest.getNewPassword(),forgotPasswordRequest.getConfirmationPassword());
+        user.setPassword(passwordEncoder.encode(forgotPasswordRequest.getNewPassword()));
         appUserRepository.save(user);
         log.info("Password has been changed");
         return "Your password has been changed";

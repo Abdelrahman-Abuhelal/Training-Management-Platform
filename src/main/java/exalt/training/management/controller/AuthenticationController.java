@@ -38,7 +38,7 @@ public class AuthenticationController {
     }
     @Operation(summary = "Complete Your Registration (Confirmation-Token Required)", security =  @SecurityRequirement(name = "confirmationAuth") )
     @PostMapping(value="/complete-registration")
-    public ResponseEntity<ConfirmedAccountResponse> confirmUserAccount(HttpServletRequest request,
+    public ResponseEntity<String> confirmUserAccount(HttpServletRequest request,
                                                                        @Valid @RequestBody PasswordRequest passwordRequest) {
         return ResponseEntity.ok(appUserService.confirmAccount(request,passwordRequest));
     }

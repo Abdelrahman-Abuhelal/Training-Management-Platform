@@ -4,8 +4,10 @@ import exalt.training.management.dto.AppUserDto;
 import exalt.training.management.dto.AppUserRequestDto;
 import exalt.training.management.dto.CreatedUserResponse;
 import exalt.training.management.dto.UserCreationRequest;
+import exalt.training.management.model.AcademicGrades;
 import exalt.training.management.model.AppUser;
 import exalt.training.management.model.Trainee;
+import exalt.training.management.service.AcademicGradesService;
 import exalt.training.management.service.AdminService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -25,6 +27,7 @@ public class AdminController {
 
 
     private final AdminService adminService;
+    private final AcademicGradesService academicGradesService;
 
     @Operation(summary = "Create User (SUPER_ADMIN, SUPERVISOR, or TRAINEE)", security =  @SecurityRequirement(name = "apiKey"))
     @PostMapping("/create-user")
@@ -79,6 +82,15 @@ public class AdminController {
     public ResponseEntity <List<Trainee>> getAllTrainees(){
         List <Trainee> trainees = adminService.getAllTrainees();
         return new ResponseEntity<>(trainees, HttpStatus.OK);
+    }
+
+
+    // Should add authorization to this endpoint for only SUPER_ADMIN
+    @Operation(summary = "Get All Academic Grades", security =  @SecurityRequirement(name = "loginAuth"))
+    @GetMapping("/trainees/grades/all")
+    public ResponseEntity<List<AcademicGrades>> getAllAcademicGrades() {
+        List <AcademicGrades> academicGrades =  academicGradesService.getAllAcademicGrades();
+        return new ResponseEntity<>(academicGrades, HttpStatus.OK);
     }
 
 }
