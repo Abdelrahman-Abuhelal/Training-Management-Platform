@@ -28,12 +28,15 @@ public class TokenService {
 
     @Value("${application.security.jwt.secret-key}")
     private String secretKey;
-    @Value("${application.security.jwt.expiration}")
-    private long jwtExpiration;
+    @Value("${application.security.jwt.login-token.expiration}")
+    private long loginExpiration;
+    @Value("${application.security.jwt.forgot-pass-token.expiration}")
+    private long forgotPasswordExpiration;
+    @Value("${application.security.jwt.confirmation-token.expiration}")
+    private long confirmationExpiration;
     @Value("${application.security.jwt.refresh-token.expiration}")
     private long refreshExpiration;
     private final TokenRepository tokenRepository;
-    private final EmailService emailService;
 
 
 
@@ -73,15 +76,35 @@ public class TokenService {
         return claimsResolver.apply(claims);
     }
 
-    public String generateToken(AppUser user) {
-        return generateToken(new HashMap<>(), user);
+    public String generateLogin(AppUser user) {
+        return generateLoginToken(new HashMap<>(), user);
+    }
+    public String generateConfirmation(AppUser user) {
+        return generateConfirmationToken(new HashMap<>(), user);
+    }
+    public String generateForgotPassword(AppUser user) {
+        return generateForgotPasswordToken(new HashMap<>(), user);
     }
 
-    public String generateToken(
+    public String generateLoginToken(
             Map<String, Object> extraClaims,
             AppUser user
     ) {
-        return buildToken(extraClaims, user, jwtExpiration);
+        return buildToken(extraClaims, user, loginExpiration);
+    }
+
+    public String generateForgotPasswordToken(
+            Map<String, Object> extraClaims,
+            AppUser user
+    ) {
+        return buildToken(extraClaims, user, forgotPasswordExpiration);
+    }
+
+    public String generateConfirmationToken(
+            Map<String, Object> extraClaims,
+            AppUser user
+    ) {
+        return buildToken(extraClaims, user, confirmationExpiration);
     }
 
     public String generateRefreshToken(

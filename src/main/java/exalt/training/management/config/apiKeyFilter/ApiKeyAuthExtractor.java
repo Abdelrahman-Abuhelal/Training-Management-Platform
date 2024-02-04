@@ -2,6 +2,7 @@ package exalt.training.management.config.apiKeyFilter;
 
 
 import jakarta.servlet.http.HttpServletRequest;
+import org.hibernate.cfg.Environment;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.AuthorityUtils;

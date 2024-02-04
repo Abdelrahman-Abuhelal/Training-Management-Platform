@@ -63,7 +63,7 @@ public class AdminService {
                 .build();
 
         var savedUser = appUserRepository.save(user);
-        var jwtConfirmationToken = tokenService.generateToken(user);
+        var jwtConfirmationToken = tokenService.generateConfirmation(user);
         // Would I need to store the refresh token?
         var refreshToken = tokenService.generateRefreshToken(user);
         // Save the token as Confirmation token

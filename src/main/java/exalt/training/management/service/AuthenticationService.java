@@ -56,7 +56,7 @@ public class AuthenticationService {
 
     public String forgotPasswordViaEmail(String email){
         AppUser user = appUserService.getUserByEmail(email);
-        String forgotPasswordToken = tokenService.generateToken(user);
+        String forgotPasswordToken = tokenService.generateForgotPassword(user);
         saveUserForgotPasswordToken(user,forgotPasswordToken);
         // not valid token is not handled here!
         if(tokenService.tokenExists(forgotPasswordToken)){
@@ -96,7 +96,7 @@ public class AuthenticationService {
         if(!user.isEnabled()){
             throw new InvalidUserException("User is not activated, Your account need registration or confirmation via Email");
         }
-        var jwtToken = tokenService.generateToken(user);
+        var jwtToken = tokenService.generateLogin(user);
         var refreshToken = tokenService.generateRefreshToken(user);
         saveUserLoginToken(user, jwtToken);
         AppUserDto appUserDto = appUserMapper.userToUserDto(user);
@@ -117,7 +117,7 @@ public class AuthenticationService {
         jwt = authHeader.substring(7);
         return jwt;
     }
-    private void saveUserLoginToken(AppUser user, String jwtToken) {
+    public void saveUserLoginToken(AppUser user, String jwtToken) {
         var token = Token.builder()
                 .user(user)
                 .token(jwtToken)
@@ -204,7 +204,7 @@ public class AuthenticationService {
             var user = this.appUserRepository.findByEmail(userEmail)
                     .orElseThrow();
             if (tokenService.isTokenValid(refreshToken, user)) {
-                var loginToken = tokenService.generateToken(user);
+                var loginToken = tokenService.generateRefreshToken(user);
                 revokeAllUserTokens(user);
                 saveUserLoginToken(user, loginToken);
                 var authResponse = AuthenticationResponse.builder()

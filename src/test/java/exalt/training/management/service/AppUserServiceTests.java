@@ -4,6 +4,7 @@ import exalt.training.management.exception.AppUserNotFoundException;
 import exalt.training.management.model.AppUser;
 
 import exalt.training.management.repository.AppUserRepository;
+import jakarta.servlet.http.HttpServletRequest;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -11,12 +12,12 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.jdbc.EmbeddedDatabaseConnection;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
+import org.springframework.http.HttpHeaders;
 
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class AppUserServiceTests {
@@ -81,4 +82,7 @@ public class AppUserServiceTests {
         assertThrows(AppUserNotFoundException.class, () -> appUserService.getUserByEmail(nonExistingEmail));
         verify(appUserRepository).findByEmail(nonExistingEmail); // Verify repository interaction
     }
+
+
+
 }
