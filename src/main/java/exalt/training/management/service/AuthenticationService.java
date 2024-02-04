@@ -153,7 +153,7 @@ public class AuthenticationService {
 
 
     private void revokeAllUserTokens(AppUser user) {
-        var validUserTokens = appUserRepository.findAllValidTokenByUser(user.getId());
+        var validUserTokens = tokenRepository.findAllValidTokenByUser(user.getId());
         if (validUserTokens.isEmpty())
             return;
         validUserTokens.forEach(token -> {

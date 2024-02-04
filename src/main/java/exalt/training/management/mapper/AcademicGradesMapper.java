@@ -8,7 +8,7 @@ import org.mapstruct.*;
 public interface AcademicGradesMapper {
 
     @Mapping(source = "academicGradesDto.tawjeehi",target = "tawjeehi")
-    @Mapping(source = "academicGradesDto.universityGrade",target = "universityGrade")
+    @Mapping(source = "academicGradesDto.universityGpa",target = "universityGpa")
     @Mapping(source = "academicGradesDto.programmingOne",target = "programmingOne")
     @Mapping(source = "academicGradesDto.objectOriented",target = "objectOriented")
     @Mapping(source = "academicGradesDto.dataStructure",target = "dataStructure")
@@ -17,7 +17,7 @@ public interface AcademicGradesMapper {
     AcademicGrades academicGradesDtoToAcademicGrades(AcademicGradesDto academicGradesDto);
 
     @Mapping(source = "academicGradesDto.tawjeehi",target = "tawjeehi")
-    @Mapping(source = "academicGradesDto.universityGrade",target = "universityGrade")
+    @Mapping(source = "academicGradesDto.universityGpa",target = "universityGpa")
     @Mapping(source = "academicGradesDto.programmingOne",target = "programmingOne")
     @Mapping(source = "academicGradesDto.objectOriented",target = "objectOriented")
     @Mapping(source = "academicGradesDto.dataStructure",target = "dataStructure")

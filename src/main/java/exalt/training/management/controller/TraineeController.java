@@ -3,6 +3,8 @@ package exalt.training.management.controller;
 
 import exalt.training.management.dto.TraineeDataDto;
 import exalt.training.management.service.TraineeService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -24,6 +26,7 @@ public class TraineeController {
 
     @PutMapping("/update-me")
     @PreAuthorize("hasAnyRole('TRAINEE')")
+    @Operation(summary = "Register Trainee Data" , security =  @SecurityRequirement(name = "loginAuth"))
     public ResponseEntity<String> registerTraineeData(
             @RequestBody @Valid TraineeDataDto traineeDataDTO, Principal user) {
         return ResponseEntity.ok(traineeService.registerTraineeData(traineeDataDTO, user));

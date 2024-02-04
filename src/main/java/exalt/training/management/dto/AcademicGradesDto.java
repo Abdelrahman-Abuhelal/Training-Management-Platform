@@ -9,7 +9,7 @@ import lombok.*;
 @NoArgsConstructor
 public class AcademicGradesDto {
     private Double tawjeehi;
-    private Double universityGrade;
+    private Double universityGpa;
     private Double programmingOne;
     private Double dataStructure;
     private Double objectOriented;

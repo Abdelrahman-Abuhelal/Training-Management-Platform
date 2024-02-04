@@ -10,7 +10,7 @@ import java.util.Date;
 import java.util.Map;
 
 @Entity
-@Table
+@Table(name = "trainee")
 @Data
 @Builder
 @ToString

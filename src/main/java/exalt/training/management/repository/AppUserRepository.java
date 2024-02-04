@@ -17,11 +17,8 @@ public interface AppUserRepository extends JpaRepository<AppUser, Long> {
 
     Optional <List<AppUser>> findByRole(AppUserRole role);
 
-    @Query(value = """
-      select t from Token t inner join AppUser u \s
-      on t.user.id = u.id\s
-      where u.id = :id and (t.expired = false or t.revoked = false) \s
-      """)
-    List<Token> findAllValidTokenByUser(Long id);
+    //change the sql to have only tokenType of login
+
+
 
 }

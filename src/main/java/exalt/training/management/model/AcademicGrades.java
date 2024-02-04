@@ -5,7 +5,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
-@Table
+@Table(name = "academic_grades")
 @Data
 @ToString
 @NoArgsConstructor
@@ -16,7 +16,7 @@ public class AcademicGrades {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private Double tawjeehi;
-    private Double universityGrade;
+    private Double universityGpa;
     private Double programmingOne;
     private Double objectOriented;
     private Double dataStructure;
