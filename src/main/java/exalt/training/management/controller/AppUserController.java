@@ -26,9 +26,9 @@ public class AppUserController {
     @Operation(summary = "Change Password (Logged-in User)", security =  @SecurityRequirement(name = "loginAuth"))
     @PutMapping("/change-password")
     public ResponseEntity<String> changePassword(@RequestBody
-                                                     @Valid ChangePasswordRequest changePasswordRequest, Principal user
+                                                     @Valid ChangePasswordRequest changePasswordRequest
     )  {
-        return ResponseEntity.ok(appUserService.changePassword(changePasswordRequest, user));
+        return ResponseEntity.ok(appUserService.changePassword(changePasswordRequest));
     }
 
     // i want to create a endpoint to take object and add it to the trainee table, and use the login token to find the user who is in the system

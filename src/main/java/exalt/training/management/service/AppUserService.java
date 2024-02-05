@@ -14,6 +14,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -30,7 +32,6 @@ public class AppUserService {
     private final SupervisorService supervisorService;
     private final SuperAdminService superAdminService;
     private final TokenService tokenService;
-    private final TokenRepository tokenRepository;
 
     public AppUserService(AppUserRepository appUserRepository,
                           @Lazy AuthenticationService authenticationService,
@@ -47,7 +48,6 @@ public class AppUserService {
         this.supervisorService = supervisorService;
         this.superAdminService = superAdminService;
         this.tokenService = tokenService;
-        this.tokenRepository = tokenRepository;
     }
 
 
@@ -121,11 +121,11 @@ public class AppUserService {
     }
 
 
-    public String changePassword(ChangePasswordRequest request, Principal connectedUser) {
+    public String changePassword(ChangePasswordRequest request) {
 // i want to get the user from the token
-        authenticationService.checkConnectedUserAuthentication(connectedUser);
 
-        var user = (AppUser) ((UsernamePasswordAuthenticationToken) connectedUser).getPrincipal();
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        var user = (AppUser) authentication.getPrincipal();
 
         // check if the current password is correct
         if (!passwordEncoder.matches(request.getCurrentPassword(), user.getPassword())) {
@@ -154,6 +154,10 @@ public class AppUserService {
     public AppUser getUserByEmail(String email){
         return appUserRepository.findByEmail(email)
                 .orElseThrow(()-> new AppUserNotFoundException("There is no registered user with this email: "+ email));
+    }
+
+    public Boolean usernameAlreadyTaken(String username){
+        return appUserRepository.existsByUsername(username);
     }
 
 

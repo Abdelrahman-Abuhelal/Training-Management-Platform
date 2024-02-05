@@ -7,6 +7,7 @@ import lombok.*;
 import org.springframework.lang.Nullable;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 @Entity
@@ -16,6 +17,7 @@ import java.util.Map;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
+@EqualsAndHashCode
 public class Trainee {
 
 
@@ -35,8 +37,8 @@ public class Trainee {
 
     @Nullable
     @JsonManagedReference
-    @OneToOne(mappedBy = "trainee",cascade = CascadeType.ALL)
-    private AcademicGrades academicGrades;
+    @OneToMany(mappedBy = "trainee",cascade = CascadeType.ALL)
+    private List<AcademicGrades> academicGrades;
 
     @OneToOne
     @JsonBackReference

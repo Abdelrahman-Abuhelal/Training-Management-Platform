@@ -1,13 +1,11 @@
 package exalt.training.management.mapper;
 
-import exalt.training.management.dto.AppUserRequestDto;
 import exalt.training.management.dto.TraineeDataDto;
-import exalt.training.management.model.AppUser;
 import exalt.training.management.model.Trainee;
 import org.mapstruct.*;
 import org.mapstruct.factory.Mappers;
 
-@Mapper
+@Mapper(componentModel = "spring")
 public interface TraineeMapper {
 
     TraineeMapper INSTANCE = Mappers.getMapper(TraineeMapper.class);
@@ -19,6 +17,8 @@ public interface TraineeMapper {
     @Mapping(source = "traineeDataDto.expectedGraduationDate",target = "expectedGraduationDate")
     @Mapping(source = "traineeDataDto.trainingField",target = "trainingField")
     @Mapping(source = "traineeDataDto.branchLocation",target = "branchLocation")
+    @Mapping(source = "traineeDataDto.academicGradesDto", target = "academicGrades", ignore = true)
+    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     Trainee traineeDataDtoToTrainee(TraineeDataDto traineeDataDto);
 
     @Mapping(source = "traineeDataDto.phoneNumber",target = "phoneNumber")
@@ -28,6 +28,7 @@ public interface TraineeMapper {
     @Mapping(source = "traineeDataDto.expectedGraduationDate",target = "expectedGraduationDate")
     @Mapping(source = "traineeDataDto.trainingField",target = "trainingField")
     @Mapping(source = "traineeDataDto.branchLocation",target = "branchLocation")
+    @Mapping(source = "traineeDataDto.academicGradesDto", target = "academicGrades", ignore = true)
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     Trainee traineeDataDtoToTrainee(TraineeDataDto traineeDataDto, @MappingTarget Trainee trainee);
 

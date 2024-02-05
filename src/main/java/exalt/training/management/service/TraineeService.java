@@ -1,61 +1,96 @@
 package exalt.training.management.service;
 
 import exalt.training.management.dto.TraineeDataDto;
-import exalt.training.management.mapper.AcademicGradesMapper;
+import exalt.training.management.exception.AppUserNotFoundException;
+import exalt.training.management.exception.InvalidAcademicCourseException;
+import exalt.training.management.exception.InvalidUserException;
 import exalt.training.management.mapper.TraineeMapper;
 import exalt.training.management.model.AcademicGrades;
+import exalt.training.management.model.AcademicGradesType;
 import exalt.training.management.model.AppUser;
 import exalt.training.management.model.Trainee;
+import exalt.training.management.repository.AcademicGradesRepository;
 import exalt.training.management.repository.TraineeRepository;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.context.annotation.Lazy;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
-import java.security.Principal;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 @Service
 @Slf4j
 public class TraineeService {
 
     private final TraineeRepository traineeRepository;
-    private final AuthenticationService authenticationService;
     private final TraineeMapper traineeMapper;
-    private final AcademicGradesMapper academicGradesMapper;
-    private final AcademicGradesService academicGradesService;
+
+    private final AcademicGradesRepository academicGradesRepository;
+
 
     public TraineeService(TraineeRepository traineeRepository,
-                          AuthenticationService authenticationService,
-                          TraineeMapper traineeMapper, AcademicGradesMapper academicGradesMapper,
-                          AcademicGradesService academicGradesService) {
+                          TraineeMapper traineeMapper,
+                         AcademicGradesRepository academicGradesRepository) {
         this.traineeRepository = traineeRepository;
-        this.authenticationService = authenticationService;
         this.traineeMapper = traineeMapper;
-        this.academicGradesMapper = academicGradesMapper;
-        this.academicGradesService = academicGradesService;
+        this.academicGradesRepository = academicGradesRepository;
     }
 
     public void saveTrainee(Trainee trainee){
         traineeRepository.save(trainee);
     }
 
-   public String registerTraineeData(TraineeDataDto traineeDataDTO, Principal connectedUser )  {
-       authenticationService.checkConnectedUserAuthentication(connectedUser);
-       var user = (AppUser) ((UsernamePasswordAuthenticationToken) connectedUser).getPrincipal();
-       log.info("Received TraineeDataDto: {}", traineeDataDTO);
-       var grades = traineeDataDTO.getAcademicGradesDto();
-       var trainee = user.getTrainee();
-       log.info("grades: {}",grades);
-       AcademicGrades academicGrades = academicGradesMapper.academicGradesDtoToAcademicGrades(grades);
-       academicGrades.setTrainee(trainee);
-       academicGradesService.saveAcademicGrades(academicGrades);
-       Trainee traineeUpdated = traineeMapper.traineeDataDtoToTrainee(traineeDataDTO,user.getTrainee());
-       traineeUpdated.setAcademicGrades(academicGrades);
-       saveTrainee(traineeUpdated);
-       return "Trainee Data Registered Successfully";
+    public Trainee getMyProfileInfo(){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        var user = (AppUser) authentication.getPrincipal();
+        var trainee = user.getTrainee();
+        if(trainee == null){
+            throw new InvalidUserException("User is not a Trainee" );
+        }
+        Optional<Trainee> traineeInfo=traineeRepository.findById(trainee.getId());
+        if (traineeInfo.isEmpty()){
+            String message=String.format("the trainee  does not have information");
+            log.info(message);
+            throw new AppUserNotFoundException(message);
+        }
+        return traineeInfo.get();
+    }
+
+
+    public String registerTraineeData(TraineeDataDto traineeDataDTO )  {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        var user = (AppUser) authentication.getPrincipal();
+        // Should add exception if the user is not authenticated
+        var trainee = user.getTrainee();
+        if(trainee == null){
+            throw new RuntimeException("User is not a Trainee" );
+        }
+        log.info("Received TraineeDataDto: {}", traineeDataDTO);
+        // SHOULD BE Set not a list
+        List<AcademicGrades> gradeList = new ArrayList<>();
+        var grades = traineeDataDTO.getAcademicGradesDto();
+        log.info("grades: {}",grades);
+        for (Map.Entry<String, Double> entry : grades.entrySet()) {
+            String key = entry.getKey();
+            Double value = entry.getValue();
+            try {
+               AcademicGradesType courseType = AcademicGradesType.valueOf(key.toUpperCase());
+               AcademicGrades academicGrades = new AcademicGrades(courseType, value, trainee);
+               gradeList.add(academicGrades);
+            } catch (InvalidAcademicCourseException e) {
+                throw new InvalidAcademicCourseException("Invalid Course: " + key);
+            }
+            }
+        List<AcademicGrades> academicGrades = academicGradesRepository.saveAll(gradeList);
+        Trainee traineeUpdated = traineeMapper.traineeDataDtoToTrainee(traineeDataDTO,trainee);
+        if(!academicGrades.isEmpty()){
+            traineeUpdated.setAcademicGrades(academicGrades);
+            traineeRepository.save(trainee);
+        }
+        return "Trainee Data Registered Successfully";
     }
 
 }

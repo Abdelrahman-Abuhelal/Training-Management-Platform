@@ -8,6 +8,8 @@ import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
+import java.util.Map;
+
 @Data
 @Builder
 @AllArgsConstructor
@@ -22,6 +24,6 @@ public class TraineeDataDto {
     private Date expectedGraduationDate;
     private String trainingField;
     private BranchLocation branchLocation;
-    private AcademicGradesDto academicGradesDto;
+    private Map<String, Double> academicGradesDto;
 
 }

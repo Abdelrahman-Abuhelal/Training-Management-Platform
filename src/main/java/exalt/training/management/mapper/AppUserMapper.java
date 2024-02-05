@@ -16,8 +16,7 @@ import java.util.List;
 
 
 // try to find constant way for doing it in pom.xml
-// @Mapper(componentModel = "spring")
-@Mapper
+@Mapper(componentModel = "spring")
 public interface AppUserMapper {
 
     AppUserMapper INSTANCE = Mappers.getMapper(AppUserMapper.class);
@@ -41,8 +40,8 @@ public interface AppUserMapper {
 
     @Mapping(source = "appUserDto.userId",target = "id")
     @Mapping(source = "appUserDto.userEmail",target = "email")
-    @Mapping(source = "appUserDto.userRole",target = "role")
     @Mapping(source = "appUserDto.userFirstName",target = "firstName")
+    @Mapping(source = "appUserDto.userRole",target = "role")
     AppUser userDtoToUser(AppUserDto appUserDto, @MappingTarget AppUser appUser);
 
     @Mapping(source = "appUserRequestDto.firstName",target = "firstName")

@@ -79,7 +79,7 @@ public class AdminController {
     @Operation(summary = "Get Trainee By Id", security =  @SecurityRequirement(name = "loginAuth"))
     @PreAuthorize("hasAnyRole('SUPER_ADMIN','SUPERVISOR')")
     @GetMapping("/trainees/{id}")
-    public ResponseEntity<Trainee> getTraineeById(@PathVariable Long id){
+    public ResponseEntity<Trainee> getTraineeProfileInfoById(@PathVariable Long id){
         Trainee trainee = adminService.getTraineeById(id);
         return new ResponseEntity<>(trainee, HttpStatus.OK);
     }
@@ -95,6 +95,7 @@ public class AdminController {
 
     // Should add authorization to this endpoint for only SUPER_ADMIN
     @Operation(summary = "Get All Academic Grades", security =  @SecurityRequirement(name = "loginAuth"))
+    @PreAuthorize("hasAnyRole('SUPER_ADMIN','SUPERVISOR')")
     @GetMapping("/trainees/grades/all")
     public ResponseEntity<List<AcademicGrades>> getAllAcademicGrades() {
         List <AcademicGrades> academicGrades =  academicGradesService.getAllAcademicGrades();

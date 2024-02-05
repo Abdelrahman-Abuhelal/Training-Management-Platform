@@ -53,6 +53,10 @@ public class AdminService {
         if (appUserService.userAlreadyExists(request.getEmail())){
             throw new UserAlreadyExistsException(request.getEmail() + " already exists!");
         }
+        // add exception when the username is already taken
+        if(appUserService.usernameAlreadyTaken(request.getUsername())){
+            throw new UserAlreadyExistsException(request.getUsername() + " : this username already reserved before!");
+        }
         var user = AppUser.builder()
                 .email(request.getEmail())
                 .firstName(request.getFirstName())

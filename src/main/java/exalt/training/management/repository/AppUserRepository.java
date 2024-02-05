@@ -17,6 +17,7 @@ public interface AppUserRepository extends JpaRepository<AppUser, Long> {
 
     Optional <List<AppUser>> findByRole(AppUserRole role);
 
+
     //change the sql to have only tokenType of login
 
 
