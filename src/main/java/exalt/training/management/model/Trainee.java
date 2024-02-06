@@ -30,6 +30,7 @@ public class Trainee {
     private byte[] copyOfId;
     private String address;
     private String universityName;
+    private String universityMajor;
     private Date expectedGraduationDate;
     private String trainingField;
     @Enumerated(EnumType.STRING)

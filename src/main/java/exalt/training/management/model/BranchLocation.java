@@ -1,6 +1,11 @@
 package exalt.training.management.model;
 
-public enum BranchLocation {
-    RAMALLAH, NABLUS, BETHLEHEM
 
+import java.util.Arrays;
+public enum BranchLocation {
+    RAMALLAH, NABLUS, BETHLEHEM;
+
+    public static boolean isValid(String location) {
+        return Arrays.stream(values()).anyMatch(enumValue -> enumValue.name().equalsIgnoreCase(location));
+    }
 }

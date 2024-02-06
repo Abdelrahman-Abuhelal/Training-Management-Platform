@@ -77,4 +77,16 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
     public ResponseEntity<String> handleInvalidAcademicCourseException(InvalidAcademicCourseException ex) {
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.CONFLICT);
     }
+
+    @ExceptionHandler(InvalidBranchLocationException.class)
+    public ResponseEntity<String> handleInvalidBranchLocationException(InvalidBranchLocationException ex) {
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.CONFLICT);
+    }
+
+    @ExceptionHandler(InvalidTrainingFieldException.class)
+    public ResponseEntity<String> handleInvalidTrainingFieldException(InvalidTrainingFieldException ex) {
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.CONFLICT);
+    }
+
+
 }

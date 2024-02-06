@@ -21,10 +21,11 @@ public class TraineeDataDto {
     private String idNumber;
     private String address;
     private String universityName;
+    private String universityMajor;
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date expectedGraduationDate;
     private String trainingField;
-    private BranchLocation branchLocation;
+    private String branchLocation;
     private Map<String, Double> academicGradesDto;
 
 }

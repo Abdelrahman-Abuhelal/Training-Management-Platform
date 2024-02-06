@@ -1,14 +1,9 @@
 package exalt.training.management.service;
 
 import exalt.training.management.dto.TraineeDataDto;
-import exalt.training.management.exception.AppUserNotFoundException;
-import exalt.training.management.exception.InvalidAcademicCourseException;
-import exalt.training.management.exception.InvalidUserException;
+import exalt.training.management.exception.*;
 import exalt.training.management.mapper.TraineeMapper;
-import exalt.training.management.model.AcademicGrades;
-import exalt.training.management.model.CourseType;
-import exalt.training.management.model.AppUser;
-import exalt.training.management.model.Trainee;
+import exalt.training.management.model.*;
 import exalt.training.management.repository.AcademicGradesRepository;
 import exalt.training.management.repository.TraineeRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -59,13 +54,21 @@ public class TraineeService {
     }
 
 
-    public String registerTraineeData(TraineeDataDto traineeDataDTO )  {
+    public String registerTraineeData(TraineeDataDto traineeDataDTO)  {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         var user = (AppUser) authentication.getPrincipal();
         // Should add exception if the user is not authenticated
         var trainee = user.getTrainee();
         if(trainee == null){
-            throw new RuntimeException("User is not a Trainee" );
+            throw new RuntimeException("User is not a registered as Trainee" );
+        }
+        String trainingField = traineeDataDTO.getTrainingField();
+        if (!TrainingField.isValid(trainingField)){
+            throw new InvalidTrainingFieldException("Invalid Training Field");
+        }
+        String branchLocation = traineeDataDTO.getBranchLocation();
+        if (!BranchLocation.isValid(branchLocation)){
+            throw new InvalidBranchLocationException("Invalid Branch Location");
         }
         log.info("Received TraineeDataDto: {}", traineeDataDTO);
         Map<String, Double> grades = traineeDataDTO.getAcademicGradesDto();
