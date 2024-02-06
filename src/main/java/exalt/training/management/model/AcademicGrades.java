@@ -17,16 +17,16 @@ public class AcademicGrades {
     private Long id;
 
     @Enumerated(EnumType.STRING)
-    private AcademicGradesType type;
+    private CourseType type;
 
-    private Double value;
+    private Double mark;
     @ManyToOne
     @JsonBackReference
     private Trainee trainee;
 
-    public AcademicGrades(AcademicGradesType courseType, Double value, Trainee trainee) {
+    public AcademicGrades(CourseType courseType, Double mark, Trainee trainee) {
         this.type = courseType;
-        this.value = value;
+        this.mark = mark;
         this.trainee = trainee;
     }
 

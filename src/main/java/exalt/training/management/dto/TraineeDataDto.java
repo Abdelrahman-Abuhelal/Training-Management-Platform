@@ -1,6 +1,7 @@
 package exalt.training.management.dto;
 
 import exalt.training.management.model.BranchLocation;
+import exalt.training.management.model.CourseType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

@@ -6,7 +6,7 @@ import exalt.training.management.exception.InvalidAcademicCourseException;
 import exalt.training.management.exception.InvalidUserException;
 import exalt.training.management.mapper.TraineeMapper;
 import exalt.training.management.model.AcademicGrades;
-import exalt.training.management.model.AcademicGradesType;
+import exalt.training.management.model.CourseType;
 import exalt.training.management.model.AppUser;
 import exalt.training.management.model.Trainee;
 import exalt.training.management.repository.AcademicGradesRepository;
@@ -16,10 +16,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -27,6 +25,7 @@ public class TraineeService {
 
     private final TraineeRepository traineeRepository;
     private final TraineeMapper traineeMapper;
+    private final EnumSet<CourseType> validCourseTypes = EnumSet.allOf(CourseType.class);
 
     private final AcademicGradesRepository academicGradesRepository;
 
@@ -69,27 +68,42 @@ public class TraineeService {
             throw new RuntimeException("User is not a Trainee" );
         }
         log.info("Received TraineeDataDto: {}", traineeDataDTO);
-        // SHOULD BE Set not a list
-        List<AcademicGrades> gradeList = new ArrayList<>();
-        var grades = traineeDataDTO.getAcademicGradesDto();
+        Map<String, Double> grades = traineeDataDTO.getAcademicGradesDto();
         log.info("grades: {}",grades);
+        // Uppercase the keys before validation
+        Set<String> uppercaseKeys = grades.keySet().stream().map(String::toUpperCase).collect(Collectors.toSet());
+        try {
+            if (!uppercaseKeys.stream().allMatch(key -> validCourseTypes.contains(CourseType.valueOf(key)))) {
+                throw new InvalidAcademicCourseException("Invalid course types found in academicGradesDto");
+            }
+        }catch (IllegalArgumentException e){
+            throw new InvalidAcademicCourseException("Invalid course type found in academicGradesDto");
+        }
         for (Map.Entry<String, Double> entry : grades.entrySet()) {
             String key = entry.getKey();
-            Double value = entry.getValue();
+            Double mark = entry.getValue();
             try {
-               AcademicGradesType courseType = AcademicGradesType.valueOf(key.toUpperCase());
-               AcademicGrades academicGrades = new AcademicGrades(courseType, value, trainee);
-               gradeList.add(academicGrades);
+                // Check for existing grade with the same courseType and trainee
+                CourseType courseType = CourseType.valueOf(key.toUpperCase());
+
+                Optional<AcademicGrades> existingGrade = academicGradesRepository.findAcademicGradesByTypeAndTrainee_Id(courseType, trainee.getId());
+
+                if (existingGrade.isPresent()) {
+                    existingGrade.get().setMark(mark);
+                    academicGradesRepository.save(existingGrade.get());
+                } else {
+                    // Create new grade
+                    AcademicGrades newGrade = new AcademicGrades(courseType, mark, trainee);
+                    academicGradesRepository.save(newGrade);
+                }
             } catch (InvalidAcademicCourseException e) {
-                throw new InvalidAcademicCourseException("Invalid Course: " + key);
+                throw new InvalidAcademicCourseException("Invalid Course type : " + key);
             }
             }
-        List<AcademicGrades> academicGrades = academicGradesRepository.saveAll(gradeList);
         Trainee traineeUpdated = traineeMapper.traineeDataDtoToTrainee(traineeDataDTO,trainee);
-        if(!academicGrades.isEmpty()){
-            traineeUpdated.setAcademicGrades(academicGrades);
-            traineeRepository.save(trainee);
-        }
+//        traineeUpdated.setAcademicGrades(academicGrades);
+        traineeRepository.save(traineeUpdated);
+
         return "Trainee Data Registered Successfully";
     }
 

@@ -67,4 +67,14 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
     public ResponseEntity<String> handleAccountAlreadyActivatedException(AccountAlreadyActivatedException ex) {
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.CONFLICT);
     }
+
+    @ExceptionHandler(InvalidUserRoleException.class)
+    public ResponseEntity<String> handleInvalidUserRoleException(InvalidUserRoleException ex) {
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.CONFLICT);
+    }
+
+    @ExceptionHandler(InvalidAcademicCourseException.class)
+    public ResponseEntity<String> handleInvalidAcademicCourseException(InvalidAcademicCourseException ex) {
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.CONFLICT);
+    }
 }
