@@ -25,7 +25,7 @@ import java.security.Principal;
 @Service
 @Slf4j
 public class AuthenticationService {
-    //should use only service here !! I have to change it
+    //  only use services here !! I have to change it
     private final AppUserRepository appUserRepository;
     private final  AppUserService appUserService;
     private final AppUserMapper appUserMapper;

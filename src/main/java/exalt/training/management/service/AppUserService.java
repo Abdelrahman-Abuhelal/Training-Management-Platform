@@ -52,6 +52,7 @@ public class AppUserService {
 
 
     public String confirmAccount(HttpServletRequest request,PasswordRequest passwordRequest) {
+        // change the authentication process to get user without using the token and request
         final String confirmAccountJwt = authenticationService.checkAuthHeader(request);
         final String userEmail;
         userEmail = tokenService.extractEmail(confirmAccountJwt);

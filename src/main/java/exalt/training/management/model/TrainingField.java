@@ -9,4 +9,5 @@ public enum TrainingField {
     public static boolean isValid(String field) {
         return Arrays.stream(values()).anyMatch(enumValue -> enumValue.name().equalsIgnoreCase(field));
     }
+
 }
