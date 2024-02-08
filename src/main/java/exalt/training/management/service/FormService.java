@@ -1,10 +1,16 @@
 package exalt.training.management.service;
 
 import exalt.training.management.dto.CompletedFormDto;
+import exalt.training.management.dto.FormDataDto;
 import exalt.training.management.dto.RatingDto;
+import exalt.training.management.exception.FormNotFoundException;
+import exalt.training.management.exception.InvalidFormType;
+import exalt.training.management.exception.InvalidTrainingFieldException;
 import exalt.training.management.mapper.RatingMapper;
 import exalt.training.management.model.AppUser;
+import exalt.training.management.model.TrainingField;
 import exalt.training.management.model.forms.Form;
+import exalt.training.management.model.forms.FormType;
 import exalt.training.management.model.forms.Rating;
 import exalt.training.management.repository.FormRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -48,16 +54,25 @@ public class FormService {
                 form.setSuperAdmin(user.getSuperAdmin());
                 break;
         }
-        var formType=completedFormDto.getType();
-        List<Rating> ratings = ratingMapper.ratingDtoToRating(completedFormDto.getRatingsDto());
-        // but will this save each rating to which form?
+        Form savedForm = formRepository.save(form);
+        String formType= completedFormDto.getType();
+        if (!FormType.isValid(formType)){
+            throw new InvalidFormType("Invalid Form Type");
+        }
+        var description=completedFormDto.getDescription();
+        List<Rating> ratings = ratingMapper.ratingDtoListToRatingList(completedFormDto.getRatingsDto());
+        ratings.forEach(rating -> rating.setForm(savedForm));
         ratingService.saveRatings(ratings);
-        form.setRatings(ratings);
-        form.setType(formType);
-        form.setDescription(completedFormDto.getDescription());
-        formRepository.save(form);
-
+        savedForm.setRatings(ratings);
+        savedForm.setType(FormType.valueOf(formType));
+        savedForm.setDescription(description);
+        formRepository.save(savedForm);
         return "Form registered successfully!";
+    }
+
+    public FormDataDto getFormDataByFormId(Long formId){
+        Form form = formRepository.findById(formId).orElseThrow(()->new FormNotFoundException("Form not found with the provided id"));
+        return FormDataDto.builder().ratingsDto(ratingMapper.ratingToRatingDto(form.getRatings())).description(form.getDescription()).type(form.getType()).build();
     }
 
 

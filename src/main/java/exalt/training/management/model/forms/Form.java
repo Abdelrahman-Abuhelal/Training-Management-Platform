@@ -5,6 +5,7 @@ import exalt.training.management.model.Supervisor;
 import exalt.training.management.model.Trainee;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
 import lombok.*;
 import org.springframework.lang.Nullable;
 
@@ -34,13 +35,13 @@ public class Form {
     @ManyToOne
     @Nullable
     private SuperAdmin superAdmin;
-
-    @NotBlank
-    private FormType type; // Review type from ReviewType enum
+    @Enumerated(EnumType.STRING)
+    private FormType type;
 
     private String description;
 
-    @OneToMany(mappedBy = "review", cascade = CascadeType.ALL)
+    @Nullable
+    @OneToMany(mappedBy = "form", cascade = CascadeType.ALL)
     private List <Rating> ratings;
 
     // Getters and setters

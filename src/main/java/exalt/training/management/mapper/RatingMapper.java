@@ -18,6 +18,15 @@ public interface RatingMapper {
     @Mapping(source = "ratingDto.questionType",target = "questionType")
     @Mapping(source = "ratingDto.question",target = "question")
     @Mapping(source = "ratingDto.answer",target = "answer")
-    List<Rating> ratingDtoToRating(List<RatingDto> ratingDto);
+    List<Rating> ratingDtoListToRatingList(List<RatingDto> ratingDto);
+
+    @Mapping(source = "ratingDto.questionType",target = "questionType")
+    @Mapping(source = "ratingDto.question",target = "question")
+    @Mapping(source = "ratingDto.answer",target = "answer")
+    Rating ratingDtoToRating(RatingDto ratingDto);
+    @Mapping(source = "rating.questionType",target = "questionType")
+    @Mapping(source = "rating.question",target = "question")
+    @Mapping(source = "rating.answer",target = "answer")
+    List<RatingDto> ratingToRatingDto(List<Rating> ratings);
 
 }

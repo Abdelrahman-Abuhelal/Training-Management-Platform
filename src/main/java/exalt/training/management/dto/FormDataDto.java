@@ -8,17 +8,16 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
-
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class CompletedFormDto {
+public class FormDataDto {
 
-    private String type;
+
+    private FormType type;
 
     private String description;
-
     private List<RatingDto> ratingsDto;
 
 
