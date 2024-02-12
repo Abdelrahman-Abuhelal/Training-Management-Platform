@@ -1,14 +1,15 @@
-
-import RegistrationForm from './pages/RegistrationForm'
-import './App.css'
+import RegistrationForm from "./components/RegistrationForm";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import "./App.css";
 
 function App() {
   return (
-    <>
-      <h1>Register User</h1>
-      <RegistrationForm />
-    </>
-  )
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<RegistrationForm />} />
+      </Routes>
+    </BrowserRouter>
+  );
 }
 
-export default App
+export default App;
