@@ -36,12 +36,7 @@ public class AuthenticationController {
     ) {
         return ResponseEntity.ok(authService.authenticate(request));
     }
-    @Operation(summary = "Complete Your Registration (Confirmation-Token Required)", security =  @SecurityRequirement(name = "confirmationAuth") )
-    @PostMapping(value="/complete-registration")
-    public ResponseEntity<String> confirmUserAccount(HttpServletRequest request,
-                                                                       @Valid @RequestBody PasswordRequest passwordRequest) {
-        return ResponseEntity.ok(appUserService.confirmAccount(request,passwordRequest));
-    }
+
 
 
 // should be in the admin APIs but for testing now
@@ -66,6 +61,14 @@ public class AuthenticationController {
             HttpServletResponse response
     ) throws IOException {
         authService.refreshToken(request, response);
+    }
+
+
+    @Operation(summary = "Complete Your Registration (Confirmation-Token Required)", security =  @SecurityRequirement(name = "confirmationAuth") )
+    @PostMapping(value="/complete-registration")
+    public ResponseEntity<String> confirmUserAccount(HttpServletRequest request,
+                                                     @Valid @RequestBody PasswordRequest passwordRequest) {
+        return ResponseEntity.ok(appUserService.confirmAccount(request,passwordRequest));
     }
 
 

@@ -79,7 +79,7 @@ public class AdminService {
         mailMessage.setTo(user.getEmail());
         mailMessage.setSubject("[Training Management System] Complete Registration!");
         mailMessage.setText("To confirm your account in the Exalt Training Application, please complete registration here : "
-                +"http://localhost:8080/api/v1/auth/complete-registration?token="+confirmationToken);
+                +"http://localhost:5173/confirm-account/"+confirmationToken);
         emailService.sendEmail(mailMessage);
     }
 
