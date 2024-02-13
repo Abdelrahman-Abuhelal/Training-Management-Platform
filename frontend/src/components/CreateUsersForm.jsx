@@ -1,33 +1,33 @@
 import React, { useState } from "react";
 import axios from "axios";
+import '../style/CreateUsersForm.css'
 
-const RegistrationForm = () => {
+const CreateUsersForm = () => {
   const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [role, setRole] = useState("SUPER_ADMIN");
   const [showSuccessAlert, setShowSuccessAlert] = useState(false);
-  const [showErrorAlert, setShowErrorAlert] = useState(false);
-  const [error, setError] = useState("");
+  const [showNotFullDataAlert, setshowNotFullDataAlert] = useState(false);
+  const [showError, setShowError] = useState("");
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (!email) {
       // validate the email
-      setShowErrorAlert(true);
+      setshowNotFullDataAlert(true);
     }
     if (!username) {
-      setShowErrorAlert(true);
+      setshowNotFullDataAlert(true);
     }
     if (!firstName) {
-      setShowErrorAlert(true);
+      setshowNotFullDataAlert(true);
     }
     if (!lastName) {
-      setShowErrorAlert(true);
-    } else {
-      setShowSuccessAlert(true);
+      setshowNotFullDataAlert(true);
     }
 
     try {
@@ -48,34 +48,40 @@ const RegistrationForm = () => {
           },
         }
       );
-
-      setError("");
-      console.log("User created successfully:", response.data);
+      if(response.status === 200){
+        setshowNotFullDataAlert(false);
+        setShowSuccessAlert(true);
+        setShowError("");
+        console.log("User created successfully:", response.data);
+      }else if(response.status === 409){
+        setShowError("User with this email or username exists already!");
+        setShowSuccessAlert(false);
+        setshowNotFullDataAlert(false);
+      }
     } catch (error) {
       console.error("Error creating user:", error);
-      setError(error.message || "An error occurred. Please try again later.");
+      setShowSuccessAlert(false);
+      setshowNotFullDataAlert(false);
+      setShowError("Error creating user!");
     }
   };
 
   return (
+    <div className="create-users-form-container">
     <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
       <div className="sm:mx-auto sm:w-full sm:max-w-sm">
         <img
-          className="mx-auto h-10 w-auto"
-          src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
+          className="mx-auto h-20 w-auto"
+          src="/EXALT_LOGO.png"
           alt="Exalt Logo"
         />
         <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
-          Create new user account
+          Create New Account
         </h2>
       </div>
 
       <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-        <form
-          className="space-y-6"
-          method="POST"
-          onSubmit={handleSubmit}
-        >
+        <form className="space-y-6" method="POST" onSubmit={handleSubmit}>
           <div>
             <label
               htmlFor="email"
@@ -114,7 +120,7 @@ const RegistrationForm = () => {
           </div>
 
           <div>
-          <div className="mt-2">
+            <div className="mt-2">
               <label
                 htmlFor="firstName"
                 className="block text-sm font-medium leading-6 text-gray-900"
@@ -132,7 +138,7 @@ const RegistrationForm = () => {
           </div>
 
           <div>
-          <div className="mt-2">
+            <div className="mt-2">
               <label
                 htmlFor="lastName"
                 className="block text-sm font-medium leading-6 text-gray-900"
@@ -150,7 +156,7 @@ const RegistrationForm = () => {
           </div>
 
           <div>
-          <div className="mt-2">
+            <div className="mt-2">
               <label
                 htmlFor="role"
                 className="block text-sm font-medium leading-6 text-gray-900"
@@ -169,19 +175,7 @@ const RegistrationForm = () => {
               </select>
             </div>
           </div>
-
-          {showErrorAlert && (
-            <p className="p-4 rounded-md bg-red-500 text-white">
-              Please fill all the details
-            </p>
-          )}
-
-          {showSuccessAlert && (
-            <p className="p-4 rounded-md bg-green-500 text-white">
-              User created successfully!
-            </p>
-          )}
-
+          <br />
           <div>
             <button
               type="submit"
@@ -190,10 +184,18 @@ const RegistrationForm = () => {
               Submit
             </button>
           </div>
+          {setshowNotFullDataAlert && (
+            <div class="alert alert-warning">Please fill all the details</div>
+          )}
+
+          {showSuccessAlert && (
+            <div class="alert alert-success">User created successfully!</div>
+          )}
         </form>
       </div>
+    </div>
     </div>
   );
 };
 
-export default RegistrationForm;
+export default CreateUsersForm;

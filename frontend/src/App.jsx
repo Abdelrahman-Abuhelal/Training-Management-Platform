@@ -1,12 +1,17 @@
-import RegistrationForm from "./components/RegistrationForm";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
 import "./App.css";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import CreateUsersForm from "./components/CreateUsersForm";
+import CompleteRegistration from "./components/CompleteRegistration";
+import Login from "./components/Login";
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<RegistrationForm />} />
+        <Route path="" element={<CreateUsersForm />} />
+        <Route path="confirm-account/:token" element={<CompleteRegistration/>} />
+        <Route path="login" element={<Login/>} />
+
       </Routes>
     </BrowserRouter>
   );

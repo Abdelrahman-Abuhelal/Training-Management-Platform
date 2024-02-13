@@ -1,0 +1,8 @@
+.create-users-form-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    height: 120vh;
+    background-color: #ffffff;
+
+  }
