@@ -155,4 +155,13 @@ public class TokenService {
         byte[] keyBytes = Decoders.BASE64.decode(secretKey);
         return Keys.hmacShaKeyFor(keyBytes);
     }
+
+    public Token findByUserAndTokenType(AppUser user, TokenType tokenType) {
+       return tokenRepository.findByUserAndTokenType(user, tokenType).orElseThrow(
+                ()-> new InvalidTokenException("Token is not Valid"));
+    }
+    public void revokeToken(Token token) {
+        token.setRevoked(true);
+        tokenRepository.save(token);
+    }
 }

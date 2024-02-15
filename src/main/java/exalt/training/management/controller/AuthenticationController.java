@@ -41,17 +41,16 @@ public class AuthenticationController {
 
 // should be in the admin APIs but for testing now
     @Operation(summary = "Confirm New Password" , security =  @SecurityRequirement(name = "forgotPasswordAuth"))
-    @PutMapping(value="/password-reset")
+    @PutMapping(value="/forgot-password-reset")
     public ResponseEntity<String> confirmPassword(HttpServletRequest request,
                                                   @Valid @RequestBody PasswordRequest passwordRequest) throws IOException {
         return ResponseEntity.ok(authService.changePasswordViaEmail(request,passwordRequest));
     }
 
     @Operation(summary = "Send a Reset Password Email (Not Logged-in User)")
-    @PostMapping("forgot-password")
-    public ResponseEntity<String> forgotPassword(@Email(message = "Please provide a valid email address")
-                                                   @RequestParam  String email){
-       return ResponseEntity.ok(authService.forgotPasswordViaEmail(email));
+    @PostMapping("forgot-password-email")
+    public ResponseEntity<String> forgotPassword(@RequestBody  ForgotPasswordEmail forgotPasswordEmail){
+       return ResponseEntity.ok(authService.forgotPasswordViaEmail(forgotPasswordEmail));
     }
 
     @Operation(summary = "Refresh Your Token", security =  @SecurityRequirement(name = "loginAuth"))

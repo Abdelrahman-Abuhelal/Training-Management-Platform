@@ -10,6 +10,13 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!email.length || !password.length) {
+      setError("Please enter both email and password");
+      return;
+    }
+
+    // Add further validations here if needed
+
 
     try {
       const baseUrl = import.meta.env.VITE_PORT_URL;
@@ -18,6 +25,7 @@ const Login = () => {
         email,
         password,
       });
+      
       if (response.status === 200) {
         setError("");
         console.log("Login successful:", response.data);
@@ -25,7 +33,7 @@ const Login = () => {
       // Redirect to protected area or store auth token
 
     } catch (error) {
-      setError(error.response.data.message || "Login failed");
+      setError(error.response.data.error || "Login failed");
     }
   };
 
@@ -79,8 +87,11 @@ const Login = () => {
                 />
               </div>
             </div>
+            <NavLink style={{ float: "right" , paddingBottom:10, paddingTop:5}} to="/forgot-password-email">Forgot Password?</NavLink>
+
+            <br /> 
             <br />
-            <NavLink to="/forgot-password-email">Forgot Password?</NavLink>
+
             <button
               type="submit"
               className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"

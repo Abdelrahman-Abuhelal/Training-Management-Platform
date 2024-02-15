@@ -2,6 +2,7 @@ package exalt.training.management.repository;
 import java.util.List;
 import java.util.Optional;
 
+import exalt.training.management.model.AppUser;
 import exalt.training.management.model.Token;
 import exalt.training.management.model.TokenType;
 import org.springframework.data.domain.Example;
@@ -14,7 +15,7 @@ public interface TokenRepository extends JpaRepository<Token, Long> {
 
     Optional<Token> findByToken(String token);
 
-
+    Optional<Token> findByUserAndTokenType(AppUser user, TokenType tokenType);
 
     // should be used in the JWT AUTH FILTER when token type is login
     Optional<Token> findTokenByTokenTypeAndToken(TokenType tokenType, String token);

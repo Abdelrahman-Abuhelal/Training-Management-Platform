@@ -32,6 +32,7 @@ public class AppUserService {
     private final SupervisorService supervisorService;
     private final SuperAdminService superAdminService;
     private final TokenService tokenService;
+    private final TokenRepository tokenRepository;
 
     public AppUserService(AppUserRepository appUserRepository,
                           @Lazy AuthenticationService authenticationService,
@@ -40,7 +41,7 @@ public class AppUserService {
                           SupervisorService supervisorService,
                           SuperAdminService superAdminService,
                           TokenService tokenService,
-                          TokenRepository tokenRepository) {
+                          TokenRepository tokenRepository, TokenRepository tokenRepository1) {
         this.appUserRepository = appUserRepository;
         this.authenticationService = authenticationService;
         this.passwordEncoder = passwordEncoder;
@@ -48,6 +49,7 @@ public class AppUserService {
         this.supervisorService = supervisorService;
         this.superAdminService = superAdminService;
         this.tokenService = tokenService;
+        this.tokenRepository = tokenRepository1;
     }
 
 
@@ -154,7 +156,7 @@ public class AppUserService {
 
     public AppUser getUserByEmail(String email){
         return appUserRepository.findByEmail(email)
-                .orElseThrow(()-> new AppUserNotFoundException("There is no registered user with this email: "+ email));
+                .orElseThrow(()-> new AppUserNotFoundException("There is no registered user with this email"));
     }
 
     public Boolean usernameAlreadyTaken(String username){

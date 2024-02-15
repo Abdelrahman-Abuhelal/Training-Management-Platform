@@ -1,6 +1,7 @@
 import axios from "axios";
 import React, { useState } from "react";
 import { useParams } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import "../style/CompleteRegistration.css";
 
 const CompleteRegistration = () => {
@@ -10,6 +11,8 @@ const CompleteRegistration = () => {
   const [showSuccessAlert, setShowSuccessAlert] = useState(false);
   const [NotMatchedPasswrodAlert, setNotMatchedPasswrodAlert] = useState(false);
   const [passwordError, setPasswordError] = useState("");
+  const [error, setError] = useState("");
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -58,6 +61,9 @@ const CompleteRegistration = () => {
         console.log("User Confirmed Account Successfully:", response.data);
       }
     } catch (error) {
+      if(error.response && error.response.status === 404 && error.response.data === "token is not valid"){
+        setError("Token is not Valid");
+      }
       setShowSuccessAlert(false);
       console.error("Error registering:", error);
     }
@@ -83,7 +89,7 @@ const CompleteRegistration = () => {
                 <input
                   type="password"
                   placeholder="Password"
-                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                className="shadow-sm block w-full px-3 py-2 text-gray-700 border rounded-md focus:outline-none focus:ring-indigo-500 focus:ring-width-1"
                   value={newPassword}
                   onChange={(e) => setNewPassword(e.target.value)}
                 />
@@ -96,12 +102,13 @@ const CompleteRegistration = () => {
                 <input
                   type="password"
                   placeholder="Confirm Password"
-                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                  className="shadow-sm block w-full px-3 py-2 text-gray-700 border rounded-md focus:outline-none focus:ring-indigo-500 focus:ring-width-1"
                   value={confirmationPassword}
                   onChange={(e) => setConfirmationPassword(e.target.value)}
                 />
               </div>
             </div>
+            <NavLink style={{ float: "right", paddingBottom:10, paddingTop:5 }} to="../login">Go to Login?</NavLink>
             <br />
             <button
               className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"

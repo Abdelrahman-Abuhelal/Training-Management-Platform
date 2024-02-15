@@ -54,14 +54,20 @@ public class AuthenticationService {
     }
 
 
-    public String forgotPasswordViaEmail(String email){
-        AppUser user = appUserService.getUserByEmail(email);
+    public String forgotPasswordViaEmail(ForgotPasswordEmail forgotPasswordEmail){
+        log.info("forgotPasswordViaEmail: " + forgotPasswordEmail.getEmail());
+        AppUser user = appUserService.getUserByEmail(forgotPasswordEmail.getEmail());
+        if (!user.isEnabled()){
+            throw new InvalidUserException("User is not activated, Your account need registration or confirmation via Email");
+        }
         String forgotPasswordToken = tokenService.generateForgotPassword(user);
         saveUserForgotPasswordToken(user,forgotPasswordToken);
         // not valid token is not handled here!
-        if(tokenService.tokenExists(forgotPasswordToken)){
-            sendForgotPasswordEmail(user,forgotPasswordToken);
+        if(!tokenService.tokenExists(forgotPasswordToken)){
+            throw new InvalidTokenException("Token is not valid");
         }
+        sendForgotPasswordEmail(user,forgotPasswordToken);
+
         log.info("An email has sent to you to change your password");
         return "An email has sent to you to change your password ";
     }
@@ -74,7 +80,7 @@ public class AuthenticationService {
         mailMessage.setTo(user.getEmail());
         mailMessage.setSubject("[Training Management System] Please reset your password");
         mailMessage.setText("To change your password in the Exalt Training Application, please click here : "
-                +"http://localhost:8080/api/v1/auth/forgot-password?token="+token);
+                +"http://localhost:5173/forgot-password-reset/"+token);
         emailService.sendEmail(mailMessage);
         log.info("Forgot-Pass Token: " + token);
     }

@@ -1,13 +1,14 @@
 import React, { useState } from "react";
 import axios from "axios";
 import "../style/CreateUsersForm.css";
+import Header from "./Header.jsx";
 
 const CreateUsersForm = () => {
   const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
-  const [role, setRole] = useState("SUPER_ADMIN");
+  const [role, setRole] = useState("TRAINEE");
   const [showSuccessAlert, setShowSuccessAlert] = useState(false);
   const [showNotFullDataAlert, setshowNotFullDataAlert] = useState(false);
   const [showError, setShowError] = useState("");
@@ -16,25 +17,23 @@ const CreateUsersForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!email) {
+    if (!email.length) {
       // validate the email
       setshowNotFullDataAlert(true);
       return;
     }
-    if (!username) {
-      setshowNotFullDataAlert(true);
-      return;
-
-    }
-    if (!firstName) {
+    if (!username.length) {
       setshowNotFullDataAlert(true);
       return;
     }
-    if (!lastName) {
+    if (!firstName.length) {
       setshowNotFullDataAlert(true);
       return;
     }
- 
+    if (!lastName.length) {
+      setshowNotFullDataAlert(true);
+      return;
+    }
 
     try {
       const baseUrl = import.meta.env.VITE_PORT_URL;
@@ -58,7 +57,7 @@ const CreateUsersForm = () => {
         setshowNotFullDataAlert(false);
         setShowSuccessAlert(true);
         setShowError("");
-        console.log("User created successfully:", response.data);
+        console.log("Email verification Sent to the user :", response.data);
       } else if (response.status === 409) {
         setShowError("User with this email or username exists already!");
         setShowSuccessAlert(false);
@@ -73,6 +72,8 @@ const CreateUsersForm = () => {
   };
 
   return (
+    <div> <>    < Header />    </>
+
     <div className="create-users-form-container">
       <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
         <div className="sm:mx-auto sm:w-full sm:max-w-sm">
@@ -82,7 +83,7 @@ const CreateUsersForm = () => {
             alt="Exalt Logo"
           />
           <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
-            Create New Account
+            Create User
           </h2>
         </div>
 
@@ -99,7 +100,7 @@ const CreateUsersForm = () => {
               <div className="mt-2">
                 <input
                   type="email"
-                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                  className="shadow-sm block w-full px-3 py-2 text-gray-700 border rounded-md focus:outline-none focus:ring-indigo-500 focus:ring-width-1"
                   id="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
@@ -118,7 +119,7 @@ const CreateUsersForm = () => {
                 <input
                   type="text"
                   id="username"
-                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                  className="shadow-sm block w-full px-3 py-2 text-gray-700 border rounded-md focus:outline-none focus:ring-indigo-500 focus:ring-width-1"
                   value={username}
                   onChange={(e) => setUsername(e.target.value)}
                 />
@@ -136,7 +137,7 @@ const CreateUsersForm = () => {
                 <input
                   type="text"
                   id="firstName"
-                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                  className="shadow-sm block w-full px-3 py-2 text-gray-700 border rounded-md focus:outline-none focus:ring-indigo-500 focus:ring-width-1"
                   value={firstName}
                   onChange={(e) => setFirstName(e.target.value)}
                 />
@@ -154,7 +155,7 @@ const CreateUsersForm = () => {
                 <input
                   type="text"
                   id="lastName"
-                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                  className="shadow-sm block w-full px-3 py-2 text-gray-700 border rounded-md focus:outline-none focus:ring-indigo-500 focus:ring-width-1"
                   value={lastName}
                   onChange={(e) => setLastName(e.target.value)}
                 />
@@ -172,12 +173,12 @@ const CreateUsersForm = () => {
                 <select
                   id="role"
                   value={role}
-                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                  className="shadow-sm block w-full px-3 py-2 text-gray-700 border rounded-md focus:outline-none focus:ring-indigo-500 focus:ring-width-1"
                   onChange={(e) => setRole(e.target.value)}
                 >
-                  <option value="SUPER_ADMIN">Admin</option>
-                  <option value="SUPERVISOR">Supervisor</option>
                   <option value="TRAINEE">Trainee</option>
+                  <option value="SUPERVISOR">Supervisor</option>
+                  <option value="SUPER_ADMIN">Admin</option>
                 </select>
               </div>
             </div>
@@ -199,13 +200,17 @@ const CreateUsersForm = () => {
             )}
 
             {showSuccessAlert && (
-              <div class="alert alert-success">User created successfully!</div>
+              <div class="alert alert-success">
+                Email verification sent to the user email
+              </div>
             )}
 
             {showError && <div class="alert alert-warning">{showError}</div>}
           </form>
         </div>
-      </div>
+      </div>        <br />
+
+    </div>
     </div>
   );
 };

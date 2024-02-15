@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
+import Header from "./Header.jsx";
 import "../style/ForgotPasswordEmail.css"; // Replace with your style file
 
 const ForgotPasswordEmail = () => {
@@ -9,7 +10,10 @@ const ForgotPasswordEmail = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+    if(!email){
+      setError("Email cannot be empty. Please enter a valid email address.");
+      return;
+    }
     try {
       const baseUrl = import.meta.env.VITE_PORT_URL;
       const response = await axios.post(
@@ -23,16 +27,18 @@ const ForgotPasswordEmail = () => {
         setError("");
         setSuccess(true);
         console.log("Forgot password email sent:", response.data);
-      } else {
-        setError(response.data.message || "Failed to send email");
+      }
+      else{
+        setError(response.data.message || "Failed ");
       }
     } catch (error) {
-        console.error("An error occurrrrred:", error);
-      setError("An error occurred. Please try again later.");
-    }
+      setError(error.response.data.message );
+  }
   };
 
   return (
+    <div> <>    < Header />    </>
+
     <div className="forgot-password-email-container">
       <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
         <div className="sm:mx-auto sm:w-full sm:max-w-sm">
@@ -72,15 +78,16 @@ const ForgotPasswordEmail = () => {
             >
               Send Reset Link
             </button>
-            {error && <p className="text-red-500 text-sm">{error}</p>}
+            {error && <p className="alert alert-warning">{error}</p>}
             {success && (
-              <p className="text-green-500 text-sm">
+              <p className="alert alert-success">
                 Check your email for instructions on resetting your password.
               </p>
             )}
           </form>
         </div>
       </div>
+    </div>
     </div>
   );
 };
