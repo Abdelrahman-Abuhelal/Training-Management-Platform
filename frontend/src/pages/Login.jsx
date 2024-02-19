@@ -34,7 +34,7 @@ const Login = () => {
         setError("");
         console.log("Login successful:", response.data);
         setUserData(response.data);  
-        navigate("/", { replace: true });
+        navigate("/dashboard", { replace: true });
       }
 
     } catch (error) {

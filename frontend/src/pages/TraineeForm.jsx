@@ -1,12 +1,11 @@
 import React, { useState } from "react";
-import SideNav from "../adminlte.components/SideNav";
+import ButtonAppBar from "../components/materialUI/NavBar";
 
 const TraineeForm = () => {
   return (
     <div>
-      <SideNav />
+      <ButtonAppBar />
       <div>
-        <div className="content-wrapper">
           <div className="content-header">
             <div className="container-fluid">
               <div className="row mb-2">
@@ -370,7 +369,6 @@ const TraineeForm = () => {
           </section>
         </div>
       </div>
-    </div>
   );
 };
 

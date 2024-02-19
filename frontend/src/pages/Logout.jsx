@@ -28,7 +28,7 @@ const Logout = () => {
 };
 
     return (
-      <button onClick={handleLogout}>Logout</button>
+      <button color="inherit" onClick={handleLogout}>Logout</button>
     );
   };
   

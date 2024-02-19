@@ -7,10 +7,11 @@ import ForgotPasswordEmail from "../pages/ForgotPasswordEmail.jsx";
 import ForgotPasswordReset from "../pages/ForgotPasswordReset.jsx";
 import Login from "../pages/Login.jsx";
 import TraineeForm from "../pages/TraineeForm.jsx";
-import Test from "../components/test.jsx";
+import Dashboard from "../pages/Dashboard.jsx";
 
 const Routes = () => {
-  const { token } = useAuth();
+  const { user } = useAuth();
+  const isAuthenticated = user && user.login_token;
 
   // accessible to all users
   const routesForPublic = [
@@ -40,8 +41,8 @@ const Routes = () => {
       element: <ProtectedRoute />, // Wrap the component in ProtectedRoute
       children: [
         {
-          path: "/",
-          element: <div>User Home Page</div>,
+          path: "/dashboard",
+          element: <Dashboard/>,
         },
         {
           path: "/profile",
@@ -55,7 +56,7 @@ const Routes = () => {
   const routesForNotAuthenticatedOnly = [
     {
       path: "/",
-      element: <div>Home Page</div>,
+      element: <div>Home Page!</div>,
     },
     {
       path: "/confirm-account/:token",
@@ -82,7 +83,7 @@ const Routes = () => {
   // Combine and conditionally include routes based on authentication status
   const router = createBrowserRouter([
     ...routesForPublic,
-    ...(!token ? routesForNotAuthenticatedOnly : []),
+    ...(!user ? routesForNotAuthenticatedOnly : []),
     ...routesForAuthenticatedOnly,
   ]);
 
