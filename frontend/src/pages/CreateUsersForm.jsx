@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import "../style/CreateUsersForm.css";
-import Header from "./Header.jsx";
+import Header from "../components/Header.jsx";
 
 const CreateUsersForm = () => {
   const [email, setEmail] = useState("");

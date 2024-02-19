@@ -102,4 +102,13 @@ public class AdminController {
         return new ResponseEntity<>(academicGrades, HttpStatus.OK);
     }
 
+
+    @Operation(summary = "Get All Academic Grades", security =  @SecurityRequirement(name = "loginAuth"))
+    @PreAuthorize("hasAnyRole('SUPER_ADMIN','SUPERVISOR')")
+    @PostMapping ("/trainees/{trainee_id}/grades")
+    public ResponseEntity<List<AcademicGrades>> saveAcademicGrades(@PathVariable String trainee_id) {
+        List <AcademicGrades> academicGrades =academicGradesService.getAllAcademicGrades();
+        return new ResponseEntity<>(academicGrades, HttpStatus.OK);
+    }
+
 }

@@ -28,7 +28,7 @@ public class TraineeController {
     @PutMapping("/update-me")
     @PreAuthorize("hasAnyRole('TRAINEE')")
     @Operation(summary = "Register Trainee Data" , security =  @SecurityRequirement(name = "loginAuth"))
-    public ResponseEntity<String> registerTraineeData(@RequestBody @Valid TraineeDataDto traineeDataDTO) {
+    public ResponseEntity<String> registerTraineeData(@RequestBody TraineeDataDto traineeDataDTO) {
         return ResponseEntity.ok(traineeService.registerTraineeData(traineeDataDTO));
     }
 

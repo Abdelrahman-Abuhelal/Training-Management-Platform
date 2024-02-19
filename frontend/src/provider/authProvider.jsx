@@ -2,43 +2,43 @@ import axios from "axios";
 import { createContext, useContext, useEffect, useMemo, useState } from "react";
 
 const AuthContext = createContext();
+// Extract necessary fields
+
 
 const AuthProvider = ({ children }) => {
-  // State to hold the authentication token
-  const [token, setToken_] = useState(localStorage.getItem("token"));
+  const [user, setUser] = useState( () => JSON.parse(localStorage.getItem("user")) || null );
+  // const { appUserDto, login_token, refresh_token } = user;
+  // const { userId, userEmail, userFirstName, userRole } = appUserDto;
 
-  // Function to set the authentication token
-  const setToken = (newToken) => {
-    setToken_(newToken);
+  const setUserData = (newUserData) => {
+    localStorage.setItem("user", JSON.stringify(newUserData));
+    setUser(newUserData);
+  };
+
+  const logout = () => {
+    localStorage.removeItem("user");
+    setUser(null);
   };
 
   useEffect(() => {
-    if (token) {
-      axios.defaults.headers.common["Authorization"] = "Bearer " + token;
-      localStorage.setItem('token',token);
+    if (user?.login_token) {
+      axios.defaults.headers.common["Authorization"] = `Bearer ${user.login_token}`;
     } else {
       delete axios.defaults.headers.common["Authorization"];
-      localStorage.removeItem('token')
     }
-  }, [token]);
+  }, [user]);
 
-  // Memoized value of the authentication context
-  const contextValue = useMemo(
-    () => ({
-      token,
-      setToken,
-    }),
-    [token]
-  );
+  const contextValue = useMemo(() => ({
+    user,
+    setUserData,
+    logout,
+  }), [user]);
 
-  // Provide the authentication context to the children components
   return (
     <AuthContext.Provider value={contextValue}>{children}</AuthContext.Provider>
   );
 };
 
-export const useAuth = () => {
-  return useContext(AuthContext);
-};
+export const useAuth = () => useContext(AuthContext);
 
 export default AuthProvider;

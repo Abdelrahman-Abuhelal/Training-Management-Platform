@@ -62,16 +62,17 @@ public class TraineeService {
         if(trainee == null){
             throw new RuntimeException("User is not a registered as Trainee" );
         }
-        String trainingField = traineeDataDTO.getTrainingField();
-        if (!TrainingField.isValid(trainingField)){
+        var trainingField = traineeDataDTO.getTrainingField();
+        if ( !TrainingField.isValid(trainingField) && trainingField != null){
             throw new InvalidTrainingFieldException("Invalid Training Field");
         }
-        String branchLocation = traineeDataDTO.getBranchLocation();
-        if (!BranchLocation.isValid(branchLocation)){
+        var branchLocation = traineeDataDTO.getBranchLocation();
+        if ( !BranchLocation.isValid(branchLocation) && branchLocation != null){
             throw new InvalidBranchLocationException("Invalid Branch Location");
         }
         log.info("Received TraineeDataDto: {}", traineeDataDTO);
-        Map<String, Double> grades = traineeDataDTO.getAcademicGradesDto();
+
+       /* Map<String, Double> grades = traineeDataDTO.getAcademicGradesDto();
         log.info("grades: {}",grades);
         // Uppercase the keys before validation
         Set<String> uppercaseKeys = grades.keySet().stream().map(String::toUpperCase).collect(Collectors.toSet());
@@ -102,9 +103,10 @@ public class TraineeService {
             } catch (InvalidAcademicCourseException e) {
                 throw new InvalidAcademicCourseException("Invalid Course type : " + key);
             }
-            }
-        Trainee traineeUpdated = traineeMapper.traineeDataDtoToTrainee(traineeDataDTO,trainee);
+            }*/
 //        traineeUpdated.setAcademicGrades(academicGrades);
+        Trainee traineeUpdated = traineeMapper.traineeDataDtoToTrainee(traineeDataDTO,trainee);
+
         traineeRepository.save(traineeUpdated);
 
         return "Trainee Data Registered Successfully";

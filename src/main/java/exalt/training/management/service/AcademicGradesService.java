@@ -14,8 +14,12 @@ import java.util.List;
 public class AcademicGradesService {
     private final AcademicGradesRepository academicGradesRepository;
 
-    public void saveAcademicGrades(AcademicGrades academicGrades){
+    public void saveAcademicGrade(AcademicGrades academicGrades){
         academicGradesRepository.save(academicGrades);
+    }
+
+    public void saveAcademicGrades(List<AcademicGrades> academicGrades){
+        academicGradesRepository.saveAll(academicGrades);
     }
 
     public List<AcademicGrades> getAllAcademicGrades() {

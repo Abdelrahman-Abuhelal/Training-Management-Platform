@@ -1,21 +1,25 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { NavLink } from 'react-router-dom';
 import "../style/Login.css";
+import { useAuth } from "../provider/authProvider";
 
 const Login = () => {
+  const navigate = useNavigate();
+  const { setUserData } = useAuth(); 
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    
     if (!email.length || !password.length) {
       setError("Please enter both email and password");
       return;
     }
-
-    // Add further validations here if needed
 
 
     try {
@@ -25,12 +29,13 @@ const Login = () => {
         email,
         password,
       });
-      
+
       if (response.status === 200) {
         setError("");
         console.log("Login successful:", response.data);
+        setUserData(response.data);  
+        navigate("/", { replace: true });
       }
-      // Redirect to protected area or store auth token
 
     } catch (error) {
       setError(error.response.data.error || "Login failed");

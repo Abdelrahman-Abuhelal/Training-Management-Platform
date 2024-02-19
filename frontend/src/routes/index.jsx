@@ -1,11 +1,13 @@
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import { useAuth } from "../provider/authProvider";
 import { ProtectedRoute } from "./ProtectedRoute";
-import CreateUsersForm from "../components/CreateUsersForm";
-import CompleteRegistration from "../components/CompleteRegistration";
-import ForgotPasswordEmail from "../components/ForgotPasswordEmail";
-import ForgotPasswordReset from "../components/ForgotPasswordReset";
-import Login from "../components/Login";
+import CreateUsersForm from "../pages/CreateUsersForm.jsx";
+import CompleteRegistration from "../pages/CompleteRegistration.jsx";
+import ForgotPasswordEmail from "../pages/ForgotPasswordEmail.jsx";
+import ForgotPasswordReset from "../pages/ForgotPasswordReset.jsx";
+import Login from "../pages/Login.jsx";
+import TraineeForm from "../pages/TraineeForm.jsx";
+import Test from "../components/test.jsx";
 
 const Routes = () => {
   const { token } = useAuth();
@@ -20,6 +22,15 @@ const Routes = () => {
       path: "/about-us",
       element: <div>About Us</div>,
     },
+    {
+      path: "/test",
+      element: < TraineeForm/>,
+    },
+    //add path for not found page
+    {
+      path: "*",
+      element: <div>Not Found Page</div>,
+    }
   ];
 
   // accessible only to authenticated users
@@ -34,12 +45,8 @@ const Routes = () => {
         },
         {
           path: "/profile",
-          element: <div>User Profile</div>,
-        },
-        {
-          path: "/logout",
-          element: <div>Logout</div>,
-        },
+          element: <TraineeForm/>,
+        }
       ],
     },
   ];
@@ -51,19 +58,19 @@ const Routes = () => {
       element: <div>Home Page</div>,
     },
     {
-      path: "confirm-account/:token",
+      path: "/confirm-account/:token",
       element: <CompleteRegistration />,
     },
     {
-      path: "login",
+      path: "/login",
       element: <Login />,
     },
     {
-      path: "forgot-password-email",
+      path: "/forgot-password-email",
       element: <ForgotPasswordEmail />,
     },
     {
-      path: "forgot-password-reset/:token",
+      path: "/forgot-password-reset/:token",
       element: <ForgotPasswordReset />,
     },
     {

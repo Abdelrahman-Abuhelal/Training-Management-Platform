@@ -26,6 +26,6 @@ public class TraineeDataDto {
     private Date expectedGraduationDate;
     private String trainingField;
     private String branchLocation;
-    private Map<String, Double> academicGradesDto;
+//    private Map<String, Double> academicGradesDto;
 
 }

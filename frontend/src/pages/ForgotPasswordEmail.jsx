@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import axios from "axios";
-import Header from "./Header.jsx";
+import Header from "../components/Header.jsx";
 import "../style/ForgotPasswordEmail.css"; // Replace with your style file
 
 const ForgotPasswordEmail = () => {
-  const [email, setUserEmail] = useState("");
+  const [email, setEmail] = useState("");
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
 
@@ -68,7 +68,7 @@ const ForgotPasswordEmail = () => {
                 id="email"
                 className="shadow-sm block w-full px-3 py-2 text-gray-700 border rounded-md focus:outline-none focus:ring-indigo-500 focus:ring-width-1"
                 value={email}
-                onChange={(e) => setUserEmail(e.target.value)}
+                onChange={(e) => setEmail(e.target.value)}
               />
             </div>
             <br />
