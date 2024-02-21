@@ -7,7 +7,7 @@ import Button from "@mui/material/Button";
 import IconButton from "@mui/material/IconButton";
 import MenuIcon from "@mui/icons-material/Menu";
 import TemporaryDrawer from "./SideBar";
-import Logout  from "./../../pages/Logout";
+import Logout  from "../../pages/auth/Logout";
 
 
 export default function ButtonAppBar() {
@@ -44,7 +44,7 @@ const toggleDrawer = (anchor, open) => (event) => {
             <MenuIcon />
           </IconButton>
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-            News
+            Exalt Training Management
           </Typography>
           <Logout/>
         </Toolbar>

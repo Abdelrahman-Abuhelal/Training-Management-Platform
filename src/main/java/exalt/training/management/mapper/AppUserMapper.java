@@ -25,23 +25,31 @@ public interface AppUserMapper {
     @Mapping(source = "appUser.email",target = "userEmail")
     @Mapping(source = "appUser.role",target = "userRole")
     @Mapping(source = "appUser.firstName",target = "userFirstName")
+    @Mapping(source = "appUser.lastName",target = "userLastName")
+    @Mapping(source = "appUser.username",target = "userUsername")
     AppUserDto userToUserDto(AppUser appUser);
 
     @Mapping(source = "appUser.id",target = "userId")
     @Mapping(source = "appUser.email",target = "userEmail")
     @Mapping(source = "appUser.role",target = "userRole")
     @Mapping(source = "appUser.firstName",target = "userFirstName")
+    @Mapping(source = "appUser.lastName",target = "userLastName")
+    @Mapping(source = "appUser.username",target = "userUsername")
     List<AppUserDto> userToUserDto(List<AppUser> appUser);
     @Mapping(source = "appUserDto.userId",target = "id")
     @Mapping(source = "appUserDto.userEmail",target = "email")
     @Mapping(source = "appUserDto.userRole",target = "role")
     @Mapping(source = "appUserDto.userFirstName",target = "firstName")
+    @Mapping(source = "appUserDto.userLastName",target = "lastName")
+    @Mapping(source = "appUserDto.userUsername",target = "username")
     AppUser userDtoToUser(AppUserDto appUserDto);
 
     @Mapping(source = "appUserDto.userId",target = "id")
     @Mapping(source = "appUserDto.userEmail",target = "email")
     @Mapping(source = "appUserDto.userFirstName",target = "firstName")
+    @Mapping(source = "appUserDto.userLastName",target = "lastName")
     @Mapping(source = "appUserDto.userRole",target = "role")
+    @Mapping(source = "appUserDto.userUsername",target = "username")
     AppUser userDtoToUser(AppUserDto appUserDto, @MappingTarget AppUser appUser);
 
     @Mapping(source = "appUserRequestDto.firstName",target = "firstName")

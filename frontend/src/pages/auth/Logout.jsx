@@ -1,9 +1,9 @@
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "../provider/authProvider";
+import { useAuth } from "../../provider/authProvider";
 import axios from "axios";
 
 const Logout = () => {
-    const { user, logout } = useAuth();
+    const { user,setUserData, logout } = useAuth();
     const navigate = useNavigate();
     const { appUserDto, login_token, refresh_token } = user;
 
@@ -16,8 +16,8 @@ const Logout = () => {
         });
 
         if (response.status === 200) {
-            logout();
-            navigate("/login", { replace: true });
+            setUserData(null);
+            navigate("/", { replace: true });
         } else {
             console.error("Unexpected logout response:", response);
         }

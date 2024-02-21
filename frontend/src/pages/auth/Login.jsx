@@ -3,12 +3,11 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { NavLink } from 'react-router-dom';
 import "../style/Login.css";
-import { useAuth } from "../provider/authProvider";
+import { useAuth } from "../../provider/authProvider";
 
 const Login = () => {
   const navigate = useNavigate();
   const { setUserData } = useAuth(); 
-
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -34,7 +33,7 @@ const Login = () => {
         setError("");
         console.log("Login successful:", response.data);
         setUserData(response.data);  
-        navigate("/dashboard", { replace: true });
+        navigate("/", { replace: true });
       }
 
     } catch (error) {

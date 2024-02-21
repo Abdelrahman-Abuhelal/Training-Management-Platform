@@ -43,7 +43,7 @@ public class AdminService {
     }
 
 
-    public String createUser(UserCreationRequest request) {
+    public String createUserSecret(UserCreationRequest request) {
         if (appUserService.userAlreadyExists(request.getEmail())){
             throw new UserAlreadyExistsException(request.getEmail() + " already exists!");
         }

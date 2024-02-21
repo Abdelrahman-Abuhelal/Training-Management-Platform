@@ -29,10 +29,18 @@ public class AdminController {
     private final AdminService adminService;
     private final AcademicGradesService academicGradesService;
 
-    @Operation(summary = "Create Any type of User (SUPER_ADMIN, SUPERVISOR, or TRAINEE)", security =  @SecurityRequirement(name = "apiKey"))
+    @Operation(summary = "Create User, Secret API (SUPER_ADMIN, SUPERVISOR, or TRAINEE)", security =  @SecurityRequirement(name = "apiKey"))
+    @PostMapping("/create-user-secret")
+    public ResponseEntity<String> createUserSecret(@RequestBody @Valid UserCreationRequest request) {
+        return ResponseEntity.ok(adminService.createUserSecret(request));
+    }
+
+
+    @Operation(summary = "Create Any type of User for admin only", security =  @SecurityRequirement(name = "loginAuth"))
+    @PreAuthorize("hasRole('SUPER_ADMIN')")
     @PostMapping("/create-user")
-    public ResponseEntity<String> createUser(@RequestBody @Valid UserCreationRequest request) {
-        return ResponseEntity.ok(adminService.createUser(request));
+    public ResponseEntity<String> createUserInAdminPortal(@RequestBody @Valid UserCreationRequest request) {
+        return ResponseEntity.ok(adminService.createUserSecret(request));
     }
 
 

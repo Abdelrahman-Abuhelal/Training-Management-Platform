@@ -1,4 +1,4 @@
-import Logout  from "../pages/Logout";
+import Logout  from "../pages/auth/Logout";
 import React from 'react';
 
 const SideNav = () => {

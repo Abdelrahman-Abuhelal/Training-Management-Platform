@@ -62,12 +62,12 @@ public class TraineeService {
         if(trainee == null){
             throw new RuntimeException("User is not a registered as Trainee" );
         }
-        var trainingField = traineeDataDTO.getTrainingField();
-        if ( !TrainingField.isValid(trainingField) && trainingField != null){
+        String trainingField = traineeDataDTO.getTrainingField();
+        if ( !TrainingField.isValid(trainingField) && !Objects.equals(trainingField, "")){
             throw new InvalidTrainingFieldException("Invalid Training Field");
         }
-        var branchLocation = traineeDataDTO.getBranchLocation();
-        if ( !BranchLocation.isValid(branchLocation) && branchLocation != null){
+        String branchLocation = traineeDataDTO.getBranchLocation();
+        if ( !BranchLocation.isValid(branchLocation) && !Objects.equals(branchLocation, "")){
             throw new InvalidBranchLocationException("Invalid Branch Location");
         }
         log.info("Received TraineeDataDto: {}", traineeDataDTO);

@@ -41,7 +41,7 @@ public class AdminControllerTests {
     public void createUser_ValidRequest_ReturnsOkStatusAndSuccessMessage() throws Exception {
         // Mock adminService behavior
         String expectedResponse = "Complete Account Registration sent to the user email ";
-        when(adminService.createUser(any())).thenReturn(expectedResponse);
+        when(adminService.createUserSecret(any())).thenReturn(expectedResponse);
 
         // Prepare request data
         UserCreationRequest request = UserCreationRequest.builder().email("valid@gmail.com").firstName("asfdsa").lastName("asdasd")
@@ -51,7 +51,7 @@ public class AdminControllerTests {
         // Perform the simulated POST request
         mockMvc.perform(post("/api/v1/admin/create-user").contentType(MediaType.APPLICATION_JSON).content(requestBody)).andExpect(status().isOk());
 
-        verify(adminService).createUser(request);
+        verify(adminService).createUserSecret(request);
     }
 
 

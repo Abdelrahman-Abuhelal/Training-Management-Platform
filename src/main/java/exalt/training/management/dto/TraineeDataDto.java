@@ -22,7 +22,7 @@ public class TraineeDataDto {
     private String address;
     private String universityName;
     private String universityMajor;
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
+//    @DateTimeFormat(pattern = "MM/dd/yyyy")
     private Date expectedGraduationDate;
     private String trainingField;
     private String branchLocation;

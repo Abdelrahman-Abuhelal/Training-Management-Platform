@@ -1,17 +1,28 @@
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import { useAuth } from "../provider/authProvider";
 import { ProtectedRoute } from "./ProtectedRoute";
-import CreateUsersForm from "../pages/CreateUsersForm.jsx";
-import CompleteRegistration from "../pages/CompleteRegistration.jsx";
-import ForgotPasswordEmail from "../pages/ForgotPasswordEmail.jsx";
-import ForgotPasswordReset from "../pages/ForgotPasswordReset.jsx";
-import Login from "../pages/Login.jsx";
-import TraineeForm from "../pages/TraineeForm.jsx";
-import Dashboard from "../pages/Dashboard.jsx";
+import CreateUsersForm from "../pages/adminPortal/CreateUsersForm.jsx";
+import CompleteRegistration from "../pages/auth/CompleteRegistration.jsx";
+import ForgotPasswordEmail from "../pages/auth/ForgotPasswordEmail.jsx";
+import ForgotPasswordReset from "../pages/auth/ForgotPasswordReset.jsx";
+import Login from "../pages/auth/Login.jsx";
+import TraineeDashboard from "../pages/traineePortal/TraineeDashboard.jsx";
+import TraineeProfile from "../pages/traineePortal/TraineeProfile.jsx";
+import AdminDashboard from "../pages/adminPortal/AdminDashboard.jsx";
+import SupervisorDashboard from "../pages/supervisorPortal.jsx/SupervisorDashboard.jsx";
+import TraineesList from "../pages/adminPortal/TraineesList.jsx";
 
 const Routes = () => {
   const { user } = useAuth();
-  const isAuthenticated = user && user.login_token;
+  const isAuthenticated = (user !== null && user.login_token !== null);
+  const isTrainee = (user !== null && user.appUserDto.userRole === "TRAINEE");
+  const isSupervisor = (user !== null && user.appUserDto.userRole === "SUPERVISOR");
+  const isSuperAdmin = (user !== null && user.appUserDto.userRole === "SUPER_ADMIN");
+  console.log("user", user);
+  console.log("isAuthenticated", isAuthenticated);
+  console.log("isTrainee", isTrainee);
+  console.log("isSupervisor", isSupervisor);
+  console.log("isSuperAdmin", isSuperAdmin);
 
   // accessible to all users
   const routesForPublic = [
@@ -25,29 +36,70 @@ const Routes = () => {
     },
     {
       path: "/test",
-      element: < TraineeForm/>,
+      element: <TraineeProfile />,
     },
-    //add path for not found page
-    {
-      path: "*",
-      element: <div>Not Found Page</div>,
-    }
   ];
 
   // accessible only to authenticated users
-  const routesForAuthenticatedOnly = [
+  const routesForTraineeOnly = [
     {
       path: "/",
       element: <ProtectedRoute />, // Wrap the component in ProtectedRoute
       children: [
         {
+          path: "/",
+          element: <TraineeDashboard />,
+        },
+        {
           path: "/dashboard",
-          element: <Dashboard/>,
+          element: <TraineeDashboard />,
         },
         {
           path: "/profile",
-          element: <TraineeForm/>,
-        }
+          element: <TraineeProfile />,
+        },
+      ],
+    },
+  ];
+
+  const routesForSupervisorOnly = [
+    {
+      path: "/",
+      element: <ProtectedRoute />, // Wrap the component in ProtectedRoute
+      children: [
+        {
+          path: "/",
+          element: <SupervisorDashboard />,
+        },
+        {
+          path: "/dashboard",
+          element: <AdminDashboard />,
+        },
+      ],
+    },
+  ];
+
+  const routesForSuperAdminOnly = [
+    {
+      path: "/",
+      element: <ProtectedRoute />, // Wrap the component in ProtectedRoute
+      children: [
+        {
+          path: "/",
+          element: <AdminDashboard />,
+        },
+        {
+          path: "/dashboard",
+          element: <AdminDashboard />,
+        },
+        {
+          path: "/trainees",
+          element: <TraineesList />,
+        },
+        {
+          path: "/create-users",
+          element: <CreateUsersForm />,
+        },
       ],
     },
   ];
@@ -56,16 +108,13 @@ const Routes = () => {
   const routesForNotAuthenticatedOnly = [
     {
       path: "/",
-      element: <div>Home Page!</div>,
+      element: <Login />,
     },
     {
       path: "/confirm-account/:token",
       element: <CompleteRegistration />,
     },
-    {
-      path: "/login",
-      element: <Login />,
-    },
+
     {
       path: "/forgot-password-email",
       element: <ForgotPasswordEmail />,
@@ -82,9 +131,10 @@ const Routes = () => {
 
   // Combine and conditionally include routes based on authentication status
   const router = createBrowserRouter([
-    ...routesForPublic,
-    ...(!user ? routesForNotAuthenticatedOnly : []),
-    ...routesForAuthenticatedOnly,
+    ...(!isAuthenticated ? routesForNotAuthenticatedOnly : []),
+    ...(isTrainee ? routesForTraineeOnly : []),
+    ...(isSupervisor ? routesForSupervisorOnly : []),
+    ...(isSuperAdmin ? routesForSuperAdminOnly : []),
   ]);
 
   // Provide the router configuration using RouterProvider

@@ -17,6 +17,10 @@ public class AppUserDto {
 
     private String userFirstName;
 
+    private String userLastName;
+
+    private String userUsername;
+
     private AppUserRole userRole;
 
 
