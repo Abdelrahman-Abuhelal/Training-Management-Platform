@@ -7,28 +7,26 @@ import Button from "@mui/material/Button";
 import IconButton from "@mui/material/IconButton";
 import MenuIcon from "@mui/icons-material/Menu";
 import TemporaryDrawer from "./SideBar";
-import Logout  from "../../pages/auth/Logout";
-
+import Logout from "../../pages/auth/Logout";
 
 export default function ButtonAppBar() {
-  
-const [state, setState] = React.useState({
-  top: false,
-  left: false,
-  bottom: false,
-  right: false,
-});
+  const [state, setState] = React.useState({
+    top: false,
+    left: false,
+    bottom: false,
+    right: false,
+  });
 
-const toggleDrawer = (anchor, open) => (event) => {
-  if (
-    event.type === "keydown" &&
-    (event.key === "Tab" || event.key === "Shift")
-  ) {
-    return;
-  }
+  const toggleDrawer = (anchor, open) => (event) => {
+    if (
+      event.type === "keydown" &&
+      (event.key === "Tab" || event.key === "Shift")
+    ) {
+      return;
+    }
 
-  setState({ ...state, [anchor]: open });
-};
+    setState({ ...state, [anchor]: open });
+  };
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static">
@@ -44,9 +42,9 @@ const toggleDrawer = (anchor, open) => (event) => {
             <MenuIcon />
           </IconButton>
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-            Exalt Training Management
+            EXALT Training Platform
           </Typography>
-          <Logout/>
+          <Logout />
         </Toolbar>
       </AppBar>
       <TemporaryDrawer

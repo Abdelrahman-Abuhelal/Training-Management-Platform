@@ -1,9 +1,17 @@
 import React, { useState, useEffect } from "react";
 import ButtonAppBar from "../../components/trainee/NavBar";
 import axios from "axios";
-import { useAuth } from "../../provider/authProvider";
+import { useParams } from "react-router-dom";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import { useNavigate } from "react-router-dom";
 
-const TraineeProfile = () => {
+const EditTrainee = () => {
+  const navigate = useNavigate();
+  const { userId } = useParams();
+  // user info
+  const [username, setUsername] = useState("");
+  const [userFullName, setUserFullName] = useState("");
+  // trainee info
   const [fullNameInArabic, setFullNameInArabic] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [idType, setIdType] = useState("");
@@ -19,33 +27,35 @@ const TraineeProfile = () => {
   const [branchLocation, setBranchLocation] = useState("");
   const [idNumberError, setIdNumberError] = useState("");
   const [showConfirmation, setShowConfirmation] = useState(false);
+  // grades
+  const [courses, setCourses] = useState([{ course: "", grade: "" }]);
 
   const baseUrl = import.meta.env.VITE_PORT_URL;
 
-  useEffect(() => {
-    const storedData = JSON.parse(localStorage.getItem("traineeProfile"));
-    console.log("Stored Data:", storedData);
-    if (storedData) {
-      setFullNameInArabic(storedData.fullNameInArabic || "");
-      setPhoneNumber(storedData.phoneNumber || "");
-      setIdType(storedData.idType || "");
-      setIdNumber(storedData.idNumber || "");
-      setAddress(storedData.address || "");
-      setCity(storedData.city || "");
-      setUniversityName(storedData.universityName || "");
-      setUniversityMajor(storedData.universityMajor || "");
-      setExpectedGraduationDate(storedData.expectedGraduationDate || "");
-      setTrainingField(storedData.trainingField || "");
-      setBranchLocation(storedData.branchLocation || "");
-    } else {
-      fetchUserData();
+  const userData = async () => {
+    try {
+      const response = await axios.get(
+        `${baseUrl}/api/v1/admin/users/${userId}`
+      );
+      if (response.status === 200) {
+        const userData = response.data;
+        setUsername(userData.userUsername);
+        setUserFullName(userData.userFirstName + " " + userData.userLastName);
+      }
+    } catch (error) {
+      console.error("Error:", error);
     }
+  };
+
+  useEffect(() => {
+    userData();
+    fetchUserData();
   }, []);
 
   const fetchUserData = async () => {
     try {
       const response = await axios.get(
-        `${baseUrl}/api/v1/trainee-operations/my-profile`
+        `${baseUrl}/api/v1/admin/trainee-info/${userId}`
       );
       if (response.status === 200) {
         const userData = response.data;
@@ -99,11 +109,11 @@ const TraineeProfile = () => {
 
     try {
       const response = await axios.put(
-        `${baseUrl}/api/v1/trainee-operations/update-me`,
+        `${baseUrl}/api/v1/admin/update-trainee/${userId}`,
         formData
       );
       if (response.status === 200) {
-        localStorage.setItem("traineeProfile", JSON.stringify(formData));
+        console.log("Data updated by admin: ", response.data);
       }
       console.log("Response:", response.data);
     } catch (error) {
@@ -131,6 +141,61 @@ const TraineeProfile = () => {
       setExpectedGraduationDate(`${year}-${formattedMonth}`);
     }
   };
+
+  const navigateBack = () => {
+    navigate(`/trainees`);
+  };
+
+  const academicGradesAPI = async () => {
+    try {
+      await axios
+        .put(`/api/v1/admin/trainees/${userId}/grades`, courses)
+        .then((response) => {
+          if (response.status === 200) {
+            console.log("Grades updated successfully");
+          }
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+        });
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
+
+  const handleCourseChange = (index, value) => {
+    const updatedCourses = [...courses];
+    updatedCourses[index].course = value;
+    setCourses(updatedCourses);
+  };
+
+  const handleGradeChange = (index, value) => {
+    const updatedCourses = [...courses];
+    updatedCourses[index].grade = value;
+    setCourses(updatedCourses);
+  };
+
+  const addCourse = () => {
+    setCourses([...courses, { course: "", grade: "" }]);
+  };
+
+  const removeCourse = (index) => {
+    const updatedCourses = [...courses];
+    updatedCourses.splice(index, 1);
+    setCourses(updatedCourses);
+  };
+
+  const handleGradesSubmit = (e) => {
+    e.preventDefault();
+    if (courses.length === 0) {
+      console.error("No courses to submit");
+      return;
+    }
+
+    academicGradesAPI();
+    console.log("Courses and Grades:", courses);
+  };
+
   return (
     <div>
       <ButtonAppBar />
@@ -144,9 +209,9 @@ const TraineeProfile = () => {
               <div className="col-sm-6">
                 <ol className="breadcrumb float-sm-right">
                   <li className="breadcrumb-item">
-                    <a href="/dashboard">EXALT Training Platform</a>
+                    <a href="/trainees">Trainees List</a>
                   </li>
-                  <li className="breadcrumb-item active">Profile</li>
+                  <li className="breadcrumb-item active">Edit Profile</li>
                 </ol>
               </div>
             </div>
@@ -158,19 +223,37 @@ const TraineeProfile = () => {
             <form className="px-4" onSubmit={handleSubmit}>
               <div className="space-y-12">
                 <div className="border-b border-gray-900/10 pb-12">
-                  <h2 className="text-base font-semibold leading-7 text-gray-900">
-                    Trainee Information
-                  </h2>
-                  <p className="mt-1 text-sm leading-6 text-gray-600">
-                    This page will be shown for HR, rememeber to add all
-                    details.
-                  </p>
+                  <button type="button" onClick={navigateBack}>
+                    <ArrowBackIcon />
+                    &nbsp;&nbsp;Back to Trainees
+                  </button>
                 </div>
                 <div className="border-b border-gray-900/10 pb-12">
                   <h2 className="text-base font-semibold leading-7 text-gray-900">
-                    Personal Information
+                    {userFullName} Profile
                   </h2>
                   <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
+                    <div className="sm:col-span-5 ">
+                      <label
+                        htmlFor="username"
+                        className="block text-sm font-medium leading-6 text-gray-900"
+                      >
+                        Username
+                      </label>
+                      <div className="mt-2">
+                        <input
+                          type="text"
+                          name="username"
+                          value={username}
+                          onChange={(e) => setUsername(e.target.value)}
+                          id="username"
+                          autoComplete="username"
+                          className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                          disabled
+                        />
+                      </div>
+                    </div>
+
                     <div className="sm:col-span-5 ">
                       <label
                         htmlFor="arabicName"
@@ -232,7 +315,7 @@ const TraineeProfile = () => {
                       >
                         Address ( Village / Street name )
                       </label>
-                      <div className="mt-3">
+                      <div className="mt-2">
                         <input
                           type="text"
                           name="address"
@@ -499,98 +582,15 @@ const TraineeProfile = () => {
                       </div>
                     </div>
                   </div>
-                </div>
-                <div className="border-b border-gray-900/10 pb-12">
-                  <h2 className="text-base font-semibold leading-7 text-gray-900">
-                    Notifications
-                  </h2>
-                  <p className="mt-1 text-sm leading-6 text-gray-600">
-                    We'll always let you know about important changes, but you
-                    pick what else you want to hear about.
-                  </p>
-                  <div className="mt-10 space-y-10">
-                    <fieldset>
-                      <legend className="text-sm font-semibold leading-6 text-gray-900">
-                        By Email
-                      </legend>
-                      <div className="mt-6 space-y-6">
-                        <div className="relative flex gap-x-3">
-                          <div className="flex h-6 items-center">
-                            <input
-                              id="comments"
-                              name="comments"
-                              type="checkbox"
-                              className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600"
-                            />
-                          </div>
-                          <div className="text-sm leading-6">
-                            <label
-                              htmlFor="comments"
-                              className="font-medium text-gray-900"
-                            >
-                              Comments
-                            </label>
-                            <p className="text-gray-500">
-                              Get notified when someones posts a comment on a
-                              posting.
-                            </p>
-                          </div>
-                        </div>
-                        <div className="relative flex gap-x-3">
-                          <div className="flex h-6 items-center">
-                            <input
-                              id="candidates"
-                              name="candidates"
-                              type="checkbox"
-                              className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600"
-                            />
-                          </div>
-                          <div className="text-sm leading-6">
-                            <label
-                              htmlFor="candidates"
-                              className="font-medium text-gray-900"
-                            >
-                              Candidates
-                            </label>
-                            <p className="text-gray-500">
-                              Get notified when a candidate applies for a job.
-                            </p>
-                          </div>
-                        </div>
-                        <div className="relative flex gap-x-3">
-                          <div className="flex h-6 items-center">
-                            <input
-                              id="offers"
-                              name="offers"
-                              type="checkbox"
-                              className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600"
-                            />
-                          </div>
-                          <div className="text-sm leading-6">
-                            <label
-                              htmlFor="offers"
-                              className="font-medium text-gray-900"
-                            >
-                              Offers
-                            </label>
-                            <p className="text-gray-500">
-                              Get notified when a candidate accepts or rejects
-                              an offer.
-                            </p>
-                          </div>
-                        </div>
-                      </div>
-                    </fieldset>
+                  <div className="mt-6 flex items-center justify-end gap-x-6">
+                    <button
+                      type="submit"
+                      className="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                    >
+                      Save Personal Details
+                    </button>
                   </div>
                 </div>
-              </div>
-              <div className="mt-6 flex items-center justify-end gap-x-6">
-                <button
-                  type="submit"
-                  className="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-                >
-                  Save Details
-                </button>
               </div>
             </form>
             {showConfirmation && (
@@ -614,6 +614,71 @@ const TraineeProfile = () => {
                 </div>
               </div>
             )}
+
+            <div className="border-b border-gray-900/10 pb-12">
+              <h2 className="text-base font-semibold leading-7 text-gray-900 pb-10">
+                Enter Courses and Grades
+              </h2>
+              <div >
+                <form onSubmit={handleGradesSubmit}>
+                  {courses.map((course, index) => (
+                    <div key={index}>
+                      <select
+                        value={course.course}
+                        onChange={(e) =>
+                          handleCourseChange(index, e.target.value)
+                        }
+                        className="block rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                      >
+                        <option value="">Select Course</option>
+                        <option value="UNIVERSITY_GPA">University GPA</option>
+                        <option value="TAWJEEHI">Tawjeehi</option>
+                        <option value="PROGRAMMING_ONE">Programming</option>
+                        <option value="OBJECT_ORIENTED">Object Oriented</option>
+                        <option value="DATA_STRUCTURE">Data Structure</option>
+                        <option value="DATABASE_ONE">Database One</option>
+                        <option value="DATABASE_TWO">Database Two</option>
+                        {/* Add more options as needed */}
+                      </select>
+                      <input
+                        type="text"
+                        placeholder="Enter Grade"
+                        value={course.grade}
+                        onChange={(e) =>
+                          handleGradeChange(index, e.target.value)
+                        }
+                        className="block rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                      />
+                      {index > 0 && (
+                        <div className="mt-4 flex justify-center">
+                          <button
+                            type="button"
+                            onClick={() => removeCourse(index)}
+                          >
+                            Remove Course
+                          </button>
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                  <button
+                    type="button"
+                    onClick={addCourse}
+                  >
+                    Add Course
+                  </button>
+                  <div className="mt-6 flex items-center justify-end gap-x-6">
+                  <button
+                    type="submit"
+                    className="mr-4 rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                  >
+                    Save Grades
+                  </button>
+                  </div>
+                </form>
+              </div>
+            </div>
+            
           </div>
         </section>
       </div>
@@ -621,4 +686,4 @@ const TraineeProfile = () => {
   );
 };
 
-export default TraineeProfile;
+export default EditTrainee;

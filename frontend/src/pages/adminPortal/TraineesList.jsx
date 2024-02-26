@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import ButtonAppBar from "../../components/admin/NavBar";
+import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
 import {
+  Grid,
+  Typography,
   TableContainer,
   Table,
   TableHead,
@@ -9,84 +12,139 @@ import {
   TableCell,
   TableBody,
   Checkbox,
-  Button,
   IconButton,
-  Tooltip,
-  TextField,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  Button, 
+
 } from "@mui/material"; // MUI components (or your preferred library)
-import { CSVLink } from "react-csv";
+import EditIcon from "@mui/icons-material/Edit";
+import DeleteIcon from "@mui/icons-material/Delete";
+import { useNavigate } from "react-router-dom";
 
 const traineesList = () => {
   const baseUrl = import.meta.env.VITE_PORT_URL;
-  const [users, setUsers] = useState([]); 
-  const [trainees, setTrainees] = useState([]);
+  const [users, setUsers] = useState([]);
+  const navigate = useNavigate();
+  const [usernameToDelete, setUsernameToDelete] = useState("");
+  const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
+  const [userIdToDelete, setUserIdToDelete] = useState(null);
+
+  const deleteUser = async (userId) => {
+    try {
+      const response = await axios.delete(
+        `${baseUrl}/api/v1/admin/users/${userId}`
+      );
+      if (response.status === 200) {
+        console.log("Trainee deleted successfully");
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   useEffect(() => {
     const fetchTrainees = async () => {
       try {
-        const response = await axios.get(`${baseUrl}/api/v1/admin/trainees`);
+        const response = await axios.get(`${baseUrl}/api/v1/admin/users`);
         if (response.status === 200) {
-          setTrainees(response.data);
+          const traineeUsers = response.data.filter(
+            (item) => item.userRole === "TRAINEE"
+          );
+          setUsers(traineeUsers);
         }
       } catch (error) {
         console.log(error);
       }
     };
     fetchTrainees();
-  }, []);
+  }, [userIdToDelete]);
 
-  const handleView = (row) => {
+  const handleView = (user) => {
     // Implement your view functionality here, e.g., navigate to a view page
-    alert(`View details for ${row.id}`);
+    navigate(`/edit-trainee/${user.userId}`);
   };
 
-  const handleDelete = (row) => {
-    // Implement your delete functionality here, e.g., call an API to delete
-    alert(`Delete ${row.id}? This action cannot be undone.`);
+  const handleDelete = (user) => {
+    setUserIdToDelete(user.userId); // Store the user ID for deletion
+    setUsernameToDelete(user.userUsername); // Store the username for display
+    setOpenDeleteDialog(true); // Open the confirmation dialog
   };
 
+  const handleCloseDeleteDialog = () => {
+    setOpenDeleteDialog(false);
+    setUserIdToDelete(null); // Clear the stored user ID
+    setUsernameToDelete(""); // Clear the stored username
+  };
+
+  const handleConfirmDelete = () => {
+    if (userIdToDelete) {
+      // Ensure user ID is available before deleting
+      deleteUser(userIdToDelete); // Call the API to delete the user
+      setOpenDeleteDialog(false); // Close the dialog after deletion
+      setUserIdToDelete(null); // Clear the stored user ID
+      setUsernameToDelete(""); // Clear the stored username
+    } else {
+      console.error("User ID not available for deletion"); // Log an error for debugging
+    }
+  };
   return (
     <div>
       <ButtonAppBar />
+
       <TableContainer>
         <Table size="small">
           <TableHead>
             <TableRow>
-              <TableCell>phoneNumber</TableCell>
-              <TableCell>idNumber</TableCell>
-              <TableCell>universityName</TableCell>
-              <TableCell>universityMajor</TableCell>
-              <TableCell>expectedGraduationDate</TableCell>
-              <TableCell>trainingField</TableCell>
-              <TableCell>branchLocation</TableCell>
-              <TableCell>Actions</TableCell>
+              <TableCell>
+                <h3 className="text-base font-semibold leading-7 text-gray-900">
+                  Email
+                </h3>
+              </TableCell>
+              <TableCell>
+                <h3 className="text-base font-semibold leading-7 text-gray-900">
+                  Username
+                </h3>
+              </TableCell>
+              <TableCell>
+                <h3 className="text-base font-semibold leading-7 text-gray-900">
+                  First Name
+                </h3>
+              </TableCell>
+              <TableCell>
+                <h3 className="text-base font-semibold leading-7 text-gray-900">
+                  Last Name
+                </h3>
+              </TableCell>
+              <TableCell>
+                <h3 className="text-base font-semibold leading-7 text-gray-900">
+                  Role
+                </h3>
+              </TableCell>
+              <TableCell>
+                <h3 className="text-base font-semibold leading-7 text-gray-900">
+                  Actions
+                </h3>
+              </TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {trainees.map((trainee) => (
-              <TableRow key={trainee.id} hover>
-                <TableCell>{trainee.phoneNumber}</TableCell>
-                <TableCell>{trainee.idNumber}</TableCell>
-                <TableCell>{trainee.universityName}</TableCell>
-                <TableCell>{trainee.universityMajor}</TableCell>
-                <TableCell>{trainee.expectedGraduationDate}</TableCell>
-                <TableCell>{trainee.trainingField}</TableCell>
-                <TableCell>{trainee.branchLocation}</TableCell>
+            {users.map((item) => (
+              <TableRow key={item.userId} hover>
+                <TableCell>{item.userEmail}</TableCell>
+                <TableCell>{item.userUsername}</TableCell>
+                <TableCell>{item.userFirstName}</TableCell>
+                <TableCell>{item.userLastName}</TableCell>
+                <TableCell>{item.userRole.toLowerCase()}</TableCell>
                 <TableCell>
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    onClick={() => handleView(trainee)}
-                  >
-                    View Profile
-                  </Button>
-                  <Button
-                    variant="contained"
-                    color="error"
-                    onClick={() => handleDelete(trainee)}
-                  >
-                    Delete
-                  </Button>
+                  <IconButton onClick={() => handleView(item)} color="primary">
+                    <ManageAccountsIcon /> {/* Replace with your desired edit icon */}
+                  </IconButton>
+                  <IconButton onClick={() => handleDelete(item)} color="error">
+                    <DeleteIcon /> {/* Replace with your desired delete icon */}
+                  </IconButton>
                 </TableCell>
               </TableRow>
             ))}
@@ -95,11 +153,29 @@ const traineesList = () => {
       </TableContainer>
       <div>
         <Button variant="contained" color="primary">
-          {/* <CSVLink data={generateCSVData()} filename="trainees.csv">
-            Export to CSV
-          </CSVLink> */}
+    
         </Button>
       </div>
+      {/* Confirmation Dialog */}
+      <Dialog open={openDeleteDialog} onClose={handleCloseDeleteDialog}>
+        <DialogTitle>Delete Confirmation</DialogTitle>
+        <DialogContent>
+          <Typography variant="h6" sx={{ mb: 2 }}>
+            Are you sure you want to delete '{usernameToDelete}'?
+          </Typography>
+          {/* Optional: Display additional details about the user being deleted */}
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseDeleteDialog}>Cancel</Button>
+          <Button
+            variant="contained"
+            color="error"
+            onClick={handleConfirmDelete}
+          >
+            Delete
+          </Button>
+        </DialogActions>
+      </Dialog>
     </div>
   );
 };

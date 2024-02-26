@@ -2,6 +2,16 @@ import React, { useState } from "react";
 import axios from "axios";
 import "../style/CreateUsersForm.css";
 import ButtonAppBar from "../../components/admin/NavBar";
+import {
+  Grid,
+  TextField,
+  Button,
+  Select,
+  MenuItem,
+  FormControl,
+  InputLabel,
+  Typography,
+} from "@mui/material";
 
 const CreateUsersForm = () => {
   const [email, setEmail] = useState("");
@@ -10,7 +20,7 @@ const CreateUsersForm = () => {
   const [lastName, setLastName] = useState("");
   const [role, setRole] = useState("");
   const [showSuccessAlert, setShowSuccessAlert] = useState(false);
-  const [showNotFullDataAlert, setshowNotFullDataAlert] = useState(false);
+  const [showNotFullDataAlert, setShowNotFullDataAlert] = useState(false);
   const [showError, setShowError] = useState("");
   const [loading, setLoading] = useState(false);
 
@@ -19,195 +29,171 @@ const CreateUsersForm = () => {
 
     if (!email.length) {
       // validate the email
-      setshowNotFullDataAlert(true);
+      setShowNotFullDataAlert(true);
       return;
     }
     if (!username.length) {
-      setshowNotFullDataAlert(true);
+      setShowNotFullDataAlert(true);
       return;
     }
     if (!firstName.length) {
-      setshowNotFullDataAlert(true);
+      setShowNotFullDataAlert(true);
       return;
     }
     if (!lastName.length) {
-      setshowNotFullDataAlert(true);
+      setShowNotFullDataAlert(true);
       return;
     }
 
+    if (email && username && firstName && lastName && role) {
+      setLoading(true);
+      // Simulate successful submission after 2 seconds
+      setTimeout(() => {
+        setLoading(false);
+        setShowSuccessAlert(true);
+      }, 2000);
+    } else {
+      setShowNotFullDataAlert(true);
+    }
+  
+
     try {
       const baseUrl = import.meta.env.VITE_PORT_URL;
-      const response = await axios.post(
-        `${baseUrl}/api/v1/admin/create-user`,
-        {
-          email,
-          username,
-          firstName,
-          lastName,
-          role,
-        }
-      );
+      const response = await axios.post(`${baseUrl}/api/v1/admin/create-user`, {
+        email,
+        username,
+        firstName,
+        lastName,
+        role,
+      });
       if (response.status === 200) {
-        setshowNotFullDataAlert(false);
+        setShowNotFullDataAlert(false);
         setShowSuccessAlert(true);
         setShowError("");
         console.log("Email verification Sent to the user :", response.data);
       } else if (response.status === 409) {
         setShowError("User with this email or username exists already!");
         setShowSuccessAlert(false);
-        setshowNotFullDataAlert(false);
+        setShowNotFullDataAlert(false);
       }
     } catch (error) {
       console.error("Error creating user:", error);
       setShowError("Error creating user");
       setShowSuccessAlert(false);
-      setshowNotFullDataAlert(false);
+      setShowNotFullDataAlert(false);
     }
   };
 
   return (
     <div>
       <ButtonAppBar />
-      <div className="create-users-form-container">
-        <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
-          <div className="sm:mx-auto sm:w-full sm:max-w-sm">
+      <Grid
+        container
+        justifyContent="center"
+        alignItems="center"
+        spacing={3}
+        style={{ marginTop: "2rem" }}
+      >
+        <Grid item xs={12}>
+          {/* <Grid container justifyContent="center">
             <img
-              className="mx-auto h-20 w-auto"
               src="/EXALT_LOGO.png"
               alt="Exalt Logo"
+              style={{ height: "auto", width: "auto", maxHeight: "80px" }}
             />
-            <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
-              Create User
-            </h2>
-          </div>
-
-          <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-            <form className="space-y-6" method="POST" onSubmit={handleSubmit}>
-              <div>
-                <label
-                  htmlFor="email"
-                  className="block text-sm font-medium leading-6 text-gray-900"
-                >
-                  Email address
-                </label>
-
-                <div className="mt-2">
-                  <input
-                    type="email"
-                    className="shadow-sm block w-full px-3 py-2 text-gray-700 border rounded-md focus:outline-none focus:ring-indigo-500 focus:ring-width-1"
-                    id="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                  />
-                </div>
-              </div>
-
-              <div>
-                <label
-                  htmlFor="username"
-                  className="block text-sm font-medium leading-6 text-gray-900"
-                >
-                  Username
-                </label>
-                <div className="mt-2">
-                  <input
-                    type="text"
-                    id="username"
-                    className="shadow-sm block w-full px-3 py-2 text-gray-700 border rounded-md focus:outline-none focus:ring-indigo-500 focus:ring-width-1"
-                    value={username}
-                    onChange={(e) => setUsername(e.target.value)}
-                  />
-                </div>
-              </div>
-
-              <div>
-                <div className="mt-2">
-                  <label
-                    htmlFor="firstName"
-                    className="block text-sm font-medium leading-6 text-gray-900"
-                  >
-                    First Name
-                  </label>
-                  <input
-                    type="text"
-                    id="firstName"
-                    className="shadow-sm block w-full px-3 py-2 text-gray-700 border rounded-md focus:outline-none focus:ring-indigo-500 focus:ring-width-1"
-                    value={firstName}
-                    onChange={(e) => setFirstName(e.target.value)}
-                  />
-                </div>
-              </div>
-
-              <div>
-                <div className="mt-2">
-                  <label
-                    htmlFor="lastName"
-                    className="block text-sm font-medium leading-6 text-gray-900"
-                  >
-                    Last Name
-                  </label>
-                  <input
-                    type="text"
-                    id="lastName"
-                    className="shadow-sm block w-full px-3 py-2 text-gray-700 border rounded-md focus:outline-none focus:ring-indigo-500 focus:ring-width-1"
-                    value={lastName}
-                    onChange={(e) => setLastName(e.target.value)}
-                  />
-                </div>
-              </div>
-
-              <div>
-                <div className="mt-2">
-                  <label
-                    htmlFor="role"
-                    className="block text-sm font-medium leading-6 text-gray-900"
-                  >
-                    Role
-                  </label>
-                  <select
+          </Grid> */}
+            <Typography variant="h4" sx={{ mt: 5,mb:5, textAlign: 'center', fontFamily: 'sans-serif' }}>
+              Create New User
+            </Typography>
+        </Grid>
+        <Grid item xs={12} sm={8} md={6}>
+          <form onSubmit={handleSubmit}>
+            <Grid container spacing={2}>
+              <Grid item xs={12} >
+                <TextField
+                  label="Email address"
+                  fullWidth
+                  variant="outlined"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                />
+              </Grid>
+              <Grid item xs={12} >
+                <TextField
+                  label="Username"
+                  fullWidth
+                  variant="outlined"
+                  value={username}
+                  onChange={(e) => setUsername(e.target.value)}
+                />
+              </Grid>
+              <Grid item xs={12} >
+                <TextField
+                  label="First Name"
+                  fullWidth
+                  variant="outlined"
+                  value={firstName}
+                  onChange={(e) => setFirstName(e.target.value)}
+                />
+              </Grid>
+              <Grid item xs={12} >
+                <TextField
+                  label="Last Name"
+                  fullWidth
+                  variant="outlined"
+                  value={lastName}
+                  onChange={(e) => setLastName(e.target.value)}
+                />
+              </Grid>
+              <Grid item xs={12} >
+                <FormControl fullWidth variant="outlined">
+                  <InputLabel id="role-label">Role</InputLabel>
+                  <Select
+                    labelId="role-label"
                     id="role"
                     value={role}
-                    className="shadow-sm block w-full px-3 py-2 text-gray-700 border rounded-md focus:outline-none focus:ring-indigo-500 focus:ring-width-1"
                     onChange={(e) => setRole(e.target.value)}
+                    label="Role"
                   >
-                    <option value=""></option>
-                    <option value="TRAINEE">Trainee</option>
-                    <option value="SUPERVISOR">Supervisor</option>
-                    <option value="SUPER_ADMIN">Admin</option>
-                  </select>
-                </div>
-              </div>
-              <br />
-              <div>
-                <button
+                    <MenuItem value="">
+                      <em>None</em>
+                    </MenuItem>
+                    <MenuItem value="TRAINEE">Trainee</MenuItem>
+                    <MenuItem value="SUPERVISOR">Supervisor</MenuItem>
+                    <MenuItem value="SUPER_ADMIN">Admin</MenuItem>
+                  </Select>
+                </FormControl>
+              </Grid>
+              <Grid item xs={12}>
+                <Button
                   type="submit"
-                  className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                  variant="contained"
+                  color="primary"
+                  fullWidth
                   disabled={loading}
                 >
-                  {loading && (
-                    <span className="spinner-border spinner-border-sm"></span>
-                  )}
-                  <span>Submit</span>
-                </button>
-              </div>
-              {showNotFullDataAlert && (
-                <div class="alert alert-warning">
-                  Please fill all the details
-                </div>
-              )}
-
-              {showSuccessAlert && (
-                <div class="alert alert-success">
-                  Email verification sent to the user email
-                </div>
-              )}
-
-              {showError && <div class="alert alert-warning">{showError}</div>}
-            </form>
-          </div>
-        </div>
-        <br />
-      </div>
+                  {loading ? "Submitting..." : "Submit"}
+                </Button>
+              </Grid>
+              <Grid item xs={12}>
+                {showNotFullDataAlert && (
+                  <div className="alert alert-warning">
+                    Please fill all the details
+                  </div>
+                )}
+                {showSuccessAlert && (
+                  <div className="alert alert-success">
+                    Email verification sent to the user email
+                  </div>
+                )}
+                {showError && (
+                  <div className="alert alert-warning">{showError}</div>
+                )}
+              </Grid>
+            </Grid>
+          </form>
+        </Grid>
+      </Grid>
     </div>
   );
 };

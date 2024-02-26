@@ -6,7 +6,7 @@ export const ProtectedRoute = () => {
   
     // Check if the user is authenticated
     if (user === null ) { 
-      return <Navigate to="/login" />;
+      return <Navigate to="/" />;
     }
   
     return <Outlet />;

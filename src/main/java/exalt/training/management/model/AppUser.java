@@ -24,7 +24,7 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode
+@EqualsAndHashCode(exclude = {"trainee", "supervisor", "superAdmin", "tokens"})
 public class AppUser implements UserDetails {
 
     @Id
@@ -66,16 +66,17 @@ public class AppUser implements UserDetails {
 
     @Nullable
     @JsonManagedReference
-    @OneToOne(mappedBy = "user")
+    @OneToOne(mappedBy = "user" , cascade = CascadeType.ALL)
     private Supervisor supervisor;
 
     @Nullable
     @JsonManagedReference
-    @OneToOne(mappedBy = "user")
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     private SuperAdmin superAdmin;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     @Nullable
+    @JsonManagedReference
     private List<Token> tokens;
 
     @Override

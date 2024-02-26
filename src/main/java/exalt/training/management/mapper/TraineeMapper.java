@@ -9,9 +9,11 @@ import org.mapstruct.factory.Mappers;
 public interface TraineeMapper {
 
     TraineeMapper INSTANCE = Mappers.getMapper(TraineeMapper.class);
-
+    @Mapping(source = "traineeDataDto.fullNameInArabic",target = "fullNameInArabic")
     @Mapping(source = "traineeDataDto.phoneNumber",target = "phoneNumber")
+    @Mapping(source = "traineeDataDto.idType",target = "idType")
     @Mapping(source = "traineeDataDto.idNumber",target = "idNumber")
+    @Mapping(source = "traineeDataDto.city",target = "city")
     @Mapping(source = "traineeDataDto.address",target = "address")
     @Mapping(source = "traineeDataDto.universityName",target = "universityName")
     @Mapping(source = "traineeDataDto.universityMajor",target = "universityMajor")
@@ -22,8 +24,11 @@ public interface TraineeMapper {
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     Trainee traineeDataDtoToTrainee(TraineeDataDto traineeDataDto);
 
+    @Mapping(source = "traineeDataDto.fullNameInArabic",target = "fullNameInArabic")
     @Mapping(source = "traineeDataDto.phoneNumber",target = "phoneNumber")
+    @Mapping(source = "traineeDataDto.idType",target = "idType")
     @Mapping(source = "traineeDataDto.idNumber",target = "idNumber")
+    @Mapping(source = "traineeDataDto.city",target = "city")
     @Mapping(source = "traineeDataDto.address",target = "address")
     @Mapping(source = "traineeDataDto.universityName",target = "universityName")
     @Mapping(source = "traineeDataDto.universityMajor",target = "universityMajor")

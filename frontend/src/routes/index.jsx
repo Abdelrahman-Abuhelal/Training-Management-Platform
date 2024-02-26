@@ -11,6 +11,7 @@ import TraineeProfile from "../pages/traineePortal/TraineeProfile.jsx";
 import AdminDashboard from "../pages/adminPortal/AdminDashboard.jsx";
 import SupervisorDashboard from "../pages/supervisorPortal.jsx/SupervisorDashboard.jsx";
 import TraineesList from "../pages/adminPortal/TraineesList.jsx";
+import EditTrainee from "../pages/adminPortal/EditTrainee.jsx";
 
 const Routes = () => {
   const { user } = useAuth();
@@ -97,6 +98,10 @@ const Routes = () => {
           element: <TraineesList />,
         },
         {
+          path: "/edit-trainee/:userId",
+          element: <EditTrainee/>,
+        },
+        {
           path: "/create-users",
           element: <CreateUsersForm />,
         },
@@ -114,7 +119,6 @@ const Routes = () => {
       path: "/confirm-account/:token",
       element: <CompleteRegistration />,
     },
-
     {
       path: "/forgot-password-email",
       element: <ForgotPasswordEmail />,

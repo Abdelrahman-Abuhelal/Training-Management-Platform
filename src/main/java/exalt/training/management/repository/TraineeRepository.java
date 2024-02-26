@@ -10,5 +10,4 @@ import org.springframework.stereotype.Repository;
 public interface TraineeRepository extends JpaRepository<Trainee, Long> {
 
 
-
 }

@@ -44,7 +44,7 @@ const toggleDrawer = (anchor, open) => (event) => {
             <MenuIcon />
           </IconButton>
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-            Exalt Training Management
+            EXALT Training Platform
           </Typography>
           <Logout/>
         </Toolbar>

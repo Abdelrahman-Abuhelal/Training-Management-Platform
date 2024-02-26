@@ -17,13 +17,15 @@ import java.util.Map;
 @NoArgsConstructor
 public class TraineeDataDto {
 
+    private String fullNameInArabic;
     private String phoneNumber;
+    private String idType;
     private String idNumber;
+    private String city;
     private String address;
     private String universityName;
     private String universityMajor;
-//    @DateTimeFormat(pattern = "MM/dd/yyyy")
-    private Date expectedGraduationDate;
+    private String expectedGraduationDate;
     private String trainingField;
     private String branchLocation;
 //    private Map<String, Double> academicGradesDto;

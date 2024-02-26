@@ -6,7 +6,7 @@ const Header = () => {
   {/* Left navbar links */}
   <ul className="navbar-nav">
     <li className="nav-item d-none d-sm-inline-block">
-    <NavLink className="nav-link" to="../login">Login</NavLink>
+    <NavLink className="nav-link" to="../">Login</NavLink>
     </li>
   </ul>
   

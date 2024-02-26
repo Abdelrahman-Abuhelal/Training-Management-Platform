@@ -1,24 +1,23 @@
 package exalt.training.management.service;
 
-import exalt.training.management.dto.AppUserDto;
-import exalt.training.management.dto.AppUserRequestDto;
-import exalt.training.management.dto.CreatedUserResponse;
-import exalt.training.management.dto.UserCreationRequest;
-import exalt.training.management.exception.AppUserNotFoundException;
-import exalt.training.management.exception.UserAlreadyExistsException;
+import exalt.training.management.dto.*;
+import exalt.training.management.exception.*;
 import exalt.training.management.mapper.AppUserMapper;
-import exalt.training.management.model.AppUser;
-import exalt.training.management.model.Trainee;
+import exalt.training.management.mapper.TraineeMapper;
+import exalt.training.management.model.*;
+import exalt.training.management.repository.AcademicGradesRepository;
 import exalt.training.management.repository.AppUserRepository;
 import exalt.training.management.repository.TraineeRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.mail.SimpleMailMessage;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -31,8 +30,12 @@ public class AdminService {
     private final AuthenticationService authenticationService;
     private final EmailService emailService;
     private final AppUserMapper userMapper;
+    private final EnumSet<CourseType> validCourseTypes = EnumSet.allOf(CourseType.class);
 
-    public AdminService(TraineeRepository traineeRepository, AppUserRepository appUserRepository, AppUserService appUserService, TokenService tokenService, AuthenticationService authenticationService, EmailService emailService, AppUserMapper userMapper) {
+    private final TraineeMapper traineeMapper;
+    private final AcademicGradesRepository academicGradesRepository;
+
+    public AdminService(TraineeRepository traineeRepository, AppUserRepository appUserRepository, AppUserService appUserService, TokenService tokenService, AuthenticationService authenticationService, EmailService emailService, AppUserMapper userMapper, TraineeMapper traineeMapper, AcademicGradesRepository academicGradesRepository) {
         this.traineeRepository = traineeRepository;
         this.appUserRepository = appUserRepository;
         this.appUserService = appUserService;
@@ -40,6 +43,8 @@ public class AdminService {
         this.authenticationService = authenticationService;
         this.emailService = emailService;
         this.userMapper = userMapper;
+        this.traineeMapper = traineeMapper;
+        this.academicGradesRepository = academicGradesRepository;
     }
 
 
@@ -93,6 +98,16 @@ public class AdminService {
 
         return "User with the ID: "+id+" has been deactivated";
     }
+
+    public String deleteUser(Long id){
+        if(appUserRepository.findById(id).isEmpty()){
+            throw new AppUserNotFoundException("There is no user with this ID: " + id);
+        }
+        appUserRepository.deleteById(id);
+        return "User with the ID: "+id+" has been deleted";
+    }
+
+
     public AppUserDto getUserById(Long id){
         AppUser appUser= appUserRepository.findById(id).orElseThrow(()-> new AppUserNotFoundException("There is no user with this ID: "+ id));
         return userMapper.userToUserDto(appUser);
@@ -102,6 +117,65 @@ public class AdminService {
         AppUser appUser= getFullUserById(id);
         appUserRepository.save(userMapper.userRequestDtoToUser(appUserRequestDto,appUser));
         return "User with ID : " + appUser.getId() +" have been updated";
+    }
+
+    public String updateTraineeData(TraineeDataDto traineeDataDTO, Long userId)  {
+        Trainee trainee= getTraineeByUserId(userId);
+        String trainingField = traineeDataDTO.getTrainingField();
+        if ( !TrainingField.isValid(trainingField) && !Objects.equals(trainingField, "")){
+            throw new InvalidTrainingFieldException("Invalid Training Field");
+        }
+        String branchLocation = traineeDataDTO.getBranchLocation();
+        if ( !BranchLocation.isValid(branchLocation) && !Objects.equals(branchLocation, "")){
+            throw new InvalidBranchLocationException("Invalid Branch Location");
+        }
+        log.info("Received TraineeDataDto: {}", traineeDataDTO);
+        Trainee traineeUpdated = traineeMapper.traineeDataDtoToTrainee(traineeDataDTO,trainee);
+        traineeRepository.save(traineeUpdated);
+        return "Trainee Data Registered Successfully";
+    }
+
+    public String saveAcademicGradesToTrainee(Map<String, Double> grades, Long userId) {
+        AppUser appUser = appUserRepository.findById(userId).orElseThrow(()-> new AppUserNotFoundException("There is no user with this ID: "+ userId));
+        Trainee trainee = appUser.getTrainee();
+        if (trainee == null) {
+            throw new AppUserNotFoundException("User is not a Trainee");
+        }
+        log.info("grades size: {}",grades.size());
+        // Uppercase the keys before validation
+        Set<String> uppercaseKeys = grades.keySet().stream().map(String::toUpperCase).collect(Collectors.toSet());
+        try {
+            if (!uppercaseKeys.stream().allMatch(key -> validCourseTypes.contains(CourseType.valueOf(key)))) {
+                throw new InvalidAcademicCourseException("Invalid course types found in academicGradesDto");
+            }
+        }catch (IllegalArgumentException e){
+            throw new InvalidAcademicCourseException("Invalid course type found in academicGradesDto");
+        }
+        Set <AcademicGrades> academicGradesSet = new HashSet<>();
+        for (Map.Entry<String, Double> entry : grades.entrySet()) {
+            String key = entry.getKey();
+            Double mark = entry.getValue();
+            try {
+                // Check for existing grade with the same courseType and trainee
+                CourseType courseType = CourseType.valueOf(key.toUpperCase());
+
+                Optional<AcademicGrades> existingGrade = academicGradesRepository.findAcademicGradesByTypeAndTrainee_Id(courseType, trainee.getId());
+
+                if (existingGrade.isPresent()) {
+                    existingGrade.get().setMark(mark);
+                    academicGradesSet.add(existingGrade.get());
+                } else {
+                    // Create new grade
+                    AcademicGrades newGrade = new AcademicGrades(courseType, mark, trainee);
+                    academicGradesSet.add(newGrade);
+                }
+            } catch (InvalidAcademicCourseException e) {
+                throw new InvalidAcademicCourseException("Invalid Course type : " + key);
+            }
+            }
+        academicGradesRepository.saveAll(academicGradesSet);
+        trainee.setAcademicGrades(academicGradesSet);
+        return "Academic Grades Registered Successfully";
     }
 
     public AppUser getFullUserById(Long id){
@@ -123,6 +197,14 @@ public class AdminService {
             throw new AppUserNotFoundException(message);
         }
         return trainee.get();
+    }
+    public Trainee getTraineeByUserId(Long id){
+        Optional<AppUser> appUserOptional = appUserRepository.findById(id);
+
+        if (appUserOptional.isEmpty()) {
+            throw new AppUserNotFoundException("There is no user with this ID: " + id);
+        }
+        return getTraineeById(Objects.requireNonNull(appUserOptional.get().getTrainee()).getId());
     }
 
 

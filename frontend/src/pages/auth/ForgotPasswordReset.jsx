@@ -115,7 +115,7 @@ const ForgotPasswordReset = () => {
                   />
                 </div>
               </div>
-              <NavLink style={{ float: "right", paddingBottom:10, paddingTop:5 }} to="../login">Back to Login?</NavLink>
+              <NavLink style={{ float: "right", paddingBottom:10, paddingTop:5 }} to="../">Back to Login?</NavLink>
               <br />
               <button
                 className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"

@@ -17,6 +17,7 @@ const Logout = () => {
 
         if (response.status === 200) {
             setUserData(null);
+            localStorage.removeItem("traineeProfile");
             navigate("/", { replace: true });
         } else {
             console.error("Unexpected logout response:", response);

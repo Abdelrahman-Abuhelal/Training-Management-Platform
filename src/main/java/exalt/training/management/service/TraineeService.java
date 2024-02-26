@@ -11,6 +11,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -20,7 +21,6 @@ public class TraineeService {
 
     private final TraineeRepository traineeRepository;
     private final TraineeMapper traineeMapper;
-    private final EnumSet<CourseType> validCourseTypes = EnumSet.allOf(CourseType.class);
 
     private final AcademicGradesRepository academicGradesRepository;
 
@@ -71,7 +71,6 @@ public class TraineeService {
             throw new InvalidBranchLocationException("Invalid Branch Location");
         }
         log.info("Received TraineeDataDto: {}", traineeDataDTO);
-
        /* Map<String, Double> grades = traineeDataDTO.getAcademicGradesDto();
         log.info("grades: {}",grades);
         // Uppercase the keys before validation

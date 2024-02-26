@@ -19,26 +19,35 @@ const Login = () => {
       setError("Please enter both email and password");
       return;
     }
+    if (password.length < 8) {
+      setError("Password must be at least 8 characters long");
+      return;
+    }
 
 
-    try {
       const baseUrl = import.meta.env.VITE_PORT_URL;
 
       const response = await axios.post(`${baseUrl}/api/v1/auth/login`, {
         email,
         password,
+      }).then((response) => {
+        if (response.status === 200) {
+          setError("");
+          console.log("Login successful:", response.data);
+          setUserData(response.data);  
+          navigate("/", { replace: true });
+        }
+        else if(response.status === 401){
+          setError("Invalid email or password");
+        }
+        else{
+          setError(response.data.message || "Login failed");
+        }
+      }).catch((error) => {
+        setError("Login failed" );
+        console.error("Login failed:", error);
       });
 
-      if (response.status === 200) {
-        setError("");
-        console.log("Login successful:", response.data);
-        setUserData(response.data);  
-        navigate("/", { replace: true });
-      }
-
-    } catch (error) {
-      setError(error.response.data.error || "Login failed");
-    }
   };
 
   return (
