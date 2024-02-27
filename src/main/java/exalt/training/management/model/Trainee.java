@@ -19,7 +19,7 @@ import java.util.Set;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode
+@EqualsAndHashCode(exclude = {"academicGrades", "user"})
 public class Trainee {
 
 

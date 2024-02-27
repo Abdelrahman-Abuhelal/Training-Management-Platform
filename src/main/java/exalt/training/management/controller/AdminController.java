@@ -133,6 +133,13 @@ public class AdminController {
         return new ResponseEntity<>(academicGrades, HttpStatus.OK);
     }
 
+    @PreAuthorize("hasAnyRole('SUPER_ADMIN','SUPERVISOR')")
+    @GetMapping("/trainees/{userId}/grades")
+    public ResponseEntity<List<AcademicGrades>> getAcademicGradesForTrainee(@PathVariable Long userId) {
+        List<AcademicGrades> academicGrades =  adminService.getAcademicGradesForTrainee(userId);
+        return new ResponseEntity<>(academicGrades, HttpStatus.OK);
+    }
+
 
     @Operation(summary = "Save Academic Grades for a trainee using UserId", security =  @SecurityRequirement(name = "loginAuth"))
     @PreAuthorize("hasAnyRole('SUPER_ADMIN','SUPERVISOR')")

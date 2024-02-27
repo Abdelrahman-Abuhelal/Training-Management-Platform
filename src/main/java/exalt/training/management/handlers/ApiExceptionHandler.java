@@ -39,6 +39,11 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
     }
 
+    @ExceptionHandler(AcademicGradesNotFoundException.class)
+    public ResponseEntity<String> handleAcademicGradesNotFoundException(AcademicGradesNotFoundException e) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+    }
+
     @ExceptionHandler(InvalidUserException.class)
     public ResponseEntity<String> handleInvalidUserException(InvalidUserException e) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());

@@ -8,5 +8,6 @@ public enum CourseType {
     OBJECT_ORIENTED,
     DATA_STRUCTURE,
     DATABASE_ONE,
-    DATABASE_TWO
+    DATABASE_TWO,
+
 }

@@ -8,6 +8,7 @@ import exalt.training.management.model.*;
 import exalt.training.management.repository.AcademicGradesRepository;
 import exalt.training.management.repository.AppUserRepository;
 import exalt.training.management.repository.TraineeRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.mail.SimpleMailMessage;
@@ -134,7 +135,7 @@ public class AdminService {
         traineeRepository.save(traineeUpdated);
         return "Trainee Data Registered Successfully";
     }
-
+    @Transactional
     public String saveAcademicGradesToTrainee(Map<String, Double> grades, Long userId) {
         AppUser appUser = appUserRepository.findById(userId).orElseThrow(()-> new AppUserNotFoundException("There is no user with this ID: "+ userId));
         Trainee trainee = appUser.getTrainee();
@@ -151,6 +152,7 @@ public class AdminService {
         }catch (IllegalArgumentException e){
             throw new InvalidAcademicCourseException("Invalid course type found in academicGradesDto");
         }
+        academicGradesRepository.deleteAllByTrainee_Id(trainee.getId());
         Set <AcademicGrades> academicGradesSet = new HashSet<>();
         for (Map.Entry<String, Double> entry : grades.entrySet()) {
             String key = entry.getKey();
@@ -176,6 +178,16 @@ public class AdminService {
         academicGradesRepository.saveAll(academicGradesSet);
         trainee.setAcademicGrades(academicGradesSet);
         return "Academic Grades Registered Successfully";
+    }
+
+    public List<AcademicGrades> getAcademicGradesForTrainee(Long userId) {
+        AppUser appUser = appUserRepository.findById(userId).orElseThrow(()-> new AppUserNotFoundException("There is no user with this ID: "+ userId));
+        Trainee trainee = appUser.getTrainee();
+        if (trainee == null) {
+            throw new AppUserNotFoundException("User is not a Trainee");
+        }
+        return academicGradesRepository.findAllByTrainee_Id(trainee.getId()).orElseThrow(()-> new AcademicGradesNotFoundException("There are no academic grades for this trainee"));
+
     }
 
     public AppUser getFullUserById(Long id){

@@ -12,6 +12,7 @@ import AdminDashboard from "../pages/adminPortal/AdminDashboard.jsx";
 import SupervisorDashboard from "../pages/supervisorPortal.jsx/SupervisorDashboard.jsx";
 import TraineesList from "../pages/adminPortal/TraineesList.jsx";
 import EditTrainee from "../pages/adminPortal/EditTrainee.jsx";
+import Home from "../adminlte.components/Home.jsx";
 
 const Routes = () => {
   const { user } = useAuth();
@@ -19,11 +20,11 @@ const Routes = () => {
   const isTrainee = (user !== null && user.appUserDto.userRole === "TRAINEE");
   const isSupervisor = (user !== null && user.appUserDto.userRole === "SUPERVISOR");
   const isSuperAdmin = (user !== null && user.appUserDto.userRole === "SUPER_ADMIN");
-  console.log("user", user);
-  console.log("isAuthenticated", isAuthenticated);
-  console.log("isTrainee", isTrainee);
-  console.log("isSupervisor", isSupervisor);
-  console.log("isSuperAdmin", isSuperAdmin);
+  // console.log("user", user);
+  // console.log("isAuthenticated", isAuthenticated);
+  // console.log("isTrainee", isTrainee);
+  // console.log("isSupervisor", isSupervisor);
+  // console.log("isSuperAdmin", isSuperAdmin);
 
   // accessible to all users
   const routesForPublic = [
@@ -49,11 +50,11 @@ const Routes = () => {
       children: [
         {
           path: "/",
-          element: <TraineeDashboard />,
+          element: <Home />,
         },
         {
           path: "/dashboard",
-          element: <TraineeDashboard />,
+          element: <Home />,
         },
         {
           path: "/profile",
@@ -70,11 +71,11 @@ const Routes = () => {
       children: [
         {
           path: "/",
-          element: <SupervisorDashboard />,
+          element: <Home />,
         },
         {
           path: "/dashboard",
-          element: <AdminDashboard />,
+          element: <Home />,
         },
       ],
     },
@@ -87,11 +88,11 @@ const Routes = () => {
       children: [
         {
           path: "/",
-          element: <AdminDashboard />,
+          element: <Home />,
         },
         {
           path: "/dashboard",
-          element: <AdminDashboard />,
+          element: <Home />,
         },
         {
           path: "/trainees",

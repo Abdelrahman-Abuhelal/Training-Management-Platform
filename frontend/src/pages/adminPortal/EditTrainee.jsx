@@ -27,10 +27,19 @@ const EditTrainee = () => {
   const [branchLocation, setBranchLocation] = useState("");
   const [idNumberError, setIdNumberError] = useState("");
   const [showConfirmation, setShowConfirmation] = useState(false);
-  // grades
-  const [courses, setCourses] = useState([{ course: "", grade: "" }]);
+  // courses and grades
+  const [courses, setCourses] = useState([]);
+  const [selectedCourses, setSelectedCourses] = useState([]);
 
   const baseUrl = import.meta.env.VITE_PORT_URL;
+
+
+
+  useEffect(() => {
+    userData();
+    fetchUserData();
+    fetchUserCourses();
+  }, []);
 
   const userData = async () => {
     try {
@@ -46,11 +55,6 @@ const EditTrainee = () => {
       console.error("Error:", error);
     }
   };
-
-  useEffect(() => {
-    userData();
-    fetchUserData();
-  }, []);
 
   const fetchUserData = async () => {
     try {
@@ -76,6 +80,22 @@ const EditTrainee = () => {
     } catch (error) {
       console.error("Error:", error);
     }
+  };
+
+  const fetchUserCourses = async () => {
+  try{
+    const response = await axios.get(`${baseUrl}/api/v1/admin/trainees/${userId}/grades`);
+    if(response.status === 200){
+      const fetchedCourses = response.data;
+      setCourses(fetchedCourses.map(
+        (course) => ({ course: course.type, grade: course.mark })
+        ));
+      setSelectedCourses(fetchedCourses.map((course) => course.type));
+  }
+  }
+  catch(error){
+    console.error("Error:", error);
+  }
   };
 
   const handleSubmit = (e) => {
@@ -148,8 +168,14 @@ const EditTrainee = () => {
 
   const academicGradesAPI = async () => {
     try {
+
+      const finalCoursesObject = courses.reduce((acc, course) => {
+        acc[course.course] = course.grade;
+        return acc;
+      }, {});
+
       await axios
-        .put(`/api/v1/admin/trainees/${userId}/grades`, courses)
+        .put(`${baseUrl}/api/v1/admin/trainees/${userId}/grades`, finalCoursesObject)
         .then((response) => {
           if (response.status === 200) {
             console.log("Grades updated successfully");
@@ -163,27 +189,43 @@ const EditTrainee = () => {
     }
   };
 
-  const handleCourseChange = (index, value) => {
-    const updatedCourses = [...courses];
-    updatedCourses[index].course = value;
-    setCourses(updatedCourses);
+  const handleCourseChange = (index, e) => {
+    const value = e.target.value;
+    if(value===""){
+      return;
+    }
+    const updatedCourses = [...courses]; 
+    updatedCourses[index].course = value; 
+
+    if (selectedCourses.includes(value)) {
+      alert("You've already selected this course.");
+      e.target.value = '';
+    } else {
+      setCourses(updatedCourses);
+      setSelectedCourses([...selectedCourses, value]);
+    }
   };
 
   const handleGradeChange = (index, value) => {
-    const updatedCourses = [...courses];
-    updatedCourses[index].grade = value;
+    if(value===""){
+      return;
+    }
+    const updatedCourses = [...courses]; 
+    updatedCourses[index].grade = value; 
     setCourses(updatedCourses);
   };
 
   const addCourse = () => {
-    setCourses([...courses, { course: "", grade: "" }]);
+    setCourses([...courses, { course: "", grade: "" }]); 
   };
 
   const removeCourse = (index) => {
-    const updatedCourses = [...courses];
-    updatedCourses.splice(index, 1);
-    setCourses(updatedCourses);
+    const updatedCourses = [...courses]; 
+    updatedCourses.splice(index, 1); 
+    setCourses(updatedCourses); 
   };
+
+  
 
   const handleGradesSubmit = (e) => {
     e.preventDefault();
@@ -191,10 +233,31 @@ const EditTrainee = () => {
       console.error("No courses to submit");
       return;
     }
+    courses.map((course) => {
+      if (course.course === "" || course.grade === "") {
+        alert("Please remove courses with empty fields.");
+        return;
+      }
+      if (course.grade <0 || course.grade > 100) {
+        alert("Grades must be between 0-100 ");
+        return;
+      }
+    });
+
 
     academicGradesAPI();
     console.log("Courses and Grades:", courses);
   };
+
+  // const handleSelectChange = (e) => {
+  //   const value = e.target.value;
+  //   if (selectedCourses.includes(value)) {
+  //     alert("You've already selected this course.");
+  //     e.target.value = '';
+  //   } else {
+  //     setSelectedCourses([...selectedCourses, value]);
+  //   }
+  // };
 
   return (
     <div>
@@ -585,7 +648,7 @@ const EditTrainee = () => {
                   <div className="mt-6 flex items-center justify-end gap-x-6">
                     <button
                       type="submit"
-                      className="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                      className="mr-4 rounded-md bg-blue-500 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-700 focus:visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                     >
                       Save Personal Details
                     </button>
@@ -614,71 +677,76 @@ const EditTrainee = () => {
                 </div>
               </div>
             )}
-
-            <div className="border-b border-gray-900/10 pb-12">
-              <h2 className="text-base font-semibold leading-7 text-gray-900 pb-10">
-                Enter Courses and Grades
-              </h2>
-              <div >
-                <form onSubmit={handleGradesSubmit}>
+            <div className="space-y-12">
+              <div className="border-b border-gray-900/10 pb-12">
+                <form className="px-4" onSubmit={handleGradesSubmit}>
+                  <h1 className="text-base font-semibold leading-7 text-gray-900 pb-10">
+                    Academic Courses and Grades
+                  </h1>
                   {courses.map((course, index) => (
-                    <div key={index}>
-                      <select
-                        value={course.course}
-                        onChange={(e) =>
-                          handleCourseChange(index, e.target.value)
-                        }
-                        className="block rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                      >
-                        <option value="">Select Course</option>
-                        <option value="UNIVERSITY_GPA">University GPA</option>
-                        <option value="TAWJEEHI">Tawjeehi</option>
-                        <option value="PROGRAMMING_ONE">Programming</option>
-                        <option value="OBJECT_ORIENTED">Object Oriented</option>
-                        <option value="DATA_STRUCTURE">Data Structure</option>
-                        <option value="DATABASE_ONE">Database One</option>
-                        <option value="DATABASE_TWO">Database Two</option>
-                        {/* Add more options as needed */}
-                      </select>
-                      <input
-                        type="text"
-                        placeholder="Enter Grade"
-                        value={course.grade}
-                        onChange={(e) =>
-                          handleGradeChange(index, e.target.value)
-                        }
-                        className="block rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                      />
-                      {index > 0 && (
-                        <div className="mt-4 flex justify-center">
-                          <button
-                            type="button"
-                            onClick={() => removeCourse(index)}
-                          >
-                            Remove Course
-                          </button>
-                        </div>
-                      )}
+                    <div
+                      key={index}
+                      className="flex items-center w-full justify-between mb-4"
+                    >
+                      <div className="flex w-full">
+                        <select
+                          className="w-1/2 mr-4 bg-gray-100 rounded-md px-3 py-2 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                          value={course.course}
+                          onChange={(e) =>
+                            handleCourseChange(index, e)
+                          }
+                          
+                        >
+                          <option value="">Select Course</option>
+                          <option value="TAWJEEHI" disabled={selectedCourses.includes("TAWJEEHI")}>Tawjeehi</option>
+                          <option value="UNIVERSITY_GPA" disabled={selectedCourses.includes("UNIVERSITY_GPA")}>University GPA</option>
+                          <option value="PROGRAMMING_ONE" disabled={selectedCourses.includes("PROGRAMMING_ONE")}>Programming</option>
+                          <option value="OBJECT_ORIENTED" disabled={selectedCourses.includes("OBJECT_ORIENTED")}>
+                            Object Oriented
+                          </option>
+                          <option value="DATA_STRUCTURE" disabled={selectedCourses.includes("DATA_STRUCTURE")}>Data Structure</option>
+                          <option value="DATABASE_ONE" disabled={selectedCourses.includes("DATABASE_ONE")}>Database One</option>
+                          <option value="DATABASE_TWO" disabled={selectedCourses.includes("DATABASE_TWO")}>Database Two</option>
+                          {/* ... other options */}
+                        </select>
+                        <input
+                          className="w-1/2 bg-gray-100 rounded-md px-3 py-2 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                          type="text"
+                          placeholder="Enter Grade"
+                          value={course.grade}
+                          onChange={(e) =>
+                            handleGradeChange(index, e.target.value)
+                          }
+                        />
+                        <button
+                          type="button"
+                          onClick={() => removeCourse(index)}
+                          className="ml-4 rounded-md px-4 py-2 bg-red-500 text-white hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
+                        >
+                          Remove 
+                        </button>
+                      </div>
                     </div>
                   ))}
                   <button
                     type="button"
                     onClick={addCourse}
+                    className="rounded-md px-4 py-2 bg-green-500 text-white hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
                   >
                     Add Course
                   </button>
+
                   <div className="mt-6 flex items-center justify-end gap-x-6">
-                  <button
-                    type="submit"
-                    className="mr-4 rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-                  >
-                    Save Grades
-                  </button>
+                    <button
+                      type="submit"
+                      className="mr-4 rounded-md bg-blue-500 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-700 focus:visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                    >
+                      Save Academic Grades
+                    </button>
                   </div>
                 </form>
               </div>
             </div>
-            
           </div>
         </section>
       </div>
