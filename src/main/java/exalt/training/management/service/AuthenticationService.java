@@ -217,8 +217,11 @@ public class AuthenticationService {
                         .loginToken(loginToken)
                         .refreshToken(refreshToken)
                         .build();
+                response.setStatus(HttpServletResponse.SC_OK);
                 new ObjectMapper().writeValue(response.getOutputStream(), authResponse);
             }
+        }else {
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
         }
     }
 

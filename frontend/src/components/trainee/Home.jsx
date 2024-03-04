@@ -1,15 +1,15 @@
-import ButtonAppBar from "../components/admin/NavBar";
+import TraineeButtonAppBar from "./NavBar";
 
-const Home = () => {
+const TraineeHome = () => {
   return (
     <div>
-      <ButtonAppBar />
+      <TraineeButtonAppBar />
       <div>
         <div className="content-header">
           <div className="container-fluid">
             <div className="row mb-2">
               <div className="col-sm-6">
-                <h1 className="m-0">Dashboard</h1>
+                <h1 className="m-0">Trainee Dashboard</h1>
               </div>
               {/* /.col */}
               <div className="col-sm-6">
@@ -51,7 +51,7 @@ const Home = () => {
                     <h3>
                       53<sup style={{ fontSize: 20 }}>%</sup>
                     </h3>
-                    <p>Bounce Rate</p>
+                    <p>New Registrations Rate</p>
                   </div>
                   <div className="icon">
                     <i className="ion ion-stats-bars" />
@@ -79,8 +79,8 @@ const Home = () => {
               <div className="col-lg-3 col-6">
                 <div className="small-box bg-info">
                   <div className="inner">
-                    <h3>150</h3>
-                    <p>New Orders</p>
+                    <h3>24</h3>
+                    <p>New Trainees</p>
                   </div>
                   <div className="icon">
                     <i className="ion ion-bag" />
@@ -99,4 +99,4 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default TraineeHome;

@@ -1,6 +1,8 @@
 package exalt.training.management.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -20,8 +22,8 @@ public class AcademicGrades {
     private CourseType type;
 
     private Double mark;
+
     @ManyToOne
-    @JsonBackReference
     private Trainee trainee;
 
     public AcademicGrades(CourseType courseType, Double mark, Trainee trainee) {

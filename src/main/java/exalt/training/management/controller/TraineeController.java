@@ -1,8 +1,10 @@
 package exalt.training.management.controller;
 
 
+import exalt.training.management.dto.ReviewDataDto;
 import exalt.training.management.dto.TraineeDataDto;
 import exalt.training.management.model.Trainee;
+import exalt.training.management.service.ReviewService;
 import exalt.training.management.service.TraineeService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -16,6 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.security.Principal;
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -24,6 +27,8 @@ public class TraineeController {
 
 
     private final TraineeService traineeService;
+
+    private final ReviewService reviewService;
 
     @PutMapping("/update-me")
     @PreAuthorize("hasAnyRole('TRAINEE')")
@@ -40,6 +45,14 @@ public class TraineeController {
     public ResponseEntity<Trainee> getTraineeProfile(){
         Trainee trainee = traineeService.getMyProfileInfo();
         return new ResponseEntity<>(trainee, HttpStatus.OK);
+    }
+
+
+    @GetMapping("/my-reviews")
+    @PreAuthorize("hasAnyRole('TRAINEE')")
+    @Operation(summary = "Get All Reviews (Trainee Only)" , security =  @SecurityRequirement(name = "loginAuth"))
+    public ResponseEntity <List<ReviewDataDto>> getAllTraineeReviews() {
+        return ResponseEntity.ok(reviewService.getAllTraineeReviews());
     }
 
 /*    @DeleteMapping("/{username}")

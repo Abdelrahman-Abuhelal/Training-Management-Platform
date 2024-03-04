@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import ButtonAppBar from "../../components/admin/NavBar";
-import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
+import ManageAccountsIcon from "@mui/icons-material/ManageAccounts";
 import {
   Grid,
   Typography,
@@ -17,16 +17,18 @@ import {
   DialogTitle,
   DialogContent,
   DialogActions,
-  Button, 
-
+  Button,
 } from "@mui/material"; // MUI components (or your preferred library)
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { useNavigate } from "react-router-dom";
+import * as XLSX from "xlsx";
+import DownloadIcon from "@mui/icons-material/Download";
 
 const traineesList = () => {
   const baseUrl = import.meta.env.VITE_PORT_URL;
-  const [users, setUsers] = useState([]);
+  const [trainees, setTrainees] = useState([]);
+  const [allTrainees, setAllTrainees] = useState([]);
   const navigate = useNavigate();
   const [usernameToDelete, setUsernameToDelete] = useState("");
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
@@ -53,7 +55,7 @@ const traineesList = () => {
           const traineeUsers = response.data.filter(
             (item) => item.userRole === "TRAINEE"
           );
-          setUsers(traineeUsers);
+          setTrainees(traineeUsers);
         }
       } catch (error) {
         console.log(error);
@@ -61,6 +63,21 @@ const traineesList = () => {
     };
     fetchTrainees();
   }, [userIdToDelete]);
+
+  useEffect(() => {
+    allTraineesInfo();
+  }, []);
+
+  const allTraineesInfo = async () => {
+    try {
+      const response = await axios.get(`${baseUrl}/api/v1/admin/trainees`);
+      if (response.status === 200) {
+        setAllTrainees(response.data);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const handleView = (user) => {
     // Implement your view functionality here, e.g., navigate to a view page
@@ -90,40 +107,66 @@ const traineesList = () => {
       console.error("User ID not available for deletion"); // Log an error for debugging
     }
   };
+
+  const exportToExcel = () => {
+    const fileType =
+      "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8";
+    const fileExtension = ".xlsx";
+    const ws = XLSX.utils.json_to_sheet(allTrainees);
+    const wb = { Sheets: { data: ws }, SheetNames: ["data"] };
+    const excelBuffer = XLSX.write(wb, { bookType: "xlsx", type: "array" });
+    const data = new Blob([excelBuffer], { type: fileType });
+    const url = URL.createObjectURL(data);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "traineesList" + fileExtension;
+    document.body.appendChild(a);
+    a.click();
+    setTimeout(() => {
+      document.body.removeChild(a);
+      window.URL.revokeObjectURL(url);
+    }, 100);
+  };
+
   return (
     <div>
       <ButtonAppBar />
-
+      <div className="flex items-center justify-end">
+      {/* <h1 className="text-base font-bold leading-7 text-gray-900">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Trainees List</h1> */}
+      <IconButton  style={{ paddingRight: '20px' }} color="primary" onClick={exportToExcel}>
+       <DownloadIcon />&nbsp;Export 
+        </IconButton>
+      </div>
       <TableContainer>
         <Table size="small">
           <TableHead>
             <TableRow>
-              <TableCell>
-                <h3 className="text-base font-semibold leading-7 text-gray-900">
-                  Email
-                </h3>
-              </TableCell>
-              <TableCell>
+              <TableCell  variant="head">
                 <h3 className="text-base font-semibold leading-7 text-gray-900">
                   Username
                 </h3>
               </TableCell>
-              <TableCell>
+              <TableCell  variant="head">
                 <h3 className="text-base font-semibold leading-7 text-gray-900">
                   First Name
                 </h3>
               </TableCell>
-              <TableCell>
+              <TableCell  variant="head">
                 <h3 className="text-base font-semibold leading-7 text-gray-900">
                   Last Name
                 </h3>
               </TableCell>
-              <TableCell>
+              <TableCell  variant="head">
+                <h3 className="text-base font-semibold leading-7 text-gray-900">
+                  Email
+                </h3>
+              </TableCell>
+              <TableCell variant="head">
                 <h3 className="text-base font-semibold leading-7 text-gray-900">
                   Role
                 </h3>
               </TableCell>
-              <TableCell>
+              <TableCell variant="head">
                 <h3 className="text-base font-semibold leading-7 text-gray-900">
                   Actions
                 </h3>
@@ -131,19 +174,19 @@ const traineesList = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {users.map((item) => (
+            {trainees.map((item) => (
               <TableRow key={item.userId} hover>
-                <TableCell>{item.userEmail}</TableCell>
                 <TableCell>{item.userUsername}</TableCell>
                 <TableCell>{item.userFirstName}</TableCell>
                 <TableCell>{item.userLastName}</TableCell>
-                <TableCell>{item.userRole.toLowerCase()}</TableCell>
+                <TableCell>{item.userEmail}</TableCell>
+                <TableCell>{item.userRole.charAt(0).toUpperCase() + item.userRole.slice(1).toLowerCase()}</TableCell>
                 <TableCell>
-                  <IconButton onClick={() => handleView(item)} color="primary">
-                    <ManageAccountsIcon /> {/* Replace with your desired edit icon */}
+                  <IconButton size="small" onClick={() => handleView(item)} color="primary">
+                    <ManageAccountsIcon />View Profile
                   </IconButton>
-                  <IconButton onClick={() => handleDelete(item)} color="error">
-                    <DeleteIcon /> {/* Replace with your desired delete icon */}
+                  <IconButton size="small" onClick={() => handleDelete(item)} color="error">
+                     <DeleteIcon /> Delete User
                   </IconButton>
                 </TableCell>
               </TableRow>
@@ -151,11 +194,7 @@ const traineesList = () => {
           </TableBody>
         </Table>
       </TableContainer>
-      <div>
-        <Button variant="contained" color="primary">
-    
-        </Button>
-      </div>
+
       {/* Confirmation Dialog */}
       <Dialog open={openDeleteDialog} onClose={handleCloseDeleteDialog}>
         <DialogTitle>Delete Confirmation</DialogTitle>

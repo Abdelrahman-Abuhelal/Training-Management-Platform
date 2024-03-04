@@ -4,8 +4,10 @@ import exalt.training.management.dto.TraineeDataDto;
 import exalt.training.management.exception.*;
 import exalt.training.management.mapper.TraineeMapper;
 import exalt.training.management.model.*;
+import exalt.training.management.model.forms.Review;
 import exalt.training.management.repository.AcademicGradesRepository;
 import exalt.training.management.repository.TraineeRepository;
+import jakarta.persistence.EntityManager;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -21,15 +23,17 @@ public class TraineeService {
 
     private final TraineeRepository traineeRepository;
     private final TraineeMapper traineeMapper;
+    private final EntityManager entityManager;
 
     private final AcademicGradesRepository academicGradesRepository;
 
 
     public TraineeService(TraineeRepository traineeRepository,
-                          TraineeMapper traineeMapper,
-                         AcademicGradesRepository academicGradesRepository) {
+                          TraineeMapper traineeMapper, EntityManager entityManager,
+                          AcademicGradesRepository academicGradesRepository) {
         this.traineeRepository = traineeRepository;
         this.traineeMapper = traineeMapper;
+        this.entityManager = entityManager;
         this.academicGradesRepository = academicGradesRepository;
     }
 
@@ -110,5 +114,13 @@ public class TraineeService {
 
         return "Trainee Data Registered Successfully";
     }
+
+    public List<Review> findReviewsByTraineeId(Long traineeId) {
+        return entityManager.createQuery(
+                        "SELECT r FROM Review r JOIN r.trainees t WHERE t.id = :traineeId", Review.class)
+                .setParameter("traineeId", traineeId)
+                .getResultList();
+    }
+
 
 }

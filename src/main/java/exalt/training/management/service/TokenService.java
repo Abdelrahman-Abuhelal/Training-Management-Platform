@@ -22,7 +22,6 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.stereotype.Service;
 
 @Service
-@RequiredArgsConstructor
 @Slf4j
 public class TokenService {
 
@@ -36,8 +35,12 @@ public class TokenService {
     private long confirmationExpiration;
     @Value("${application.security.jwt.refresh-token.expiration}")
     private long refreshExpiration;
+
     private final TokenRepository tokenRepository;
 
+    public TokenService(TokenRepository tokenRepository) {
+        this.tokenRepository = tokenRepository;
+    }
 
 
     public Token findByToken(String token){

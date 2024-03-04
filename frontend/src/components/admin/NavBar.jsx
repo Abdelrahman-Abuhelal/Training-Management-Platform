@@ -9,7 +9,7 @@ import MenuIcon from "@mui/icons-material/Menu";
 import TemporaryDrawer from "./SideBar";
 import Logout from "../../pages/auth/Logout";
 
-export default function ButtonAppBar() {
+export default function AdminButtonAppBar() {
   const [state, setState] = React.useState({
     top: false,
     left: false,
@@ -29,7 +29,7 @@ export default function ButtonAppBar() {
   };
   return (
     <Box sx={{ flexGrow: 1 }}>
-      <AppBar position="static">
+      <AppBar position="static"  color="primary">
         <Toolbar>
           <IconButton
             size="large"

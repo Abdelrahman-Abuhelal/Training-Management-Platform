@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import ButtonAppBar from "../../components/trainee/NavBar";
+import ButtonAppBar from "../../components/admin/NavBar";
 import axios from "axios";
 import { useParams } from "react-router-dom";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
@@ -26,14 +26,13 @@ const EditTrainee = () => {
   const [trainingField, setTrainingField] = useState("");
   const [branchLocation, setBranchLocation] = useState("");
   const [idNumberError, setIdNumberError] = useState("");
-  const [showConfirmation, setShowConfirmation] = useState(false);
+  const [showDetailsConfirmation, setShowDetailsConfirmation] = useState(false);
+  const [showGradesConfirmation, setShowGradesConfirmation] = useState(false);
   // courses and grades
   const [courses, setCourses] = useState([]);
   const [selectedCourses, setSelectedCourses] = useState([]);
 
   const baseUrl = import.meta.env.VITE_PORT_URL;
-
-
 
   useEffect(() => {
     userData();
@@ -83,31 +82,35 @@ const EditTrainee = () => {
   };
 
   const fetchUserCourses = async () => {
-  try{
-    const response = await axios.get(`${baseUrl}/api/v1/admin/trainees/${userId}/grades`);
-    if(response.status === 200){
-      const fetchedCourses = response.data;
-      setCourses(fetchedCourses.map(
-        (course) => ({ course: course.type, grade: course.mark })
-        ));
-      setSelectedCourses(fetchedCourses.map((course) => course.type));
-  }
-  }
-  catch(error){
-    console.error("Error:", error);
-  }
+    try {
+      const response = await axios.get(
+        `${baseUrl}/api/v1/admin/trainees/${userId}/grades`
+      );
+      if (response.status === 200) {
+        const fetchedCourses = response.data;
+        setCourses(
+          fetchedCourses.map((course) => ({
+            course: course.type,
+            grade: course.mark,
+          }))
+        );
+        setSelectedCourses(fetchedCourses.map((course) => course.type));
+      }
+    } catch (error) {
+      console.error("Error:", error);
+    }
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
     // Show confirmation dialog
-    setShowConfirmation(true);
+    setShowDetailsConfirmation(true);
   };
 
   const handleConfirm = async (e) => {
     e.preventDefault();
 
-    setShowConfirmation(false);
+    setShowDetailsConfirmation(false);
 
     if (idNumber.length > 0 && idNumber.length !== 9) {
       setIdNumberError("ID Number must be 9 digits");
@@ -143,8 +146,19 @@ const EditTrainee = () => {
 
   const handleCancel = () => {
     // User cancelled action
-    setShowConfirmation(false);
+    setShowDetailsConfirmation(false);
   };
+
+  const handleCancelGrades = () => {
+    // User cancelled action
+    setShowGradesConfirmation(false);
+  };
+
+  const handleAcademicGradesSubmit = (e) => {
+    e.preventDefault();
+    setShowGradesConfirmation(true);
+  };
+
   const handleMonthChange = (e) => {
     setExpectedGraduationMonth(e.target.value);
     updateExpectedGraduationDate(e.target.value, expectedGraduationYear);
@@ -168,14 +182,16 @@ const EditTrainee = () => {
 
   const academicGradesAPI = async () => {
     try {
-
       const finalCoursesObject = courses.reduce((acc, course) => {
         acc[course.course] = course.grade;
         return acc;
       }, {});
 
       await axios
-        .put(`${baseUrl}/api/v1/admin/trainees/${userId}/grades`, finalCoursesObject)
+        .put(
+          `${baseUrl}/api/v1/admin/trainees/${userId}/grades`,
+          finalCoursesObject
+        )
         .then((response) => {
           if (response.status === 200) {
             console.log("Grades updated successfully");
@@ -191,15 +207,15 @@ const EditTrainee = () => {
 
   const handleCourseChange = (index, e) => {
     const value = e.target.value;
-    if(value===""){
+    if (value === "") {
       return;
     }
-    const updatedCourses = [...courses]; 
-    updatedCourses[index].course = value; 
+    const updatedCourses = [...courses];
+    updatedCourses[index].course = value;
 
     if (selectedCourses.includes(value)) {
       alert("You've already selected this course.");
-      e.target.value = '';
+      e.target.value = "";
     } else {
       setCourses(updatedCourses);
       setSelectedCourses([...selectedCourses, value]);
@@ -207,28 +223,28 @@ const EditTrainee = () => {
   };
 
   const handleGradeChange = (index, value) => {
-    if(value===""){
+    if (value === "") {
       return;
     }
-    const updatedCourses = [...courses]; 
-    updatedCourses[index].grade = value; 
+    const updatedCourses = [...courses];
+    updatedCourses[index].grade = value;
     setCourses(updatedCourses);
   };
 
   const addCourse = () => {
-    setCourses([...courses, { course: "", grade: "" }]); 
+    setCourses([...courses, { course: "", grade: "" }]);
   };
 
   const removeCourse = (index) => {
-    const updatedCourses = [...courses]; 
-    updatedCourses.splice(index, 1); 
-    setCourses(updatedCourses); 
+    const updatedCourses = [...courses];
+    updatedCourses.splice(index, 1);
+    setCourses(updatedCourses);
   };
 
-  
-
-  const handleGradesSubmit = (e) => {
+  const handleConfrimGrades = (e) => {
     e.preventDefault();
+    setShowGradesConfirmation(false);
+
     if (courses.length === 0) {
       console.error("No courses to submit");
       return;
@@ -238,12 +254,11 @@ const EditTrainee = () => {
         alert("Please remove courses with empty fields.");
         return;
       }
-      if (course.grade <0 || course.grade > 100) {
-        alert("Grades must be between 0-100 ");
+      if (course.grade < 60|| course.grade > 100) {
+        alert("Grades must be between 60-100 ");
         return;
       }
     });
-
 
     academicGradesAPI();
     console.log("Courses and Grades:", courses);
@@ -656,7 +671,7 @@ const EditTrainee = () => {
                 </div>
               </div>
             </form>
-            {showConfirmation && (
+            {showDetailsConfirmation && (
               <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-75">
                 <div className="bg-white p-8 rounded-md shadow-md">
                   <p>Are you sure you want to save?</p>
@@ -677,9 +692,10 @@ const EditTrainee = () => {
                 </div>
               </div>
             )}
-            <div className="space-y-12">
-              <div className="border-b border-gray-900/10 pb-12">
-                <form className="px-4" onSubmit={handleGradesSubmit}>
+
+            <form className="px-4" onSubmit={handleAcademicGradesSubmit}>
+              <div className="space-y-12">
+                <div className="border-b border-gray-900/10 pb-12">
                   <h1 className="text-base font-semibold leading-7 text-gray-900 pb-10">
                     Academic Courses and Grades
                   </h1>
@@ -692,21 +708,59 @@ const EditTrainee = () => {
                         <select
                           className="w-1/2 mr-4 bg-gray-100 rounded-md px-3 py-2 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
                           value={course.course}
-                          onChange={(e) =>
-                            handleCourseChange(index, e)
-                          }
-                          
+                          onChange={(e) => handleCourseChange(index, e)}
                         >
                           <option value="">Select Course</option>
-                          <option value="TAWJEEHI" disabled={selectedCourses.includes("TAWJEEHI")}>Tawjeehi</option>
-                          <option value="UNIVERSITY_GPA" disabled={selectedCourses.includes("UNIVERSITY_GPA")}>University GPA</option>
-                          <option value="PROGRAMMING_ONE" disabled={selectedCourses.includes("PROGRAMMING_ONE")}>Programming</option>
-                          <option value="OBJECT_ORIENTED" disabled={selectedCourses.includes("OBJECT_ORIENTED")}>
+                          <option
+                            value="TAWJEEHI"
+                            disabled={selectedCourses.includes("TAWJEEHI")}
+                          >
+                            Tawjeehi
+                          </option>
+                          <option
+                            value="UNIVERSITY_GPA"
+                            disabled={selectedCourses.includes(
+                              "UNIVERSITY_GPA"
+                            )}
+                          >
+                            University GPA
+                          </option>
+                          <option
+                            value="PROGRAMMING_ONE"
+                            disabled={selectedCourses.includes(
+                              "PROGRAMMING_ONE"
+                            )}
+                          >
+                            Programming
+                          </option>
+                          <option
+                            value="OBJECT_ORIENTED"
+                            disabled={selectedCourses.includes(
+                              "OBJECT_ORIENTED"
+                            )}
+                          >
                             Object Oriented
                           </option>
-                          <option value="DATA_STRUCTURE" disabled={selectedCourses.includes("DATA_STRUCTURE")}>Data Structure</option>
-                          <option value="DATABASE_ONE" disabled={selectedCourses.includes("DATABASE_ONE")}>Database One</option>
-                          <option value="DATABASE_TWO" disabled={selectedCourses.includes("DATABASE_TWO")}>Database Two</option>
+                          <option
+                            value="DATA_STRUCTURE"
+                            disabled={selectedCourses.includes(
+                              "DATA_STRUCTURE"
+                            )}
+                          >
+                            Data Structure
+                          </option>
+                          <option
+                            value="DATABASE_ONE"
+                            disabled={selectedCourses.includes("DATABASE_ONE")}
+                          >
+                            Database One
+                          </option>
+                          <option
+                            value="DATABASE_TWO"
+                            disabled={selectedCourses.includes("DATABASE_TWO")}
+                          >
+                            Database Two
+                          </option>
                           {/* ... other options */}
                         </select>
                         <input
@@ -723,7 +777,7 @@ const EditTrainee = () => {
                           onClick={() => removeCourse(index)}
                           className="ml-4 rounded-md px-4 py-2 bg-red-500 text-white hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
                         >
-                          Remove 
+                          Remove
                         </button>
                       </div>
                     </div>
@@ -744,9 +798,31 @@ const EditTrainee = () => {
                       Save Academic Grades
                     </button>
                   </div>
-                </form>
+                 
+                </div>
               </div>
-            </div>
+            </form>
+            {showGradesConfirmation && (
+                    <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-75">
+                      <div className="bg-white p-8 rounded-md shadow-md">
+                        <p>Save Academic Grades ?</p>
+                        <div className="mt-4 flex justify-center">
+                          <button
+                            onClick={handleConfrimGrades}
+                            className="mr-4 rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                          >
+                            Yes
+                          </button>
+                          <button
+                            onClick={handleCancelGrades}
+                            className="rounded-md bg-gray-300 px-3 py-2 text-sm font-semibold text-gray-800 shadow-sm hover:bg-gray-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-600"
+                          >
+                            No
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  )}
           </div>
         </section>
       </div>

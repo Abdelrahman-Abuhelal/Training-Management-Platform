@@ -6,13 +6,18 @@ import CompleteRegistration from "../pages/auth/CompleteRegistration.jsx";
 import ForgotPasswordEmail from "../pages/auth/ForgotPasswordEmail.jsx";
 import ForgotPasswordReset from "../pages/auth/ForgotPasswordReset.jsx";
 import Login from "../pages/auth/Login.jsx";
-import TraineeDashboard from "../pages/traineePortal/TraineeDashboard.jsx";
 import TraineeProfile from "../pages/traineePortal/TraineeProfile.jsx";
-import AdminDashboard from "../pages/adminPortal/AdminDashboard.jsx";
-import SupervisorDashboard from "../pages/supervisorPortal.jsx/SupervisorDashboard.jsx";
+import SupervisorDashboard from "../pages/supervisorPortal/SupervisorDashboard.jsx";
 import TraineesList from "../pages/adminPortal/TraineesList.jsx";
 import EditTrainee from "../pages/adminPortal/EditTrainee.jsx";
-import Home from "../adminlte.components/Home.jsx";
+import Home from "../components/admin/Home.jsx";
+import ReviewCreation from "../pages/adminPortal/ReviewCreation.jsx";
+import AdminButtonAppBar from "../components/admin/NavBar";
+import TraineeButtonAppBar  from "../components/trainee/NavBar";
+import AdminHome from "../components/admin/Home.jsx";
+import TraineeHome from "../components/trainee/Home.jsx";
+import ReviewsList from "../pages/traineePortal/ReviewsList.jsx";
+import FillReview from "../pages/traineePortal/FillReview.jsx";
 
 const Routes = () => {
   const { user } = useAuth();
@@ -46,19 +51,28 @@ const Routes = () => {
   const routesForTraineeOnly = [
     {
       path: "/",
-      element: <ProtectedRoute />, // Wrap the component in ProtectedRoute
+      element: <ProtectedRoute /> ,
+      // Wrap the component in ProtectedRoute
       children: [
         {
           path: "/",
-          element: <Home />,
+          element: <TraineeHome />,
         },
         {
           path: "/dashboard",
-          element: <Home />,
+          element: <TraineeHome />,
         },
         {
           path: "/profile",
           element: <TraineeProfile />,
+        },
+        {
+          path: "/reviews",
+          element: <ReviewsList />,
+        },
+        {
+          path: "/reviews/:reviewId",
+          element: <FillReview />,
         },
       ],
     },
@@ -88,15 +102,19 @@ const Routes = () => {
       children: [
         {
           path: "/",
-          element: <Home />,
+          element: <AdminHome />,
         },
         {
           path: "/dashboard",
-          element: <Home />,
+          element: <AdminHome />,
         },
         {
           path: "/trainees",
           element: <TraineesList />,
+        },
+        {
+          path:"/create-reviews",
+          element:<ReviewCreation />
         },
         {
           path: "/edit-trainee/:userId",

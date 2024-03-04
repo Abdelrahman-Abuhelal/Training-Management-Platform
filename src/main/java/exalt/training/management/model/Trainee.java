@@ -1,7 +1,10 @@
 package exalt.training.management.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import exalt.training.management.model.forms.Review;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -19,7 +22,8 @@ import java.util.Set;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(exclude = {"academicGrades", "user"})
+@EqualsAndHashCode(exclude = {"academicGrades", "reviews","user"})
+
 public class Trainee {
 
 
@@ -42,9 +46,12 @@ public class Trainee {
     private BranchLocation branchLocation;
 
     @Nullable
-    @JsonManagedReference
     @OneToMany(mappedBy = "trainee",cascade = CascadeType.ALL)
     private Set<AcademicGrades> academicGrades;
+
+    @Nullable
+    @ManyToMany(cascade = CascadeType.ALL) // Many-to-Many relationship with Review
+    private List <Review> reviews;
 
     @OneToOne
     @JsonBackReference

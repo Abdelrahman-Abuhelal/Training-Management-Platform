@@ -10,7 +10,7 @@ import TemporaryDrawer from "./SideBar";
 import Logout  from "../../pages/auth/Logout";
 
 
-export default function ButtonAppBar() {
+export default function TraineeButtonAppBar() {
   
 const [state, setState] = React.useState({
   top: false,

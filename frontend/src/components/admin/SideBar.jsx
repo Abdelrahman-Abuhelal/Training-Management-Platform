@@ -10,6 +10,18 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import InboxIcon from '@mui/icons-material/MoveToInbox';
 import MailIcon from '@mui/icons-material/Mail';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import SpaceDashboardIcon from '@mui/icons-material/SpaceDashboard';
+import GroupAddIcon from '@mui/icons-material/GroupAdd';
+import ListAltIcon from '@mui/icons-material/ListAlt';
+const routes = [
+  { path: '/dashboard', name: 'Dashboard', icon: <SpaceDashboardIcon /> },
+  { path: '/trainees', name: 'Trainees', icon: <AccountCircleIcon /> },
+  { path: '/create-users', name: 'Create Users', icon: <GroupAddIcon /> },
+  { path: '/create-reviews', name: 'Create Reviews', icon: <ListAltIcon /> },
+
+];
+
 
 export default function TemporaryDrawer({state, setState, toggleDrawer}) {
 
@@ -23,19 +35,19 @@ export default function TemporaryDrawer({state, setState, toggleDrawer}) {
     >
       <List>      
           {/* the links should be the same as routing name, stupid logic*/}
-        {['Dashboard', 'Profile', 'Trainees', 'Create-Users'].map((text, index) => (
-          <ListItem key={text} disablePadding>
-            <ListItemButton href={`/${text.toLowerCase()}`}>
+          {routes.map((route, index) => (
+        <ListItem key={route.name} disablePadding>
+        <ListItemButton href={route.path}>
               <ListItemIcon>
-                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+              {route.icon}
               </ListItemIcon>
-              <ListItemText primary={text} />
+              <ListItemText primary={route.name} />
             </ListItemButton>
           </ListItem>
         ))}
       </List>
       <Divider />
-      <List>
+      {/* <List>
         {['All mail', 'Trash', 'Spam'].map((text, index) => (
           <ListItem key={text} disablePadding>
             <ListItemButton>
@@ -46,7 +58,7 @@ export default function TemporaryDrawer({state, setState, toggleDrawer}) {
             </ListItemButton>
           </ListItem>
         ))}
-      </List>
+      </List> */}
     </Box>
   );
 

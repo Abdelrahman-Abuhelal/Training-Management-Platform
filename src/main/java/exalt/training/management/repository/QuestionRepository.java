@@ -1,12 +1,10 @@
 package exalt.training.management.repository;
 
-import exalt.training.management.model.forms.Review;
+import exalt.training.management.model.forms.Question;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
-
 @Repository
-public interface ReviewRepository  extends JpaRepository<Review, Long> {
 
+public interface QuestionRepository  extends JpaRepository<Question,Long> {
 }
