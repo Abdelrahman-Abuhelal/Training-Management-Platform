@@ -3,6 +3,7 @@ package exalt.training.management.model;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import exalt.training.management.model.forms.Review;
+import exalt.training.management.model.forms.ReviewSubmission;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.lang.Nullable;
@@ -27,6 +28,11 @@ public class SuperAdmin {
 
 
     @Nullable
-    @ManyToMany(cascade = CascadeType.ALL) // Many-to-Many relationship with Review
+    @ManyToMany
     private List<Review> reviews;
+
+
+    @Nullable
+    @OneToMany(mappedBy = "superAdmin", cascade = CascadeType.ALL)
+    private List<ReviewSubmission> reviewSubmissions;
 }

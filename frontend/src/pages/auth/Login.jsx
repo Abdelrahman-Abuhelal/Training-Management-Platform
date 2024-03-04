@@ -33,7 +33,6 @@ const Login = () => {
       }).then((response) => {
         if (response.status === 200) {
           setError("");
-          console.log("Login successful:", response.data);
           setUserData(response.data);  
           navigate("/", { replace: true });
         }

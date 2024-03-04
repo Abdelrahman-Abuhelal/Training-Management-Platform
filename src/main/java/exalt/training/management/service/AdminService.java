@@ -7,6 +7,7 @@ import exalt.training.management.mapper.TraineeMapper;
 import exalt.training.management.model.*;
 import exalt.training.management.repository.AcademicGradesRepository;
 import exalt.training.management.repository.AppUserRepository;
+import exalt.training.management.repository.SupervisorRepository;
 import exalt.training.management.repository.TraineeRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -33,10 +34,11 @@ public class AdminService {
     private final AppUserMapper userMapper;
     private final EnumSet<CourseType> validCourseTypes = EnumSet.allOf(CourseType.class);
 
+    private final SupervisorRepository supervisorRepository;
     private final TraineeMapper traineeMapper;
     private final AcademicGradesRepository academicGradesRepository;
 
-    public AdminService(TraineeRepository traineeRepository, AppUserRepository appUserRepository, AppUserService appUserService, TokenService tokenService, AuthenticationService authenticationService, EmailService emailService, AppUserMapper userMapper, TraineeMapper traineeMapper, AcademicGradesRepository academicGradesRepository) {
+    public AdminService(TraineeRepository traineeRepository, AppUserRepository appUserRepository, AppUserService appUserService, TokenService tokenService, AuthenticationService authenticationService, EmailService emailService, AppUserMapper userMapper, SupervisorRepository supervisorRepository, TraineeMapper traineeMapper, AcademicGradesRepository academicGradesRepository) {
         this.traineeRepository = traineeRepository;
         this.appUserRepository = appUserRepository;
         this.appUserService = appUserService;
@@ -44,6 +46,7 @@ public class AdminService {
         this.authenticationService = authenticationService;
         this.emailService = emailService;
         this.userMapper = userMapper;
+        this.supervisorRepository = supervisorRepository;
         this.traineeMapper = traineeMapper;
         this.academicGradesRepository = academicGradesRepository;
     }
@@ -228,6 +231,16 @@ public class AdminService {
             throw new AppUserNotFoundException(message);
         }
         return trainees;
+    }
+
+    public List<Supervisor> getAllSupervisors(){
+        List<Supervisor> supervisors=supervisorRepository.findAll();
+        if (supervisors.isEmpty()){
+            String message= "there are no supervisors";
+            log.info(message);
+            throw new AppUserNotFoundException(message);
+        }
+        return supervisors;
     }
 
 /*    public void deleteTraineeByUsername(String username){

@@ -24,6 +24,7 @@ const FillReview = () => {
     targetAudience: "",
     questions: [],
   });
+  const [answers, setAnswers] = useState([]); // State to hold answers
 
   useEffect(() => {
     const reviewFormById = async () => {
@@ -34,6 +35,11 @@ const FillReview = () => {
         if (response.status === 200) {
           setFormData(response.data);
           console.log(response.data);
+          // Initialize answers state with empty answers for each question
+          setAnswers(response.data.questions.map(question => ({
+            questionId: question.id,
+            selectedOptionsContent: []
+          })));
         }
       } catch (error) {
         console.error(error); // Use console.error for logging errors
@@ -44,40 +50,32 @@ const FillReview = () => {
   }, [reviewId]);
 
   const handleInputChange = (event, questionId) => {
-    const { name, value } = event.target;
-    setFormData((prevData) => ({
-      ...prevData,
-      questions: prevData.questions.map((question) => ({
-        ...question,
-        answer: question.id === questionId ? value : question.answer,
-      })),
-    }));
+    const { value } = event.target;
+    setAnswers(prevAnswers => prevAnswers.map(answer => 
+      answer.questionId === questionId 
+        ? { ...answer, selectedOptionsContent: [value] }
+        : answer
+    ));
   };
 
   const handleOptionChange = (questionId, optionIndex) => {
-    setFormData((prevData) => ({
-      ...prevData,
-      questions: prevData.questions.map((question) => ({
-        ...question,
-        answer: question.id === questionId ? optionIndex : question.answer,
-      })),
-    }));
+    setAnswers(prevAnswers => prevAnswers.map(answer => 
+      answer.questionId === questionId 
+        ? { ...answer, selectedOptionsContent: [optionIndex] }
+        : answer
+    ));
   };
 
   const handleMultiAnswerOptionChange = (questionId, newAnswer) => {
-    setFormData((prevData) => ({
-      ...prevData,
-      questions: prevData.questions.map((question) => ({
-        ...question,
-        answer: question.id === questionId ? newAnswer : question.answer,
-      })),
-    }));
+    setAnswers(prevAnswers => prevAnswers.map(answer => 
+      answer.questionId === questionId 
+        ? { ...answer, selectedOptionsContent: newAnswer }
+        : answer
+    ));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Show confirmation dialog
-    console.log(formData);
     setShowDetailsConfirmation(true);
   };
 
@@ -89,7 +87,7 @@ const FillReview = () => {
     try {
       const response = await axios.put(
         `${baseUrl}/api/v1/reviews/${reviewId}`,
-        JSON.stringify(formData.questions)
+        { answers }
       );
       if (response.status === 200) {
         console.log("Review updated by admin: ", response.data);
@@ -100,7 +98,6 @@ const FillReview = () => {
   };
 
   const handleCancel = () => {
-    // User cancelled action
     setShowDetailsConfirmation(false);
   };
 
@@ -110,7 +107,7 @@ const FillReview = () => {
         return (
           <TextField
             name={`answer-${question.id}`}
-            value={question.answer || ""}
+            value={answers.find(answer => answer.questionId === question.id)?.selectedOptionsContent[0] || ""}
             onChange={(event) => handleInputChange(event, question.id)}
             fullWidth
           />
@@ -119,7 +116,7 @@ const FillReview = () => {
         return (
           <FormControl>
             <RadioGroup
-              value={question.answer || ""}
+              value={answers.find(answer => answer.questionId === question.id)?.selectedOptionsContent[0] || ""}
               onChange={(event) =>
                 handleOptionChange(question.id, event.target.value)
               }
@@ -145,15 +142,13 @@ const FillReview = () => {
                   control={
                     <Checkbox
                       checked={
-                        question.answer
-                          ? question.answer.includes(String(index))
-                          : false
+                        answers.find(answer => answer.questionId === question.id)?.selectedOptionsContent.includes(String(index)) || false
                       }
                       onChange={(event) => {
                         const selectedIndex = String(index);
                         const currentIndex =
-                          question.answer.indexOf(selectedIndex);
-                        const newAnswer = [...question.answer];
+                          answers.find(answer => answer.questionId === question.id)?.selectedOptionsContent.indexOf(selectedIndex);
+                        const newAnswer = [...answers.find(answer => answer.questionId === question.id)?.selectedOptionsContent || []];
 
                         if (currentIndex === -1) {
                           newAnswer.push(selectedIndex);
@@ -206,13 +201,13 @@ const FillReview = () => {
           <br />
           <Typography variant="body1" gutterBottom>
             <span style={{ fontSize: "17px", fontWeight: "bold" }}>
-              Title:{" "}
+              Title: {" "}
             </span>
             {formData.title}
           </Typography>
           <Typography variant="body1" gutterBottom>
             <span style={{ fontSize: "17px", fontWeight: "bold" }}>
-              Description:{" "}
+              Description: {" "}
             </span>{" "}
             {formData.description}
           </Typography>

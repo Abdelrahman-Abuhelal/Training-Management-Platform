@@ -1,5 +1,6 @@
 package exalt.training.management.dto;
 
+import exalt.training.management.model.forms.Answer;
 import exalt.training.management.model.forms.Question;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -14,6 +15,6 @@ import java.util.List;
 public class FillReviewDto {
 
 
-    private List<Question> questions;
+    private List<Answer> answers;
 
 }

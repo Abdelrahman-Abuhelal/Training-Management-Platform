@@ -31,8 +31,8 @@ public interface ReviewMapper {
     @Mapping(source = "questions",target = "questions")
     List<ReviewDataDto> reviewCreationDtoListToReviewList(List<Review>  reviews);
 
-    @Mapping(source = "questions",target = "questions")
+/*    @Mapping(source = "questions",target = "questions")
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-    Review reviewFilledToReview(FillReviewDto fillReviewDto,@MappingTarget Review review);
+    Review reviewFilledToReview(FillReviewDto fillReviewDto,@MappingTarget Review review);*/
 
 }

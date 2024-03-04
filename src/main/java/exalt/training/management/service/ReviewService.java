@@ -9,13 +9,15 @@ import exalt.training.management.exception.InvalidFormType;
 import exalt.training.management.exception.InvalidUserException;
 import exalt.training.management.mapper.ReviewMapper;
 import exalt.training.management.model.AppUser;
+import exalt.training.management.model.AppUserRole;
+import exalt.training.management.model.Supervisor;
 import exalt.training.management.model.Trainee;
 import exalt.training.management.model.forms.Question;
 import exalt.training.management.model.forms.Review;
+import exalt.training.management.model.forms.ReviewSubmission;
 import exalt.training.management.model.forms.ReviewType;
-import exalt.training.management.repository.QuestionRepository;
-import exalt.training.management.repository.ReviewRepository;
-import exalt.training.management.repository.TraineeRepository;
+import exalt.training.management.repository.*;
+import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -35,17 +37,22 @@ public class ReviewService {
     private final QuestionRepository questionRepository;
 
     private final TraineeRepository traineeRepository;
+    private  final SupervisorRepository supervisorRepository;
+
+    private final ReviewSubmissionRepository reviewSubmissionRepository;
 
     private final TraineeService traineeService;
 
 
     @Autowired
-    public ReviewService(ReviewRepository reviewRepository, AdminService adminService, QuestionRepository questionRepository, TraineeRepository traineeRepository, ReviewMapper reviewMapper, TraineeService traineeService) {
+    public ReviewService(ReviewRepository reviewRepository, AdminService adminService, QuestionRepository questionRepository, TraineeRepository traineeRepository, ReviewMapper reviewMapper, SupervisorRepository supervisorRepository, ReviewSubmissionRepository reviewSubmissionRepository, TraineeService traineeService) {
         this.reviewRepository = reviewRepository;
         this.adminService = adminService;
         this.questionRepository = questionRepository;
         this.traineeRepository = traineeRepository;
         this.reviewMapper = reviewMapper;
+        this.supervisorRepository = supervisorRepository;
+        this.reviewSubmissionRepository = reviewSubmissionRepository;
         this.traineeService = traineeService;
     }
 
@@ -97,6 +104,11 @@ public class ReviewService {
            trainees.forEach(trainee -> trainee.getReviews().add(review));
            traineeRepository.saveAll(trainees);
         }
+        else if ("supervisors".equals(targetAudience)) {
+            List<Supervisor> supervisors = adminService.getAllSupervisors();
+            supervisors.forEach(supervisor -> supervisor.getReviews().add(review));
+            supervisorRepository.saveAll(supervisors);
+        }// add the admin part, I Don't have time.
 
         return "Review Form has been created";
     }
@@ -121,12 +133,26 @@ public class ReviewService {
         List <Review> reviews =traineeService.findReviewsByTraineeId(trainee.getId());
        return reviewMapper.reviewCreationDtoListToReviewList(reviews);
    }
-
+@Transactional
    public String fillReview(FillReviewDto fillReviewDto,Long reviewId)
    {
-      Review review= reviewRepository.findById(reviewId).orElseThrow(()->new FormNotFoundException("No Review with this ID"));
-      Review updatedReview= reviewMapper.reviewFilledToReview(fillReviewDto,review);
-      reviewRepository.save(updatedReview);
+       Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+       var user = (AppUser) authentication.getPrincipal();
+
+
+       ReviewSubmission reviewSubmission=new ReviewSubmission();
+       Review review= reviewRepository.findById(reviewId).orElseThrow(()->new FormNotFoundException("No Review with this ID"));
+       reviewSubmission.setReview(review);
+
+       if(user.getRole().equals(AppUserRole.TRAINEE)){
+           reviewSubmission.setTrainee(user.getTrainee());
+       }else if(user.getRole().equals(AppUserRole.SUPERVISOR)){
+       reviewSubmission.setSupervisor(user.getSupervisor());
+        }else if(user.getRole().equals(AppUserRole.SUPER_ADMIN)){
+           reviewSubmission.setSuperAdmin(user.getSuperAdmin());
+       }
+       reviewSubmission.setAnswers(fillReviewDto.getAnswers());
+       reviewSubmissionRepository.save(reviewSubmission);
       return "Review has been updated";
    }
 

@@ -26,10 +26,6 @@ public class Question {
 
     private String type;
 
-    @ElementCollection
-    @CollectionTable(name = "question_answers", joinColumns = @JoinColumn(name = "answer_id"))
-    private List<String> answer;
-
     @ManyToOne
     @JoinColumn(name = "review_id")
     private Review review;
