@@ -118,8 +118,8 @@ const AdminForm = () => {
     <div>
       <ButtonAppBar />
       <div style={{ display: "flex", alignItems: "center", justifyContent: "center", minHeight: "70vh" }}>
-        <form onSubmit={handleSubmit(onSubmit)} style={{ width: "75%", maxWidth: "1000px" }}>
-          <span style={{ display: "flex", fontSize: "20px", alignItems: "center", justifyContent: "center", fontWeight: "bold" }}>Review Form</span>
+        <form onSubmit={handleSubmit(onSubmit)} style={{ width: "70%", maxWidth: "1000px" }}>
+          <span style={{padding:"5px", display: "flex", fontSize: "20px", alignItems: "center", justifyContent: "center", fontWeight: "bold",fontFamily:"cursive" }}>Review Form Creation</span>
           <br />
           <div>
             <TextField
@@ -128,13 +128,13 @@ const AdminForm = () => {
               error={!!errors.title}
               helperText={errors.title?.message || ""}
               onChange={handleInputChange}
-              sx={{ marginBottom: 2 }}
+              sx={{ marginBottom: 2 ,}}
               fullWidth
             />
           </div>
           <br />
           <div>
-            <TextField
+            <TextField 
               {...register("description", { required: true })}
               label="Description"
               error={!!errors.description}
@@ -186,6 +186,7 @@ const AdminForm = () => {
                 <Select
                   labelId={`question-type-label-${questionIndex}`}
                   id={`question-type-${questionIndex}`}
+                  label='Type of Question'
                   value={question.type}
                   onChange={(e) => {
                     const updatedQuestions = [...formData.questions];

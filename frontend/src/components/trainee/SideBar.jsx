@@ -15,11 +15,12 @@ import SpaceDashboardIcon from '@mui/icons-material/SpaceDashboard';
 import GroupAddIcon from '@mui/icons-material/GroupAdd';
 import ListAltIcon from '@mui/icons-material/ListAlt';
 
-
+import SettingsIcon from '@mui/icons-material/Settings';
 const routes = [
   { path: '/dashboard', name: 'Dashboard', icon: <SpaceDashboardIcon /> },
   { path: '/profile', name: 'Profile', icon: <AccountCircleIcon /> },
   { path: '/reviews', name: 'Reviews', icon: <ListAltIcon /> },
+  { path: '/change-password', name: 'Settings', icon: <SettingsIcon /> }
 
 ];
 

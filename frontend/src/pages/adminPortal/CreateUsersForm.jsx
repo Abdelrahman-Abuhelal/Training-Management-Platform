@@ -102,8 +102,8 @@ const CreateUsersForm = () => {
               style={{ height: "auto", width: "auto", maxHeight: "80px" }}
             />
           </Grid> */}
-            <Typography variant="h4" sx={{ mt: 5,mb:5, textAlign: 'center', fontFamily: 'sans-serif' }}>
-              Create New User
+            <Typography variant="h4" sx={{ mt: 5,mb:5, textAlign: 'center' , fontSize:35,fontFamily:"Cursive"}}>
+            User Registration
             </Typography>
         </Grid>
         <Grid item xs={12} sm={8} md={6}>
@@ -169,8 +169,9 @@ const CreateUsersForm = () => {
                   type="submit"
                   variant="contained"
                   color="primary"
-                  fullWidth
+                  sx={{mt: 5,mb:5, textAlign: 'center'}}
                   disabled={loading}
+                  fullWidth
                 >
                   {loading ? "Submitting..." : "Submit"}
                 </Button>

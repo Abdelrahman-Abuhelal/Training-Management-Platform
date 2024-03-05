@@ -12,6 +12,7 @@ import lombok.*;
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
+@EqualsAndHashCode(exclude = "trainee")
 public class AcademicGrades {
 
     @Id

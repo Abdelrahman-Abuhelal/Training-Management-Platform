@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import ButtonAppBar from "../../components/trainee/NavBar";
 import axios from "axios";
 import { useAuth } from "../../provider/authProvider";
+import "../style/traineeProfile.css"
 
 const TraineeProfile = () => {
   const [fullNameInArabic, setFullNameInArabic] = useState("");
@@ -392,7 +393,7 @@ const TraineeProfile = () => {
                         </select>
                       </div>
                     </div>
-                    <div className="sm:col-span-3">
+                    <div className="sm:col-span-4">
                       <label
                         htmlFor="graudation-date"
                         className="block text-sm font-medium leading-6 text-gray-900"
@@ -442,7 +443,7 @@ const TraineeProfile = () => {
                         </select>
                       </div>
                     </div>
-                    <div className="sm:col-span-3">
+                    <div className="sm:col-span-6">
                       <label
                         htmlFor="branch"
                         className="block text-sm font-medium leading-6 text-gray-900"
@@ -467,7 +468,7 @@ const TraineeProfile = () => {
                       </div>
                     </div>
 
-                    <div className="sm:col-span-3">
+                    <div className="sm:col-span-4">
                       <label
                         htmlFor="branch"
                         className="block text-sm font-medium leading-6 text-gray-900"

@@ -52,7 +52,7 @@ public class TraineeController {
     @PreAuthorize("hasAnyRole('TRAINEE')")
     @Operation(summary = "Get All Reviews (Trainee Only)" , security =  @SecurityRequirement(name = "loginAuth"))
     public ResponseEntity <List<ReviewDataDto>> getAllTraineeReviews() {
-        return ResponseEntity.ok(reviewService.getAllTraineeReviews());
+        return ResponseEntity.ok(reviewService.getAllReviews());
     }
 
 /*    @DeleteMapping("/{username}")

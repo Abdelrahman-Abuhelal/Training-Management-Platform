@@ -1,5 +1,6 @@
 package exalt.training.management.model.forms;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import exalt.training.management.model.*;
 import jakarta.persistence.*;
 import lombok.*;
@@ -13,7 +14,7 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(exclude = {"questions"})
+@EqualsAndHashCode(exclude = {"questions","trainees","supervisors","superAdmins"})
 public class Review {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

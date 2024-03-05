@@ -1,9 +1,6 @@
 package exalt.training.management.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.fasterxml.jackson.annotation.*;
 import exalt.training.management.model.forms.Review;
 import exalt.training.management.model.forms.ReviewSubmission;
 import jakarta.persistence.*;
@@ -23,8 +20,7 @@ import java.util.Set;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(exclude = {"academicGrades","user"})
-
+@EqualsAndHashCode(exclude = {"academicGrades","user","reviews","reviewSubmissions"})
 public class Trainee {
 
 
@@ -48,13 +44,16 @@ public class Trainee {
 
     @Nullable
     @OneToMany(mappedBy = "trainee",cascade = CascadeType.ALL)
+    @JsonIgnore
     private Set<AcademicGrades> academicGrades;
 
     @ManyToMany
+    @JsonIgnore
     private List<Review> reviews;
 
     @Nullable
     @OneToMany(mappedBy = "trainee", cascade = CascadeType.ALL)
+    @JsonIgnore
     private List<ReviewSubmission> reviewSubmissions;
 
     @OneToOne
