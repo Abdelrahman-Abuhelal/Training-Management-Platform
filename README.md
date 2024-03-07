@@ -7,10 +7,10 @@ The primary goal of this application is to provide a centralized platform for HR
 - User registration and login with JWT authentication
 - Password encryption using BCrypt
 - Role-based authorization with Spring Security
-- Customized access denied handling
-- Logout mechanism
+- Complete registration sent email
 - Forgot password email and Change password
 - Refresh token
+- Logout mechanism
 
 # Features
 - Three types of users (Trainee, Supervisor, SueprAdmin).
@@ -22,4 +22,5 @@ The primary goal of this application is to provide a centralized platform for HR
 - Trainees can submit their form answers.
 
 
-
+Backend Swagger APIs:
+http://yourserver:port/swagger-ui/index.html
