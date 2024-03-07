@@ -25,6 +25,8 @@ The primary goal of this application is to provide a centralized platform for HR
 - Java JDK 21
 - Maven 3.9.5
 - MySQL 8.2
+- Spring Boot 3.1
+- Mockito Testing
 - Postman
 - Swagger 
 - React with Vite
