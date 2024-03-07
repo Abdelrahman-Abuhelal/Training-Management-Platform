@@ -49,11 +49,10 @@ const CompleteRegistration = () => {
         },
         {
           headers: {
-            Authorization: `Bearer ${token}`, // Send token in Authorization header
+            Authorization: `Bearer ${token}`,
           },
         }
       );
-      // Handle response as needed
       if (response.status === 200) {
         setShowSuccessAlert(true);
         setPasswordError("");

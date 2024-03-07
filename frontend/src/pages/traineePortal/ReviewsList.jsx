@@ -45,7 +45,6 @@ const ReviewsList = () => {
     
 
       const handleView = (item) => {
-        // Implement your view functionality here, e.g., navigate to a view page
         navigate(`/reviews/${item.id}`);
       };
 

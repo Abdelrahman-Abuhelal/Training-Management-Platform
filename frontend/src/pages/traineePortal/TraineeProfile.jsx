@@ -71,7 +71,6 @@ const TraineeProfile = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Show confirmation dialog
     setShowConfirmation(true);
   };
 

@@ -98,7 +98,7 @@ const Routes = () => {
   const routesForSuperAdminOnly = [
     {
       path: "/",
-      element: <ProtectedRoute />, // Wrap the component in ProtectedRoute
+      element: <ProtectedRoute />, 
       children: [
         {
           path: "/",
@@ -128,7 +128,6 @@ const Routes = () => {
     },
   ];
 
-  // accessible only to non-authenticated users
   const routesForNotAuthenticatedOnly = [
     {
       path: "/",
@@ -152,7 +151,6 @@ const Routes = () => {
     },
   ];
 
-  // Combine and conditionally include routes based on authentication status
   const router = createBrowserRouter([
     ...(!isAuthenticated ? routesForNotAuthenticatedOnly : []),
     ...(isTrainee ? routesForTraineeOnly : []),
@@ -160,7 +158,6 @@ const Routes = () => {
     ...(isSuperAdmin ? routesForSuperAdminOnly : []),
   ]);
 
-  // Provide the router configuration using RouterProvider
   return <RouterProvider router={router} />;
 };
 

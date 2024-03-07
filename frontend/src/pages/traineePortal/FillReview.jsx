@@ -35,7 +35,6 @@ const FillReview = () => {
         if (response.status === 200) {
           setFormData(response.data);
           console.log(response.data);
-          // Initialize answers state with empty answers for each question
           setAnswers(
             response.data.questions.map((question) => ({
               questionId: question.id,
@@ -44,7 +43,7 @@ const FillReview = () => {
           );
         }
       } catch (error) {
-        console.error(error); // Use console.error for logging errors
+        console.error(error); 
       }
     };
 

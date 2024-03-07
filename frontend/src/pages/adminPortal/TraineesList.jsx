@@ -80,31 +80,29 @@ const traineesList = () => {
   };
 
   const handleView = (user) => {
-    // Implement your view functionality here, e.g., navigate to a view page
     navigate(`/edit-trainee/${user.userId}`);
   };
 
   const handleDelete = (user) => {
-    setUserIdToDelete(user.userId); // Store the user ID for deletion
-    setUsernameToDelete(user.userUsername); // Store the username for display
-    setOpenDeleteDialog(true); // Open the confirmation dialog
+    setUserIdToDelete(user.userId); 
+    setUsernameToDelete(user.userUsername); 
+    setOpenDeleteDialog(true); 
   };
 
   const handleCloseDeleteDialog = () => {
     setOpenDeleteDialog(false);
-    setUserIdToDelete(null); // Clear the stored user ID
-    setUsernameToDelete(""); // Clear the stored username
+    setUserIdToDelete(null); 
+    setUsernameToDelete("");
   };
 
   const handleConfirmDelete = () => {
     if (userIdToDelete) {
-      // Ensure user ID is available before deleting
-      deleteUser(userIdToDelete); // Call the API to delete the user
-      setOpenDeleteDialog(false); // Close the dialog after deletion
-      setUserIdToDelete(null); // Clear the stored user ID
-      setUsernameToDelete(""); // Clear the stored username
+      deleteUser(userIdToDelete); 
+      setOpenDeleteDialog(false); 
+      setUserIdToDelete(null); 
+      setUsernameToDelete(""); 
     } else {
-      console.error("User ID not available for deletion"); // Log an error for debugging
+      console.error("User ID not available for deletion"); 
     }
   };
 
@@ -195,14 +193,12 @@ const traineesList = () => {
         </Table>
       </TableContainer>
 
-      {/* Confirmation Dialog */}
       <Dialog open={openDeleteDialog} onClose={handleCloseDeleteDialog}>
         <DialogTitle>Delete Confirmation</DialogTitle>
         <DialogContent>
           <Typography variant="h6" sx={{ mb: 2 }}>
             Are you sure you want to delete '{usernameToDelete}'?
           </Typography>
-          {/* Optional: Display additional details about the user being deleted */}
         </DialogContent>
         <DialogActions>
           <Button onClick={handleCloseDeleteDialog}>Cancel</Button>

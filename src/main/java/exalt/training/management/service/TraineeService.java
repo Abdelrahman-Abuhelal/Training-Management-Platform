@@ -75,39 +75,7 @@ public class TraineeService {
             throw new InvalidBranchLocationException("Invalid Branch Location");
         }
         log.info("Received TraineeDataDto: {}", traineeDataDTO);
-       /* Map<String, Double> grades = traineeDataDTO.getAcademicGradesDto();
-        log.info("grades: {}",grades);
-        // Uppercase the keys before validation
-        Set<String> uppercaseKeys = grades.keySet().stream().map(String::toUpperCase).collect(Collectors.toSet());
-        try {
-            if (!uppercaseKeys.stream().allMatch(key -> validCourseTypes.contains(CourseType.valueOf(key)))) {
-                throw new InvalidAcademicCourseException("Invalid course types found in academicGradesDto");
-            }
-        }catch (IllegalArgumentException e){
-            throw new InvalidAcademicCourseException("Invalid course type found in academicGradesDto");
-        }
-        for (Map.Entry<String, Double> entry : grades.entrySet()) {
-            String key = entry.getKey();
-            Double mark = entry.getValue();
-            try {
-                // Check for existing grade with the same courseType and trainee
-                CourseType courseType = CourseType.valueOf(key.toUpperCase());
 
-                Optional<AcademicGrades> existingGrade = academicGradesRepository.findAcademicGradesByTypeAndTrainee_Id(courseType, trainee.getId());
-
-                if (existingGrade.isPresent()) {
-                    existingGrade.get().setMark(mark);
-                    academicGradesRepository.save(existingGrade.get());
-                } else {
-                    // Create new grade
-                    AcademicGrades newGrade = new AcademicGrades(courseType, mark, trainee);
-                    academicGradesRepository.save(newGrade);
-                }
-            } catch (InvalidAcademicCourseException e) {
-                throw new InvalidAcademicCourseException("Invalid Course type : " + key);
-            }
-            }*/
-//        traineeUpdated.setAcademicGrades(academicGrades);
         Trainee traineeUpdated = traineeMapper.traineeDataDtoToTrainee(traineeDataDTO,trainee);
 
         traineeRepository.save(traineeUpdated);

@@ -51,7 +51,7 @@ const ForgotPasswordReset = () => {
         },
         {
           headers: {
-            Authorization: `Bearer ${token}`, // Ensure correct token inclusion
+            Authorization: `Bearer ${token}`, 
           },
         }
       );
@@ -61,9 +61,7 @@ const ForgotPasswordReset = () => {
         setPasswordError("");
         setNotMatchedPasswrodAlert(false);
         console.log("Password reset successfully:", response.data);
-        // Optionally redirect to login page after successful reset
       } else {
-        // Handle unsuccessful response with clearer error message
         setShowSuccessAlert(false);
         setPasswordError(
           "An error occurred while resetting your password. Please try again later."
@@ -72,7 +70,6 @@ const ForgotPasswordReset = () => {
     } catch (error) {
       setShowSuccessAlert(false);
       console.error("Error resetting password:", error);
-      // Consider displaying a user-friendly error message using error.message
     }
   };
 
@@ -82,8 +79,7 @@ const ForgotPasswordReset = () => {
         <div className="sm:mx-auto sm:w-full sm:max-w-sm">
           <img
             className="mx-auto h-20 w-auto"
-            src="/EXALT_LOGO.png" // Replace with your logo image
-            alt="Exalt Logo"
+            src="/EXALT_LOGO.png" 
           />
           <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
             Reset Your Password

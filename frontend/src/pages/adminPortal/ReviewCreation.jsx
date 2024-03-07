@@ -40,7 +40,7 @@ const AdminForm = () => {
       ...formData,
       questions: [
         ...formData.questions,
-        { question: "", type: "text", options: [] } // Default type is text
+        { question: "", type: "text", options: [] } 
       ]
     });
   };

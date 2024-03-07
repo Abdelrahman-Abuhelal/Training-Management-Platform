@@ -3,7 +3,6 @@ import { createContext, useContext, useEffect, useMemo, useState } from "react";
 import { jwtDecode } from "jwt-decode";
 
 const AuthContext = createContext();
-// Extract necessary fields
 
 
 const AuthProvider = ({ children }) => {
@@ -33,7 +32,7 @@ const AuthProvider = ({ children }) => {
     
    }catch (error) {
       console.error("Error refreshing token:", error);
-      logout(); // Log out user if token refresh fails
+      logout(); 
     }
   };
 
