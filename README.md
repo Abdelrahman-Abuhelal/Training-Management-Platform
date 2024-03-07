@@ -13,7 +13,7 @@ The primary goal of this application is to provide a centralized platform for HR
 - Logout mechanism
 
 # Features
-- Three types of users (Trainee, Supervisor, SuperAdmin).
+- Three Portals (Trainee, Supervisor, SuperAdmin).
 - Secure routing mechanism based on roles using ReactJS.
 - HR managers can create, edit, and delete trainees profiles.
 - HR managers can update their academic grades.
