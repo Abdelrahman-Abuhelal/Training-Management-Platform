@@ -21,6 +21,15 @@ The primary goal of this application is to provide a centralized platform for HR
 - Trainees can register their personal details (Profile).
 - Trainees can submit their form answers.
 
+# Tools Used to build the project: 
+- Java JDK 21
+- Maven 3.9.5
+- MySQL 8.2
+- Postman
+- Swagger 
+- React with Vite
+- intelliJ IDEA 2023
+- VSCode
 
-Backend Swagger APIs:
-http://yourserver:port/swagger-ui/index.html
+
+Swagger Documentation: http://yourserver:port/swagger-ui/index.html
