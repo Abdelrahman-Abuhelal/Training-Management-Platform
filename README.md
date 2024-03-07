@@ -17,7 +17,7 @@ The primary goal of this application is to provide a centralized platform for HR
 - Secure routing mechanism based on roles using ReactJS.
 - HR managers can create, edit, and delete trainees profiles.
 - HR managers can update their academic grades.
-- HR managers can create any type of review forms.
+- HR managers can create any type of review form questions.
 - Trainees can register their personal details (Profile).
 - Trainees can submit their form answers.
 
