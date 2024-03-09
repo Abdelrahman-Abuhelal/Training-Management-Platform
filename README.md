@@ -3,7 +3,7 @@ It is a Training Management Application designed to streamline and enhance the p
 The primary goal of this application is to provide a centralized platform for HR managers, supervisors, and trainees to efficiently oversee and participate in the training process.
 
 
-# Security Features
+## Security Features
 - User registration and login with JWT authentication
 - Password encryption using BCrypt
 - Role-based authorization with Spring Security
@@ -12,7 +12,7 @@ The primary goal of this application is to provide a centralized platform for HR
 - Refresh token
 - Logout mechanism
 
-# Features
+## Product Features
 - Three Portals (Trainee, Supervisor, SuperAdmin).
 - Secure routing mechanism based on roles using ReactJS.
 - HR managers can create, edit, and delete trainees profiles.
@@ -21,7 +21,7 @@ The primary goal of this application is to provide a centralized platform for HR
 - Trainees can register their personal details (Profile).
 - Trainees can submit their form answers.
 
-# Tools Used to build the project: 
+## Tools Used to build the project: 
 - Java JDK v21
 - Maven v3.9.5
 - MySQL v8.2
