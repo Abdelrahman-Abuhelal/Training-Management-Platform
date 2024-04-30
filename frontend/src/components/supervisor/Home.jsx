@@ -1,14 +1,13 @@
-import AdminButtonAppBar from "./NavBar";
+import SupervisorButtonAppBar from "./NavBar";
 
-const AdminHome = () => {
+const SuperviosrHome = () => {
   return (
-
       <div>
         <div className="content-header">
           <div className="container-fluid">
             <div className="row mb-2">
               <div className="col-sm-6">
-                <h1 className="m-0">Admin Dashboard</h1>
+                <h1 className="m-0">Supervisor Dashboard</h1>
               </div>
               {/* /.col */}
               <div className="col-sm-6">
@@ -97,4 +96,4 @@ const AdminHome = () => {
   );
 };
 
-export default AdminHome;
+export default SuperviosrHome;

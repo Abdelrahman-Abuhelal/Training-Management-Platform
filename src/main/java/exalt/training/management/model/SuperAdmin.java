@@ -17,6 +17,7 @@ import java.util.List;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
+@EqualsAndHashCode(exclude = {"supervisors","user","reviews","reviewSubmissions"})
 public class SuperAdmin {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,7 +26,6 @@ public class SuperAdmin {
     @OneToOne
     @JsonBackReference
     private AppUser user;
-
 
     @Nullable
     @ManyToMany

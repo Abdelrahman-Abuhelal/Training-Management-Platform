@@ -194,7 +194,6 @@ const FillReview = () => {
 
   return (
     <div>
-      <ButtonAppBar />
       <div
         style={{
           display: "flex",

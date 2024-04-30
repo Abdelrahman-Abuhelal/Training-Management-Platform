@@ -1,10 +1,9 @@
 import React from 'react'
-import ButtonAppBar from "../../components/trainee/NavBar";
+import ButtonAppBar from "../../components/supervisor/NavBar";
 
 const SupervisorDashboard = () => {
   return (
 <div>
-    <ButtonAppBar/>
     <div> Supervisor Dashboard Page</div>
   </div>
   )

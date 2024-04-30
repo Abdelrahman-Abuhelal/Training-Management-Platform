@@ -1,5 +1,6 @@
 package exalt.training.management.config;
 
+import exalt.training.management.config.apiKeyFilter.ApiKeyAuthExtractor;
 import exalt.training.management.model.AppUser;
 import exalt.training.management.model.AppUserRole;
 import exalt.training.management.repository.AppUserRepository;
@@ -44,7 +45,10 @@ public class ApplicationConfig {
     public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
         return config.getAuthenticationManager();
     }
-
+    @Bean
+    public ApiKeyAuthExtractor apiKeyAuthExtractor() {
+        return new ApiKeyAuthExtractor();
+    }
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();

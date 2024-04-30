@@ -126,11 +126,11 @@ public class AdminService {
     public String updateTraineeData(TraineeDataDto traineeDataDTO, Long userId)  {
         Trainee trainee= getTraineeByUserId(userId);
         String trainingField = traineeDataDTO.getTrainingField();
-        if ( !TrainingField.isValid(trainingField) && !Objects.equals(trainingField, "")){
+        if ( !TrainingField.isValid(trainingField) && !Objects.equals(trainingField.trim(), "")){
             throw new InvalidTrainingFieldException("Invalid Training Field");
         }
         String branchLocation = traineeDataDTO.getBranchLocation();
-        if ( !BranchLocation.isValid(branchLocation) && !Objects.equals(branchLocation, "")){
+        if ( !BranchLocation.isValid(branchLocation) && !Objects.equals(branchLocation.trim(), "")){
             throw new InvalidBranchLocationException("Invalid Branch Location");
         }
         log.info("Received TraineeDataDto: {}", traineeDataDTO);

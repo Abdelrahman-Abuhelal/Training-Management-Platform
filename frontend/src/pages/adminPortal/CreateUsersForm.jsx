@@ -86,7 +86,6 @@ const CreateUsersForm = () => {
 
   return (
     <div>
-      <ButtonAppBar />
       <Grid
         container
         justifyContent="center"

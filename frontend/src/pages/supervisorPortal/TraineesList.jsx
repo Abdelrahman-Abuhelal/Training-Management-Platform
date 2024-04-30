@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import ButtonAppBar from "../../components/admin/NavBar";
 import ManageAccountsIcon from "@mui/icons-material/ManageAccounts";
 import {
   Grid,
@@ -128,6 +127,7 @@ const traineesList = () => {
 
   return (
     <div>
+    
       <div className="flex items-center justify-end">
       {/* <h1 className="text-base font-bold leading-7 text-gray-900">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Trainees List</h1> */}
       <IconButton  style={{ paddingRight: '20px' }} color="primary" onClick={exportToExcel}>

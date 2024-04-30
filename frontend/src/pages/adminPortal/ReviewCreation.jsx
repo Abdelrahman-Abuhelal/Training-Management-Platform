@@ -116,7 +116,6 @@ const AdminForm = () => {
 
   return (
     <div>
-      <ButtonAppBar />
       <div style={{ display: "flex", alignItems: "center", justifyContent: "center", minHeight: "70vh" }}>
         <form onSubmit={handleSubmit(onSubmit)} style={{ width: "70%", maxWidth: "1000px" }}>
           <span style={{padding:"5px", display: "flex", fontSize: "20px", alignItems: "center", justifyContent: "center", fontWeight: "bold",fontFamily:"cursive" }}>Review Form Creation</span>

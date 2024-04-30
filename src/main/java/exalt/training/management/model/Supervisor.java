@@ -17,6 +17,7 @@ import java.util.List;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
+@EqualsAndHashCode(exclude = {"user","trainees","superAdmins","reviews","reviewSubmissions"})
 public class Supervisor {
 
     @Id
@@ -27,7 +28,11 @@ public class Supervisor {
     @JsonBackReference
     private AppUser user;
 
+    @ManyToMany(mappedBy = "supervisors") // Trainee already has this field
+    private List<Trainee> trainees;
 
+    @ManyToMany(cascade = CascadeType.PERSIST) // Consider adding cascade type if needed
+    private List<SuperAdmin> superAdmins;
     @Nullable
     @ManyToMany
     private List<Review> reviews;

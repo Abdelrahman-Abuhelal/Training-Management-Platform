@@ -276,7 +276,6 @@ const EditTrainee = () => {
 
   return (
     <div>
-      <ButtonAppBar />
       <div style={{ paddingLeft: "280px" }}>
         <div className="content-header">
           <div className="container-fluid">

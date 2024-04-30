@@ -20,7 +20,7 @@ import java.util.Set;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(exclude = {"academicGrades","user","reviews","reviewSubmissions"})
+@EqualsAndHashCode(exclude = {"academicGrades","supervisors"  ,"user","reviews","reviewSubmissions"})
 public class Trainee {
 
 
@@ -47,6 +47,8 @@ public class Trainee {
     @JsonIgnore
     private Set<AcademicGrades> academicGrades;
 
+    @ManyToMany
+    private List<Supervisor> supervisors;
     @ManyToMany
     @JsonIgnore
     private List<Review> reviews;

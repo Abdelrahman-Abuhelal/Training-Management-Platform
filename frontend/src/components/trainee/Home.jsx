@@ -1,9 +1,6 @@
-import TraineeButtonAppBar from "./NavBar";
 
 const TraineeHome = () => {
   return (
-    <div>
-      <TraineeButtonAppBar />
       <div>
         <div className="content-header">
           <div className="container-fluid">
@@ -95,7 +92,6 @@ const TraineeHome = () => {
         </section>
         {/* /.content */}
       </div>
-    </div>
   );
 };
 

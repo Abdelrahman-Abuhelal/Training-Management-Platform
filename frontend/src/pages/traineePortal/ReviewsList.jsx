@@ -51,7 +51,6 @@ const ReviewsList = () => {
 
   return (
     <div>
-    <ButtonAppBar />
     <TableContainer>
     <Table size="small">
       <TableHead>

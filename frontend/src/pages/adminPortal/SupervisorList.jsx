@@ -25,10 +25,10 @@ import { useNavigate } from "react-router-dom";
 import * as XLSX from "xlsx";
 import DownloadIcon from "@mui/icons-material/Download";
 
-const traineesList = () => {
+const SupervisorsList = () => {
   const baseUrl = import.meta.env.VITE_PORT_URL;
-  const [trainees, setTrainees] = useState([]);
-  const [allTrainees, setAllTrainees] = useState([]);
+  const [supervisors, setSupervisors] = useState([]);
+  const [allSupervisors, setAllSupervisors] = useState([]);
   const navigate = useNavigate();
   const [usernameToDelete, setUsernameToDelete] = useState("");
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
@@ -48,31 +48,31 @@ const traineesList = () => {
   };
 
   useEffect(() => {
-    const fetchTrainees = async () => {
+    const fetchSupervisors = async () => {
       try {
         const response = await axios.get(`${baseUrl}/api/v1/admin/users`);
         if (response.status === 200) {
-          const traineeUsers = response.data.filter(
-            (item) => item.userRole === "TRAINEE"
+          const supervisorUsers = response.data.filter(
+            (item) => item.userRole === "SUPERVISOR"
           );
-          setTrainees(traineeUsers);
+          setSupervisors(supervisorUsers);
         }
       } catch (error) {
         console.log(error);
       }
     };
-    fetchTrainees();
+    fetchSupervisors();
   }, [userIdToDelete]);
 
   useEffect(() => {
-    allTraineesInfo();
+    allSupervisorsInfo();
   }, []);
 
-  const allTraineesInfo = async () => {
+  const allSupervisorsInfo = async () => {
     try {
-      const response = await axios.get(`${baseUrl}/api/v1/admin/trainees`);
+      const response = await axios.get(`${baseUrl}/api/v1/admin/supervisors`);
       if (response.status === 200) {
-        setAllTrainees(response.data);
+        setAllSupervisors(response.data);
       }
     } catch (error) {
       console.log(error);
@@ -80,7 +80,7 @@ const traineesList = () => {
   };
 
   const handleView = (user) => {
-    navigate(`/edit-trainee/${user.userId}`);
+    navigate(`/edit-supervisor/${user.userId}`);
   };
 
   const handleDelete = (user) => {
@@ -110,14 +110,14 @@ const traineesList = () => {
     const fileType =
       "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8";
     const fileExtension = ".xlsx";
-    const ws = XLSX.utils.json_to_sheet(allTrainees);
+    const ws = XLSX.utils.json_to_sheet(allSupervisors);
     const wb = { Sheets: { data: ws }, SheetNames: ["data"] };
     const excelBuffer = XLSX.write(wb, { bookType: "xlsx", type: "array" });
     const data = new Blob([excelBuffer], { type: fileType });
     const url = URL.createObjectURL(data);
     const a = document.createElement("a");
     a.href = url;
-    a.download = "traineesList" + fileExtension;
+    a.download = "supervisorList" + fileExtension;
     document.body.appendChild(a);
     a.click();
     setTimeout(() => {
@@ -171,7 +171,7 @@ const traineesList = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {trainees.map((item) => (
+            {supervisors.map((item) => (
               <TableRow key={item.userId} hover>
                 <TableCell>{item.userUsername}</TableCell>
                 <TableCell>{item.userFirstName}</TableCell>
@@ -214,4 +214,4 @@ const traineesList = () => {
   );
 };
 
-export default traineesList;
+export default SupervisorsList;
