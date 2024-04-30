@@ -23,6 +23,7 @@ The primary goal of this application is to provide a centralized platform for HR
 
 ## Tools Used to build the project: 
 - Java JDK v21
+- npm 
 - Maven v3.9.5
 - MySQL v8.2
 - Spring Boot v3.1
