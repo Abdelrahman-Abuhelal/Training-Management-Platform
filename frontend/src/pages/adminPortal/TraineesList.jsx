@@ -127,7 +127,7 @@ const traineesList = () => {
   };
 
   return (
-    <div>
+    <div  style={{padding: "3rem"}}>
       <div className="flex items-center justify-end">
       {/* <h1 className="text-base font-bold leading-7 text-gray-900">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Trainees List</h1> */}
       <IconButton  style={{ paddingRight: '20px' }} color="primary" onClick={exportToExcel}>
@@ -180,10 +180,10 @@ const traineesList = () => {
                 <TableCell>{item.userRole.charAt(0).toUpperCase() + item.userRole.slice(1).toLowerCase()}</TableCell>
                 <TableCell>
                   <IconButton size="small" onClick={() => handleView(item)} color="primary">
-                    <ManageAccountsIcon />View Profile
+                    سس<ManageAccountsIcon />
                   </IconButton>
                   <IconButton size="small" onClick={() => handleDelete(item)} color="error">
-                     <DeleteIcon /> Delete User
+                     <DeleteIcon /> 
                   </IconButton>
                 </TableCell>
               </TableRow>
