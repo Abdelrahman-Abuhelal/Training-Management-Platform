@@ -1,7 +1,7 @@
 package exalt.training.management.mapper;
 
 import exalt.training.management.dto.TraineeDataDto;
-import exalt.training.management.model.Trainee;
+import exalt.training.management.model.users.Trainee;
 import org.mapstruct.*;
 import org.mapstruct.factory.Mappers;
 

@@ -2,10 +2,9 @@ package exalt.training.management.repository;
 import java.util.List;
 import java.util.Optional;
 
-import exalt.training.management.model.AppUser;
+import exalt.training.management.model.users.AppUser;
 import exalt.training.management.model.Token;
 import exalt.training.management.model.TokenType;
-import org.springframework.data.domain.Example;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;

@@ -5,6 +5,8 @@ import exalt.training.management.exception.*;
 import exalt.training.management.mapper.TraineeMapper;
 import exalt.training.management.model.*;
 import exalt.training.management.model.forms.Review;
+import exalt.training.management.model.users.AppUser;
+import exalt.training.management.model.users.Trainee;
 import exalt.training.management.repository.AcademicGradesRepository;
 import exalt.training.management.repository.TraineeRepository;
 import jakarta.persistence.EntityManager;
@@ -13,9 +15,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
-import java.text.SimpleDateFormat;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Service
 @Slf4j

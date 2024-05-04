@@ -3,12 +3,7 @@ package exalt.training.management.mapper;
 
 import exalt.training.management.dto.AppUserDto;
 import exalt.training.management.dto.AppUserRequestDto;
-import exalt.training.management.model.AppUser;
-import exalt.training.management.model.AppUserRole;
-import jakarta.persistence.Column;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.validation.constraints.Size;
+import exalt.training.management.model.users.AppUser;
 import org.mapstruct.*;
 import org.mapstruct.factory.Mappers;
 

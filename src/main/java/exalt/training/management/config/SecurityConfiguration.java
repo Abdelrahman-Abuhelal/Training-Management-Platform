@@ -1,8 +1,6 @@
 package exalt.training.management.config;
 
 import exalt.training.management.config.apiKeyFilter.ApiKeyAuthFilter;
-import exalt.training.management.model.AppUserRole;
-import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -19,10 +17,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 
 import java.util.Arrays;
-import java.util.List;
 
-import static exalt.training.management.model.Permission.*;
-import static org.springframework.http.HttpMethod.*;
 import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
 
 @Configuration

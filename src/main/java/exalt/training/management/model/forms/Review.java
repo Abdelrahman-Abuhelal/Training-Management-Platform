@@ -1,7 +1,8 @@
 package exalt.training.management.model.forms;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-import exalt.training.management.model.*;
+import exalt.training.management.model.users.SuperAdmin;
+import exalt.training.management.model.users.Supervisor;
+import exalt.training.management.model.users.Trainee;
 import jakarta.persistence.*;
 import lombok.*;
 

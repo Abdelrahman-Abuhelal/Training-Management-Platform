@@ -5,17 +5,16 @@ import exalt.training.management.exception.*;
 import exalt.training.management.mapper.AppUserMapper;
 import exalt.training.management.mapper.TraineeMapper;
 import exalt.training.management.model.*;
+import exalt.training.management.model.users.AppUser;
+import exalt.training.management.model.users.Supervisor;
+import exalt.training.management.model.users.Trainee;
 import exalt.training.management.repository.AcademicGradesRepository;
 import exalt.training.management.repository.AppUserRepository;
 import exalt.training.management.repository.SupervisorRepository;
 import exalt.training.management.repository.TraineeRepository;
 import jakarta.transaction.Transactional;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.mail.SimpleMailMessage;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -138,6 +137,21 @@ public class AdminService {
         traineeRepository.save(traineeUpdated);
         return "Trainee Data Registered Successfully";
     }
+
+
+    @Transactional
+    public void assignSupervisorsToTrainees(List<Long> supervisorIds, List<Long> traineeIds) {
+        List<Supervisor> supervisors = supervisorRepository.findAllById(supervisorIds);
+        List<Trainee> trainees = traineeRepository.findAllById(traineeIds);
+
+        // Assign supervisors to trainees
+        for (Trainee trainee : trainees) {
+            trainee.setSupervisors(supervisors);
+        }
+
+        traineeRepository.saveAll(trainees);
+    }
+
     @Transactional
     public String saveAcademicGradesToTrainee(Map<String, Double> grades, Long userId) {
         AppUser appUser = appUserRepository.findById(userId).orElseThrow(()-> new AppUserNotFoundException("There is no user with this ID: "+ userId));

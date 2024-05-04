@@ -1,21 +1,18 @@
 package exalt.training.management.service;
 
-import exalt.training.management.dto.CompletedFormDto;
 import exalt.training.management.dto.FillReviewDto;
 import exalt.training.management.dto.ReviewCreationDto;
 import exalt.training.management.dto.ReviewDataDto;
 import exalt.training.management.exception.FormNotFoundException;
-import exalt.training.management.exception.InvalidFormType;
 import exalt.training.management.exception.InvalidUserException;
 import exalt.training.management.mapper.ReviewMapper;
-import exalt.training.management.model.AppUser;
-import exalt.training.management.model.AppUserRole;
-import exalt.training.management.model.Supervisor;
-import exalt.training.management.model.Trainee;
+import exalt.training.management.model.users.AppUser;
+import exalt.training.management.model.users.AppUserRole;
+import exalt.training.management.model.users.Supervisor;
+import exalt.training.management.model.users.Trainee;
 import exalt.training.management.model.forms.Question;
 import exalt.training.management.model.forms.Review;
 import exalt.training.management.model.forms.ReviewSubmission;
-import exalt.training.management.model.forms.ReviewType;
 import exalt.training.management.repository.*;
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;

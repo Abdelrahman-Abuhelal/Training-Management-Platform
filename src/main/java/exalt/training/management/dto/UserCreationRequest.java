@@ -1,13 +1,11 @@
 package exalt.training.management.dto;
 
-import exalt.training.management.config.password.StrongPassword;
-import exalt.training.management.model.AppUserRole;
+import exalt.training.management.model.users.AppUserRole;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
 import lombok.*;
 
 @Data

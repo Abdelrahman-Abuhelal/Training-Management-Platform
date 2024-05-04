@@ -1,19 +1,14 @@
-package exalt.training.management.model;
+package exalt.training.management.model.users;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import exalt.training.management.model.*;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
-import org.springframework.data.annotation.CreatedBy;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedBy;
-import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.lang.Nullable;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.time.Instant;
 import java.util.Collection;
 import java.util.List;
 

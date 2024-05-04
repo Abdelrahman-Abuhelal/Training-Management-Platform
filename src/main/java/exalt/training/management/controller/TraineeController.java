@@ -3,21 +3,17 @@ package exalt.training.management.controller;
 
 import exalt.training.management.dto.ReviewDataDto;
 import exalt.training.management.dto.TraineeDataDto;
-import exalt.training.management.model.Trainee;
+import exalt.training.management.model.users.Trainee;
 import exalt.training.management.service.ReviewService;
 import exalt.training.management.service.TraineeService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
-import java.security.Principal;
 import java.util.List;
 
 @RestController

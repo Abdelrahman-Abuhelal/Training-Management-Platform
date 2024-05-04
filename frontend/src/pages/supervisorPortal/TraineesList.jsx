@@ -24,7 +24,7 @@ import { useNavigate } from "react-router-dom";
 import * as XLSX from "xlsx";
 import DownloadIcon from "@mui/icons-material/Download";
 
-const traineesList = () => {
+const Supervisor_Trainees_List = () => {
   const baseUrl = import.meta.env.VITE_PORT_URL;
   const [trainees, setTrainees] = useState([]);
   const [allTrainees, setAllTrainees] = useState([]);
@@ -214,4 +214,4 @@ const traineesList = () => {
   );
 };
 
-export default traineesList;
+export default Supervisor_Trainees_List;

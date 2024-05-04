@@ -1,7 +1,6 @@
 package exalt.training.management.repository;
 
-import exalt.training.management.model.Supervisor;
-import exalt.training.management.model.Token;
+import exalt.training.management.model.users.Supervisor;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

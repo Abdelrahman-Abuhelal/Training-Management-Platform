@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import ButtonAppBar from "../../components/admin/NavBar";
-import ManageAccountsIcon from "@mui/icons-material/ManageAccounts";
 import {
   Grid,
   Typography,
@@ -32,7 +30,7 @@ import { useNavigate } from "react-router-dom";
 import * as XLSX from "xlsx";
 import DownloadIcon from "@mui/icons-material/Download";
 
-const SupervisorsList = () => {
+const HR_Supervisors_List = () => {
   const baseUrl = import.meta.env.VITE_PORT_URL;
   const [supervisors, setSupervisors] = useState([]);
   const [allSupervisors, setAllSupervisors] = useState([]);
@@ -216,8 +214,13 @@ const SupervisorsList = () => {
 
   return (
     <div  style={{padding: "3rem"}}>
-      <div className="flex items-center justify-end">
-        {/* <h1 className="text-base font-bold leading-7 text-gray-900">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Trainees List</h1> */}
+            <div className="flex items-center justify-end">
+        <TextField
+          label="Search username"
+          variant="standard"
+          value={searchTerm}
+          onChange={handleSearchChange}
+        />
         <IconButton
           style={{ paddingRight: "20px" }}
           color="primary"
@@ -227,14 +230,6 @@ const SupervisorsList = () => {
           &nbsp;Export
         </IconButton>
       </div>
-      {/* Search Bar */}
-      <TextField
-        label="Search username"
-        variant="standard"
-        value={searchTerm}
-        onChange={handleSearchChange}
-        // ... other TextField props
-      />
       <TableContainer component={Paper}>
         <Table aria-label="supervisor table">
           <TableHead>
@@ -245,7 +240,9 @@ const SupervisorsList = () => {
                   direction={sortDirection}
                   onClick={(event) => handleRequestSort(event, "userUsername")}
                 >
+                 <h3 className="text-base font-semibold leading-7 text-gray-900">
                   Username
+                </h3>
                 </TableSortLabel>
               </TableCell>
               <TableCell variant="head">
@@ -292,7 +289,7 @@ const SupervisorsList = () => {
                     onClick={() => handleAssignTrainees(item)}
                     color="primary"
                   >
-                    <ManageAccountsIcon />
+                    <EditIcon />
                   </IconButton>
                   <IconButton
                     size="small"
@@ -381,5 +378,4 @@ const SupervisorsList = () => {
 };
 
 
-
-export default SupervisorsList;
+export default HR_Supervisors_List;

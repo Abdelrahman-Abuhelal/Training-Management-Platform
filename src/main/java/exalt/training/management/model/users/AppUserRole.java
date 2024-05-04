@@ -1,6 +1,7 @@
-package exalt.training.management.model;
+package exalt.training.management.model.users;
 
 
+import exalt.training.management.model.Permission;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;

@@ -1,25 +1,21 @@
 package exalt.training.management.service;
 
 import exalt.training.management.dto.ChangePasswordRequest;
-import exalt.training.management.dto.ConfirmedAccountResponse;
 import exalt.training.management.dto.PasswordRequest;
 import exalt.training.management.exception.*;
-import exalt.training.management.mapper.AppUserMapper;
-import exalt.training.management.model.*;
+import exalt.training.management.model.users.AppUser;
+import exalt.training.management.model.users.SuperAdmin;
+import exalt.training.management.model.users.Supervisor;
+import exalt.training.management.model.users.Trainee;
 import exalt.training.management.repository.AppUserRepository;
 import exalt.training.management.repository.TokenRepository;
 import jakarta.servlet.http.HttpServletRequest;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Lazy;
-import org.springframework.http.HttpHeaders;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
-import java.security.Principal;
 
 @Service
 @Slf4j

@@ -1,8 +1,8 @@
 package exalt.training.management.model.forms;
 
-import exalt.training.management.model.SuperAdmin;
-import exalt.training.management.model.Supervisor;
-import exalt.training.management.model.Trainee;
+import exalt.training.management.model.users.SuperAdmin;
+import exalt.training.management.model.users.Supervisor;
+import exalt.training.management.model.users.Trainee;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import lombok.*;

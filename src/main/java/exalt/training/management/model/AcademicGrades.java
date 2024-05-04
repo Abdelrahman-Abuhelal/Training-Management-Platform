@@ -1,8 +1,6 @@
 package exalt.training.management.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import exalt.training.management.model.users.Trainee;
 import jakarta.persistence.*;
 import lombok.*;
 

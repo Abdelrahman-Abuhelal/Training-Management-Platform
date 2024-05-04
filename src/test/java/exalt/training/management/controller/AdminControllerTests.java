@@ -2,7 +2,7 @@ package exalt.training.management.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import exalt.training.management.dto.UserCreationRequest;
-import exalt.training.management.model.AppUserRole;
+import exalt.training.management.model.users.AppUserRole;
 import exalt.training.management.service.AdminService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -16,7 +16,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultMatcher;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.client.match.MockRestRequestMatchers.content;

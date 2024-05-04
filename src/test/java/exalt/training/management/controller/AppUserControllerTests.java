@@ -1,7 +1,6 @@
 package exalt.training.management.controller;
 
 import exalt.training.management.dto.ChangePasswordRequest;
-import exalt.training.management.model.AppUser;
 import exalt.training.management.service.AppUserService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

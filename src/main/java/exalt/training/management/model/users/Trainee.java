@@ -1,16 +1,17 @@
-package exalt.training.management.model;
+package exalt.training.management.model.users;
 
 import com.fasterxml.jackson.annotation.*;
+import exalt.training.management.model.AcademicGrades;
+import exalt.training.management.model.BranchLocation;
 import exalt.training.management.model.forms.Review;
 import exalt.training.management.model.forms.ReviewSubmission;
+import exalt.training.management.model.users.AppUser;
+import exalt.training.management.model.users.Supervisor;
 import jakarta.persistence.*;
 import lombok.*;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.lang.Nullable;
 
-import java.util.Date;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 @Entity

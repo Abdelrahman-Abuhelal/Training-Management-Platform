@@ -1,6 +1,7 @@
 package exalt.training.management.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import exalt.training.management.model.users.AppUser;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -32,5 +33,5 @@ public class Token {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(nullable = false)
     @JsonBackReference
-    private  AppUser user;
+    private AppUser user;
 }

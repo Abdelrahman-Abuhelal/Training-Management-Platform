@@ -7,22 +7,19 @@ import ForgotPasswordEmail from "../pages/auth/ForgotPasswordEmail.jsx";
 import ForgotPasswordReset from "../pages/auth/ForgotPasswordReset.jsx";
 import Login from "../pages/auth/Login.jsx";
 import TraineeProfile from "../pages/traineePortal/TraineeProfile.jsx";
-import SupervisorDashboard from "../pages/supervisorPortal/SupervisorDashboard.jsx";
-import TraineesList from "../pages/supervisorPortal/TraineesList.jsx";
+import Supervisor_Trainees_List from "../pages/supervisorPortal/TraineesList.jsx";
 import EditTrainee from "../pages/adminPortal/EditTrainee.jsx";
 import ReviewCreation from "../pages/adminPortal/ReviewCreation.jsx";
-import AdminButtonAppBar from "../components/admin/NavBar";
-import TraineeButtonAppBar from "../components/trainee/NavBar";
 import AdminHome from "../components/admin/Home.jsx";
 import TraineeHome from "../components/trainee/Home.jsx";
 import SupervisorHome from "../components/supervisor/Home.jsx";
 import ReviewsList from "../pages/traineePortal/ReviewsList.jsx";
 import FillReview from "../pages/traineePortal/FillReview.jsx";
-import SupervisorButtonAppBar from "../components/supervisor/NavBar.jsx";
 import SupervisorLayout from "../pages/supervisorPortal/SupervisorLayout.jsx";
 import TraineeLayout from "../pages/traineePortal/TraineeLayout.jsx";
 import AdminLayout from "../pages/adminPortal/AdminLayout.jsx";
-import SupervisorsList from "../pages/adminPortal/SupervisorList.jsx"
+import HR_Supervisors_List from "../pages/adminPortal/SupervisorList.jsx"
+import HR_Trainees_List from "../pages/adminPortal/TraineesList.jsx";
 
 const Routes = () => {
   const { user } = useAuth();
@@ -106,7 +103,7 @@ const Routes = () => {
             },
             {
               path: "/my-trainees",
-              element: <TraineesList />,
+              element: <Supervisor_Trainees_List />,
             },
             // Add more child routes as needed
           ],
@@ -134,11 +131,11 @@ const Routes = () => {
             },
             {
               path: "/trainees",
-              element: <TraineesList />,
+              element: <HR_Trainees_List />,
             },
             {
               path: "/supervisors",
-              element: <SupervisorsList />,
+              element: <HR_Supervisors_List />,
             },
             {
               path: "/create-reviews",

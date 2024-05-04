@@ -1,6 +1,6 @@
 package exalt.training.management.service;
 import exalt.training.management.exception.InvalidTokenException;
-import exalt.training.management.model.AppUser;
+import exalt.training.management.model.users.AppUser;
 import exalt.training.management.model.Token;
 import exalt.training.management.model.TokenType;
 import exalt.training.management.repository.TokenRepository;
@@ -15,10 +15,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.stereotype.Service;
 
 @Service

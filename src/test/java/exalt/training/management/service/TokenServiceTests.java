@@ -1,20 +1,15 @@
 package exalt.training.management.service;
 
 import exalt.training.management.exception.InvalidTokenException;
-import exalt.training.management.model.AppUser;
 import exalt.training.management.model.Token;
 import exalt.training.management.model.TokenType;
-import exalt.training.management.repository.AppUserRepository;
 import exalt.training.management.repository.TokenRepository;
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.Date;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;

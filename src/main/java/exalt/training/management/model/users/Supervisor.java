@@ -1,7 +1,6 @@
-package exalt.training.management.model;
+package exalt.training.management.model.users;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import exalt.training.management.model.forms.Review;
 import exalt.training.management.model.forms.ReviewSubmission;
 import jakarta.persistence.*;
@@ -11,14 +10,15 @@ import org.springframework.lang.Nullable;
 import java.util.List;
 
 @Entity
-@Table(name = "super_admin")
+@Table(name = "supervisor")
 @Data
 @Builder
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(exclude = {"supervisors","user","reviews","reviewSubmissions"})
-public class SuperAdmin {
+@EqualsAndHashCode(exclude = {"user","trainees","superAdmins","reviews","reviewSubmissions"})
+public class Supervisor {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -27,12 +27,16 @@ public class SuperAdmin {
     @JsonBackReference
     private AppUser user;
 
+    @ManyToMany(mappedBy = "supervisors") // Trainee already has this field
+    private List<Trainee> trainees;
+
+    @ManyToMany(cascade = CascadeType.PERSIST) // Consider adding cascade type if needed
+    private List<SuperAdmin> superAdmins;
     @Nullable
     @ManyToMany
     private List<Review> reviews;
 
-
     @Nullable
-    @OneToMany(mappedBy = "superAdmin", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "supervisor", cascade = CascadeType.ALL)
     private List<ReviewSubmission> reviewSubmissions;
 }

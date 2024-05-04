@@ -1,6 +1,6 @@
 package exalt.training.management.dto;
 
-import exalt.training.management.model.AppUserRole;
+import exalt.training.management.model.users.AppUserRole;
 import lombok.*;
 
 

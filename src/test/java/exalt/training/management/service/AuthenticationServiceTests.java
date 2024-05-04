@@ -1,7 +1,7 @@
 package exalt.training.management.service;
 
 import exalt.training.management.exception.InvalidTokenException;
-import exalt.training.management.model.AppUser;
+import exalt.training.management.model.users.AppUser;
 import exalt.training.management.model.Token;
 import exalt.training.management.model.TokenType;
 import exalt.training.management.repository.TokenRepository;

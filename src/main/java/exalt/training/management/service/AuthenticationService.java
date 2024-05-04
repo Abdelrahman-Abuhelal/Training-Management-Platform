@@ -5,6 +5,7 @@ import exalt.training.management.dto.*;
 import exalt.training.management.exception.*;
 import exalt.training.management.mapper.AppUserMapper;
 import exalt.training.management.model.*;
+import exalt.training.management.model.users.AppUser;
 import exalt.training.management.repository.AppUserRepository;
 import exalt.training.management.repository.TokenRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;

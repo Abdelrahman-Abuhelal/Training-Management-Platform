@@ -2,8 +2,8 @@ package exalt.training.management.controller;
 
 import exalt.training.management.dto.*;
 import exalt.training.management.model.AcademicGrades;
-import exalt.training.management.model.AppUser;
-import exalt.training.management.model.Trainee;
+import exalt.training.management.model.users.AppUser;
+import exalt.training.management.model.users.Trainee;
 import exalt.training.management.service.AcademicGradesService;
 import exalt.training.management.service.AdminService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -79,6 +79,14 @@ public class AdminController {
     public ResponseEntity<AppUser> getUserInfoById(@PathVariable Long id){
         AppUser appUser= adminService.getFullUserById(id);
         return new ResponseEntity<>(appUser, HttpStatus.OK);
+    }
+    @Operation(summary = "Assign trainees to Supervisors", security =  @SecurityRequirement(name = "loginAuth"))
+    @PreAuthorize("hasAnyRole('SUPER_ADMIN')")
+    @PutMapping("/assign-trainees")
+    public ResponseEntity<String> assignSupervisorsToTrainees(@RequestBody AssignRequest assignRequest) {
+        adminService.assignSupervisorsToTrainees(assignRequest.getSupervisorIds(), assignRequest.getTraineeIds());
+        String message= "Supervisors assigned to trainees successfully";
+        return new ResponseEntity<>(message, HttpStatus.OK);
     }
 
     @Operation(summary = "Update User using his Id", security =  @SecurityRequirement(name = "loginAuth"))

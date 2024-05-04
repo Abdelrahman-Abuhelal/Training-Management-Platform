@@ -2,7 +2,7 @@
 //
 //import exalt.training.management.dto.RatingDto;
 //import exalt.training.management.dto.TraineeDataDto;
-//import exalt.training.management.model.Trainee;
+//import exalt.training.management.model.users.Trainee;
 //import org.mapstruct.Mapper;
 //import org.mapstruct.Mapping;
 //import org.mapstruct.factory.Mappers;
