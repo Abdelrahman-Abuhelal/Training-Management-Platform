@@ -141,12 +141,15 @@ public class AdminService {
 
     @Transactional
     public void assignSupervisorsToTrainees(List<Long> supervisorIds, List<Long> traineeIds) {
-        List<Supervisor> supervisors = supervisorRepository.findAllById(supervisorIds);
-        List<Trainee> trainees = traineeRepository.findAllById(traineeIds);
+        List<Supervisor> supervisors = supervisorRepository.findAllById(supervisorRepository.findSupervisorIdsByUserIds(supervisorIds));
+        List<Trainee> trainees = traineeRepository.findAllById(traineeRepository.findTraineeIdsByUserIds(traineeIds));
+
+        log.info("Supervisors : "+supervisors+"; Trainees :  "+ trainees);
 
         // Assign supervisors to trainees
         for (Trainee trainee : trainees) {
             trainee.setSupervisors(supervisors);
+            log.info("ID OF TRAINEE : "+trainee.getId()+" Supervisors "+ trainee.getSupervisors());
         }
 
         traineeRepository.saveAll(trainees);

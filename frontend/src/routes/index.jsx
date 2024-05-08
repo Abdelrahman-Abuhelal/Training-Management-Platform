@@ -20,6 +20,7 @@ import TraineeLayout from "../pages/traineePortal/TraineeLayout.jsx";
 import AdminLayout from "../pages/adminPortal/AdminLayout.jsx";
 import HR_Supervisors_List from "../pages/adminPortal/SupervisorList.jsx"
 import HR_Trainees_List from "../pages/adminPortal/TraineesList.jsx";
+import ReviewForm from "../pages/supervisorPortal/ReviewForm.jsx"
 
 const Routes = () => {
   const { user } = useAuth();
@@ -105,6 +106,10 @@ const Routes = () => {
               path: "/my-trainees",
               element: <Supervisor_Trainees_List />,
             },
+            {
+              path:"/review-form/:traineeId",
+              element: <ReviewForm />
+            }
             // Add more child routes as needed
           ],
         },

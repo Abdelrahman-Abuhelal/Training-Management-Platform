@@ -46,6 +46,7 @@ public class Trainee {
     @Nullable
     @OneToMany(mappedBy = "trainee",cascade = CascadeType.ALL)
     @JsonIgnore
+    @ToString.Exclude
     private Set<AcademicGrades> academicGrades;
 
     @ManyToMany
@@ -61,5 +62,6 @@ public class Trainee {
 
     @OneToOne
     @JsonBackReference
+    @ToString.Exclude
     private AppUser user;
 }

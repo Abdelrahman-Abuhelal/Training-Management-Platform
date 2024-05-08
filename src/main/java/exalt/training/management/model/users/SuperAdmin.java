@@ -25,6 +25,7 @@ public class SuperAdmin {
 
     @OneToOne
     @JsonBackReference
+    @ToString.Exclude
     private AppUser user;
 
     @Nullable

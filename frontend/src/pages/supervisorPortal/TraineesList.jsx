@@ -1,45 +1,41 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import ManageAccountsIcon from "@mui/icons-material/ManageAccounts";
+import ReviewsIcon from '@mui/icons-material/Reviews';
 import {
-  Grid,
-  Typography,
   TableContainer,
   Table,
   TableHead,
+  Typography,
   TableRow,
   TableCell,
   TableBody,
-  Checkbox,
+  TextField ,
+  TablePagination,
   IconButton,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
-  Button,
+  Checkbox,
+  Paper,
+  TableSortLabel,
 } from "@mui/material"; // MUI components (or your preferred library)
-import EditIcon from "@mui/icons-material/Edit";
-import DeleteIcon from "@mui/icons-material/Delete";
 import { useNavigate } from "react-router-dom";
-import * as XLSX from "xlsx";
-import DownloadIcon from "@mui/icons-material/Download";
 
 const Supervisor_Trainees_List = () => {
   const baseUrl = import.meta.env.VITE_PORT_URL;
   const [trainees, setTrainees] = useState([]);
-  const [allTrainees, setAllTrainees] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [orderBy, setOrderBy] = useState("userUsername");
+  const [sortDirection, setSortDirection] = useState("asc");
+  const [selectedTrainees, setSelectedTrainees] = useState([]);
+
   const navigate = useNavigate();
-  const [usernameToDelete, setUsernameToDelete] = useState("");
-  const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
-  const [userIdToDelete, setUserIdToDelete] = useState(null);
 
-  const deleteUser = async (userId) => {
+  const fetchTrainees = async () => {
     try {
-      const response = await axios.delete(
-        `${baseUrl}/api/v1/admin/users/${userId}`
-      );
+      const response = await axios.get(`${baseUrl}/api/v1/supervisor/my-trainees`);
       if (response.status === 200) {
-        console.log("Trainee deleted successfully");
+        const traineeUsers = response.data;
+        setTrainees(traineeUsers);
       }
     } catch (error) {
       console.log(error);
@@ -47,143 +43,126 @@ const Supervisor_Trainees_List = () => {
   };
 
   useEffect(() => {
-    const fetchTrainees = async () => {
-      try {
-        const response = await axios.get(`${baseUrl}/api/v1/admin/users`);
-        if (response.status === 200) {
-          const traineeUsers = response.data.filter(
-            (item) => item.userRole === "TRAINEE"
-          );
-          setTrainees(traineeUsers);
-        }
-      } catch (error) {
-        console.log(error);
-      }
-    };
     fetchTrainees();
-  }, [userIdToDelete]);
-
-  useEffect(() => {
-    allTraineesInfo();
-  }, []);
-
-  const allTraineesInfo = async () => {
-    try {
-      const response = await axios.get(`${baseUrl}/api/v1/admin/trainees`);
-      if (response.status === 200) {
-        setAllTrainees(response.data);
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  }, [page, rowsPerPage, searchTerm]);
 
   const handleView = (user) => {
-    navigate(`/edit-trainee/${user.userId}`);
+    navigate(`/review-form/${user.userId}`);
   };
 
-  const handleDelete = (user) => {
-    setUserIdToDelete(user.userId); 
-    setUsernameToDelete(user.userUsername); 
-    setOpenDeleteDialog(true); 
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
   };
 
-  const handleCloseDeleteDialog = () => {
-    setOpenDeleteDialog(false);
-    setUserIdToDelete(null); 
-    setUsernameToDelete("");
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0); // Reset page when rows per page changes
   };
 
-  const handleConfirmDelete = () => {
-    if (userIdToDelete) {
-      deleteUser(userIdToDelete); 
-      setOpenDeleteDialog(false); 
-      setUserIdToDelete(null); 
-      setUsernameToDelete(""); 
-    } else {
-      console.error("User ID not available for deletion"); 
+  const handleSearchChange = (event) => {
+    setSearchTerm(event.target.value);
+    setPage(0); // Reset page when search term changes
+  };
+
+  const handleRequestSort = (event, property) => {
+    const isAsc = orderBy === property && sortDirection === "asc";
+    setOrderBy(property);
+    setSortDirection(isAsc ? "desc" : "asc");
+  };
+
+  const sortedTrainees = trainees.sort((a, b) => {
+    const isAsc = sortDirection === "asc";
+    if (orderBy === "userUsername") {
+      return isAsc
+        ? a.userUsername.localeCompare(b.userUsername)
+        : b.userUsername.localeCompare(a.userUsername);
     }
-  };
+    // Add additional sorting logic for other properties if needed
+    return 0;
+  });
 
-  const exportToExcel = () => {
-    const fileType =
-      "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8";
-    const fileExtension = ".xlsx";
-    const ws = XLSX.utils.json_to_sheet(allTrainees);
-    const wb = { Sheets: { data: ws }, SheetNames: ["data"] };
-    const excelBuffer = XLSX.write(wb, { bookType: "xlsx", type: "array" });
-    const data = new Blob([excelBuffer], { type: fileType });
-    const url = URL.createObjectURL(data);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = "traineesList" + fileExtension;
-    document.body.appendChild(a);
-    a.click();
-    setTimeout(() => {
-      document.body.removeChild(a);
-      window.URL.revokeObjectURL(url);
-    }, 100);
-  };
+  const paginatedTrainees = sortedTrainees.slice(
+    page * rowsPerPage,
+    page * rowsPerPage + rowsPerPage
+  );
 
   return (
-    <div>
-    
+    <div style={{ padding: "3rem" }}>
       <div className="flex items-center justify-end">
-      {/* <h1 className="text-base font-bold leading-7 text-gray-900">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Trainees List</h1> */}
-      <IconButton  style={{ paddingRight: '20px' }} color="primary" onClick={exportToExcel}>
-       <DownloadIcon />&nbsp;Export 
-        </IconButton>
+        <TextField
+          label="Search username"
+          variant="standard"
+          value={searchTerm}
+          onChange={handleSearchChange}
+        />
       </div>
-      <TableContainer>
-        <Table size="small">
+      <TableContainer component={Paper}>
+        <Table aria-label="trainee table">
           <TableHead>
             <TableRow>
-              <TableCell  variant="head">
-                <h3 className="text-base font-semibold leading-7 text-gray-900">
-                  Username
-                </h3>
+              <TableCell>
+                <Checkbox
+                  checked={selectedTrainees.length === paginatedTrainees.length}
+                  onChange={(e) => {
+                    if (e.target.checked) {
+                      setSelectedTrainees(paginatedTrainees);
+                    } else {
+                      setSelectedTrainees([]);
+                    }
+                  }}
+                />
               </TableCell>
-              <TableCell  variant="head">
-                <h3 className="text-base font-semibold leading-7 text-gray-900">
-                  First Name
-                </h3>
+              <TableCell>
+                <TableSortLabel
+                  active={orderBy === "userUsername"}
+                  direction={sortDirection}
+                  onClick={(e) => handleRequestSort(e, "userUsername")}
+                >
+                  <Typography variant="h6">Username</Typography>
+                </TableSortLabel>
               </TableCell>
-              <TableCell  variant="head">
-                <h3 className="text-base font-semibold leading-7 text-gray-900">
-                  Last Name
-                </h3>
+              <TableCell>
+                <Typography variant="h6">First Name</Typography>
               </TableCell>
-              <TableCell  variant="head">
-                <h3 className="text-base font-semibold leading-7 text-gray-900">
-                  Email
-                </h3>
+              <TableCell>
+                <Typography variant="h6">Last Name</Typography>
               </TableCell>
-              <TableCell variant="head">
-                <h3 className="text-base font-semibold leading-7 text-gray-900">
-                  Role
-                </h3>
+              <TableCell>
+                <Typography variant="h6">Email</Typography>
               </TableCell>
-              <TableCell variant="head">
-                <h3 className="text-base font-semibold leading-7 text-gray-900">
-                  Actions
-                </h3>
+              <TableCell>
+                <Typography variant="h6">Role</Typography>
+              </TableCell>
+              <TableCell>
+                <Typography variant="h6">Actions</Typography>
               </TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {trainees.map((item) => (
+            {paginatedTrainees.map((item) => (
               <TableRow key={item.userId} hover>
+                <TableCell>
+                  <Checkbox
+                    checked={selectedTrainees.some(
+                      (trainee) => trainee.userId === item.userId
+                    )}
+                    onChange={(e) =>
+                      handleCheckboxChange(e, item)
+                    }
+                  />
+                </TableCell>
                 <TableCell>{item.userUsername}</TableCell>
                 <TableCell>{item.userFirstName}</TableCell>
                 <TableCell>{item.userLastName}</TableCell>
                 <TableCell>{item.userEmail}</TableCell>
-                <TableCell>{item.userRole.charAt(0).toUpperCase() + item.userRole.slice(1).toLowerCase()}</TableCell>
+                <TableCell>{item.userRole}</TableCell>
                 <TableCell>
-                  <IconButton size="small" onClick={() => handleView(item)} color="primary">
-                    <ManageAccountsIcon />View Profile
-                  </IconButton>
-                  <IconButton size="small" onClick={() => handleDelete(item)} color="error">
-                     <DeleteIcon /> Delete User
+                  <IconButton
+                    size="small"
+                    onClick={() => handleView(item)}
+                    color="primary"
+                  >
+                    <ReviewsIcon /> &nbsp;  Add review
                   </IconButton>
                 </TableCell>
               </TableRow>
@@ -191,25 +170,15 @@ const Supervisor_Trainees_List = () => {
           </TableBody>
         </Table>
       </TableContainer>
-
-      <Dialog open={openDeleteDialog} onClose={handleCloseDeleteDialog}>
-        <DialogTitle>Delete Confirmation</DialogTitle>
-        <DialogContent>
-          <Typography variant="h6" sx={{ mb: 2 }}>
-            Are you sure you want to delete '{usernameToDelete}'?
-          </Typography>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleCloseDeleteDialog}>Cancel</Button>
-          <Button
-            variant="contained"
-            color="error"
-            onClick={handleConfirmDelete}
-          >
-            Delete
-          </Button>
-        </DialogActions>
-      </Dialog>
+      <TablePagination
+        rowsPerPageOptions={[5, 10, 25]}
+        component="div"
+        count={trainees.length}
+        rowsPerPage={rowsPerPage}
+        page={page}
+        onPageChange={handleChangePage}
+        onRowsPerPageChange={handleChangeRowsPerPage}
+      />
     </div>
   );
 };

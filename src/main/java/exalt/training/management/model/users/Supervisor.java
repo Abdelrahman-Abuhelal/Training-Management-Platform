@@ -25,9 +25,10 @@ public class Supervisor {
 
     @OneToOne
     @JsonBackReference
+    @ToString.Exclude
     private AppUser user;
 
-    @ManyToMany(mappedBy = "supervisors") // Trainee already has this field
+    @ManyToMany(mappedBy = "supervisors", fetch = FetchType.EAGER) // Trainee already has this field
     private List<Trainee> trainees;
 
     @ManyToMany(cascade = CascadeType.PERSIST) // Consider adding cascade type if needed
