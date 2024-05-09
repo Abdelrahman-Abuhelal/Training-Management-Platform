@@ -24,7 +24,7 @@ import {
   Select,
   MenuItem,
 }from "@mui/material"; // MUI components (or your preferred library)
-import EditIcon from "@mui/icons-material/Edit";
+import GroupIcon from '@mui/icons-material/Group';
 import DeleteIcon from "@mui/icons-material/Delete";
 import { useNavigate } from "react-router-dom";
 import * as XLSX from "xlsx";
@@ -166,10 +166,6 @@ const HR_Supervisors_List = () => {
     }
   };
 
-  const handleAssignTrainees = (supervisor) => {
-    setSelectedSupervisor(supervisor);
-    setSelectedTrainees([]);
-  };
 
   const handleTraineeSelect = (event) => {
     setSelectedTrainees(event.target.value);
@@ -284,12 +280,12 @@ const HR_Supervisors_List = () => {
                     item.userRole.slice(1).toLowerCase()}
                 </TableCell>
                 <TableCell>
-                  <IconButton
+                <IconButton
                     size="small"
-                    onClick={() => handleAssignTrainees(item)}
+                    onClick={() => navigate(`/supervisors/${item.userId}/trainees`)}
                     color="primary"
                   >
-                    <EditIcon />
+                    <GroupIcon />
                   </IconButton>
                   <IconButton
                     size="small"

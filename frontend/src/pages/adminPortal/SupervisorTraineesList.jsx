@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import ReviewsIcon from '@mui/icons-material/Reviews';
+import ReviewsIcon from "@mui/icons-material/Reviews";
+import { useParams } from "react-router-dom";
 import {
   TableContainer,
   Table,
@@ -9,7 +10,7 @@ import {
   TableRow,
   TableCell,
   TableBody,
-  TextField ,
+  TextField,
   TablePagination,
   IconButton,
   Checkbox,
@@ -17,8 +18,10 @@ import {
   TableSortLabel,
 } from "@mui/material"; // MUI components (or your preferred library)
 import { useNavigate } from "react-router-dom";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 
 const Supervisor_Trainees_List = () => {
+  const { userId } = useParams();
   const baseUrl = import.meta.env.VITE_PORT_URL;
   const [trainees, setTrainees] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
@@ -38,13 +41,16 @@ const Supervisor_Trainees_List = () => {
     page * rowsPerPage + rowsPerPage
   );
 
-
   const fetchTrainees = async () => {
     try {
-      const response = await axios.get(`${baseUrl}/api/v1/supervisor/my-trainees`);
+      const response = await axios.get(
+        `${baseUrl}/api/v1/supervisor/${userId}/trainees`
+      );
       if (response.status === 200) {
         const traineeUsers = response.data;
         setTrainees(traineeUsers);
+      } else {
+        console.error("Failed to fetch trainees. Status:", response.status);
       }
     } catch (error) {
       console.log(error);
@@ -90,10 +96,17 @@ const Supervisor_Trainees_List = () => {
     return 0;
   });
 
-
-
   return (
     <div style={{ padding: "3rem" }}>
+      <IconButton
+        color="primary"
+        onClick={() => {
+          navigate(`/supervisors/`);
+        }}
+        style={{ marginBottom: "1rem" }}
+      >
+        <ArrowBackIcon />
+      </IconButton>
       <div className="flex items-center justify-end">
         <TextField
           label="Search username"
@@ -152,9 +165,7 @@ const Supervisor_Trainees_List = () => {
                     checked={selectedTrainees.some(
                       (trainee) => trainee.userId === item.userId
                     )}
-                    onChange={(e) =>
-                      handleCheckboxChange(e, item)
-                    }
+                    onChange={(e) => handleCheckboxChange(e, item)}
                   />
                 </TableCell>
                 <TableCell>{item.userUsername}</TableCell>
@@ -162,15 +173,7 @@ const Supervisor_Trainees_List = () => {
                 <TableCell>{item.userLastName}</TableCell>
                 <TableCell>{item.userEmail}</TableCell>
                 <TableCell>{item.userRole}</TableCell>
-                <TableCell>
-                  <IconButton
-                    size="small"
-                    onClick={() => handleView(item)}
-                    color="primary"
-                  >
-                    <ReviewsIcon /> &nbsp;  Add review
-                  </IconButton>
-                </TableCell>
+                <TableCell></TableCell>
               </TableRow>
             ))}
           </TableBody>

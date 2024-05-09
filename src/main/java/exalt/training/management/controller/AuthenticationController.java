@@ -53,7 +53,7 @@ public class AuthenticationController {
        return ResponseEntity.ok(authService.forgotPasswordViaEmail(forgotPasswordEmail));
     }
 
-    @Operation(summary = "Refresh Your Token", security =  @SecurityRequirement(name = "loginAuth"))
+    @Operation(summary = "Refresh Your Token")
     @PostMapping("/refresh-token")
     public void refreshToken(
             HttpServletRequest request,

@@ -203,6 +203,8 @@ public class AuthenticationService {
         final String refreshToken;
         final String userEmail;
         if (authHeader == null ||!authHeader.startsWith("Bearer ")) {
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            log.info("Token is not good");
             return;
         }
         refreshToken = authHeader.substring(7);

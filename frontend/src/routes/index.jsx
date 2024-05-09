@@ -21,6 +21,7 @@ import AdminLayout from "../pages/adminPortal/AdminLayout.jsx";
 import HR_Supervisors_List from "../pages/adminPortal/SupervisorList.jsx"
 import HR_Trainees_List from "../pages/adminPortal/TraineesList.jsx";
 import ReviewForm from "../pages/supervisorPortal/ReviewForm.jsx"
+import SupervisorTraineesList from "../pages/adminPortal/SupervisorTraineesList.jsx"
 
 const Routes = () => {
   const { user } = useAuth();
@@ -154,6 +155,10 @@ const Routes = () => {
               path: "/create-users",
               element: <CreateUsersForm />,
             },
+            {
+              path:"/supervisors/:userId/trainees",
+              element: <SupervisorTraineesList />
+            }
           ],
         },
       ],
