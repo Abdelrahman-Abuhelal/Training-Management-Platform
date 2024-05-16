@@ -20,6 +20,8 @@ The primary goal of this application is to provide a centralized platform for HR
 - HR managers can create any type of review form questions.
 - Trainees can register their personal details (Profile).
 - Trainees can submit their form answers.
+- Supervisors can view their trainees.
+- Supervisors can assign tasks to their trainees.
 
 ## Tools Used to build the project: 
 - Java JDK v21
