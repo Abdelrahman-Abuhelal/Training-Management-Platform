@@ -22,6 +22,10 @@ import HR_Supervisors_List from "../pages/adminPortal/SupervisorList.jsx"
 import HR_Trainees_List from "../pages/adminPortal/TraineesList.jsx";
 import ReviewForm from "../pages/supervisorPortal/ReviewForm.jsx"
 import SupervisorTraineesList from "../pages/adminPortal/SupervisorTraineesList.jsx"
+import TraineeProfileView from "../pages/supervisorPortal/TraineeProfileView.jsx";
+import AssignTask from "../pages/supervisorPortal/AssignTask.jsx";
+import Resources from "../pages/supervisorPortal/Resources.jsx";
+// import GoogleDriveAuth from "../pages/supervisorPortal/Resources.jsx"
 
 const Routes = () => {
   const { user } = useAuth();
@@ -104,13 +108,33 @@ const Routes = () => {
               element: <SupervisorHome />,
             },
             {
+              path: "/dashboard", // Default child route
+              element: <SupervisorHome />,
+            },
+            {
               path: "/my-trainees",
               element: <Supervisor_Trainees_List />,
             },
+            // {
+            //   path:"/resources",
+            //   element: <GoogleDriveAuth/>
+            // },
             {
               path:"/review-form/:traineeId",
               element: <ReviewForm />
-            }
+            },
+            {
+              path: "/view-trainee/:userId",
+              element: <TraineeProfileView />,
+            },
+            {
+              path: "/add-resource",
+              element: <Resources />,
+            },
+            {
+              path: "/assign-task",
+              element: <AssignTask />,
+            },
             // Add more child routes as needed
           ],
         },

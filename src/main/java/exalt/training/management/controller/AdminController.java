@@ -66,7 +66,7 @@ public class AdminController {
     }
 
     @Operation(summary = "Get User By Id", security =  @SecurityRequirement(name = "loginAuth"))
-    @PreAuthorize("hasRole('SUPER_ADMIN')")
+    @PreAuthorize("hasAnyRole('SUPER_ADMIN','SUPERVISOR')")
     @GetMapping("/users/{id}")
     public ResponseEntity<AppUserDto> getUserById(@PathVariable Long id){
         AppUserDto appUserDto= adminService.getUserById(id);

@@ -11,6 +11,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.lang.Nullable;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
@@ -18,7 +19,6 @@ import java.util.Set;
 @Table(name = "trainee")
 @Data
 @Builder
-@ToString
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(exclude = {"academicGrades","supervisors"  ,"user","reviews","reviewSubmissions"})
@@ -50,6 +50,7 @@ public class Trainee {
     private Set<AcademicGrades> academicGrades;
 
     @ManyToMany
+    @JsonIgnore
     private List<Supervisor> supervisors;
     @ManyToMany
     @JsonIgnore
@@ -64,4 +65,23 @@ public class Trainee {
     @JsonBackReference
     @ToString.Exclude
     private AppUser user;
+
+    @Override
+    public String toString() {
+        return "Trainee{" +
+                "id=" + id +
+                ", fullNameInArabic='" + fullNameInArabic + '\'' +
+                ", phoneNumber='" + phoneNumber + '\'' +
+                ", idType='" + idType + '\'' +
+                ", idNumber='" + idNumber + '\'' +
+                ", copyOfId=" + Arrays.toString(copyOfId) +
+                ", city='" + city + '\'' +
+                ", address='" + address + '\'' +
+                ", universityName='" + universityName + '\'' +
+                ", universityMajor='" + universityMajor + '\'' +
+                ", expectedGraduationDate='" + expectedGraduationDate + '\'' +
+                ", trainingField='" + trainingField + '\'' +
+                ", branchLocation=" + branchLocation +
+                '}';
+    }
 }

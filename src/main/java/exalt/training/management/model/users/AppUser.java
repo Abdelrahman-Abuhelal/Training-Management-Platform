@@ -15,7 +15,6 @@ import java.util.List;
 @Entity
 @Table(name = "app_user")
 @Data
-@ToString
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -73,6 +72,22 @@ public class AppUser implements UserDetails {
     @Nullable
     @JsonManagedReference
     private List<Token> tokens;
+
+    @Override
+    public String toString() {
+        return "AppUser{" +
+                "id=" + id +
+                ", email='" + email + '\'' +
+                ", password='" + password + '\'' +
+                ", username='" + username + '\'' +
+                ", role=" + role +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", fullName='" + fullName + '\'' +
+                ", imageUrl='" + imageUrl + '\'' +
+                ", enabled=" + enabled +
+                '}';
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

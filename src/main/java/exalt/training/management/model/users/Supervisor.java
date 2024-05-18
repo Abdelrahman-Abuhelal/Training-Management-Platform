@@ -13,7 +13,6 @@ import java.util.List;
 @Table(name = "supervisor")
 @Data
 @Builder
-@ToString
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(exclude = {"user","trainees","superAdmins","reviews","reviewSubmissions"})

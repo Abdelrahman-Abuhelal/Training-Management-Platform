@@ -27,7 +27,7 @@ public class SupervisorController {
 
 
     @GetMapping( "/my-trainees")
-    @PreAuthorize("hasAnyRole('SUPERVISOR')")
+    @PreAuthorize("hasRole('SUPERVISOR')")
     @Operation(summary = "Get Supervisor's Trainees By login token" , security =  @SecurityRequirement(name = "loginAuth"))
     public ResponseEntity <List<AppUserDto>> getMyTrainees() {
         List<AppUserDto> trainees = supervisorService.getMyTrainees();

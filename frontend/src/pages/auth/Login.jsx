@@ -11,6 +11,7 @@ const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const baseUrl = import.meta.env.VITE_PORT_URL;
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -25,9 +26,8 @@ const Login = () => {
     }
 
 
-      const baseUrl = import.meta.env.VITE_PORT_URL;
 
-      const response = await axios.post(`${baseUrl}/api/v1/auth/login`, {
+  await axios.post(`${baseUrl}/api/v1/auth/login`, {
         email,
         password,
       }).then((response) => {

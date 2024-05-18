@@ -15,11 +15,13 @@ import SpaceDashboardIcon from '@mui/icons-material/SpaceDashboard';
 import GroupAddIcon from '@mui/icons-material/GroupAdd';
 import ListAltIcon from '@mui/icons-material/ListAlt';
 import SettingsIcon from '@mui/icons-material/Settings';
-
-
+import AddTaskIcon from '@mui/icons-material/AddTask';
+import NoteAddIcon from '@mui/icons-material/NoteAdd';
 const routes = [
   { path: '/dashboard', name: 'Dashboard', icon: <SpaceDashboardIcon /> },
   { path: '/my-trainees', name: 'My Trainees', icon: <AccountCircleIcon /> },
+  { path: '/assign-task', name: 'Assign Task', icon: <AddTaskIcon /> },
+  { path: '/add-resource', name: 'Add Resource', icon: <NoteAddIcon /> },
   { path: '/reviews', name: 'Reviews', icon: <ListAltIcon /> },
   { path: '/change-password', name: 'Settings', icon: <SettingsIcon /> }
 

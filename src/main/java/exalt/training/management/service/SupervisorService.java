@@ -59,7 +59,9 @@ public class SupervisorService {
         } else {
             log.info("Supervisor doesn't have trainees");
         }
+        log.info("trainees: "+ trainees);
         List <AppUser> appUsers = trainees.stream().map(trainee -> trainee.getUser()).toList();
+        log.info("trainee users: "+appUsers);
         return appUserMapper.userToUserDto(appUsers);
     }
 
