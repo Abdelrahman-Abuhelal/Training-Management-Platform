@@ -163,6 +163,8 @@ const AssignTask = () => {
   });
 
   return (
+    <Paper elevation={3} sx={{ p: 4, m: 2 }}>
+
     <Box sx={{ padding: "3rem" }}>
       <Typography  variant="h5" sx={{ marginBottom: '2rem' }}>&nbsp;&nbsp;Assign Task</Typography>
       <Box sx={{ display: "flex", flexWrap: "wrap", gap: 2 }}>
@@ -172,6 +174,7 @@ const AssignTask = () => {
           value={taskName}
           onChange={handleTaskNameChange}
           fullWidth
+          required
         />
         <FormControl fullWidth>
           <TextField
@@ -182,7 +185,8 @@ const AssignTask = () => {
             }
             value={taskDescription}
             onChange={handleTaskDescriptionChange}
-          />
+            required
+            />
         </FormControl>
         <FormControl fullWidth>
           <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -288,6 +292,7 @@ const AssignTask = () => {
         Assign Task
       </Button>
     </Box>
+    </Paper>
   );
 };
 

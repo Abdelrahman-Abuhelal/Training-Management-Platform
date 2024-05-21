@@ -13,12 +13,16 @@ import {
   TablePagination,
   IconButton,
   Checkbox,
+  InputAdornment ,
   Paper,
+  Grid,
   Button,
   TableSortLabel,
 } from "@mui/material"; // MUI components (or your preferred library)
+import GroupsIcon from '@mui/icons-material/Groups';
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
+import SearchIcon from "@mui/icons-material/Search";
 
 const Supervisor_Trainees_List = () => {
   const baseUrl = import.meta.env.VITE_PORT_URL;
@@ -97,14 +101,31 @@ const Supervisor_Trainees_List = () => {
 
   return (
     <div style={{ padding: "3rem" }}>
-      <div className="flex items-center justify-end">
-        <TextField
-          label="Search username"
-          variant="standard"
-          value={searchTerm}
-          onChange={handleSearchChange}
-        />
-      </div>
+    <Grid container spacing={3} justifyContent="space-between" alignItems="center">
+        <Grid item xs={12} sm={6}>
+          <Typography variant="h5" component="h2">
+          My Trainees   <GroupsIcon style={{ fontSize: '30px' }} />
+          </Typography>
+        </Grid>
+        <Grid item>
+          <TextField
+            placeholder="Search username"
+            variant="outlined"
+            value={searchTerm}
+            onChange={handleSearchChange}
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <SearchIcon />
+                </InputAdornment>
+              ),
+            }}
+            sx={{ maxWidth: "250px" }} // Adjust the maxWidth as needed
+          />
+        </Grid>
+
+      </Grid>
+
       <TableContainer component={Paper}>
         <Table aria-label="trainee table">
           <TableHead>

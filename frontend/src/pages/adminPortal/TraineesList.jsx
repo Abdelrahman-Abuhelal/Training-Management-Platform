@@ -29,11 +29,13 @@ import {
   Select,
   Menu,
   MenuItem,
+  InputAdornment
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import DownloadIcon from "@mui/icons-material/Download";
 import { useNavigate } from "react-router-dom";
 import * as XLSX from "xlsx";
+import SearchIcon from "@mui/icons-material/Search";
 
 const TraineesList = () => {
   const baseUrl = import.meta.env.VITE_PORT_URL;
@@ -235,12 +237,22 @@ const TraineesList = () => {
   return (
     <div style={{ padding: "3rem" }}>
       <div className="flex items-center justify-between mb-4">
-        <TextField
-          label="Search username"
-          variant="standard"
-          value={searchTerm}
-          onChange={handleSearchChange}
-        />
+      <Grid item>
+          <TextField
+            placeholder="Search username"
+            variant="outlined"
+            value={searchTerm}
+            onChange={handleSearchChange}
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <SearchIcon />
+                </InputAdornment>
+              ),
+            }}
+            sx={{ maxWidth: "250px" }} // Adjust the maxWidth as needed
+          />
+        </Grid>
         <div>
           <IconButton color="primary" onClick={exportToExcel}>
             <DownloadIcon />

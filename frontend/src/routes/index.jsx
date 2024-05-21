@@ -25,6 +25,8 @@ import SupervisorTraineesList from "../pages/adminPortal/SupervisorTraineesList.
 import TraineeProfileView from "../pages/supervisorPortal/TraineeProfileView.jsx";
 import AssignTask from "../pages/supervisorPortal/AssignTask.jsx";
 import Resources from "../pages/supervisorPortal/Resources.jsx";
+import AnnouncementForm from "../pages/adminPortal/CreateAnnounments.jsx";
+
 // import GoogleDriveAuth from "../pages/supervisorPortal/Resources.jsx"
 
 const Routes = () => {
@@ -182,6 +184,10 @@ const Routes = () => {
             {
               path:"/supervisors/:userId/trainees",
               element: <SupervisorTraineesList />
+            },
+            {
+              path: "/create-announcements",
+              element: <AnnouncementForm />
             }
           ],
         },

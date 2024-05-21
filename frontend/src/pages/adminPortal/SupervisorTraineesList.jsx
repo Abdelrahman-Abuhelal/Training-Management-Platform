@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import ReviewsIcon from "@mui/icons-material/Reviews";
 import { useParams } from "react-router-dom";
+import { InputAdornment } from "@mui/material";
+
 import {
   TableContainer,
   Table,
@@ -13,12 +15,16 @@ import {
   TextField,
   TablePagination,
   IconButton,
+  Grid,
+  Box,
+  Button,
   Checkbox,
   Paper,
   TableSortLabel,
 } from "@mui/material"; // MUI components (or your preferred library)
 import { useNavigate } from "react-router-dom";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import SearchIcon from "@mui/icons-material/Search";
 
 const Supervisor_Trainees_List = () => {
   const { userId } = useParams();
@@ -59,7 +65,6 @@ const Supervisor_Trainees_List = () => {
     }
   };
 
-  
   const userData = async () => {
     try {
       const response = await axios.get(
@@ -78,7 +83,6 @@ const Supervisor_Trainees_List = () => {
   useEffect(() => {
     userData();
   }, []);
-
 
   useEffect(() => {
     fetchTrainees();
@@ -121,31 +125,45 @@ const Supervisor_Trainees_List = () => {
 
   return (
     <div style={{ padding: "3rem" }}>
-      <IconButton
-        color="primary"
-        onClick={() => {
-          navigate(`/supervisors/`);
-        }}
-        style={{ marginBottom: "1rem" }}
+      <Grid
+        container
+        alignItems="center"
+        justifyContent="space-between"
+        marginBottom="1rem"
       >
-        <ArrowBackIcon />
-      </IconButton>
-      <div className="flex items-center justify-end">
-        <TextField
-          label="Search username"
-          variant="standard"
-          value={searchTerm}
-          onChange={handleSearchChange}
-        />
-      </div>
-      <Typography
-        variant="h5"
-        component="h2"
-        gutterBottom
-        sx={{ mt: 3, ml: 1 }}
-      >
-        {username} Trainees
-      </Typography>
+        <Grid item>
+          <IconButton
+            color="primary"
+            onClick={() => {
+              navigate(`/supervisors/`);
+            }}
+          >
+            <ArrowBackIcon />
+          </IconButton>
+        </Grid>
+        <Grid item>
+          <Typography variant="h5" component="h2" gutterBottom>
+            {username} Trainees
+          </Typography>
+        </Grid>
+        <Grid item>
+          <TextField
+            placeholder="Search username"
+            variant="outlined"
+            value={searchTerm}
+            onChange={handleSearchChange}
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <SearchIcon />
+                </InputAdornment>
+              ),
+            }}
+            sx={{ maxWidth: "250px" }} // Adjust the maxWidth as needed
+          />
+        </Grid>
+      </Grid>
+
       <TableContainer component={Paper}>
         <Table aria-label="trainee table">
           <TableHead>
