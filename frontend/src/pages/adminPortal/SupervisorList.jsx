@@ -23,8 +23,8 @@ import {
   InputLabel,
   Select,
   MenuItem,
-}from "@mui/material"; // MUI components (or your preferred library)
-import GroupIcon from '@mui/icons-material/Group';
+} from "@mui/material"; // MUI components (or your preferred library)
+import GroupIcon from "@mui/icons-material/Group";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { useNavigate } from "react-router-dom";
 import * as XLSX from "xlsx";
@@ -50,7 +50,7 @@ const HR_Supervisors_List = () => {
   const filteredSupervisors = supervisors.filter((supervisor) =>
     supervisor.userUsername.toLowerCase().includes(searchTerm.toLowerCase())
   );
-  
+
   const paginatedSupervisors = filteredSupervisors.slice(
     page * rowsPerPage,
     page * rowsPerPage + rowsPerPage
@@ -58,9 +58,9 @@ const HR_Supervisors_List = () => {
 
   // Inside handleSearchChange function
   const handleSearchChange = (event) => {
-  setSearchTerm(event.target.value);
-  setPage(0); // Reset page when search term changes
-};
+    setSearchTerm(event.target.value);
+    setPage(0); // Reset page when search term changes
+  };
 
   const handleRequestSort = (event, newOrderBy) => {
     setOrderBy(newOrderBy);
@@ -117,11 +117,11 @@ const HR_Supervisors_List = () => {
       console.log(error);
     }
   };
-  
+
   useEffect(() => {
     fetchSupervisors();
   }, [userIdToDelete, sortDirection, orderBy]);
-  
+
   useEffect(() => {
     const fetchTrainees = async () => {
       try {
@@ -138,10 +138,6 @@ const HR_Supervisors_List = () => {
     };
     fetchTrainees();
   }, []);
-
-
-
-
 
   const handleDelete = (user) => {
     setUserIdToDelete(user.userId);
@@ -166,16 +162,18 @@ const HR_Supervisors_List = () => {
     }
   };
 
-
   const handleTraineeSelect = (event) => {
     setSelectedTrainees(event.target.value);
   };
 
   const handleAssignConfirm = async () => {
     try {
-      const response = await axios.post(`${baseUrl}/api/v1/supervisor/${selectedSupervisor.userId}/assign`, {
-        trainees: selectedTrainees
-      });
+      const response = await axios.post(
+        `${baseUrl}/api/v1/supervisor/${selectedSupervisor.userId}/assign`,
+        {
+          trainees: selectedTrainees,
+        }
+      );
       if (response.status === 200) {
         console.log("Trainees assigned successfully");
         // Refresh the list of supervisors after assignment
@@ -209,8 +207,9 @@ const HR_Supervisors_List = () => {
   };
 
   return (
-    <div  style={{padding: "3rem"}}>
-            <div className="flex items-center justify-end">
+    <div style={{ padding: "3rem" }}>
+
+      <div className="flex items-center justify-end">
         <TextField
           label="Search username"
           variant="standard"
@@ -226,6 +225,14 @@ const HR_Supervisors_List = () => {
           &nbsp;Export
         </IconButton>
       </div>
+      <Typography
+        variant="h5"
+        component="h2"
+        gutterBottom
+        sx={{ mt: 3, ml: 1 }}
+      >
+        List of Supervisors
+      </Typography>
       <TableContainer component={Paper}>
         <Table aria-label="supervisor table">
           <TableHead>
@@ -236,9 +243,9 @@ const HR_Supervisors_List = () => {
                   direction={sortDirection}
                   onClick={(event) => handleRequestSort(event, "userUsername")}
                 >
-                 <h3 className="text-base font-semibold leading-7 text-gray-900">
-                  Username
-                </h3>
+                  <h3 className="text-base font-semibold leading-7 text-gray-900">
+                    Username
+                  </h3>
                 </TableSortLabel>
               </TableCell>
               <TableCell variant="head">
@@ -280,9 +287,11 @@ const HR_Supervisors_List = () => {
                     item.userRole.slice(1).toLowerCase()}
                 </TableCell>
                 <TableCell>
-                <IconButton
+                  <IconButton
                     size="small"
-                    onClick={() => navigate(`/supervisors/${item.userId}/trainees`)}
+                    onClick={() =>
+                      navigate(`/supervisors/${item.userId}/trainees`)
+                    }
                     color="primary"
                   >
                     <GroupIcon />
@@ -292,7 +301,7 @@ const HR_Supervisors_List = () => {
                     onClick={() => handleDelete(item)}
                     color="error"
                   >
-                    <DeleteIcon /> 
+                    <DeleteIcon />
                   </IconButton>
                 </TableCell>
               </TableRow>
@@ -331,7 +340,10 @@ const HR_Supervisors_List = () => {
       </Dialog>
 
       {/* Assign Trainees Dialog */}
-      <Dialog open={!!selectedSupervisor} onClose={() => setSelectedSupervisor(null)}>
+      <Dialog
+        open={!!selectedSupervisor}
+        onClose={() => setSelectedSupervisor(null)}
+      >
         <DialogTitle>Assign Trainees</DialogTitle>
         <DialogContent>
           <FormControl fullWidth>
@@ -372,6 +384,5 @@ const HR_Supervisors_List = () => {
     </div>
   );
 };
-
 
 export default HR_Supervisors_List;

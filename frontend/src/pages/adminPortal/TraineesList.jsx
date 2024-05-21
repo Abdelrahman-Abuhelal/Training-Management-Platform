@@ -256,6 +256,14 @@ const TraineesList = () => {
           </Button>
         </div>
       </div>
+      <Typography
+        variant="h5"
+        component="h2"
+        gutterBottom
+        sx={{ mt: 3, ml: 1 }}
+      >
+        List of Trainees
+      </Typography>
       <TableContainer component={Paper}>
         <Table aria-label="trainee table">
           <TableHead>

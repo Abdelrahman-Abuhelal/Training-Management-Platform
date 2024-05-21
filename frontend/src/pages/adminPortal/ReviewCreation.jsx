@@ -10,7 +10,7 @@ import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import ButtonAppBar from "../../components/admin/NavBar";
 import InputLabel from "@mui/material/InputLabel";
-import FormHelperText from "@mui/material/FormHelperText";
+import Typography from "@mui/material/Typography";
 
 const AdminForm = () => {
   const baseUrl = import.meta.env.VITE_PORT_URL;
@@ -118,8 +118,20 @@ const AdminForm = () => {
     <div>
       <div style={{ display: "flex", alignItems: "center", justifyContent: "center", minHeight: "70vh" }}>
         <form onSubmit={handleSubmit(onSubmit)} style={{ width: "70%", maxWidth: "1000px" }}>
-          <span style={{padding:"5px", display: "flex", fontSize: "20px", alignItems: "center", justifyContent: "center", fontWeight: "bold",fontFamily:"cursive" }}>Review Form Creation</span>
-          <br />
+        <Typography
+  component="span"
+  sx={{
+    padding: "5px",
+    display: "flex",
+    fontSize: "20px",
+    alignItems: "center",
+    justifyContent: "center",
+    fontFamily: "'Nunito', sans-serif",
+    fontWeight: "bold",
+  }}
+>
+  Review Form Creation
+</Typography>          <br />
           <div>
             <TextField
               {...register("title", { required: true })}

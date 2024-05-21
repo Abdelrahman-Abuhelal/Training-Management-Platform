@@ -30,6 +30,8 @@ const Supervisor_Trainees_List = () => {
   const [orderBy, setOrderBy] = useState("userUsername");
   const [sortDirection, setSortDirection] = useState("asc");
   const [selectedTrainees, setSelectedTrainees] = useState([]);
+  const [username, setUsername] = useState("");
+  const [userFullName, setUserFullName] = useState("");
   const navigate = useNavigate();
 
   const filteredTrainees = trainees.filter((trainee) =>
@@ -56,6 +58,27 @@ const Supervisor_Trainees_List = () => {
       console.log(error);
     }
   };
+
+  
+  const userData = async () => {
+    try {
+      const response = await axios.get(
+        `${baseUrl}/api/v1/admin/users/${userId}`
+      );
+      if (response.status === 200) {
+        const userData = response.data;
+        setUsername(userData.userUsername);
+        setUserFullName(userData.userFirstName + " " + userData.userLastName);
+      }
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
+
+  useEffect(() => {
+    userData();
+  }, []);
+
 
   useEffect(() => {
     fetchTrainees();
@@ -115,6 +138,14 @@ const Supervisor_Trainees_List = () => {
           onChange={handleSearchChange}
         />
       </div>
+      <Typography
+        variant="h5"
+        component="h2"
+        gutterBottom
+        sx={{ mt: 3, ml: 1 }}
+      >
+        {username} Trainees
+      </Typography>
       <TableContainer component={Paper}>
         <Table aria-label="trainee table">
           <TableHead>

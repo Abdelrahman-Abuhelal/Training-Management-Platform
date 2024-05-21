@@ -93,17 +93,10 @@ const CreateUsersForm = () => {
         spacing={3}
         style={{ marginTop: "2rem" }}
       >
-        <Grid item xs={12}>
-          {/* <Grid container justifyContent="center">
-            <img
-              src="/EXALT_LOGO.png"
-              alt="Exalt Logo"
-              style={{ height: "auto", width: "auto", maxHeight: "80px" }}
-            />
-          </Grid> */}
-            <Typography variant="h4" sx={{ mt: 5,mb:5, textAlign: 'center' , fontSize:35,fontFamily:"Cursive"}}>
+    <Grid item xs={12}>
+          <Typography variant="h4" sx={{ mt: 5, mb: 5, textAlign: 'center' }}>
             User Registration
-            </Typography>
+          </Typography>
         </Grid>
         <Grid item xs={12} sm={8} md={6}>
           <form onSubmit={handleSubmit}>
