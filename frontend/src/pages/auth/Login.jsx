@@ -58,6 +58,12 @@ const Login = () => {
             src="/EXALT_LOGO.png" // Replace with your logo image
             alt="Exalt Logo"
           />
+           <img
+            className="mx-auto h-40 w-auto"
+            src="TMS_LOGO.jpg" // Replace with your logo image
+            alt="TMS Logo"
+            style={{ borderRadius: "10px" }} // Adjust the radius as needed
+          />
           <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
             Login to your account
           </h2>

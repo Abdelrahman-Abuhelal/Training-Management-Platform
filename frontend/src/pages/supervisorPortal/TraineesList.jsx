@@ -183,7 +183,7 @@ const Supervisor_Trainees_List = () => {
                   <Button color="primary" onClick={() => handleViewProfile(item)}>
                     {item.userUsername}
                   </Button>
-                </TableCell>{" "}
+                </TableCell>
                 <TableCell>{item.userFirstName}</TableCell>
                 <TableCell>{item.userLastName}</TableCell>
                 <TableCell>{item.userEmail}</TableCell>

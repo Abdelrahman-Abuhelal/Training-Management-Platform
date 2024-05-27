@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import {
   Grid,
@@ -11,8 +11,9 @@ import {
 } from "@mui/material";
 import MuiAlert from "@mui/material/Alert";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import ReviewsIcon from '@mui/icons-material/Reviews';
+import ReviewsIcon from "@mui/icons-material/Reviews";
 import { useNavigate } from "react-router-dom";
+import { useParams } from "react-router-dom";
 
 function Alert(props) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
@@ -29,8 +30,11 @@ const ReviewForm = () => {
   });
   const [openSnackbar, setOpenSnackbar] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
-  const baseUrl = "https://example.com/api/review"; // Replace with your API endpoint
+  const baseUrl = import.meta.env.VITE_PORT_URL;
   const navigate = useNavigate();
+  const { userId } = useParams();
+  const [username, setUsername] = useState("");
+  const [userFullName, setUserFullName] = useState("");
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -50,6 +54,25 @@ const ReviewForm = () => {
       [aspect]: { ...review[aspect], comment: value },
     });
   };
+
+  const userData = async () => {
+    try {
+      const response = await axios.get(
+        `${baseUrl}/api/v1/admin/users/${userId}`
+      );
+      if (response.status === 200) {
+        const userData = response.data;
+        setUsername(userData.userUsername);
+        setUserFullName(userData.userFirstName + " " + userData.userLastName);
+      }
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
+
+  useEffect(() => {
+    userData();
+  }, []);
 
   const handleSubmit = async () => {
     try {
@@ -86,25 +109,17 @@ const ReviewForm = () => {
           <IconButton
             color="primary"
             onClick={() => {
-              navigate(`/my-trainees/`)
+              navigate(`/my-trainees/`);
             }}
             style={{ marginBottom: "1rem" }}
           >
             <ArrowBackIcon />
           </IconButton>
-          <Typography variant="h5" gutterBottom>
-            Review Form
+          <Typography variant="h4" gutterBottom style={{ color: "#1976D2", marginBottom: "1rem" }}>
+            Review <span>{username}</span>
           </Typography>
-          <TextField
-            label="Trainee ID"
-            variant="outlined"
-            fullWidth
-            name="traineeId"
-            value={review.traineeId}
-            onChange={handleInputChange}
-            margin="normal"
-          />
-          <Typography variant="subtitle1" gutterBottom>
+
+          <Typography variant="h6" gutterBottom style={{ marginTop: "2rem" }}>
             Soft Skills
           </Typography>
           <TextField
@@ -113,9 +128,7 @@ const ReviewForm = () => {
             fullWidth
             name="softSkillsRating"
             value={review.softSkills.rating}
-            onChange={(e) =>
-              handleRatingChange("softSkills", e.target.value)
-            }
+            onChange={(e) => handleRatingChange("softSkills", e.target.value)}
             margin="normal"
             type="number"
             inputProps={{ min: "1", max: "10" }}
@@ -126,16 +139,14 @@ const ReviewForm = () => {
             fullWidth
             name="softSkillsComment"
             value={review.softSkills.comment}
-            onChange={(e) =>
-              handleCommentChange("softSkills", e.target.value)
-            }
+            onChange={(e) => handleCommentChange("softSkills", e.target.value)}
             margin="normal"
             multiline
             rows={4}
           />
           {/* Add similar fields for other evaluation aspects */}
           {/* Programming Skills */}
-          <Typography variant="subtitle1" gutterBottom>
+          <Typography variant="h6" gutterBottom style={{ marginTop: "2rem" }}>
             Programming Skills
           </Typography>
           <TextField
@@ -165,7 +176,7 @@ const ReviewForm = () => {
             rows={4}
           />
           {/* Teamwork Skills */}
-          <Typography variant="subtitle1" gutterBottom>
+          <Typography variant="h6" gutterBottom style={{ marginTop: "2rem" }}>
             Teamwork Skills
           </Typography>
           <TextField
@@ -195,7 +206,7 @@ const ReviewForm = () => {
             rows={4}
           />
           {/* Communication Skills */}
-          <Typography variant="subtitle1" gutterBottom>
+          <Typography variant="h6" gutterBottom style={{ marginTop: "2rem" }}>
             Communication Skills
           </Typography>
           <TextField
@@ -225,7 +236,7 @@ const ReviewForm = () => {
             rows={4}
           />
           {/* Problem Solving Skills */}
-          <Typography variant="subtitle1" gutterBottom>
+          <Typography variant="h6" gutterBottom style={{ marginTop: "2rem" }}>
             Problem Solving Skills
           </Typography>
           <TextField

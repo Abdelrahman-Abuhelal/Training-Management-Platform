@@ -122,7 +122,7 @@ const Routes = () => {
             //   element: <GoogleDriveAuth/>
             // },
             {
-              path:"/review-form/:traineeId",
+              path:"/review-form/:userId",
               element: <ReviewForm />
             },
             {

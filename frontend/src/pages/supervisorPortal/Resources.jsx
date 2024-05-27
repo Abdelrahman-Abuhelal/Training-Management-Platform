@@ -1,141 +1,123 @@
-import React, { useState, useEffect } from "react";
-import axios from "axios";
-import { TextField, Button, Snackbar } from "@mui/material";
-import { useDropzone } from "react-dropzone";
-import UploadContainer from "../supervisorPortal/UploadContainer";
-import { createTheme, ThemeProvider } from "@mui/material";
+import React, { useState } from "react";
+import {
+  Box,
+  Button,
+  TextField,
+  Typography,
+  Paper,
+  IconButton,
+  List,
+  ListItem,
+  ListItemText,
+  ListItemSecondaryAction,
+} from "@mui/material";
+import {
+  AddPhotoAlternate as AddPhotoAlternateIcon,
+  Delete as DeleteIcon,
+} from "@mui/icons-material";
 
-const Resources = () => {
-  const baseUrl = import.meta.env.VITE_PORT_URL;
-  const [trainees, setTrainees] = useState([]);
-  const [searchTerm, setSearchTerm] = useState("");
-  const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(10);
-  const [orderBy, setOrderBy] = useState("userUsername");
-  const [sortDirection, setSortDirection] = useState("asc");
-  const [selectedTrainees, setSelectedTrainees] = useState([]);
-  const [uploadMessage, setUploadMessage] = useState("");
-  const [files, setFiles] = useState([]);
-  const [description, setDescription] = useState("");
-
-  useEffect(() => {
-    fetchTrainees();
-  }, [page, rowsPerPage, searchTerm]);
-
-  const fetchTrainees = async () => {
-    try {
-      const response = await axios.get(
-        `${baseUrl}/api/v1/supervisor/my-trainees`
-      );
-      if (response.status === 200) {
-        const traineeUsers = response.data;
-        setTrainees(traineeUsers);
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const handleViewReview = (user) => {
-    // Handle view review
-  };
-
-  const handleViewProfile = (user) => {
-    // Handle view profile
-  };
-
-  const handleChangePage = (event, newPage) => {
-    setPage(newPage);
-  };
-
-  const handleChangeRowsPerPage = (event) => {
-    setRowsPerPage(parseInt(event.target.value, 10));
-    setPage(0); // Reset page when rows per page changes
-  };
-
-  const handleSearchChange = (event) => {
-    setSearchTerm(event.target.value);
-    setPage(0); // Reset page when search term changes
-  };
-
-  const handleRequestSort = (event, property) => {
-    const isAsc = orderBy === property && sortDirection === "asc";
-    setOrderBy(property);
-    setSortDirection(isAsc ? "desc" : "asc");
-  };
-
-  const handleFileUpload = (files) => {
-    setFiles(files);
-  };
-
-  const handleDescriptionChange = (event) => {
-    setDescription(event.target.value);
-  };
-
-  const theme = createTheme();
-  //Change flag to disable dropzone
-  const disabled = false;
-
-
-
-  const onDrop = (acceptedFiles) => {
-    alert(acceptedFiles[0].name);
-  };
-  const { getRootProps, getInputProps, isDragAccept } = useDropzone({
-    onDrop,
-    disabled
+const ResourceUploader = () => {
+  const [resource, setResource] = useState({
+    name: "",
+    description: "",
+    files: [],
   });
-  const handleSubmit = async () => {
-    const formData = new FormData();
-    files.forEach((file) => {
-      formData.append("files", file);
-    });
-    formData.append("description", description);
 
-    try {
-      const response = await axios.post(`${baseUrl}/api/v1/upload`, formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
-      if (response.status === 200) {
-        setUploadMessage("Files uploaded successfully!");
-      }
-    } catch (error) {
-      console.error("Error uploading files:", error);
-      setUploadMessage("Error uploading files. Please try again.");
-    }
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setResource({ ...resource, [name]: value });
+  };
+
+  const handleFileChange = (e) => {
+    const files = Array.from(e.target.files);
+    setResource({
+      ...resource,
+      files: [...resource.files, ...files],
+    });
+  };
+
+  const handleRemoveFile = (fileToRemove) => {
+    setResource({
+      ...resource,
+      files: resource.files.filter((file) => file !== fileToRemove),
+    });
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    // Handle form submission logic here
+    console.log(resource);
   };
 
   return (
-    <div style={{ padding: "3rem" }}>
-      <div style={{ marginBottom: "1rem" }}>
+    <Paper elevation={3} sx={{ p: 4, m: 2 }}>
+        <Typography variant="h4" gutterBottom style={{ marginBottom: "1rem" }}>
+        Add New Resource
+      </Typography>
+      <form onSubmit={handleSubmit}>
         <TextField
-          label="Search username"
-          variant="standard"
-          value={searchTerm}
-          onChange={handleSearchChange}
+          fullWidth
+          margin="normal"
+          label="Name"
+          name="name"
+          value={resource.name}
+          onChange={handleInputChange}
+          required
         />
-      </div>
-
-      <ThemeProvider theme={theme}>
-      <UploadContainer
-        {...getRootProps({
-          //+ converts true -> 1, false -> 0
-          accepted: +isDragAccept,
-          disabled
-        })}
-      >
-        <input {...getInputProps()} />
-        <p>Drag 'n' drop some files here, or click to select files</p>
-      </UploadContainer>
-    </ThemeProvider> 
-
-      <Button variant="contained" color="primary" onClick={handleSubmit}>
-        Submit
-      </Button>
-   </div>
+        <TextField
+          fullWidth
+          margin="normal"
+          label="Description"
+          name="description"
+          value={resource.description}
+          onChange={handleInputChange}
+          multiline
+          rows={4}
+          required
+        />
+        <Box display="flex" alignItems="center" mt={2}>
+          <input
+            accept=".pdf,.doc,.docx,.xls,.xlsx"
+            style={{ display: "none" }}
+            id="upload-files"
+            multiple
+            type="file"
+            onChange={handleFileChange}
+          />
+          <label htmlFor="upload-files">
+            <IconButton color="primary" component="span">
+              <AddPhotoAlternateIcon />
+            </IconButton>
+          </label>
+          <Typography>{resource.files.length} Files Selected</Typography>
+        </Box>
+        <List>
+          {resource.files.map((file, index) => (
+            <ListItem key={index}>
+              <ListItemText primary={file.name} />
+              <ListItemSecondaryAction>
+                <IconButton
+                  edge="end"
+                  aria-label="delete"
+                  onClick={() => handleRemoveFile(file)}
+                >
+                  <DeleteIcon />
+                </IconButton>
+              </ListItemSecondaryAction>
+            </ListItem>
+          ))}
+        </List>
+        <Button
+          variant="contained"
+          color="primary"
+          type="submit"
+          sx={{ mt: 3 }}
+        >
+          Submit
+        </Button>
+      </form>
+    </Paper>
   );
 };
 
-export default Resources;
+export default ResourceUploader;

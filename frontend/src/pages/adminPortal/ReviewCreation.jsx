@@ -8,10 +8,9 @@ import Button from "@mui/material/Button";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
-import ButtonAppBar from "../../components/admin/NavBar";
-import InputLabel from "@mui/material/InputLabel";
 import Typography from "@mui/material/Typography";
-import SearchIcon from "@mui/icons-material/Search";
+import Paper from "@mui/material/Paper";
+import InputLabel from '@mui/material/InputLabel';
 
 const AdminForm = () => {
   const baseUrl = import.meta.env.VITE_PORT_URL;
@@ -41,7 +40,7 @@ const AdminForm = () => {
       ...formData,
       questions: [
         ...formData.questions,
-        { question: "", type: "text", options: [] } 
+        { question: "", type: "text", options: [] }
       ]
     });
   };
@@ -104,10 +103,14 @@ const AdminForm = () => {
           <TextField
             label={`Option ${optionIndex + 1}`}
             value={option}
-            onChange={(e) => handleOptionChange(questionIndex, optionIndex, e)}
+            onChange={(e) =>
+              handleOptionChange(questionIndex, optionIndex, e)
+            }
             sx={{ marginBottom: 2, width: "60%" }}
           />
-          <IconButton onClick={() => handleRemoveOption(questionIndex, optionIndex)}>
+          <IconButton
+            onClick={() => handleRemoveOption(questionIndex, optionIndex)}
+          >
             <DeleteIcon />
           </IconButton>
         </div>
@@ -116,71 +119,49 @@ const AdminForm = () => {
   };
 
   return (
-    <div>
-      <div style={{ display: "flex", alignItems: "center", justifyContent: "center", minHeight: "70vh" }}>
-        <form onSubmit={handleSubmit(onSubmit)} style={{ width: "70%", maxWidth: "1000px" }}>
-        <Typography
-  component="span"
-  sx={{
-    padding: "5px",
-    display: "flex",
-    fontSize: "20px",
-    alignItems: "center",
-    justifyContent: "center",
-    fontFamily: "'Nunito', sans-serif",
-    fontWeight: "bold",
-  }}
->
-  Review Form Creation
-</Typography>          <br />
-          <div>
-            <TextField
-              {...register("title", { required: true })}
-              label="Review Title"
-              error={!!errors.title}
-              helperText={errors.title?.message || ""}
+    <div style={{ display: "flex", justifyContent: "center", marginTop: 20 }}>
+      <Paper elevation={3} style={{ width: "70%", maxWidth: 1000, padding: 20 }}>
+        <Typography variant="h5" gutterBottom>
+          Review Form Creation
+        </Typography>
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <TextField
+            {...register("title", { required: true })}
+            label="Review Title"
+            error={!!errors.title}
+            helperText={errors.title?.message || ""}
+            onChange={handleInputChange}
+            sx={{ marginBottom: 2 }}
+            fullWidth
+          />
+          <TextField
+            {...register("description", { required: true })}
+            label="Description"
+            error={!!errors.description}
+            helperText={errors.description?.message || ""}
+            onChange={handleInputChange}
+            sx={{ marginBottom: 2 }}
+            fullWidth
+          />
+          <FormControl sx={{ width: "100%", marginBottom: 2 }}>
+            <InputLabel id="target-audience-label">Target Audience</InputLabel>
+            <Select
+              {...register("targetAudience", { required: true })}
+              labelId="target-audience-label"
+              id="target-audience"
+              name="targetAudience"
+              label="Target Audience"
+              value={formData.targetAudience || ""}
+              error={!!errors.targetAudience}
+              helperText={errors.targetAudience?.message || ""}
               onChange={handleInputChange}
-              sx={{ marginBottom: 2 ,}}
-              fullWidth
-            />
-          </div>
-          <br />
-          <div>
-            <TextField 
-              {...register("description", { required: true })}
-              label="Description"
-              error={!!errors.description}
-              helperText={errors.description?.message || ""}
-              onChange={handleInputChange}
-              sx={{ marginBottom: 2 }}
-              fullWidth
-            />
-          </div>
-          <br />
-          <div>
-            <FormControl sx={{ width: "100%", marginBottom: 2 }} onClick={(event) => event.stopPropagation()}>
-              <InputLabel id="target-audience-label">Target Audience</InputLabel>
-              <Select
-                {...register("targetAudience", { required: true })}
-                labelId="target-audience-label"
-                id="target-audience"
-                name="targetAudience"
-                label="Target Audience"
-                value={formData.targetAudience || ""}
-                error={!!errors.targetAudience}
-                helperText={errors.targetAudience?.message || ""}
-                onChange={handleInputChange}
-                sx={{ marginBottom: 2, width: "40%" }}
-              >
-                <MenuItem value="trainees">Trainees</MenuItem>
-                <MenuItem value="supervisors">Supervisors</MenuItem>
-                <MenuItem value="admins">Admins</MenuItem>
-              </Select>
-            </FormControl>
-          </div>
-          <br />
-          <br />
-          <br />
+              sx={{ marginBottom: 2, width: "100%" }}
+            >
+              <MenuItem value="trainees">Trainees</MenuItem>
+              <MenuItem value="supervisors">Supervisors</MenuItem>
+              <MenuItem value="admins">Admins</MenuItem>
+            </Select>
+          </FormControl>
           {formData.questions.map((question, questionIndex) => (
             <div key={questionIndex}>
               <TextField
@@ -191,14 +172,16 @@ const AdminForm = () => {
                   updatedQuestions[questionIndex].question = e.target.value;
                   setFormData({ ...formData, questions: updatedQuestions });
                 }}
-                sx={{ marginBottom: 2, width: "70%" }}
+                sx={{ marginBottom: 2, width: "100%" }}
               />
-              <FormControl sx={{ marginBottom: 2, width: "70%" }}>
-                <InputLabel id={`question-type-label-${questionIndex}`}>Type of Question</InputLabel>
+              <FormControl sx={{ marginBottom: 2, width: "100%" }}>
+                <InputLabel id={`question-type-label-${questionIndex}`}>
+                  Type of Question
+                </InputLabel>
                 <Select
                   labelId={`question-type-label-${questionIndex}`}
                   id={`question-type-${questionIndex}`}
-                  label='Type of Question'
+                  label="Type of Question"
                   value={question.type}
                   onChange={(e) => {
                     const updatedQuestions = [...formData.questions];
@@ -207,24 +190,40 @@ const AdminForm = () => {
                   }}
                 >
                   <MenuItem value="text">Text</MenuItem>
-                  <MenuItem value="one-answer-selection">One Answer Selection</MenuItem>
-                  <MenuItem value="multiple-answer-selection">Multiple Answer Selection</MenuItem>
+                  <MenuItem value="one-answer-selection">
+                    One Answer Selection
+                  </MenuItem>
+                  <MenuItem value="multiple-answer-selection">
+                    Multiple Answer Selection
+                  </MenuItem>
                 </Select>
               </FormControl>
               {question.type !== "text" && renderOptions(questionIndex)}
-              {question.type !== "text" && <Button onClick={() => handleAddOption(questionIndex)}>Add Option</Button>}
-              <IconButton onClick={() => handleRemoveQuestion(questionIndex)}>
+              {question.type !== "text" && (
+                <Button onClick={() => handleAddOption(questionIndex)}>
+                  Add Option
+                </Button>
+              )}
+              <IconButton
+                onClick={() => handleRemoveQuestion(questionIndex)}
+              >
                 <DeleteIcon />
               </IconButton>
-              <br />
-              <br />
-              <br />
             </div>
           ))}
-          <Button onClick={handleAddQuestion}>Add Question</Button>
-          <Button type="submit" disabled={errors.length > 0}>Create Form</Button>
+          <Button onClick={handleAddQuestion} variant="outlined" sx={{ mt: 2 }}>
+            Add Question
+          </Button>
+          <Button
+            type="submit"
+            variant="contained"
+            disabled={errors.length > 0}
+            sx={{ mt: 2, ml: 2 }}
+          >
+            Create Form
+          </Button>
         </form>
-      </div>
+      </Paper>
     </div>
   );
 };
