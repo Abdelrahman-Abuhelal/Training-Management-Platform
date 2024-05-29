@@ -79,7 +79,13 @@ const ForgotPasswordReset = () => {
         <div className="sm:mx-auto sm:w-full sm:max-w-sm">
           <img
             className="mx-auto h-20 w-auto"
-            src="/EXALT_LOGO.png" 
+            src="/EXALT_LOGO2.png" 
+          />
+           <img
+            className="mx-auto h-40 w-auto"
+            src="/TMS_LOGO.jpg" // Replace with your logo image
+            alt="TMS Logo"
+            style={{ borderRadius: "10px" }} // Adjust the radius as needed
           />
           <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
             Reset Your Password
@@ -91,7 +97,7 @@ const ForgotPasswordReset = () => {
               <div className="mt-2">
                 <input
                   type="password"
-                  placeholder="password"
+                  placeholder="Password"
                   className="shadow-sm block w-full px-3 py-2 text-gray-700 border rounded-md focus:outline-none focus:ring-indigo-500 focus:ring-width-1"
                   value={newPassword}
                   onChange={(e) => setNewPassword(e.target.value)}

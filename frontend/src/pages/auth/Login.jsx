@@ -1,13 +1,13 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { NavLink } from 'react-router-dom';
+import { NavLink } from "react-router-dom";
 import "../style/Login.css";
 import { useAuth } from "../../provider/authProvider";
 
 const Login = () => {
   const navigate = useNavigate();
-  const { setUserData } = useAuth(); 
+  const { setUserData } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -15,7 +15,7 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     if (!email.length || !password.length) {
       setError("Please enter both email and password");
       return;
@@ -25,47 +25,47 @@ const Login = () => {
       return;
     }
 
-
-
-  await axios.post(`${baseUrl}/api/v1/auth/login`, {
+    await axios
+      .post(`${baseUrl}/api/v1/auth/login`, {
         email,
         password,
-      }).then((response) => {
+      })
+      .then((response) => {
         if (response.status === 200) {
           setError("");
-          setUserData(response.data);  
+          setUserData(response.data);
           navigate("/", { replace: true });
-        }
-        else if(response.status === 401){
+        } else if (response.status === 401) {
           setError("Invalid email or password");
-        }
-        else{
+        } else {
           setError(response.data.message || "Login failed");
         }
-      }).catch((error) => {
-        setError("Login failed" );
+      })
+      .catch((error) => {
+        setError("Login failed");
         console.error("Login failed:", error);
       });
-
   };
 
   return (
     <div className="login-container">
       <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
         <div className="sm:mx-auto sm:w-full sm:max-w-sm">
+
           <img
             className="mx-auto h-20 w-auto"
-            src="/EXALT_LOGO.png" // Replace with your logo image
+            src="/EXALT_LOGO2.png" // Replace with your logo image
             alt="Exalt Logo"
-          />
-           <img
-            className="mx-auto h-40 w-auto"
+          /> 
+          <img
+            className="mx-auto h-43 w-52"
             src="TMS_LOGO.jpg" // Replace with your logo image
             alt="TMS Logo"
             style={{ borderRadius: "10px" }} // Adjust the radius as needed
           />
-          <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
-            Login to your account
+
+<h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
+            Login Page
           </h2>
         </div>
         <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
@@ -105,9 +105,14 @@ const Login = () => {
                 />
               </div>
             </div>
-            <NavLink style={{ float: "right" , paddingBottom:10, paddingTop:5}} to="/forgot-password-email">Forgot Password?</NavLink>
+            <NavLink
+              style={{ float: "right", paddingBottom: 10, paddingTop: 5 }}
+              to="/forgot-password-email"
+            >
+              Forgot Password?
+            </NavLink>
 
-            <br /> 
+            <br />
             <br />
 
             <button
@@ -122,6 +127,6 @@ const Login = () => {
       </div>
     </div>
   );
-};
+}; 
 
 export default Login;
