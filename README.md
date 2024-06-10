@@ -1,5 +1,5 @@
 # Training-Management-Platform
-It is a Training Management Application designed to streamline and enhance the process of managing training periods for palestinian students within the company branches during summer or winter breaks.
+It is a Training Management Application designed to streamline and enhance the process of managing training periods for Palestinian students within the company branches during summer or winter breaks.
 The primary goal of this application is to provide a centralized platform for HR managers, supervisors, and trainees to efficiently oversee and participate in the training process.
 
 
