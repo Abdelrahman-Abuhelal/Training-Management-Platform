@@ -71,4 +71,3 @@ The primary goal of this application is to provide a centralized platform for HR
 - VSCode
 
 
-Swagger Documentation: http://yourserver:port/swagger-ui/index.html
