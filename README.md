@@ -37,7 +37,25 @@ The primary goal of this application is to provide a centralized platform for HR
 - HR managers can view all reviews done by supervisors and trainees.
   
 
-  
+## Class Diagram
+![image](https://github.com/Abdelrahman-Abuhelal/Training-Management-Platform/assets/77440941/5ad7e3d8-f3db-44de-921f-f68f4ce6bc51)
+
+
+## APIs
+### Authentication APIs
+![image](https://github.com/Abdelrahman-Abuhelal/Training-Management-Platform/assets/77440941/5422ec0d-2c5d-4366-9d46-f6f708332899)
+### User APIs
+![image](https://github.com/Abdelrahman-Abuhelal/Training-Management-Platform/assets/77440941/e5b80152-52e1-4496-a735-7072259f7a17)
+### Admin APIs
+![image](https://github.com/Abdelrahman-Abuhelal/Training-Management-Platform/assets/77440941/95e72d91-75fb-442b-8cd9-9aca485ae565)
+### Trainee APIs
+![image](https://github.com/Abdelrahman-Abuhelal/Training-Management-Platform/assets/77440941/4d2457ff-5282-464d-b024-e47aa2106c5a)
+### Supervisor APIs
+![image](https://github.com/Abdelrahman-Abuhelal/Training-Management-Platform/assets/77440941/72e331c5-9ce4-462e-ab8d-d3a03b37db11)
+### Review APIs
+![image](https://github.com/Abdelrahman-Abuhelal/Training-Management-Platform/assets/77440941/a2438033-9e7c-457f-bc35-af06aed3786d)
+
+
 # Tools Used to build the project: 
 - Java JDK v21
 - npm 
