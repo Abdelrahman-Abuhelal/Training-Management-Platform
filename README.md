@@ -41,7 +41,7 @@ The primary goal of this application is to provide a centralized platform for HR
 ![image](https://github.com/Abdelrahman-Abuhelal/Training-Management-Platform/assets/77440941/5ad7e3d8-f3db-44de-921f-f68f4ce6bc51)
 
 
-## APIs
+## Backend APIs
 ### Authentication APIs
 ![image](https://github.com/Abdelrahman-Abuhelal/Training-Management-Platform/assets/77440941/5422ec0d-2c5d-4366-9d46-f6f708332899)
 ### User APIs
