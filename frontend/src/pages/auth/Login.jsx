@@ -25,12 +25,10 @@ const Login = () => {
       return;
     }
 
-    await axios
-      .post(`${baseUrl}/api/v1/auth/login`, {
+    await axios.post(`${baseUrl}/api/v1/auth/login`, {
         email,
         password,
-      })
-      .then((response) => {
+      }).then((response) => {
         if (response.status === 200) {
           setError("");
           setUserData(response.data);

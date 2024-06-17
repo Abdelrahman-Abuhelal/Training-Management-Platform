@@ -20,8 +20,6 @@ public class ReviewCreationDto {
 
     private String description;
 
-    private String targetAudience;
-
     @OneToMany(mappedBy = "review", cascade = CascadeType.ALL)
     private List<Question> questions;
 

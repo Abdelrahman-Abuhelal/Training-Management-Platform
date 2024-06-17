@@ -24,7 +24,6 @@ const AdminForm = () => {
   const [formData, setFormData] = useState({
     title: "",
     description: "",
-    targetAudience: "",
     questions: []
   });
 
@@ -91,7 +90,6 @@ const AdminForm = () => {
     setFormData({
       title: "",
       description: "",
-      targetAudience: "",
       questions: []
     });
   };
@@ -143,25 +141,6 @@ const AdminForm = () => {
             sx={{ marginBottom: 2 }}
             fullWidth
           />
-          <FormControl sx={{ width: "100%", marginBottom: 2 }}>
-            <InputLabel id="target-audience-label">Target Audience</InputLabel>
-            <Select
-              {...register("targetAudience", { required: true })}
-              labelId="target-audience-label"
-              id="target-audience"
-              name="targetAudience"
-              label="Target Audience"
-              value={formData.targetAudience || ""}
-              error={!!errors.targetAudience}
-              helperText={errors.targetAudience?.message || ""}
-              onChange={handleInputChange}
-              sx={{ marginBottom: 2, width: "100%" }}
-            >
-              <MenuItem value="trainees">Trainees</MenuItem>
-              <MenuItem value="supervisors">Supervisors</MenuItem>
-              <MenuItem value="admins">Admins</MenuItem>
-            </Select>
-          </FormControl>
           {formData.questions.map((question, questionIndex) => (
             <div key={questionIndex}>
               <TextField

@@ -87,7 +87,6 @@ public class ReviewService {
 */
 
     public String createReviewForm(ReviewCreationDto reviewDto){
-        var targetAudience= reviewDto.getTargetAudience();
         List<Question> questions = reviewDto.getQuestions();
 
         Review review= reviewMapper.reviewCreationDtoToReview(reviewDto);
@@ -95,17 +94,6 @@ public class ReviewService {
 
         questions.forEach(question -> question.setReview(review));
         questionRepository.saveAll(questions);
-
-        if("trainees".equals(targetAudience)){
-           List <Trainee> trainees= adminService.getAllTrainees();
-           trainees.forEach(trainee -> trainee.getReviews().add(review));
-           traineeRepository.saveAll(trainees);
-        }
-        else if ("supervisors".equals(targetAudience)) {
-            List<Supervisor> supervisors = adminService.getAllSupervisors();
-            supervisors.forEach(supervisor -> supervisor.getReviews().add(review));
-            supervisorRepository.saveAll(supervisors);
-        }// add the admin part, I Don't have time.
 
         return "Review Form has been created";
     }
