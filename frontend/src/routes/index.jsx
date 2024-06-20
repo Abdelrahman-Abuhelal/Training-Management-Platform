@@ -9,12 +9,12 @@ import Login from "../pages/auth/Login.jsx";
 import TraineeProfile from "../pages/traineePortal/TraineeProfile.jsx";
 import Supervisor_Trainees_List from "../pages/supervisorPortal/TraineesList.jsx";
 import EditTrainee from "../pages/adminPortal/EditTrainee.jsx";
-import ReviewCreation from "../pages/adminPortal/ReviewCreation.jsx";
+import FormBuilder from "../pages/adminPortal/FormBuilder.jsx";
 import AdminHome from "../components/admin/Home.jsx";
 import TraineeHome from "../components/trainee/Home.jsx";
 import SupervisorHome from "../components/supervisor/Home.jsx";
-import ReviewsList from "../pages/traineePortal/ReviewsList.jsx";
-import FillReview from "../pages/traineePortal/FillReview.jsx";
+import FormsList from "../pages/traineePortal/FormsList.jsx";
+import FillForm from "../pages/traineePortal/FillForm.jsx";
 import SupervisorLayout from "../pages/supervisorPortal/SupervisorLayout.jsx";
 import TraineeLayout from "../pages/traineePortal/TraineeLayout.jsx";
 import AdminLayout from "../pages/adminPortal/AdminLayout.jsx";
@@ -83,12 +83,12 @@ const Routes = () => {
               element: <TraineeProfile />,
             },
             {
-              path: "/reviews",
-              element: <ReviewsList />,
+              path: "/forms",
+              element: <FormsList />,
             },
             {
-              path: "/reviews/:reviewId",
-              element: <FillReview />,
+              path: "/forms/:formId",
+              element: <FillForm />,
             },
           ],
         },
@@ -170,8 +170,8 @@ const Routes = () => {
               element: <HR_Supervisors_List />,
             },
             {
-              path: "/create-reviews",
-              element: <ReviewCreation />,
+              path: "/create-forms",
+              element: <FormBuilder />,
             },
             {
               path: "/edit-trainee/:userId",

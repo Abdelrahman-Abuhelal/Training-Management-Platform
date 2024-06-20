@@ -12,7 +12,7 @@ import Typography from "@mui/material/Typography";
 import Paper from "@mui/material/Paper";
 import InputLabel from '@mui/material/InputLabel';
 
-const AdminForm = () => {
+const FormBuilder = () => {
   const baseUrl = import.meta.env.VITE_PORT_URL;
 
   const {
@@ -68,16 +68,16 @@ const AdminForm = () => {
     setFormData({ ...formData, questions: updatedQuestions });
   };
 
-  const reviewCreationAPI = async () => {
+  const formCreationAPI = async () => {
     try {
       const response = await axios.post(
-        `${baseUrl}/api/v1/reviews/create-review`,
+        `${baseUrl}/api/v1/forms/create-form`,
         JSON.stringify(formData),
         { headers: { "Content-Type": "application/json" } }
       );
       if (response.status === 200) {
-        const reviewMessage = response.data;
-        console.log(reviewMessage);
+        const formMessage = response.data;
+        console.log(formMessage);
       }
     } catch (error) {
       console.error("Error:", error);
@@ -86,7 +86,7 @@ const AdminForm = () => {
 
   const onSubmit = (data) => {
     console.log("Form submitted:", data);
-    reviewCreationAPI();
+    formCreationAPI();
     setFormData({
       title: "",
       description: "",
@@ -117,15 +117,19 @@ const AdminForm = () => {
   };
 
   return (
-    <div style={{ display: "flex", justifyContent: "center", marginTop: 20 }}>
-      <Paper elevation={3} style={{ width: "70%", maxWidth: 1000, padding: 20 }}>
-        <Typography variant="h5" gutterBottom>
-          Review Form Creation
+    <div style={{ display: "flex", justifyContent: "center"}}>
+      <Paper elevation={3} sx={{ p: 4, m: 6 , width: "70%", maxWidth: 1000}} >
+        <Typography variant="h4" gutterBottom>
+         Form Builder
         </Typography>
+        <Typography variant="h6" gutterBottom>
+         Create any needed form by filling the required details..
+        </Typography>
+        <br />
         <form onSubmit={handleSubmit(onSubmit)}>
           <TextField
             {...register("title", { required: true })}
-            label="Review Title"
+            label="Form Title"
             error={!!errors.title}
             helperText={errors.title?.message || ""}
             onChange={handleInputChange}
@@ -207,4 +211,4 @@ const AdminForm = () => {
   );
 };
 
-export default AdminForm;
+export default FormBuilder;

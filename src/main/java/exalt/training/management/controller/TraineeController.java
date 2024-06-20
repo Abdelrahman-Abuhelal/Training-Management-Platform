@@ -1,10 +1,10 @@
 package exalt.training.management.controller;
 
 
-import exalt.training.management.dto.ReviewDataDto;
+import exalt.training.management.dto.FormDataDto;
 import exalt.training.management.dto.TraineeDataDto;
 import exalt.training.management.model.users.Trainee;
-import exalt.training.management.service.ReviewService;
+import exalt.training.management.service.FormService;
 import exalt.training.management.service.TraineeService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -24,7 +24,7 @@ public class TraineeController {
 
     private final TraineeService traineeService;
 
-    private final ReviewService reviewService;
+    private final FormService reviewService;
 
     @PutMapping("/update-me")
     @PreAuthorize("hasAnyRole('TRAINEE')")
@@ -44,11 +44,11 @@ public class TraineeController {
     }
 
 
-    @GetMapping("/my-reviews")
+    @GetMapping("/my-forms")
     @PreAuthorize("hasAnyRole('TRAINEE')")
-    @Operation(summary = "Get All Reviews (Trainee Only)" , security =  @SecurityRequirement(name = "loginAuth"))
-    public ResponseEntity <List<ReviewDataDto>> getAllTraineeReviews() {
-        return ResponseEntity.ok(reviewService.getAllReviews());
+    @Operation(summary = "Get All Forms (Trainee Only)" , security =  @SecurityRequirement(name = "loginAuth"))
+    public ResponseEntity <List<FormDataDto>> getAllTraineeForms() {
+        return ResponseEntity.ok(reviewService.getAllForms());
     }
 
 /*    @DeleteMapping("/{username}")

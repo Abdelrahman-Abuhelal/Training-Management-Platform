@@ -2,7 +2,6 @@ package exalt.training.management.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import exalt.training.management.model.forms.Question;
-import exalt.training.management.model.forms.ReviewType;
 import lombok.*;
 
 import java.util.List;
@@ -12,15 +11,13 @@ import java.util.List;
 @NoArgsConstructor
 @EqualsAndHashCode(exclude = "questions")
 
-public class ReviewDataDto {
+public class FormDataDto {
 
     private Long id;
 
     private String title;
 
     private String description;
-
-    private String targetAudience;
 
     @JsonIgnoreProperties("review")
     private List<Question> questions;

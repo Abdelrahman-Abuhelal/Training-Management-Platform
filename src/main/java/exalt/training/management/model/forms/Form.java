@@ -16,7 +16,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(exclude = {"questions","trainees","supervisors","superAdmins"})
-public class Review {
+public class Form {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -25,19 +25,16 @@ public class Review {
 
     private String description;
 
-    private String targetAudience;
-
-    @OneToMany(mappedBy = "review", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "form", cascade = CascadeType.ALL)
     private List<Question> questions;
 
-
-    @ManyToMany(mappedBy = "reviews")
+    @ManyToMany(mappedBy = "forms")
     private List<Trainee> trainees;
 
-    @ManyToMany(mappedBy = "reviews")
+    @ManyToMany(mappedBy = "forms")
     private List<Supervisor> supervisors;
 
-    @ManyToMany(mappedBy = "reviews")
+    @ManyToMany(mappedBy = "forms")
     private List<SuperAdmin> superAdmins;
     // Getters and setters
 }

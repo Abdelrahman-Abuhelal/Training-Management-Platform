@@ -50,7 +50,7 @@ const AnnouncementForm = () => {
   };
 
   return (
-    <Paper elevation={3} sx={{ p: 4, m: 2 }}>
+    <Paper elevation={3} sx={{ p: 4, m: 10 }}>
       <Typography variant="h5" gutterBottom>
         Add New Announcement
       </Typography>
@@ -58,7 +58,7 @@ const AnnouncementForm = () => {
         <TextField
           fullWidth
           margin="normal"
-          label="Name"
+          label="Subject"
           name="name"
           value={announcement.name}
           onChange={handleInputChange}

@@ -1,18 +1,17 @@
 package exalt.training.management.service;
 
-import exalt.training.management.dto.FillReviewDto;
-import exalt.training.management.dto.ReviewCreationDto;
-import exalt.training.management.dto.ReviewDataDto;
+
+import exalt.training.management.dto.FillFormDto;
+import exalt.training.management.dto.FormCreationDto;
+import exalt.training.management.dto.FormDataDto;
 import exalt.training.management.exception.FormNotFoundException;
 import exalt.training.management.exception.InvalidUserException;
-import exalt.training.management.mapper.ReviewMapper;
+import exalt.training.management.mapper.FormMapper;
+import exalt.training.management.model.forms.Form;
+import exalt.training.management.model.forms.FormSubmission;
 import exalt.training.management.model.users.AppUser;
 import exalt.training.management.model.users.AppUserRole;
-import exalt.training.management.model.users.Supervisor;
-import exalt.training.management.model.users.Trainee;
 import exalt.training.management.model.forms.Question;
-import exalt.training.management.model.forms.Review;
-import exalt.training.management.model.forms.ReviewSubmission;
 import exalt.training.management.repository.*;
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
@@ -25,31 +24,31 @@ import java.util.List;
 
 @Service
 @Slf4j
-public class ReviewService {
+public class FormService {
 
 
-    private final ReviewRepository reviewRepository;
+    private final FormRepository formRepository;
     private final AdminService adminService;
-    private final ReviewMapper reviewMapper;
+    private final FormMapper formMapper;
     private final QuestionRepository questionRepository;
 
     private final TraineeRepository traineeRepository;
     private  final SupervisorRepository supervisorRepository;
 
-    private final ReviewSubmissionRepository reviewSubmissionRepository;
+    private final FormSubmissionRepository formSubmissionRepository;
 
     private final TraineeService traineeService;
 
 
     @Autowired
-    public ReviewService(ReviewRepository reviewRepository, AdminService adminService, QuestionRepository questionRepository, TraineeRepository traineeRepository, ReviewMapper reviewMapper, SupervisorRepository supervisorRepository, ReviewSubmissionRepository reviewSubmissionRepository, TraineeService traineeService) {
-        this.reviewRepository = reviewRepository;
+    public FormService(FormRepository formRepository, AdminService adminService, QuestionRepository questionRepository, TraineeRepository traineeRepository, FormMapper formMapper, SupervisorRepository supervisorRepository, FormSubmissionRepository formSubmissionRepository, TraineeService traineeService) {
+        this.formRepository = formRepository;
         this.adminService = adminService;
         this.questionRepository = questionRepository;
         this.traineeRepository = traineeRepository;
-        this.reviewMapper = reviewMapper;
+        this.formMapper = formMapper;
         this.supervisorRepository = supervisorRepository;
-        this.reviewSubmissionRepository = reviewSubmissionRepository;
+        this.formSubmissionRepository = formSubmissionRepository;
         this.traineeService = traineeService;
     }
 
@@ -86,58 +85,58 @@ public class ReviewService {
     }
 */
 
-    public String createReviewForm(ReviewCreationDto reviewDto){
-        List<Question> questions = reviewDto.getQuestions();
+    public String createForm(FormCreationDto formDto){
+        List<Question> questions = formDto.getQuestions();
 
-        Review review= reviewMapper.reviewCreationDtoToReview(reviewDto);
-        reviewRepository.save(review);
+        Form form= formMapper.formCreationDtoToForm(formDto);
+        formRepository.save(form);
 
-        questions.forEach(question -> question.setReview(review));
+        questions.forEach(question -> question.setForm(form));
         questionRepository.saveAll(questions);
 
         return "Review Form has been created";
     }
 
-    public ReviewDataDto getReviewById(Long reviewId) {
-        Review review = reviewRepository.findById(reviewId).orElseThrow(() -> new FormNotFoundException("Review no found with that ID"));
-        return ReviewDataDto.builder().id(review.getId()).title(review.getTitle()).description(review.getDescription()).questions(review.getQuestions()).build();
+    public FormDataDto getFormById(Long formId) {
+        Form form = formRepository.findById(formId).orElseThrow(() -> new FormNotFoundException("Form not found with that ID"));
+        return FormDataDto.builder().id(form.getId()).title(form.getTitle()).description(form.getDescription()).questions(form.getQuestions()).build();
     }
 
-    public List<ReviewDataDto> getAllReviews(){
-        List <Review> reviews = reviewRepository.findAll();
-        return reviewMapper.reviewCreationDtoListToReviewList(reviews);
+    public List<FormDataDto> getAllForms(){
+        List <Form> forms = formRepository.findAll();
+        return formMapper.formCreationDtoListToFormList(forms);
     }
 
-   public List <ReviewDataDto> getAllTraineeReviews(){
+   public List <FormDataDto> getAllTraineeForms(){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         var user = (AppUser) authentication.getPrincipal();
         var trainee = user.getTrainee();
         if(trainee == null){
             throw new InvalidUserException("User is not a Trainee");
         }
-        List <Review> reviews =traineeService.findReviewsByTraineeId(trainee.getId());
-       return reviewMapper.reviewCreationDtoListToReviewList(reviews);
+        List <Form> forms =traineeService.findFormsByTraineeId(trainee.getId());
+       return formMapper.formCreationDtoListToFormList(forms);
    }
 @Transactional
-   public String fillReview(FillReviewDto fillReviewDto,Long reviewId)
+   public String fillForm(FillFormDto fillFormDto, Long formId)
    {
        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
        var user = (AppUser) authentication.getPrincipal();
 
 
-       ReviewSubmission reviewSubmission=new ReviewSubmission();
-       Review review= reviewRepository.findById(reviewId).orElseThrow(()->new FormNotFoundException("No Review with this ID"));
-       reviewSubmission.setReview(review);
+       FormSubmission formSubmission=new FormSubmission();
+       Form form= formRepository.findById(formId).orElseThrow(()->new FormNotFoundException("No Review with this ID"));
+       formSubmission.setForm(form);
 
        if(user.getRole().equals(AppUserRole.TRAINEE)){
-           reviewSubmission.setTrainee(user.getTrainee());
+           formSubmission.setTrainee(user.getTrainee());
        }else if(user.getRole().equals(AppUserRole.SUPERVISOR)){
-       reviewSubmission.setSupervisor(user.getSupervisor());
+           formSubmission.setSupervisor(user.getSupervisor());
         }else if(user.getRole().equals(AppUserRole.SUPER_ADMIN)){
-           reviewSubmission.setSuperAdmin(user.getSuperAdmin());
+           formSubmission.setSuperAdmin(user.getSuperAdmin());
        }
-       reviewSubmission.setAnswers(fillReviewDto.getAnswers());
-       reviewSubmissionRepository.save(reviewSubmission);
+       formSubmission.setAnswers(fillFormDto.getAnswers());
+       formSubmissionRepository.save(formSubmission);
       return "Review has been updated";
    }
 

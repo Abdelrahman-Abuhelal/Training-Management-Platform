@@ -16,7 +16,7 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ReviewSubmission {
+public class FormSubmission {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -34,7 +34,7 @@ public class ReviewSubmission {
     private SuperAdmin superAdmin;
 
     @ManyToOne
-    private Review review;
+    private Form form;
 
     @OneToMany(cascade = CascadeType.ALL)
     private List<Answer> answers;

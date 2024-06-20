@@ -4,7 +4,7 @@ import exalt.training.management.dto.TraineeDataDto;
 import exalt.training.management.exception.*;
 import exalt.training.management.mapper.TraineeMapper;
 import exalt.training.management.model.*;
-import exalt.training.management.model.forms.Review;
+import exalt.training.management.model.forms.Form;
 import exalt.training.management.model.users.AppUser;
 import exalt.training.management.model.users.Trainee;
 import exalt.training.management.repository.AcademicGradesRepository;
@@ -83,9 +83,9 @@ public class TraineeService {
         return "Trainee Data Registered Successfully";
     }
 
-    public List<Review> findReviewsByTraineeId(Long traineeId) {
+    public List<Form> findFormsByTraineeId(Long traineeId) {
         return entityManager.createQuery(
-                        "SELECT r FROM Review r JOIN r.trainees t WHERE t.id = :traineeId", Review.class)
+                        "SELECT f FROM Form f JOIN f.trainees t WHERE t.id = :traineeId", Form.class)
                 .setParameter("traineeId", traineeId)
                 .getResultList();
     }

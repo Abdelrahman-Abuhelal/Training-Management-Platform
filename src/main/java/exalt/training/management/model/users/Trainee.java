@@ -3,8 +3,8 @@ package exalt.training.management.model.users;
 import com.fasterxml.jackson.annotation.*;
 import exalt.training.management.model.AcademicGrades;
 import exalt.training.management.model.BranchLocation;
-import exalt.training.management.model.forms.Review;
-import exalt.training.management.model.forms.ReviewSubmission;
+import exalt.training.management.model.forms.Form;
+import exalt.training.management.model.forms.FormSubmission;
 import exalt.training.management.model.users.AppUser;
 import exalt.training.management.model.users.Supervisor;
 import jakarta.persistence.*;
@@ -54,12 +54,12 @@ public class Trainee {
     private List<Supervisor> supervisors;
     @ManyToMany
     @JsonIgnore
-    private List<Review> reviews;
+    private List<Form> forms;
 
     @Nullable
     @OneToMany(mappedBy = "trainee", cascade = CascadeType.ALL)
     @JsonIgnore
-    private List<ReviewSubmission> reviewSubmissions;
+    private List<FormSubmission> formSubmissions;
 
     @OneToOne
     @JsonBackReference

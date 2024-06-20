@@ -23,20 +23,20 @@ import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { useNavigate } from "react-router-dom";
 
-const ReviewsList = () => {
+const FormsList = () => {
     const baseUrl = import.meta.env.VITE_PORT_URL;
-    const [reviews, setReviews] = useState([]);
+    const [forms, setForms] = useState([]);
     const navigate = useNavigate();
 
     useEffect(() => {
-        traineeReviews();
+        traineeForms();
       }, []);
     
-      const traineeReviews = async () => {
+      const traineeForms = async () => {
         try {
-          const response = await axios.get(`${baseUrl}/api/v1/trainee-operations/my-reviews`);
+          const response = await axios.get(`${baseUrl}/api/v1/trainee-operations/my-forms`);
           if (response.status === 200) {
-            setReviews(response.data);
+            setForms(response.data);
           }
         } catch (error) {
           console.log(error);
@@ -45,7 +45,7 @@ const ReviewsList = () => {
     
 
       const handleView = (item) => {
-        navigate(`/reviews/${item.id}`);
+        navigate(`/forms/${item.id}`);
       };
 
 
@@ -57,30 +57,30 @@ const ReviewsList = () => {
         <TableRow>
         <TableCell  variant="head">
             <h3 className="text-base font-semibold leading-7 text-gray-900">
-              Review ID
+              Form ID
             </h3>
           </TableCell>
           <TableCell  variant="head">
             <h3 className="text-base font-semibold leading-7 text-gray-900">
-              Review Title
+              Form Title
             </h3>
           </TableCell>
           <TableCell  variant="head">
             <h3 className="text-base font-semibold leading-7 text-gray-900">
-              Review Description
+              Form Description
             </h3>
           </TableCell>
         </TableRow>
       </TableHead>
       <TableBody>
-        {reviews.map((item) => (
+        {forms.map((item) => (
           <TableRow key={item.id} hover>
             <TableCell>{item.id}</TableCell>
             <TableCell>{item.title}</TableCell>
             <TableCell>{item.description}</TableCell>
             <TableCell>
               <IconButton size="small" onClick={() => handleView(item)} color="primary">
-                <ManageAccountsIcon />View Review
+                <ManageAccountsIcon />View Form
               </IconButton>
             </TableCell>
           </TableRow>
@@ -92,4 +92,4 @@ const ReviewsList = () => {
    </div> )
 }
 
-export default ReviewsList
+export default FormsList

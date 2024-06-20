@@ -2,7 +2,7 @@ package exalt.training.management.model.forms;
 
 import java.util.Arrays;
 
-public enum ReviewType {
+public enum FormType {
     // how to easily make new types from enum class
     TRAINING_FEEDBACK,
     SUPERVISOR_REVIEW,

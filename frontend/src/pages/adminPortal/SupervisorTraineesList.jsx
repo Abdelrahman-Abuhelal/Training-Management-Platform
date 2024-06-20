@@ -143,7 +143,7 @@ const Supervisor_Trainees_List = () => {
         </Grid>
         <Grid item>
           <Typography variant="h5" component="h2" gutterBottom>
-            {username} Trainees
+            {username}'s Trainees
           </Typography>
         </Grid>
         <Grid item>

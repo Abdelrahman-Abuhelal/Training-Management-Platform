@@ -1,8 +1,9 @@
 package exalt.training.management.model.users;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import exalt.training.management.model.forms.Review;
-import exalt.training.management.model.forms.ReviewSubmission;
+
+import exalt.training.management.model.forms.Form;
+import exalt.training.management.model.forms.FormSubmission;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.lang.Nullable;
@@ -34,9 +35,9 @@ public class Supervisor {
     private List<SuperAdmin> superAdmins;
     @Nullable
     @ManyToMany
-    private List<Review> reviews;
+    private List<Form> forms;
 
     @Nullable
     @OneToMany(mappedBy = "supervisor", cascade = CascadeType.ALL)
-    private List<ReviewSubmission> reviewSubmissions;
+    private List<FormSubmission> formSubmissions;
 }

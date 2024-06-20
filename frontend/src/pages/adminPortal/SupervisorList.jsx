@@ -196,7 +196,7 @@ const HR_Supervisors_List = () => {
   };
 
   return (
-    <div style={{ padding: "2rem" }}>
+    <div style={{ padding: "3rem" }}>
       <Grid container spacing={3} justifyContent="space-between" alignItems="center">
         <Grid item xs={12} sm={6}>
           <Typography variant="h5" component="h2">

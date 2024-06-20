@@ -1,9 +1,7 @@
 package exalt.training.management.controller;
 
 import exalt.training.management.dto.*;
-import exalt.training.management.model.forms.Review;
 import exalt.training.management.model.users.Trainee;
-import exalt.training.management.service.ReviewService;
 import exalt.training.management.service.SupervisorService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;

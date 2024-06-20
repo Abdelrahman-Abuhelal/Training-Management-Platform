@@ -58,7 +58,7 @@ public class AdminController {
 
 
     @Operation(summary = "Get All Users", security =  @SecurityRequirement(name = "loginAuth"))
-    @PreAuthorize("hasRole('SUPER_ADMIN')")
+    @PreAuthorize("hasAnyRole('SUPER_ADMIN','SUPERVISOR')")
     @GetMapping("/users")
     public ResponseEntity<List<AppUserDto>> getAllUsers(){
         List<AppUserDto> userList= adminService.getAllUsers();

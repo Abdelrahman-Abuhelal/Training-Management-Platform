@@ -1,8 +1,8 @@
 package exalt.training.management.model.users;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import exalt.training.management.model.forms.Review;
-import exalt.training.management.model.forms.ReviewSubmission;
+import exalt.training.management.model.forms.Form;
+import exalt.training.management.model.forms.FormSubmission;
 import exalt.training.management.model.users.AppUser;
 import jakarta.persistence.*;
 import lombok.*;
@@ -30,10 +30,10 @@ public class SuperAdmin {
 
     @Nullable
     @ManyToMany
-    private List<Review> reviews;
+    private List<Form> forms;
 
 
     @Nullable
     @OneToMany(mappedBy = "superAdmin", cascade = CascadeType.ALL)
-    private List<ReviewSubmission> reviewSubmissions;
+    private List<FormSubmission> reviewSubmissions;
 }

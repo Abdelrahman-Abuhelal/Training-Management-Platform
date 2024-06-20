@@ -6,7 +6,14 @@ ChartJS.register(ArcElement, Tooltip, Legend);
 
 const PieChartForAdmin = () => {
   return (
-    <div style={{ width: "400px", height: "400px" }}>
+    <div  style={{ 
+      display: "flex", 
+      justifyContent: "center", 
+      alignItems: "center", 
+      width: "400px", 
+      height: "400px",
+      margin: "0 auto"
+    }}>
       <Pie data={AdminChartPie} />
     </div>
   );

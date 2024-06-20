@@ -19,7 +19,7 @@ import SettingsIcon from '@mui/icons-material/Settings';
 const routes = [
   { path: '/dashboard', name: 'Dashboard', icon: <SpaceDashboardIcon /> },
   { path: '/profile', name: 'Profile', icon: <AccountCircleIcon /> },
-  { path: '/reviews', name: 'Reviews', icon: <ListAltIcon /> },
+  { path: '/forms', name: 'Forms', icon: <ListAltIcon /> },
   { path: '/change-password', name: 'Settings', icon: <SettingsIcon /> }
 
 ];

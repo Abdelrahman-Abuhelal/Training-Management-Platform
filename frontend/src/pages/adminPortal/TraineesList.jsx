@@ -262,8 +262,8 @@ const TraineesList = () => {
             variant="contained"
             color="primary"
             onClick={handleAssignToSupervisor}
-            disabled={selectedTrainees.length === 0}
-          >
+            disabled={selectedTrainees.length !== 1}
+            >
             Assign to Supervisor
           </Button>
         </div>

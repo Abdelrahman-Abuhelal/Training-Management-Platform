@@ -14,23 +14,22 @@ import Button from "@mui/material/Button";
 import ButtonAppBar from "../../components/trainee/NavBar";
 import { useParams } from "react-router-dom";
 
-const FillReview = () => {
-  const { reviewId } = useParams();
+const FillForm = () => {
+  const { formId } = useParams();
   const baseUrl = import.meta.env.VITE_PORT_URL;
   const [showDetailsConfirmation, setShowDetailsConfirmation] = useState(false);
   const [formData, setFormData] = useState({
     title: "",
     description: "",
-    targetAudience: "",
     questions: [],
   });
   const [answers, setAnswers] = useState([]); // State to hold answers
 
   useEffect(() => {
-    const reviewFormById = async () => {
+    const getFormById = async () => {
       try {
         const response = await axios.get(
-          `${baseUrl}/api/v1/reviews/${reviewId}`
+          `${baseUrl}/api/v1/forms/${formId}`
         );
         if (response.status === 200) {
           setFormData(response.data);
@@ -47,8 +46,8 @@ const FillReview = () => {
       }
     };
 
-    reviewFormById();
-  }, [reviewId]);
+    getFormById();
+  }, [formId]);
 
   const handleInputChange = (event, questionId) => {
     const { value } = event.target;
@@ -93,11 +92,11 @@ const FillReview = () => {
 
     try {
       const response = await axios.put(
-        `${baseUrl}/api/v1/reviews/${reviewId}`,
+        `${baseUrl}/api/v1/forms/${formId}`,
         { answers }
       );
       if (response.status === 200) {
-        console.log("Review updated by admin: ", response.data);
+        console.log("Form updated by admin: ", response.data);
       }
     } catch (error) {
       console.error("Error:", error);
@@ -217,7 +216,7 @@ const FillReview = () => {
               fontFamily: "cursive",
             }}
           >
-            Review Form
+           Form
           </span>
           <br />
           <Typography variant="body1" gutterBottom>
@@ -256,7 +255,7 @@ const FillReview = () => {
                 {renderQuestion(question)}
               </div>
             ))}
-          <Button type="submit">Send Review</Button>
+          <Button type="submit">Send Form</Button>
         </form>
         {showDetailsConfirmation && (
           <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-75">
@@ -284,4 +283,4 @@ const FillReview = () => {
   );
 };
 
-export default FillReview;
+export default FillForm;

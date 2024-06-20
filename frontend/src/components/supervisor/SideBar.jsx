@@ -22,7 +22,7 @@ const routes = [
   { path: '/my-trainees', name: 'My Trainees', icon: <AccountCircleIcon /> },
   { path: '/assign-task', name: 'Assign Task', icon: <AddTaskIcon /> },
   { path: '/add-resource', name: 'Add Resource', icon: <NoteAddIcon /> },
-  { path: '/reviews', name: 'Reviews', icon: <ListAltIcon /> },
+  { path: '/forms', name: 'Forms', icon: <ListAltIcon /> },
   { path: '/change-password', name: 'Settings', icon: <SettingsIcon /> }
 
 ];
