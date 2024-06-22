@@ -23,17 +23,15 @@ public class TraineeService {
 
     private final TraineeRepository traineeRepository;
     private final TraineeMapper traineeMapper;
-    private final EntityManager entityManager;
 
     private final AcademicGradesRepository academicGradesRepository;
 
 
     public TraineeService(TraineeRepository traineeRepository,
-                          TraineeMapper traineeMapper, EntityManager entityManager,
+                          TraineeMapper traineeMapper,
                           AcademicGradesRepository academicGradesRepository) {
         this.traineeRepository = traineeRepository;
         this.traineeMapper = traineeMapper;
-        this.entityManager = entityManager;
         this.academicGradesRepository = academicGradesRepository;
     }
 
@@ -83,12 +81,12 @@ public class TraineeService {
         return "Trainee Data Registered Successfully";
     }
 
-    public List<Form> findFormsByTraineeId(Long traineeId) {
+/*    public List<Form> findFormsByTraineeId(Long traineeId) {
         return entityManager.createQuery(
                         "SELECT f FROM Form f JOIN f.trainees t WHERE t.id = :traineeId", Form.class)
                 .setParameter("traineeId", traineeId)
                 .getResultList();
-    }
+    }*/
 
 
 }

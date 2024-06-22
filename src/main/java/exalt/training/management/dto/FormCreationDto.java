@@ -20,7 +20,6 @@ public class FormCreationDto {
 
     private String description;
 
-    @OneToMany(mappedBy = "form", cascade = CascadeType.ALL)
     private List<Question> questions;
 
 }

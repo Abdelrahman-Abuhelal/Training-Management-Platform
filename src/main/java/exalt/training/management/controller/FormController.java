@@ -3,11 +3,14 @@ package exalt.training.management.controller;
 import exalt.training.management.dto.FillFormDto;
 import exalt.training.management.dto.FormCreationDto;
 import exalt.training.management.dto.FormDataDto;
+import exalt.training.management.dto.FormDto;
+import exalt.training.management.model.forms.Form;
 import exalt.training.management.service.FormService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -30,27 +33,31 @@ public class FormController {
         return ResponseEntity.ok(formService.createForm(formCreationDto));
     }
 
+    @GetMapping()
+    @PreAuthorize("hasAnyRole('SUPER_ADMIN')")
+    @Operation(summary = "Get All Forms (Admin Only)" , security =  @SecurityRequirement(name = "loginAuth"))
+    public ResponseEntity <List<FormDto>> getAllForms() {
+        return ResponseEntity.ok(formService.getAllForms());
+    }
 
     @GetMapping("/{formId}")
     @PreAuthorize("hasAnyRole('TRAINEE','SUPERVISOR','SUPER_ADMIN')")
     @Operation(summary = "Get Form Info By ID" , security =  @SecurityRequirement(name = "loginAuth"))
-    public ResponseEntity<FormDataDto> getFormById(@PathVariable Long formId) {
+    public ResponseEntity<FormCreationDto> getFormById(@PathVariable Long formId) {
         return ResponseEntity.ok(formService.getFormById(formId));
     }
-
-    @GetMapping()
+    @PutMapping(value = "/{formId}", consumes = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasAnyRole('SUPER_ADMIN')")
-    @Operation(summary = "Get All Forms (Admin Only)" , security =  @SecurityRequirement(name = "loginAuth"))
-    public ResponseEntity <List<FormDataDto>> getAllForms() {
-        return ResponseEntity.ok(formService.getAllForms());
+    @Operation(summary = "Update Form Info" , security =  @SecurityRequirement(name = "loginAuth"))
+    public ResponseEntity<String> updateForm(@PathVariable Long formId, @RequestBody @Valid FormDataDto formDataDto) {
+        return ResponseEntity.ok(formService.updateForm(formId,formDataDto));
     }
 
-
-    @PutMapping("/{formId}")
-    @PreAuthorize("hasAnyRole('TRAINEE','SUPERVISOR','SUPER_ADMIN')")
-    public ResponseEntity <String> fillFormById(@RequestBody FillFormDto fillFormDto, @PathVariable Long formId){
-        return ResponseEntity.ok(formService.fillForm(fillFormDto,formId));
-    }
+//    @PutMapping("/{formId}")
+//    @PreAuthorize("hasAnyRole('TRAINEE','SUPERVISOR','SUPER_ADMIN')")
+//    public ResponseEntity <String> fillFormById(@RequestBody FillFormDto fillFormDto, @PathVariable Long formId){
+////        return ResponseEntity.ok(formService.fillForm(fillFormDto,formId));
+//    }
 
 
 /*

@@ -1,5 +1,6 @@
 package exalt.training.management.model.forms;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
@@ -25,12 +26,12 @@ public class Question {
 
     private String type;
 
-    @ManyToOne
-    @JoinColumn(name = "form_id")
-    private Form form;
-
     @ElementCollection
     @CollectionTable(name = "question_options", joinColumns = @JoinColumn(name = "question_id"))
     private List<String> options;
 
+    @ManyToOne
+    @JoinColumn(name = "form_id")
+    @JsonBackReference
+    private Form form;
 }

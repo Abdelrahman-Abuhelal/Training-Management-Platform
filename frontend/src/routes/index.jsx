@@ -26,8 +26,8 @@ import TraineeProfileView from "../pages/supervisorPortal/TraineeProfileView.jsx
 import AssignTask from "../pages/supervisorPortal/AssignTask.jsx";
 import Resources from "../pages/supervisorPortal/Resources.jsx";
 import AnnouncementForm from "../pages/adminPortal/CreateAnnounments.jsx";
-
-// import GoogleDriveAuth from "../pages/supervisorPortal/Resources.jsx"
+import FormTemplates from "../pages/adminPortal/FormTemplates.jsx"
+import FormTemplatePage from "../pages/adminPortal/FormTemplatePage.jsx"
 
 const Routes = () => {
   const { user } = useAuth();
@@ -174,9 +174,18 @@ const Routes = () => {
               element: <FormBuilder />,
             },
             {
+              path:"/form-templates",
+              element: <FormTemplates />,
+            },
+            {
+              path:"/form-templates/:formId",
+              element: <FormTemplatePage />,
+            },
+            {
               path: "/edit-trainee/:userId",
               element: <EditTrainee />,
             },
+    
             {
               path: "/create-users",
               element: <CreateUsersForm />,

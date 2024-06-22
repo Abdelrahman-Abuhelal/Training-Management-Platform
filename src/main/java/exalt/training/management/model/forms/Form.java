@@ -1,5 +1,8 @@
 package exalt.training.management.model.forms;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import exalt.training.management.model.users.AppUser;
 import exalt.training.management.model.users.SuperAdmin;
 import exalt.training.management.model.users.Supervisor;
 import exalt.training.management.model.users.Trainee;
@@ -11,11 +14,11 @@ import java.util.List;
 @Entity
 @Table
 @Data
-@ToString
+@ToString(exclude = {"questions", "usersAssignedTo"})
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(exclude = {"questions","trainees","supervisors","superAdmins"})
+@EqualsAndHashCode(exclude = {"questions","usersAssignedTo"})
 public class Form {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,15 +29,17 @@ public class Form {
     private String description;
 
     @OneToMany(mappedBy = "form", cascade = CascadeType.ALL)
+    @JsonManagedReference
     private List<Question> questions;
 
-    @ManyToMany(mappedBy = "forms")
-    private List<Trainee> trainees;
+    @ManyToMany
+    @JoinTable(
+            name = "user_form",
+            joinColumns = @JoinColumn(name = "form_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id")
+    )
+    @JsonManagedReference
+    private List<AppUser> usersAssignedTo;
 
-    @ManyToMany(mappedBy = "forms")
-    private List<Supervisor> supervisors;
-
-    @ManyToMany(mappedBy = "forms")
-    private List<SuperAdmin> superAdmins;
     // Getters and setters
 }

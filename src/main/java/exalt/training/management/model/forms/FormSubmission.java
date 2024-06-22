@@ -1,5 +1,6 @@
 package exalt.training.management.model.forms;
 
+import exalt.training.management.model.users.AppUser;
 import exalt.training.management.model.users.SuperAdmin;
 import exalt.training.management.model.users.Supervisor;
 import exalt.training.management.model.users.Trainee;
@@ -23,15 +24,7 @@ public class FormSubmission {
 
     @ManyToOne
     @Nullable
-    private Trainee trainee;
-
-    @ManyToOne
-    @Nullable
-    private Supervisor supervisor;
-
-    @ManyToOne
-    @Nullable
-    private SuperAdmin superAdmin;
+    private AppUser user;
 
     @ManyToOne
     private Form form;

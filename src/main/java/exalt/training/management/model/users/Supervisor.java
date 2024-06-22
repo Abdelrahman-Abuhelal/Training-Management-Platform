@@ -37,7 +37,5 @@ public class Supervisor {
     @ManyToMany
     private List<Form> forms;
 
-    @Nullable
-    @OneToMany(mappedBy = "supervisor", cascade = CascadeType.ALL)
-    private List<FormSubmission> formSubmissions;
+
 }

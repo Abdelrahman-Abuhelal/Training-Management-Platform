@@ -22,6 +22,7 @@ const routes = [
   { path: "/dashboard", name: "Dashboard", icon: <SpaceDashboardIcon /> },
   { path: "/trainees", name: "Trainees", icon: <GroupsIcon /> },
   { path: "/supervisors", name: "Supervisors", icon: <AccountBoxIcon /> },
+  { path: "/form-templates", name: "Form Templates", icon: <ListAltIcon /> },
   { path: "/create-forms", name: "Create Forms", icon: <ListAltIcon /> },
   { path: "/create-announcements", name: "Create Announcements", icon: <CampaignIcon /> },
   { path: "/create-users", name: "Create Users", icon: <GroupAddIcon /> },

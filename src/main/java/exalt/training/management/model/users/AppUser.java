@@ -1,7 +1,10 @@
 package exalt.training.management.model.users;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import exalt.training.management.model.*;
+import exalt.training.management.model.forms.Form;
+import exalt.training.management.model.forms.FormSubmission;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
 import org.springframework.lang.Nullable;
@@ -18,7 +21,7 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(exclude = {"trainee", "supervisor", "superAdmin", "tokens"})
+@EqualsAndHashCode(exclude = {"trainee", "supervisor", "superAdmin", "tokens","forms"})
 public class AppUser implements UserDetails {
 
     @Id
@@ -72,6 +75,15 @@ public class AppUser implements UserDetails {
     @Nullable
     @JsonManagedReference
     private List<Token> tokens;
+
+    @Nullable
+    @ManyToMany(mappedBy = "usersAssignedTo", cascade = CascadeType.ALL)
+    private List<Form> forms;
+
+
+//    @Nullable
+//    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+//    private List<FormSubmission> formSubmissions;
 
     @Override
     public String toString() {

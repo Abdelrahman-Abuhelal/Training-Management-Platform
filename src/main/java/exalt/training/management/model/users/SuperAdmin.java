@@ -28,12 +28,6 @@ public class SuperAdmin {
     @ToString.Exclude
     private AppUser user;
 
-    @Nullable
-    @ManyToMany
-    private List<Form> forms;
 
 
-    @Nullable
-    @OneToMany(mappedBy = "superAdmin", cascade = CascadeType.ALL)
-    private List<FormSubmission> reviewSubmissions;
 }

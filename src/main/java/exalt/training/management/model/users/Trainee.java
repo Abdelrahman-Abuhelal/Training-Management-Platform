@@ -56,10 +56,7 @@ public class Trainee {
     @JsonIgnore
     private List<Form> forms;
 
-    @Nullable
-    @OneToMany(mappedBy = "trainee", cascade = CascadeType.ALL)
-    @JsonIgnore
-    private List<FormSubmission> formSubmissions;
+
 
     @OneToOne
     @JsonBackReference
