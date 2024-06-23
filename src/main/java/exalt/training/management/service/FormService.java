@@ -70,10 +70,11 @@ public class FormService {
     }
 */
 
-    public String createForm(FormCreationDto formDto){
-        List<Question> questions = formDto.getQuestions();
+    public String createForm(FormDataDto formDataDto){
+        List<Question> questions = questionMapper.questionDtoListToQuestionList(formDataDto.getQuestions());
 
-        Form form= formMapper.formCreationDtoToForm(formDto);
+        Form form= formMapper.formDataDtoToForm(formDataDto);
+        form.setQuestions(questions);
         formRepository.save(form);
 
         questions.forEach(question -> question.setForm(form));
@@ -100,14 +101,11 @@ public class FormService {
 
         questionRepository.deleteAllByForm(form);
 
-        // Map DTO questions to entities
         List<Question> questions = questionMapper.questionDtoListToQuestionList(formDataDto.getQuestions());
 
-        // Update form details
         Form updatedForm = formMapper.formDataDtoToForm(formDataDto, form);
         updatedForm.setQuestions(questions);
 
-        // Save form and questions
         formRepository.save(updatedForm);
         questions.forEach(question -> question.setForm(updatedForm));
         questionRepository.saveAll(questions);

@@ -29,8 +29,8 @@ public class FormController {
     @PostMapping( "/create-form")
     @PreAuthorize("hasAnyRole('SUPERVISOR','SUPER_ADMIN')")
     @Operation(summary = "Create Form by Admin" , security =  @SecurityRequirement(name = "loginAuth"))
-    public ResponseEntity<String> createForm(@RequestBody @Valid FormCreationDto formCreationDto) {
-        return ResponseEntity.ok(formService.createForm(formCreationDto));
+    public ResponseEntity<String> createForm(@RequestBody @Valid FormDataDto formDataDto) {
+        return ResponseEntity.ok(formService.createForm(formDataDto));
     }
 
     @GetMapping()

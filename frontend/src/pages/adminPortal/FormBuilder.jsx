@@ -11,13 +11,17 @@ import Select from "@mui/material/Select";
 import Typography from "@mui/material/Typography";
 import Paper from "@mui/material/Paper";
 import InputLabel from '@mui/material/InputLabel';
-
+import {  Dialog, 
+  DialogActions, 
+  DialogContent, 
+  DialogContentText, 
+  DialogTitle} from "@mui/material";
 const FormBuilder = () => {
   const baseUrl = import.meta.env.VITE_PORT_URL;
+  const [showConfirmation, setShowConfirmation] = useState(false);
 
   const {
     register,
-    handleSubmit,
     formState: { errors }
   } = useForm();
 
@@ -72,8 +76,7 @@ const FormBuilder = () => {
     try {
       const response = await axios.post(
         `${baseUrl}/api/v1/forms/create-form`,
-        JSON.stringify(formData),
-        { headers: { "Content-Type": "application/json" } }
+        formData
       );
       if (response.status === 200) {
         const formMessage = response.data;
@@ -84,8 +87,10 @@ const FormBuilder = () => {
     }
   };
 
-  const onSubmit = (data) => {
+  const handleConfirm = async (e,data) => {
+    e.preventDefault();
     console.log("Form submitted:", data);
+    setShowConfirmation(false);
     formCreationAPI();
     setFormData({
       title: "",
@@ -116,6 +121,16 @@ const FormBuilder = () => {
     );
   };
 
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    setShowConfirmation(true);
+  };
+
+  const handleCancel = () => {
+    setShowConfirmation(false);
+  };
+
+
   return (
     <div style={{ display: "flex", justifyContent: "center"}}>
       <Paper elevation={3} sx={{ p: 4, m: 6 , width: "70%", maxWidth: 1000}} >
@@ -126,7 +141,7 @@ const FormBuilder = () => {
          Create any needed form by filling the required details..
         </Typography>
         <br />
-        <form onSubmit={handleSubmit(onSubmit)}>
+        <form onSubmit={handleSubmit}>
           <TextField
             {...register("title", { required: true })}
             label="Form Title"
@@ -206,6 +221,22 @@ const FormBuilder = () => {
             Create Form
           </Button>
         </form>
+        <Dialog open={showConfirmation} onClose={handleCancel}>
+        <DialogTitle>Confirmation</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            Are you sure you want to create this form?
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCancel} color="primary">
+            Cancel
+          </Button>
+          <Button onClick={handleConfirm} color="primary">
+            Confirm
+          </Button>
+        </DialogActions>
+      </Dialog>
       </Paper>
     </div>
   );

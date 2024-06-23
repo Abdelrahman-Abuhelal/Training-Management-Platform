@@ -54,6 +54,11 @@ public interface FormMapper {
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     Form formDataDtoToForm(FormDataDto formDataDto, @MappingTarget Form form);
 
+    @Mapping(source = "title",target = "title")
+    @Mapping(source = "description",target = "description")
+    @Mapping(source = "questions",target = "questions")
+    Form formDataDtoToForm(FormDataDto formDataDto);
+
 
 /*    @Mapping(source = "questions",target = "questions")
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)

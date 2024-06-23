@@ -163,7 +163,8 @@ const AssignTask = () => {
   });
 
   return (
-    <Paper elevation={3} sx={{ p: 4, m: 2 }}>
+    <div style={{ display: "flex", justifyContent: "center"}}>
+<Paper elevation={3} sx={{ p: 3, m: 6 , width: "70%", maxWidth: 1000}} >
 
       <Typography  variant="h4" sx={{ marginBottom: '2rem' }}>&nbsp;&nbsp;Assign Task</Typography>
       <Box sx={{ display: "flex", flexWrap: "wrap", gap: 2 }}>
@@ -291,6 +292,7 @@ const AssignTask = () => {
         Assign Task
       </Button>
     </Paper>
+    </div>
   );
 };
 
