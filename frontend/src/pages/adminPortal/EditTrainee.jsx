@@ -1,9 +1,23 @@
 import React, { useState, useEffect } from "react";
-import ButtonAppBar from "../../components/admin/NavBar";
 import axios from "axios";
 import { useParams } from "react-router-dom";
-import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { useNavigate } from "react-router-dom";
+import {
+  Container,
+  Typography,
+  TextField,
+  Select,
+  MenuItem,
+  Box,
+  FormControl,
+  InputLabel,
+  Button,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+} from "@mui/material";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 
 const EditTrainee = () => {
   const navigate = useNavigate();
@@ -71,6 +85,12 @@ const EditTrainee = () => {
         setUniversityName(userData.universityName || "");
         setUniversityMajor(userData.universityMajor || "");
         setExpectedGraduationDate(userData.expectedGraduationDate || "");
+        setExpectedGraduationYear(
+          userData.expectedGraduationDate.slice(0, 4) || ""
+        );
+        setExpectedGraduationMonth(
+          userData.expectedGraduationDate.slice(-2) || ""
+        );
         setTrainingField(userData.trainingField || "");
         setBranchLocation(userData.branchLocation || "");
       } else {
@@ -141,6 +161,22 @@ const EditTrainee = () => {
       console.log("Response:", response.data);
     } catch (error) {
       console.error("Error:", error);
+    }
+  };
+
+  const handlePhoneNumberChange = (e) => {
+    let value = e.target.value;
+    if (/^05\d*$/.test(value)) {
+      setPhoneNumber(value);
+    } else if (value === "" || /^05\d*$/.test(value.slice(0, 3))) {
+      setPhoneNumber(value);
+    }
+  };
+
+  const handleIdNumberChange = (e) => {
+    const value = e.target.value;
+    if (/^\d{0,9}$/.test(value)) {
+      setIdNumber(value);
     }
   };
 
@@ -254,7 +290,7 @@ const EditTrainee = () => {
         alert("Please remove courses with empty fields.");
         return;
       }
-      if (course.grade < 60|| course.grade > 100) {
+      if (course.grade < 60 || course.grade > 100) {
         alert("Grades must be between 60-100 ");
         return;
       }
@@ -275,557 +311,312 @@ const EditTrainee = () => {
   // };
 
   return (
-    <div>
-      <div style={{ paddingLeft: "280px" }}>
-        <div className="content-header">
-          <div className="container-fluid">
-            <div className="row mb-2">
-              <div className="col-sm-6">
-                {/* <h1 className="m-0">Profile</h1>*/}
-              </div>
-              <div className="col-sm-6">
-                <ol className="breadcrumb float-sm-right">
-                  <li className="breadcrumb-item">
-                    <a href="/trainees">Trainees List</a>
-                  </li>
-                  <li className="breadcrumb-item active">Edit Profile</li>
-                </ol>
-              </div>
-            </div>
-          </div>
-        </div>
-        <section className="content">
-          <div className="container-fluid">
-            {/* trianing form */}
-            <form className="px-4" onSubmit={handleSubmit}>
-              <div className="space-y-12">
-                <div className="border-b border-gray-900/10 pb-12">
-                  <button type="button" onClick={navigateBack}>
-                    <ArrowBackIcon />
-                    &nbsp;&nbsp;Back to Trainees
-                  </button>
-                </div>
-                <div className="border-b border-gray-900/10 pb-12">
-                  <h2 className="text-base font-semibold leading-7 text-gray-900">
-                    {userFullName} Profile
-                  </h2>
-                  <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
-                    <div className="sm:col-span-5 ">
-                      <label
-                        htmlFor="username"
-                        className="block text-sm font-medium leading-6 text-gray-900"
-                      >
-                        Username
-                      </label>
-                      <div className="mt-2">
-                        <input
-                          type="text"
-                          name="username"
-                          value={username}
-                          onChange={(e) => setUsername(e.target.value)}
-                          id="username"
-                          autoComplete="username"
-                          className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                          disabled
-                        />
-                      </div>
-                    </div>
+    <Container maxWidth="lg">
+      <Typography
+        variant="h5"
+        gutterBottom
+        align="center"
+        sx={{
+          marginBottom: "1rem",
+          marginTop: "1rem",
+        }}
+      >
+        {" "}
+        Edit Trainee Profile
+      </Typography>
 
-                    <div className="sm:col-span-5 ">
-                      <label
-                        htmlFor="arabicName"
-                        className="block text-sm font-medium leading-6 text-gray-900"
-                      >
-                        Full Name in Arabic (الاسم الرباعي كما في الهوية
-                        الشخصية)
-                      </label>
-                      <div className="mt-2">
-                        <input
-                          type="text"
-                          name="arabicName"
-                          value={fullNameInArabic}
-                          onChange={(e) => setFullNameInArabic(e.target.value)}
-                          id="arabicName"
-                          autoComplete="arabicName"
-                          dir="rtl"
-                          lang="ar"
-                          className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                        />
-                      </div>
-                    </div>
+      <Button onClick={navigateBack} startIcon={<ArrowBackIcon />}>
+        Back to Trainees
+      </Button>
 
-                    <div className="sm:col-span-2">
-                      <label
-                        htmlFor="city"
-                        className="block text-sm font-medium leading-6 text-gray-900"
-                      >
-                        Nearest City
-                      </label>
-                      <select
-                        id="city"
-                        name="city"
-                        autoComplete="city-name"
-                        value={city}
-                        onChange={(e) => setCity(e.target.value)}
-                        className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6"
-                      >
-                        <option value=""></option>
-                        <option value="Ramallah">Ramallah</option>
-                        <option value="Tulkarm">Tulkarm</option>
-                        <option value="Bethlehem">Bethlehem</option>
-                        <option value="Nablus">Nablus</option>
-                        <option value="Jerusalem">Jerusalem</option>
-                        <option value="Jenin">Jenin</option>
-                        <option value="Jericho">Jericho</option>
-                        <option value="Hebron">Hebron</option>
-                        <option value="Qalqilya">Qalqilya</option>
-                        <option value="Tubas">Tubas</option>
-                        <option value="Salfit">Salfit</option>
-                        <option value="OTHER">Other</option>
-                      </select>
-                    </div>
+      <form onSubmit={handleSubmit}>
+        <FormControl fullWidth>
+          <Typography variant="h6" gutterBottom>
+            {userFullName} Profile
+          </Typography>
 
-                    <div className="sm:col-span-3">
-                      <label
-                        htmlFor="Address"
-                        className="block text-sm font-medium leading-6 text-gray-900"
-                      >
-                        Address ( Village / Street name )
-                      </label>
-                      <div className="mt-2">
-                        <input
-                          type="text"
-                          name="address"
-                          value={address}
-                          onChange={(e) => setAddress(e.target.value)}
-                          id="address"
-                          autoComplete="address"
-                          className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                        />
-                      </div>
-                    </div>
-                    <div className="sm:col-span-2">
-                      <label
-                        htmlFor="university"
-                        className="block text-sm font-medium leading-6 text-gray-900"
-                      >
-                        ID type
-                      </label>
-                      <div className="mt-2">
-                        <select
-                          id="idType"
-                          name="idType"
-                          value={idType}
-                          onChange={(e) => setIdType(e.target.value)}
-                          autoComplete="ID-Type"
-                          className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6"
-                        >
-                          <option value=""></option>
-                          <option value="Westbank">Westbank - ضفة</option>
-                          <option value="Jerusalem">Jerusalem - قدس</option>
-                          <option>Other</option>
-                        </select>
-                      </div>
-                    </div>
-                    <div className="sm:col-span-3">
-                      <label
-                        htmlFor="IdNumber"
-                        className="block text-sm font-medium leading-6 text-gray-900"
-                      >
-                        ID Number
-                      </label>
-                      <div className="mt-2">
-                        <input
-                          type="number"
-                          name="IdNumber"
-                          value={idNumber}
-                          onChange={(e) => setIdNumber(e.target.value)}
-                          id="IdNumber"
-                          autoComplete="IdNumber"
-                          inputmode="numeric"
-                          className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                        />
-                      </div>
-                    </div>
+          <Box mb={2}>
+            <TextField
+              fullWidth
+              label="Username"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              disabled
+            />
+          </Box>
 
-                    <div className="sm:col-span-5">
-                      <label
-                        htmlFor="phoneNumber"
-                        className="block text-sm font-medium leading-6 text-gray-900"
-                      >
-                        Phone Number
-                      </label>
-                      <div className="mt-2">
-                        <input
-                          type="text"
-                          name="phone-number"
-                          id="phone-number"
-                          value={phoneNumber}
-                          onChange={(e) => setPhoneNumber(e.target.value)}
-                          autoComplete="phone-number"
-                          className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                        />
-                      </div>
-                    </div>
+          <Box mb={2}>
+            <TextField
+              fullWidth
+              variant="outlined"
+              label="Full Name in Arabic (الاسم الرباعي كما في الهوية الشخصية)"
+              value={fullNameInArabic}
+              onChange={(e) => setFullNameInArabic(e.target.value)}
+              inputProps={{ dir: "rtl", lang: "ar" }}
+            />
+          </Box>
+          <Box mb={2}>
+            <FormControl fullWidth>
+              <InputLabel>Nearest City</InputLabel>
+              <Select
+                value={city}
+                onChange={(e) => setCity(e.target.value)}
+                label="Nearest City"
+              >
+                <MenuItem value=""></MenuItem>
+                <MenuItem value="Ramallah">Ramallah</MenuItem>
+                <MenuItem value="Tulkarm">Tulkarm</MenuItem>
+                <MenuItem value="Bethlehem">Bethlehem</MenuItem>
+                <MenuItem value="Nablus">Nablus</MenuItem>
+                <MenuItem value="Jerusalem">Jerusalem</MenuItem>
+                <MenuItem value="Jenin">Jenin</MenuItem>
+                <MenuItem value="Jericho">Jericho</MenuItem>
+                <MenuItem value="Hebron">Hebron</MenuItem>
+                <MenuItem value="Qalqilya">Qalqilya</MenuItem>
+                <MenuItem value="Tubas">Tubas</MenuItem>
+                <MenuItem value="Salfit">Salfit</MenuItem>
+                <MenuItem value="OTHER">Other</MenuItem>
+              </Select>
+            </FormControl>
+          </Box>
 
-                    <div className="sm:col-span-2">
-                      <label
-                        htmlFor="university"
-                        className="block text-sm font-medium leading-6 text-gray-900"
-                      >
-                        University Name
-                      </label>
-                      <div className="mt-2">
-                        <select
-                          id="university"
-                          name="university"
-                          value={universityName}
-                          onChange={(e) => setUniversityName(e.target.value)}
-                          autoComplete="university-name"
-                          className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6"
-                        >
-                          <option value=""></option>
-                          <option value="Al-Quds University">
-                            Al-Quds University
-                          </option>
-                          <option value="Birzeit University">
-                            Birzeit University
-                          </option>
-                          <option value="Bethlehem University">
-                            Bethlehem University
-                          </option>
-                          <option value="Al-Quds Open University">
-                            Al-Quds Open University
-                          </option>
-                          <option value="Arab American University">
-                            Arab American University
-                          </option>
-                          <option value="Hebron University">
-                            Hebron University
-                          </option>
-                          <option value="Ibrahimieh College">
-                            Ibrahimieh College
-                          </option>
-                          <option value="Khodori Institute, Tulkarm">
-                            Khodori Institute, Tulkarm
-                          </option>
-                          <option value="Palestine Ahliya University">
-                            Palestine Ahliya University
-                          </option>
-                          <option value="Palestine Polytechnic University">
-                            Palestine Polytechnic University
-                          </option>
-                          <option>Other</option>
-                        </select>
-                      </div>
-                    </div>
-                    <div className="sm:col-span-3">
-                      <label
-                        htmlFor="major"
-                        className="block text-sm font-medium leading-6 text-gray-900"
-                      >
-                        University Major
-                      </label>
-                      <div className="mt-2">
-                        <select
-                          id="major"
-                          name="major"
-                          autoComplete="major-name"
-                          value={universityMajor}
-                          onChange={(e) => setUniversityMajor(e.target.value)}
-                          className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6"
-                        >
-                          <option value=""></option>
-                          <option value="Computer_Engineering">
-                            Computer Engineering
-                          </option>
-                          <option value="Computer_Science">
-                            Computer Science
-                          </option>
-                          <option value="Information_Technology">
-                            Information Technology
-                          </option>
-                          <option value="Electrical_Engineering">
-                            Electrical Engineering
-                          </option>
-                          <option value="Other">Other</option>
-                        </select>
-                      </div>
-                    </div>
-                    <div className="sm:col-span-3">
-                      <label
-                        htmlFor="graudation-date"
-                        className="block text-sm font-medium leading-6 text-gray-900"
-                      >
-                        Graduation Date (Expected)
-                      </label>
-                      <div className="mt-2 flex space-x-2">
-                        <select
-                          id="graduation-month"
-                          name="graduation-month"
-                          value={expectedGraduationMonth}
-                          onChange={handleMonthChange}
-                          className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6"
-                        >
-                          <option value="" disabled>
-                            Select Month
-                          </option>
-                          <option value="01">January</option>
-                          <option value="02">February</option>
-                          <option value="03">March</option>
-                          <option value="04">April</option>
-                          <option value="05">May</option>
-                          <option value="06">June</option>
-                          <option value="07">July</option>
-                          <option value="08">August</option>
-                          <option value="09">September</option>
-                          <option value="10">October</option>
-                          <option value="11">November</option>
-                          <option value="12">December</option>
-                        </select>
-                        <select
-                          id="graduation-year"
-                          name="graduation-year"
-                          value={expectedGraduationYear}
-                          onChange={handleYearChange}
-                          className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6"
-                        >
-                          <option value="" disabled>
-                            Select Year
-                          </option>
-                          {[...Array(15)].map((_, index) => (
-                            <option key={index} value={2022 + index}>
-                              {2022 + index}
-                            </option>
-                          ))}
-                          {/* Add options for years here */}
-                        </select>
-                      </div>
-                    </div>
-                    <div className="sm:col-span-3">
-                      <label
-                        htmlFor="branch"
-                        className="block text-sm font-medium leading-6 text-gray-900"
-                      >
-                        Training Location
-                      </label>
-                      <div className="mt-2">
-                        <select
-                          id="branch"
-                          name="branch"
-                          autoComplete="branch-name"
-                          value={branchLocation}
-                          onChange={(e) => setBranchLocation(e.target.value)}
-                          className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6"
-                        >
-                          <option value=""></option>
-                          <option value="RAMALLAH">Ramallah</option>
-                          <option value="BETHLEHEM">Bethlehem</option>
-                          <option value="NABLUS">Nablus</option>
-                          <option value="OTHER">Other</option>
-                        </select>
-                      </div>
-                    </div>
+          <Box mb={2}>
+            <TextField
+              fullWidth
+              variant="outlined"
+              label="Address (Village / Street name)"
+              value={address}
+              onChange={(e) => setAddress(e.target.value)}
+            />
+          </Box>
 
-                    <div className="sm:col-span-3">
-                      <label
-                        htmlFor="branch"
-                        className="block text-sm font-medium leading-6 text-gray-900"
-                      >
-                        Preffered Training Area
-                      </label>
-                      <div className="mt-2">
-                        <select
-                          id="field"
-                          name="field"
-                          value={trainingField}
-                          onChange={(e) => setTrainingField(e.target.value)}
-                          autoComplete="field-name"
-                          className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6"
-                        >
-                          <option value=""></option>
-                          <option value="BACKEND">Backend</option>
-                          <option value="FRONTEND">Frontend</option>
-                          <option value="QUALITY_ASSURANCE">
-                            Quality Assurance
-                          </option>
-                          <option value="MOBILE">Mobile Development</option>
-                          <option value="DevOps">DevOps</option>
-                          <option value="DESIGN_VERIFICATION">
-                            Design Verification
-                          </option>
-                          <option value="OTHER">Other</option>
-                        </select>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="mt-6 flex items-center justify-end gap-x-6">
-                    <button
-                      type="submit"
-                      className="mr-4 rounded-md bg-blue-500 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-700 focus:visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-                    >
-                      Save Personal Details
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </form>
-            {showDetailsConfirmation && (
-              <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-75">
-                <div className="bg-white p-8 rounded-md shadow-md">
-                  <p>Are you sure you want to save?</p>
-                  <div className="mt-4 flex justify-center">
-                    <button
-                      onClick={handleConfirm}
-                      className="mr-4 rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-                    >
-                      Yes
-                    </button>
-                    <button
-                      onClick={handleCancel}
-                      className="rounded-md bg-gray-300 px-3 py-2 text-sm font-semibold text-gray-800 shadow-sm hover:bg-gray-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-600"
-                    >
-                      No
-                    </button>
-                  </div>
-                </div>
-              </div>
-            )}
+          <Box mb={2}>
+            <FormControl fullWidth>
+              <InputLabel>ID Type</InputLabel>
+              <Select
+                value={idType}
+                onChange={(e) => setIdType(e.target.value)}
+                label="ID type"
+              >
+                <MenuItem value=""></MenuItem>
+                <MenuItem value="Westbank">Westbank - ضفة</MenuItem>
+                <MenuItem value="Jerusalem">Jerusalem - قدس</MenuItem>
+                <MenuItem value="Other">Other</MenuItem>
+              </Select>
+            </FormControl>
+          </Box>
 
-            <form className="px-4" onSubmit={handleAcademicGradesSubmit}>
-              <div className="space-y-12">
-                <div className="border-b border-gray-900/10 pb-12">
-                  <h1 className="text-base font-semibold leading-7 text-gray-900 pb-10">
-                    Academic Courses and Grades
-                  </h1>
-                  {courses.map((course, index) => (
-                    <div
-                      key={index}
-                      className="flex items-center w-full justify-between mb-4"
-                    >
-                      <div className="flex w-full">
-                        <select
-                          className="w-1/2 mr-4 bg-gray-100 rounded-md px-3 py-2 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
-                          value={course.course}
-                          onChange={(e) => handleCourseChange(index, e)}
-                        >
-                          <option value="">Select Course</option>
-                          <option
-                            value="TAWJEEHI"
-                            disabled={selectedCourses.includes("TAWJEEHI")}
-                          >
-                            Tawjeehi
-                          </option>
-                          <option
-                            value="UNIVERSITY_GPA"
-                            disabled={selectedCourses.includes(
-                              "UNIVERSITY_GPA"
-                            )}
-                          >
-                            University GPA
-                          </option>
-                          <option
-                            value="PROGRAMMING_ONE"
-                            disabled={selectedCourses.includes(
-                              "PROGRAMMING_ONE"
-                            )}
-                          >
-                            Programming
-                          </option>
-                          <option
-                            value="OBJECT_ORIENTED"
-                            disabled={selectedCourses.includes(
-                              "OBJECT_ORIENTED"
-                            )}
-                          >
-                            Object Oriented
-                          </option>
-                          <option
-                            value="DATA_STRUCTURE"
-                            disabled={selectedCourses.includes(
-                              "DATA_STRUCTURE"
-                            )}
-                          >
-                            Data Structure
-                          </option>
-                          <option
-                            value="DATABASE_ONE"
-                            disabled={selectedCourses.includes("DATABASE_ONE")}
-                          >
-                            Database One
-                          </option>
-                          <option
-                            value="DATABASE_TWO"
-                            disabled={selectedCourses.includes("DATABASE_TWO")}
-                          >
-                            Database Two
-                          </option>
-                          {/* ... other options */}
-                        </select>
-                        <input
-                          className="w-1/2 bg-gray-100 rounded-md px-3 py-2 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
-                          type="text"
-                          placeholder="Enter Grade"
-                          value={course.grade}
-                          onChange={(e) =>
-                            handleGradeChange(index, e.target.value)
-                          }
-                        />
-                        <button
-                          type="button"
-                          onClick={() => removeCourse(index)}
-                          className="ml-4 rounded-md px-4 py-2 bg-red-500 text-white hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
-                        >
-                          Remove
-                        </button>
-                      </div>
-                    </div>
+          <Box mb={2}>
+            <TextField
+              fullWidth
+              label="ID Number"
+              variant="outlined"
+              value={idNumber}
+              onChange={(e) => setIdNumber(e.target.value)}
+              error={!!idNumberError}
+              helperText={idNumberError}
+              inputProps={{ inputMode: "numeric" }}
+            />
+          </Box>
+
+          <Box mb={2}>
+            <TextField
+              fullWidth
+              label="Phone Number starts with '05'"
+              value={phoneNumber}
+              onChange={handlePhoneNumberChange}
+            />
+          </Box>
+
+          <Box mb={2}>
+            <FormControl fullWidth>
+              <InputLabel>University Name</InputLabel>
+              <Select
+                value={universityName}
+                onChange={(e) => setUniversityName(e.target.value)}
+                label="University Name"
+              >
+                <MenuItem value=""></MenuItem>
+                <MenuItem value="Al-Quds University">
+                  Al-Quds University
+                </MenuItem>
+                <MenuItem value="Birzeit University">
+                  Birzeit University
+                </MenuItem>
+                <MenuItem value="Bethlehem University">
+                  Bethlehem University
+                </MenuItem>
+                <MenuItem value="Al-Quds Open University">
+                  Al-Quds Open University
+                </MenuItem>
+                <MenuItem value="Arab American University">
+                  Arab American University
+                </MenuItem>
+                <MenuItem value="Hebron University">Hebron University</MenuItem>
+                <MenuItem value="Ibrahimieh College">
+                  Ibrahimieh College
+                </MenuItem>
+                <MenuItem value="Khodori Institute, Tulkarm">
+                  Khodori Institute, Tulkarm
+                </MenuItem>
+                <MenuItem value="Palestine Ahliya University">
+                  Palestine Ahliya University
+                </MenuItem>
+                <MenuItem value="Palestine Polytechnic University">
+                  Palestine Polytechnic University
+                </MenuItem>
+                <MenuItem value="Other">Other</MenuItem>
+              </Select>
+            </FormControl>
+          </Box>
+
+          <Box mb={2}>
+            <FormControl fullWidth>
+              <InputLabel>University Major</InputLabel>
+              <Select
+                value={universityMajor}
+                onChange={(e) => setUniversityMajor(e.target.value)}
+                label="University Major"
+              >
+                <MenuItem value=""></MenuItem>
+                <MenuItem value="Computer_Engineering">
+                  Computer Engineering
+                </MenuItem>
+                <MenuItem value="Computer_Science">Computer Science</MenuItem>
+                <MenuItem value="Information_Technology">
+                  Information Technology
+                </MenuItem>
+                <MenuItem value="Electrical_Engineering">
+                  Electrical Engineering
+                </MenuItem>
+                <MenuItem value="Other">Other</MenuItem>
+              </Select>
+            </FormControl>
+          </Box>
+          <Box mb={2}>
+            <Box display="flex" justifyContent="space-between">
+              <FormControl variant="outlined" style={{ width: "48%" }}>
+                <InputLabel>Graduation Year Date (expected)</InputLabel>
+                <Select
+                  value={expectedGraduationYear}
+                  onChange={handleYearChange}
+                  label="Graduation Year Date (expected)"
+                >
+                  <MenuItem value=""></MenuItem>
+                  {[...Array(10).keys()].map((i) => (
+                    <MenuItem key={i} value={new Date().getFullYear() + i}>
+                      {new Date().getFullYear() + i}
+                    </MenuItem>
                   ))}
-                  <button
-                    type="button"
-                    onClick={addCourse}
-                    className="rounded-md px-4 py-2 bg-green-500 text-white hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
-                  >
-                    Add Course
-                  </button>
+                </Select>
+              </FormControl>
+              <FormControl variant="outlined" style={{ width: "48%" }}>
+                <InputLabel>Graduation Month Date (expected)</InputLabel>
+                <Select
+                  value={expectedGraduationMonth}
+                  onChange={handleMonthChange}
+                  label="Graduation Month Date (expected)"
+                >
+                  <MenuItem value=""></MenuItem>
+                  <MenuItem value="01">January</MenuItem>
+                  <MenuItem value="02">February</MenuItem>
+                  <MenuItem value="03">March</MenuItem>
+                  <MenuItem value="04">April</MenuItem>
+                  <MenuItem value="05">May</MenuItem>
+                  <MenuItem value="06">June</MenuItem>
+                  <MenuItem value="07">July</MenuItem>
+                  <MenuItem value="08">August</MenuItem>
+                  <MenuItem value="09">September</MenuItem>
+                  <MenuItem value="10">October</MenuItem>
+                  <MenuItem value="11">November</MenuItem>
+                  <MenuItem value="12">December</MenuItem>
+                </Select>
+              </FormControl>
+            </Box>
+          </Box>
+          <Box mb={2}>
+            <FormControl fullWidth variant="outlined">
+              <InputLabel>Branch Location</InputLabel>
+              <Select
+                value={branchLocation}
+                onChange={(e) => setBranchLocation(e.target.value)}
+                label="Branch Location"
+              >
+                <MenuItem value=""></MenuItem>
+                <MenuItem value="RAMALLAH">Ramallah</MenuItem>
+                <MenuItem value="NABLUS">Nablus</MenuItem>
+                <MenuItem value="BETHLEHEM">Bethlehem</MenuItem>
+                <MenuItem value="OTHER">Other</MenuItem>
+              </Select>
+            </FormControl>
+          </Box>
+          <Box mb={2}>
+            <FormControl fullWidth variant="outlined">
+              <InputLabel>Training Field</InputLabel>
+              <Select
+                value={trainingField}
+                onChange={(e) => setTrainingField(e.target.value)}
+                label="Training Field"
+              >
+                <MenuItem value=""></MenuItem>
+                <MenuItem value="BACKEND">Backend</MenuItem>
+                <MenuItem value="FRONTEND">Frontend</MenuItem>
+                <MenuItem value="QUALITY_ASSURANCE">Quality Assurance</MenuItem>
+                <MenuItem value="MOBILE">Mobile Development</MenuItem>
+                <MenuItem value="DevOps">DevOps</MenuItem>
+                <MenuItem value="DESIGN_VERIFICATION">
+                  Desgin Verification
+                </MenuItem>
+                <MenuItem value="Other">Other</MenuItem>
+              </Select>
+            </FormControl>
+          </Box>
+          <Box mb={2}>
+            <Button fullWidth  type="submit" variant="contained" color="primary">
+              Save Details
+            </Button>
+          </Box>
+        </FormControl>
+      </form>
 
-                  <div className="mt-6 flex items-center justify-end gap-x-6">
-                    <button
-                      type="submit"
-                      className="mr-4 rounded-md bg-blue-500 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-700 focus:visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-                    >
-                      Save Academic Grades
-                    </button>
-                  </div>
-                 
-                </div>
-              </div>
-            </form>
-            {showGradesConfirmation && (
-                    <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-75">
-                      <div className="bg-white p-8 rounded-md shadow-md">
-                        <p>Save Academic Grades ?</p>
-                        <div className="mt-4 flex justify-center">
-                          <button
-                            onClick={handleConfrimGrades}
-                            className="mr-4 rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-                          >
-                            Yes
-                          </button>
-                          <button
-                            onClick={handleCancelGrades}
-                            className="rounded-md bg-gray-300 px-3 py-2 text-sm font-semibold text-gray-800 shadow-sm hover:bg-gray-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-600"
-                          >
-                            No
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                  )}
-          </div>
-        </section>
-      </div>
-    </div>
+      {/* Confirmation Dialog for Details */}
+      <Dialog open={showDetailsConfirmation} onClose={handleCancel}>
+        <DialogTitle>Confirmation</DialogTitle>
+        <DialogContent>
+          <Typography>Are you sure you want to save the details?</Typography>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCancel} color="primary">
+            Cancel
+          </Button>
+          <Button onClick={handleConfirm} color="primary" variant="contained">
+            Confirm
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+      {/* Confirmation Dialog for Grades */}
+      <Dialog open={showGradesConfirmation} onClose={handleCancelGrades}>
+        <DialogTitle>Confirmation</DialogTitle>
+        <DialogContent>
+          <Typography>
+            Are you sure you want to save the academic grades?
+          </Typography>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCancelGrades} color="primary">
+            Cancel
+          </Button>
+          <Button
+            onClick={handleConfrimGrades}
+            color="primary"
+            variant="contained"
+          >
+            Confirm
+          </Button>
+        </DialogActions>
+      </Dialog>
+    </Container>
   );
 };
 

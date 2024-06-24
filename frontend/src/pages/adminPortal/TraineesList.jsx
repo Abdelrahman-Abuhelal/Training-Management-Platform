@@ -24,12 +24,12 @@ import {
   FormControl,
   Grid,
   FormGroup,
-  FormControlLabel ,
+  FormControlLabel,
   InputLabel,
   Select,
   Menu,
   MenuItem,
-  InputAdornment
+  InputAdornment,
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import DownloadIcon from "@mui/icons-material/Download";
@@ -237,7 +237,7 @@ const TraineesList = () => {
   return (
     <div style={{ padding: "3rem" }}>
       <div className="flex items-center justify-between mb-4">
-      <Grid item>
+        <Grid item>
           <TextField
             placeholder="Search username"
             variant="outlined"
@@ -263,101 +263,108 @@ const TraineesList = () => {
             color="primary"
             onClick={handleAssignToSupervisor}
             disabled={selectedTrainees.length !== 1}
-            >
+          >
             Assign to Supervisor
           </Button>
         </div>
       </div>
-      <Typography
-        variant="h5"
-        component="h2"
-        gutterBottom
-        sx={{ mt: 3, ml: 1 }}
-      >
-        List of Trainees
-      </Typography>
-      <TableContainer component={Paper}>
-        <Table aria-label="trainee table">
-          <TableHead>
-            <TableRow>
-              <TableCell>
-                <Checkbox
-                  checked={selectedTrainees.length === paginatedTrainees.length}
-                  onChange={(e) => {
-                    if (e.target.checked) {
-                      setSelectedTrainees(paginatedTrainees);
-                    } else {
-                      setSelectedTrainees([]);
-                    }
-                  }}
-                />
-              </TableCell>
-              <TableCell variant="head">
-                <TableSortLabel
-                  active={orderBy === "userUsername"}
-                  direction={sortDirection}
-                  onClick={(event) => handleRequestSort(event, "userUsername")}
-                >
-                  <Typography variant="h6">Username</Typography>
-                </TableSortLabel>
-              </TableCell>
-              <TableCell variant="head">
-                <Typography variant="h6">First Name</Typography>
-              </TableCell>
-              <TableCell variant="head">
-                <Typography variant="h6">Last Name</Typography>
-              </TableCell>
-              <TableCell variant="head">
-                <Typography variant="h6">Email</Typography>
-              </TableCell>
-              <TableCell variant="head">
-                <Typography variant="h6">Role</Typography>
-              </TableCell>
-              <TableCell variant="head">
-                <Typography variant="h6">Actions</Typography>
-              </TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {paginatedTrainees.map((item) => (
-              <TableRow key={item.userId} hover>
+      <Paper sx={{ border: "1px solid #ccc", mt: 2 }}>
+        <Typography
+          variant="h5"
+          component="h2"
+          gutterBottom
+          align="center"
+          sx={{ fontWeight: "bold", mt: 3, ml: 1 }}
+        >
+          List of Trainees
+        </Typography>
+        <TableContainer component={Paper}>
+          <Table aria-label="trainee table">
+            <TableHead>
+              <TableRow>
                 <TableCell>
                   <Checkbox
-                    checked={selectedTrainees.some(
-                      (trainee) => trainee.userId === item.userId
-                    )}
-                    onChange={(e) => handleCheckboxChange(e, item)}
+                    checked={
+                      selectedTrainees.length === paginatedTrainees.length
+                    }
+                    onChange={(e) => {
+                      if (e.target.checked) {
+                        setSelectedTrainees(paginatedTrainees);
+                      } else {
+                        setSelectedTrainees([]);
+                      }
+                    }}
                   />
                 </TableCell>
-                <TableCell>{item.userUsername}</TableCell>
-                <TableCell>{item.userFirstName}</TableCell>
-                <TableCell>{item.userLastName}</TableCell>
-                <TableCell>{item.userEmail}</TableCell>
-                <TableCell>
-                  {item.userRole.charAt(0).toUpperCase() +
-                    item.userRole.slice(1).toLowerCase()}
+                <TableCell variant="head">
+                  <TableSortLabel
+                    active={orderBy === "userUsername"}
+                    direction={sortDirection}
+                    onClick={(event) =>
+                      handleRequestSort(event, "userUsername")
+                    }
+                  >
+                    <Typography variant="h6">Username</Typography>
+                  </TableSortLabel>
                 </TableCell>
-                <TableCell>
-                  <IconButton
-                    size="small"
-                    onClick={() => navigate(`/edit-trainee/${item.userId}`)}
-                    color="primary"
-                  >
-                    <ManageAccountsIcon />
-                  </IconButton>
-                  <IconButton
-                    size="small"
-                    onClick={() => handleDelete(item)}
-                    color="error"
-                  >
-                    <DeleteIcon />
-                  </IconButton>
+                <TableCell variant="head">
+                  <Typography variant="h6">First Name</Typography>
+                </TableCell>
+                <TableCell variant="head">
+                  <Typography variant="h6">Last Name</Typography>
+                </TableCell>
+                <TableCell variant="head">
+                  <Typography variant="h6">Email</Typography>
+                </TableCell>
+                <TableCell variant="head">
+                  <Typography variant="h6">Role</Typography>
+                </TableCell>
+                <TableCell variant="head">
+                  <Typography variant="h6">Actions</Typography>
                 </TableCell>
               </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
+            </TableHead>
+            <TableBody>
+              {paginatedTrainees.map((item) => (
+                <TableRow key={item.userId} hover>
+                  <TableCell>
+                    <Checkbox
+                      checked={selectedTrainees.some(
+                        (trainee) => trainee.userId === item.userId
+                      )}
+                      onChange={(e) => handleCheckboxChange(e, item)}
+                    />
+                  </TableCell>
+                  <TableCell>{item.userUsername}</TableCell>
+                  <TableCell>{item.userFirstName}</TableCell>
+                  <TableCell>{item.userLastName}</TableCell>
+                  <TableCell>{item.userEmail}</TableCell>
+                  <TableCell>
+                    {item.userRole.charAt(0).toUpperCase() +
+                      item.userRole.slice(1).toLowerCase()}
+                  </TableCell>
+                  <TableCell>
+                    <IconButton
+                      size="small"
+                      onClick={() => navigate(`/edit-trainee/${item.userId}`)}
+                      color="primary"
+                    >
+                      <ManageAccountsIcon />
+                    </IconButton>
+                    <IconButton
+                      size="small"
+                      onClick={() => handleDelete(item)}
+                      color="error"
+                    >
+                      <DeleteIcon />
+                    </IconButton>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      </Paper>
       <TablePagination
         component="div"
         count={filteredTrainees.length}

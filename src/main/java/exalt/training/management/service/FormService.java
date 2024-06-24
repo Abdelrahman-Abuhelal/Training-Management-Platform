@@ -83,6 +83,14 @@ public class FormService {
         return "Review Form has been created";
     }
 
+    public String deleteForm(Long formId){
+        if(!formRepository.existsById(formId)){
+            throw new FormNotFoundException(String.format("Form with this %s ID number doesn't exist",formId));
+        }
+        formRepository.deleteById(formId);
+        return "Form with ID " + formId +" has been deleted";
+    }
+
     public FormCreationDto getFormById(Long formId) {
         Form form = formRepository.findById(formId).orElseThrow(() -> new FormNotFoundException("Form not found with that ID"));
         return formMapper.formToFormCreationDto(form);

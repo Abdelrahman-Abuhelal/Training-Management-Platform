@@ -29,8 +29,15 @@ public class FormController {
     @PostMapping( "/create-form")
     @PreAuthorize("hasAnyRole('SUPERVISOR','SUPER_ADMIN')")
     @Operation(summary = "Create Form by Admin" , security =  @SecurityRequirement(name = "loginAuth"))
-    public ResponseEntity<String> createForm(@RequestBody @Valid FormDataDto formDataDto) {
+    public ResponseEntity<String> createFormTemplate(@RequestBody @Valid FormDataDto formDataDto) {
         return ResponseEntity.ok(formService.createForm(formDataDto));
+    }
+
+    @DeleteMapping( "/{formId}")
+    @PreAuthorize("hasAnyRole('SUPERVISOR','SUPER_ADMIN')")
+    @Operation(summary = "Delete Form by Admin" , security =  @SecurityRequirement(name = "loginAuth"))
+    public ResponseEntity<String> deleteFormTemplate(@PathVariable Long formId) {
+        return ResponseEntity.ok(formService.deleteForm(formId));
     }
 
     @GetMapping()

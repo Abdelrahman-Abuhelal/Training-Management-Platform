@@ -69,6 +69,11 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
     }
 
+    @ExceptionHandler(FormNotFoundException.class)
+    public ResponseEntity<String> handleFormNotFoundException(FormNotFoundException e) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+    }
+
     @ExceptionHandler(InvalidTokenException.class)
     public ResponseEntity<String> handleInvalidTokenException(InvalidTokenException ex) {
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);

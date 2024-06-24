@@ -82,7 +82,9 @@ const HR_Supervisors_List = () => {
 
   const deleteUser = async (userId) => {
     try {
-      const response = await axios.delete(`${baseUrl}/api/v1/admin/users/${userId}`);
+      const response = await axios.delete(
+        `${baseUrl}/api/v1/admin/users/${userId}`
+      );
       if (response.status === 200) {
         console.log("Supervisor deleted successfully");
         setSupervisors(supervisors.filter((user) => user.userId !== userId));
@@ -96,7 +98,9 @@ const HR_Supervisors_List = () => {
     try {
       const response = await axios.get(`${baseUrl}/api/v1/admin/users`);
       if (response.status === 200) {
-        const supervisorUsers = response.data.filter((item) => item.userRole === "SUPERVISOR");
+        const supervisorUsers = response.data.filter(
+          (item) => item.userRole === "SUPERVISOR"
+        );
         const sortedSupervisors = supervisorUsers.sort((a, b) => {
           const isAsc = sortDirection === "asc";
           if (orderBy === "userUsername") {
@@ -123,7 +127,9 @@ const HR_Supervisors_List = () => {
       try {
         const response = await axios.get(`${baseUrl}/api/v1/admin/users`);
         if (response.status === 200) {
-          const traineeUsers = response.data.filter((item) => item.userRole === "TRAINEE");
+          const traineeUsers = response.data.filter(
+            (item) => item.userRole === "TRAINEE"
+          );
           setAvailableTrainees(traineeUsers);
         }
       } catch (error) {
@@ -162,9 +168,12 @@ const HR_Supervisors_List = () => {
 
   const handleAssignConfirm = async () => {
     try {
-      const response = await axios.post(`${baseUrl}/api/v1/supervisor/${selectedSupervisor.userId}/assign`, {
-        trainees: selectedTrainees,
-      });
+      const response = await axios.post(
+        `${baseUrl}/api/v1/supervisor/${selectedSupervisor.userId}/assign`,
+        {
+          trainees: selectedTrainees,
+        }
+      );
       if (response.status === 200) {
         console.log("Trainees assigned successfully");
         fetchSupervisors();
@@ -177,7 +186,8 @@ const HR_Supervisors_List = () => {
   };
 
   const exportToExcel = () => {
-    const fileType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8";
+    const fileType =
+      "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8";
     const fileExtension = ".xlsx";
     const ws = XLSX.utils.json_to_sheet(allSupervisors);
     const wb = { Sheets: { data: ws }, SheetNames: ["data"] };
@@ -196,93 +206,121 @@ const HR_Supervisors_List = () => {
   };
 
   return (
-    <div style={{ padding: "3rem" }}>
-      <Grid container spacing={3} justifyContent="space-between" alignItems="center">
-        <Grid item xs={12} sm={6}>
-          <Typography variant="h5" component="h2">
-            List of Supervisors
-          </Typography>
-        </Grid>
-        <Grid item>
-          <TextField
-            placeholder="Search username"
-            variant="outlined"
-            value={searchTerm}
-            onChange={handleSearchChange}
-            InputProps={{
-              startAdornment: (
-                <InputAdornment position="start">
-                  <SearchIcon />
-                </InputAdornment>
-              ),
-            }}
-            sx={{ maxWidth: "250px" }} // Adjust the maxWidth as needed
-          />
+    <div style={{ padding: "5rem" }}>
+      <Paper sx={{ border: "1px solid #ccc", mt: 2 }}>
+        <Grid
+          container
+          spacing={3}
+          justifyContent="space-between"
+          alignItems="center"
+        >
+          <Grid item xs={12} sm={6}>
+            <Typography
+              variant="h5"
+              component="h2"
+              align="right"
+              sx={{ fontWeight: "bold", mt: 3, ml: 1 }}
+            >
+              List of Supervisors
+            </Typography>
+          </Grid>
+          <Grid item>
+            <TextField
+              placeholder="Search username"
+              variant="outlined"
+              value={searchTerm}
+              onChange={handleSearchChange}
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <SearchIcon />
+                  </InputAdornment>
+                ),
+              }}
+              sx={{ maxWidth: "250px" }} // Adjust the maxWidth as needed
+            />
+          </Grid>
         </Grid>
 
-      </Grid>
-
-      <TableContainer component={Paper} sx={{ mt: 3 }}>
-        <Table aria-label="supervisor table">
-          <TableHead>
-            <TableRow>
-              <TableCell>
-                <TableSortLabel
-                  active={orderBy === "userUsername"}
-                  direction={sortDirection}
-                  onClick={(event) => handleRequestSort(event, "userUsername")}
-                >
-                  <Typography variant="subtitle1" fontWeight="bold">Username</Typography>
-                </TableSortLabel>
-              </TableCell>
-              <TableCell>
-                <Typography variant="subtitle1" fontWeight="bold">First Name</Typography>
-              </TableCell>
-              <TableCell>
-                <Typography variant="subtitle1" fontWeight="bold">Last Name</Typography>
-              </TableCell>
-              <TableCell>
-                <Typography variant="subtitle1" fontWeight="bold">Email</Typography>
-              </TableCell>
-              <TableCell>
-                <Typography variant="subtitle1" fontWeight="bold">Role</Typography>
-              </TableCell>
-              <TableCell>
-                <Typography variant="subtitle1" fontWeight="bold">Actions</Typography>
-              </TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {paginatedSupervisors.map((item) => (
-              <TableRow key={item.userId} hover>
-                <TableCell>{item.userUsername}</TableCell>
-                <TableCell>{item.userFirstName}</TableCell>
-                <TableCell>{item.userLastName}</TableCell>
-                <TableCell>{item.userEmail}</TableCell>
+        <TableContainer component={Paper} sx={{ mt: 3 }}>
+          <Table aria-label="supervisor table">
+            <TableHead>
+              <TableRow>
                 <TableCell>
-                  {item.userRole.charAt(0).toUpperCase() + item.userRole.slice(1).toLowerCase()}
+                  <TableSortLabel
+                    active={orderBy === "userUsername"}
+                    direction={sortDirection}
+                    onClick={(event) =>
+                      handleRequestSort(event, "userUsername")
+                    }
+                  >
+                    <Typography variant="subtitle1" fontWeight="bold">
+                      Username
+                    </Typography>
+                  </TableSortLabel>
                 </TableCell>
                 <TableCell>
-                  <IconButton
-                    size="small"
-                    onClick={() => navigate(`/supervisors/${item.userId}/trainees`)}
-                    color="primary"
-                  >
-                    <GroupIcon />
-                  </IconButton>
-                  <IconButton
-                    size="small"
-                    onClick={() => handleDelete(item)}
-                    color="error"
-                  >
-                    <DeleteIcon />
-                  </IconButton>
+                  <Typography variant="subtitle1" fontWeight="bold">
+                    First Name
+                  </Typography>
+                </TableCell>
+                <TableCell>
+                  <Typography variant="subtitle1" fontWeight="bold">
+                    Last Name
+                  </Typography>
+                </TableCell>
+                <TableCell>
+                  <Typography variant="subtitle1" fontWeight="bold">
+                    Email
+                  </Typography>
+                </TableCell>
+                <TableCell>
+                  <Typography variant="subtitle1" fontWeight="bold">
+                    Role
+                  </Typography>
+                </TableCell>
+                <TableCell>
+                  <Typography variant="subtitle1" fontWeight="bold">
+                    Actions
+                  </Typography>
                 </TableCell>
               </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
+            </TableHead>
+            <TableBody>
+              {paginatedSupervisors.map((item) => (
+                <TableRow key={item.userId} hover>
+                  <TableCell>{item.userUsername}</TableCell>
+                  <TableCell>{item.userFirstName}</TableCell>
+                  <TableCell>{item.userLastName}</TableCell>
+                  <TableCell>{item.userEmail}</TableCell>
+                  <TableCell>
+                    {item.userRole.charAt(0).toUpperCase() +
+                      item.userRole.slice(1).toLowerCase()}
+                  </TableCell>
+                  <TableCell>
+                    <IconButton
+                      size="small"
+                      onClick={() =>
+                        navigate(`/supervisors/${item.userId}/trainees`)
+                      }
+                      color="primary"
+                    >
+                      <GroupIcon />
+                    </IconButton>
+                    <IconButton
+                      size="small"
+                      onClick={() => handleDelete(item)}
+                      color="error"
+                    >
+                      <DeleteIcon />
+                    </IconButton>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      </Paper>
 
       <TablePagination
         component="div"
@@ -291,9 +329,8 @@ const HR_Supervisors_List = () => {
         page={page}
         onPageChange={handleChangePage}
         onRowsPerPageChange={handleChangeRowsPerPage}
-        sx={{ mt: 2 }}
+        sx={{ mt: 1 }}
       />
-
       <Dialog open={openDeleteDialog} onClose={handleCloseDeleteDialog}>
         <DialogTitle>Delete Confirmation</DialogTitle>
         <DialogContent>
@@ -303,13 +340,20 @@ const HR_Supervisors_List = () => {
         </DialogContent>
         <DialogActions>
           <Button onClick={handleCloseDeleteDialog}>Cancel</Button>
-          <Button variant="contained" color="error" onClick={handleConfirmDelete}>
+          <Button
+            variant="contained"
+            color="error"
+            onClick={handleConfirmDelete}
+          >
             Delete
           </Button>
         </DialogActions>
       </Dialog>
 
-      <Dialog open={!!selectedSupervisor} onClose={() => setSelectedSupervisor(null)}>
+      <Dialog
+        open={!!selectedSupervisor}
+        onClose={() => setSelectedSupervisor(null)}
+      >
         <DialogTitle>Assign Trainees</DialogTitle>
         <DialogContent>
           <FormControl fullWidth>
@@ -338,7 +382,11 @@ const HR_Supervisors_List = () => {
         </DialogContent>
         <DialogActions>
           <Button onClick={() => setSelectedSupervisor(null)}>Cancel</Button>
-          <Button variant="contained" color="primary" onClick={handleAssignConfirm}>
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={handleAssignConfirm}
+          >
             Confirm
           </Button>
         </DialogActions>

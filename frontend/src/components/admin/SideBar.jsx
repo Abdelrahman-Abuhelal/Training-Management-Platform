@@ -38,7 +38,6 @@ export default function TemporaryDrawer({ state, setState, toggleDrawer }) {
       onKeyDown={toggleDrawer(anchor, false)}
     >
       <List>
-        {/* the links should be the same as routing name, stupid logic*/}
         {routes.map((route, index) => (
           <ListItem key={route.name} disablePadding>
             <ListItemButton href={route.path}>

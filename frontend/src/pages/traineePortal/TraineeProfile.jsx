@@ -38,23 +38,7 @@ const TraineeProfile = () => {
   const baseUrl = import.meta.env.VITE_PORT_URL;
 
   useEffect(() => {
-    const storedData = JSON.parse(localStorage.getItem("traineeProfile"));
-    console.log("Stored Data:", storedData);
-    if (storedData) {
-      setFullNameInArabic(storedData.fullNameInArabic || "");
-      setPhoneNumber(storedData.phoneNumber || "");
-      setIdType(storedData.idType || "");
-      setIdNumber(storedData.idNumber || "");
-      setAddress(storedData.address || "");
-      setCity(storedData.city || "");
-      setUniversityName(storedData.universityName || "");
-      setUniversityMajor(storedData.universityMajor || "");
-      setExpectedGraduationDate(storedData.expectedGraduationDate || "");
-      setTrainingField(storedData.trainingField || "");
-      setBranchLocation(storedData.branchLocation || "");
-    } else {
-      fetchUserData();
-    }
+fetchUserData();
   }, []);
 
   const fetchUserData = async () => {
@@ -73,6 +57,8 @@ const TraineeProfile = () => {
         setUniversityName(userData.universityName || "");
         setUniversityMajor(userData.universityMajor || "");
         setExpectedGraduationDate(userData.expectedGraduationDate || "");
+        setExpectedGraduationYear(userData.expectedGraduationDate.slice(0, 4) || "");
+        setExpectedGraduationMonth(userData.expectedGraduationDate.slice(-2)|| "");
         setTrainingField(userData.trainingField || "");
         setBranchLocation(userData.branchLocation || "");
       } else {
@@ -284,14 +270,28 @@ const TraineeProfile = () => {
           </FormControl>
         </Box>
         <Box mb={2}>
-        <Typography variant="h9" component="h2" sx={{pb:2,pl:1}}>Expected Graduation Date</Typography>
           <Box display="flex" justifyContent="space-between">
             <FormControl variant="outlined" style={{ width: "48%" }}>
-              <InputLabel>Month</InputLabel>
+            <InputLabel>Graduation Year Date (expected)</InputLabel>
+            <Select
+                value={expectedGraduationYear}
+                onChange={handleYearChange}
+                label="Graduation Year Date (expected)"
+              >
+                <MenuItem value=""></MenuItem>
+                {[...Array(10).keys()].map((i) => (
+                  <MenuItem key={i} value={new Date().getFullYear() + i}>
+                    {new Date().getFullYear()+ i}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+            <FormControl variant="outlined" style={{ width: "48%" }}>
+              <InputLabel>Graduation Month Date (expected)</InputLabel>
               <Select
                 value={expectedGraduationMonth}
                 onChange={handleMonthChange}
-                label="Month"
+                label="Graduation Month Date (expected)"
               >
                 <MenuItem value=""></MenuItem>
                 <MenuItem value="01">January</MenuItem>
@@ -306,21 +306,6 @@ const TraineeProfile = () => {
                 <MenuItem value="10">October</MenuItem>
                 <MenuItem value="11">November</MenuItem>
                 <MenuItem value="12">December</MenuItem>
-              </Select>
-            </FormControl>
-            <FormControl variant="outlined" style={{ width: "48%" }}>
-              <InputLabel>Year</InputLabel>
-              <Select
-                value={expectedGraduationYear}
-                onChange={handleYearChange}
-                label="Year"
-              >
-                <MenuItem value=""></MenuItem>
-                {[...Array(10).keys()].map((i) => (
-                  <MenuItem key={i} value={new Date().getFullYear() + i}>
-                    {new Date().getFullYear() + i}
-                  </MenuItem>
-                ))}
               </Select>
             </FormControl>
           </Box>
