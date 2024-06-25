@@ -573,7 +573,7 @@ const EditTrainee = () => {
           </Box>
           <Box mb={2}>
             <Button fullWidth type="submit" variant="contained" color="primary">
-              Save Details
+              Save Details.
             </Button>
           </Box>
         </FormControl>
