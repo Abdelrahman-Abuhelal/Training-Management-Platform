@@ -7,6 +7,7 @@ import {
   Typography,
   TextField,
   Select,
+  Grid,
   MenuItem,
   Box,
   FormControl,
@@ -16,9 +17,11 @@ import {
   DialogTitle,
   DialogContent,
   DialogActions,
+  Snackbar,
 } from "@mui/material";
+import { Alert } from "@mui/material";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-
+import DeleteIcon from "@mui/icons-material/Delete";
 const EditTrainee = () => {
   const navigate = useNavigate();
   const { userId } = useParams();
@@ -45,6 +48,12 @@ const EditTrainee = () => {
   // courses and grades
   const [courses, setCourses] = useState([]);
   const [selectedCourses, setSelectedCourses] = useState([]);
+  const [traineeDetailsSnackbarSuccess, setTraineeDetailsSnackbarSuccess] = useState(false);
+  const [traineeDetailsSnackbarError, setTraineeDetailsSnackbarError] = useState(false);
+
+  const [gradesSnackbarSuccess, setGradesSnackbarSuccess] = useState(false);
+  const [gradesSnackbarError, setGradesSnackbarError] = useState(false);
+  const [traineeDetailsSnackbarErrorMessage,setTraineeDetailsSnackbarErrorMessage] = useState("");
 
   const baseUrl = import.meta.env.VITE_PORT_URL;
 
@@ -124,6 +133,18 @@ const EditTrainee = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     // Show confirmation dialog
+    if (idNumber.length !== 9) {
+      setTraineeDetailsSnackbarError(true);
+      setTraineeDetailsSnackbarErrorMessage("ID Number must be 9 digits");
+      return;
+    }
+
+    if (! /^05\d{8}$/.test(phoneNumber)) {
+      setTraineeDetailsSnackbarError(true);
+      setTraineeDetailsSnackbarErrorMessage("Phone Number must start with '05' and have 10 digits ");
+      return;
+    }
+
     setShowDetailsConfirmation(true);
   };
 
@@ -132,9 +153,7 @@ const EditTrainee = () => {
 
     setShowDetailsConfirmation(false);
 
-    if (idNumber.length > 0 && idNumber.length !== 9) {
-      setIdNumberError("ID Number must be 9 digits");
-    }
+
 
     const formData = {
       fullNameInArabic,
@@ -157,6 +176,7 @@ const EditTrainee = () => {
       );
       if (response.status === 200) {
         console.log("Data updated by admin: ", response.data);
+        setTraineeDetailsSnackbarSuccess(true);
       }
       console.log("Response:", response.data);
     } catch (error) {
@@ -164,21 +184,21 @@ const EditTrainee = () => {
     }
   };
 
-  const handlePhoneNumberChange = (e) => {
-    let value = e.target.value;
-    if (/^05\d*$/.test(value)) {
-      setPhoneNumber(value);
-    } else if (value === "" || /^05\d*$/.test(value.slice(0, 3))) {
-      setPhoneNumber(value);
-    }
-  };
+  // const handlePhoneNumberChange = (e) => {
+  //   let value = e.target.value;
+  //   if (/^05\d*$/.test(value)) {
+  //     setPhoneNumber(value);
+  //   } else if (value === "" || /^05\d*$/.test(value.slice(0, 3))) {
+  //     setPhoneNumber(value);
+  //   }
+  // };
 
-  const handleIdNumberChange = (e) => {
-    const value = e.target.value;
-    if (/^\d{0,9}$/.test(value)) {
-      setIdNumber(value);
-    }
-  };
+  // const handleIdNumberChange = (e) => {
+  //   const value = e.target.value;
+  //   if (/^\d{0,9}$/.test(value)) {
+  //     setIdNumber(value);
+  //   }
+  // };
 
   const handleCancel = () => {
     // User cancelled action
@@ -192,6 +212,17 @@ const EditTrainee = () => {
 
   const handleAcademicGradesSubmit = (e) => {
     e.preventDefault();
+
+    //  if any course has an invalid grade
+    const invalidGrade = courses.some((course) => {
+      return course.grade === "" || course.grade < 60 || course.grade > 100;
+    });
+
+    if (invalidGrade) {
+      setGradesSnackbarError(true);
+      return;
+    }
+
     setShowGradesConfirmation(true);
   };
 
@@ -223,19 +254,12 @@ const EditTrainee = () => {
         return acc;
       }, {});
 
-      await axios
-        .put(
-          `${baseUrl}/api/v1/admin/trainees/${userId}/grades`,
-          finalCoursesObject
-        )
-        .then((response) => {
-          if (response.status === 200) {
-            console.log("Grades updated successfully");
-          }
-        })
-        .catch((error) => {
-          console.error("Error:", error);
-        });
+      await axios.put(
+        `${baseUrl}/api/v1/admin/trainees/${userId}/grades`,
+        finalCoursesObject
+      );
+
+      console.log("Grades updated successfully");
     } catch (error) {
       console.error("Error:", error);
     }
@@ -249,13 +273,18 @@ const EditTrainee = () => {
     const updatedCourses = [...courses];
     updatedCourses[index].course = value;
 
-    if (selectedCourses.includes(value)) {
-      alert("You've already selected this course.");
-      e.target.value = "";
-    } else {
-      setCourses(updatedCourses);
-      setSelectedCourses([...selectedCourses, value]);
+    // Remove the course type from selectedCourses if it exists
+    const filteredSelectedCourses = selectedCourses.filter(
+      (course) => course !== value
+    );
+    setSelectedCourses(filteredSelectedCourses);
+
+    // Add the new selected course type
+    if (!filteredSelectedCourses.includes(value)) {
+      setSelectedCourses([...filteredSelectedCourses, value]);
     }
+
+    setCourses(updatedCourses);
   };
 
   const handleGradeChange = (index, value) => {
@@ -273,11 +302,15 @@ const EditTrainee = () => {
 
   const removeCourse = (index) => {
     const updatedCourses = [...courses];
-    updatedCourses.splice(index, 1);
+    const removedCourse = updatedCourses.splice(index, 1)[0];
+    const filteredSelectedCourses = selectedCourses.filter(
+      (course) => course !== removedCourse.course
+    );
+    setSelectedCourses(filteredSelectedCourses);
     setCourses(updatedCourses);
   };
 
-  const handleConfrimGrades = (e) => {
+  const handleConfrimGrades = async (e) => {
     e.preventDefault();
     setShowGradesConfirmation(false);
 
@@ -287,17 +320,23 @@ const EditTrainee = () => {
     }
     courses.map((course) => {
       if (course.course === "" || course.grade === "") {
-        alert("Please remove courses with empty fields.");
+        setGradesSnackbarError(true); // Display error Snackbar
         return;
       }
       if (course.grade < 60 || course.grade > 100) {
-        alert("Grades must be between 60-100 ");
+        setGradesSnackbarError(true); // Display error Snackbar
         return;
       }
     });
 
-    academicGradesAPI();
-    console.log("Courses and Grades:", courses);
+    try {
+      await academicGradesAPI();
+      setGradesSnackbarSuccess(true); // Display success Snackbar
+      console.log("Courses and Grades:", courses);
+    } catch (error) {
+      console.error("Error:", error);
+      setGradesSnackbarError(true); // Display error Snackbar
+    }
   };
 
   // const handleSelectChange = (e) => {
@@ -319,6 +358,7 @@ const EditTrainee = () => {
         sx={{
           marginBottom: "1rem",
           marginTop: "1rem",
+          color: "#1976D2",
         }}
       >
         {" "}
@@ -331,7 +371,7 @@ const EditTrainee = () => {
 
       <form onSubmit={handleSubmit}>
         <FormControl fullWidth>
-          <Typography variant="h6" gutterBottom>
+          <Typography align="center" variant="h6" gutterBottom>
             {userFullName} Profile
           </Typography>
 
@@ -424,7 +464,7 @@ const EditTrainee = () => {
               fullWidth
               label="Phone Number starts with '05'"
               value={phoneNumber}
-              onChange={handlePhoneNumberChange}
+              onChange={(e) => setPhoneNumber(e.target.value)}
             />
           </Box>
 
@@ -573,10 +613,122 @@ const EditTrainee = () => {
           </Box>
           <Box mb={2}>
             <Button fullWidth type="submit" variant="contained" color="primary">
-              Save Details.
+              Save Details
             </Button>
           </Box>
         </FormControl>
+      </form>
+
+      <form
+        onSubmit={handleAcademicGradesSubmit}
+        style={{ paddingTop: "40px", paddingBottom: "80px" }}
+      >
+        <Grid container spacing={3}>
+          <Grid item xs={12}>
+            <Typography variant="h6" align="center" gutterBottom>
+              Academic Courses and Grades
+            </Typography>
+          </Grid>
+          {courses.map((course, index) => (
+            <Grid item xs={12} key={index}>
+              <Grid
+                container
+                alignItems="center"
+                justifyContent="space-between"
+                spacing={2}
+              >
+                <Grid item xs={5}>
+                  <FormControl fullWidth>
+                    <InputLabel id={`course-label-${index}`}>
+                      Select Course
+                    </InputLabel>
+                    <Select
+                      labelId={`course-label-${index}`}
+                      id={`course-select-${index}`}
+                      label={`course-label-${index}`}
+                      value={course.course}
+                      onChange={(e) => handleCourseChange(index, e)}
+                      fullWidth
+                    >
+                      <MenuItem value="">Select Course</MenuItem>
+                      <MenuItem
+                        value="TAWJEEHI"
+                        disabled={selectedCourses.includes("TAWJEEHI")}
+                      >
+                        Tawjeehi
+                      </MenuItem>
+                      <MenuItem
+                        value="UNIVERSITY_GPA"
+                        disabled={selectedCourses.includes("UNIVERSITY_GPA")}
+                      >
+                        University GPA
+                      </MenuItem>
+                      <MenuItem
+                        value="PROGRAMMING_ONE"
+                        disabled={selectedCourses.includes("PROGRAMMING_ONE")}
+                      >
+                        Programming
+                      </MenuItem>
+                      <MenuItem
+                        value="OBJECT_ORIENTED"
+                        disabled={selectedCourses.includes("OBJECT_ORIENTED")}
+                      >
+                        Object Oriented
+                      </MenuItem>
+                      <MenuItem
+                        value="DATA_STRUCTURE"
+                        disabled={selectedCourses.includes("DATA_STRUCTURE")}
+                      >
+                        Data Structure
+                      </MenuItem>
+                      <MenuItem
+                        value="DATABASE_ONE"
+                        disabled={selectedCourses.includes("DATABASE_ONE")}
+                      >
+                        Database One
+                      </MenuItem>
+                      <MenuItem
+                        value="DATABASE_TWO"
+                        disabled={selectedCourses.includes("DATABASE_TWO")}
+                      >
+                        Database Two
+                      </MenuItem>
+                      {/* Add other options here */}
+                    </Select>
+                  </FormControl>
+                </Grid>
+                <Grid item xs={5}>
+                  <TextField
+                    fullWidth
+                    id={`grade-input-${index}`}
+                    label="Enter Grade"
+                    value={course.grade}
+                    onChange={(e) => handleGradeChange(index, e.target.value)}
+                  />
+                </Grid>
+                <Grid item xs={2}>
+                  <Button
+                    variant="contained"
+                    color="error"
+                    onClick={() => removeCourse(index)}
+                  >
+                    <DeleteIcon />
+                  </Button>
+                </Grid>
+              </Grid>
+            </Grid>
+          ))}
+          <Grid item xs={12}>
+            <Button variant="contained" color="primary" onClick={addCourse}>
+              Add Course
+            </Button>
+          </Grid>
+          <Grid item xs={12}>
+            <Button fullWidth type="submit" variant="contained" color="primary">
+              Save Academic Grades
+            </Button>
+          </Grid>
+        </Grid>
       </form>
 
       {/* Confirmation Dialog for Details */}
@@ -616,6 +768,68 @@ const EditTrainee = () => {
           </Button>
         </DialogActions>
       </Dialog>
+
+      <Snackbar
+        open={traineeDetailsSnackbarSuccess}
+        autoHideDuration={6000}
+        onClose={() => setTraineeDetailsSnackbarSuccess(false)}
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+      >
+        <Alert
+          onClose={() => setTraineeDetailsSnackbarSuccess(false)}
+          severity="success"
+          sx={{ width: "100%" }}
+        >
+          Trainee details have been saved.
+        </Alert>
+      </Snackbar>
+      <Snackbar
+        open={traineeDetailsSnackbarError}
+        autoHideDuration={6000}
+        onClose={() => setTraineeDetailsSnackbarError(false)}
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+      >
+        <Alert
+          onClose={() => {
+            setTraineeDetailsSnackbarError(false);
+            setTraineeDetailsSnackbarErrorMessage("");
+          }}
+          severity="error"
+          sx={{ width: "100%" }}
+        >
+        {traineeDetailsSnackbarErrorMessage}
+        </Alert>
+      </Snackbar>
+
+      <Snackbar
+        open={gradesSnackbarSuccess}
+        autoHideDuration={6000}
+        onClose={() => setGradesSnackbarSuccess(false)}
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+      >
+        <Alert
+          onClose={() => setGradesSnackbarSuccess(false)}
+          severity="success"
+          sx={{ width: "100%" }}
+        >
+          Grades saved successfully.
+        </Alert>
+      </Snackbar>
+
+      <Snackbar
+        open={gradesSnackbarError}
+        autoHideDuration={6000}
+        onClose={() => setGradesSnackbarError(false)}
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+      >
+        <Alert
+          onClose={() => setGradesSnackbarError(false)}
+          severity="error"
+          sx={{ width: "100%" }}
+        >
+          Grades should be between 60-100 only.
+        </Alert>
+      </Snackbar>
     </Container>
   );
 };

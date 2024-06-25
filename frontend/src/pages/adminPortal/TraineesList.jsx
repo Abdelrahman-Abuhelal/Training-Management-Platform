@@ -40,6 +40,7 @@ import SearchIcon from "@mui/icons-material/Search";
 const TraineesList = () => {
   const baseUrl = import.meta.env.VITE_PORT_URL;
   const [trainees, setTrainees] = useState([]);
+  const [traineesDetails, setTraineesDetails] = useState([]);
   const [searchTerm, setSearchTerm] = useState(""); // Search state
   const [orderBy, setOrderBy] = useState("userUsername"); // Default sort order
   const [sortDirection, setSortDirection] = useState("asc"); // Default sort direction
@@ -140,6 +141,26 @@ const TraineesList = () => {
     setOpenAssignDialog(false);
   };
 
+  const preprocessTraineeDetails = (data) => {
+    return data.map((trainee) => {
+      const { copyOfId, ...rest } = trainee;
+      return {
+        ID: rest.id,
+        "Full Name (Arabic)": rest.fullNameInArabic,
+        "Phone Number": rest.phoneNumber,
+        "ID Type": rest.idType,
+        "ID Number": rest.idNumber,
+        City: rest.city,
+        Address: rest.address,
+        "University Name": rest.universityName,
+        "University Major": rest.universityMajor,
+        "Expected Graduation Date": rest.expectedGraduationDate,
+        "Training Field": rest.trainingField,
+        "Branch Location": rest.branchLocation,
+      };
+    });
+  };
+
   const handleAssignConfirm = async () => {
     try {
       const traineeIds = selectedTrainees.map((trainee) => trainee.userId);
@@ -184,14 +205,14 @@ const TraineesList = () => {
     const fileType =
       "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8";
     const fileExtension = ".xlsx";
-    const ws = XLSX.utils.json_to_sheet(filteredTrainees);
+    const ws = XLSX.utils.json_to_sheet(traineesDetails);
     const wb = { Sheets: { data: ws }, SheetNames: ["data"] };
     const excelBuffer = XLSX.write(wb, { bookType: "xlsx", type: "array" });
     const data = new Blob([excelBuffer], { type: fileType });
     const url = URL.createObjectURL(data);
     const a = document.createElement("a");
     a.href = url;
-    a.download = "traineesList" + fileExtension;
+    a.download = "TraineesDetails" + fileExtension;
     document.body.appendChild(a);
     a.click();
     setTimeout(() => {
@@ -200,39 +221,54 @@ const TraineesList = () => {
     }, 100);
   };
 
-  useEffect(() => {
-    const fetchTrainees = async () => {
-      try {
-        const response = await axios.get(`${baseUrl}/api/v1/admin/users`);
-        if (response.status === 200) {
-          const traineeUsers = response.data.filter(
-            (item) => item.userRole === "TRAINEE"
-          );
-          setTrainees(traineeUsers);
-        }
-      } catch (error) {
-        console.log(error);
+  const fetchTrainees = async () => {
+    try {
+      const response = await axios.get(`${baseUrl}/api/v1/admin/users`);
+      if (response.status === 200) {
+        const traineeUsers = response.data.filter(
+          (item) => item.userRole === "TRAINEE"
+        );
+        setTrainees(traineeUsers);
       }
-    };
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  useEffect(() => {
     fetchTrainees();
   }, [userIdToDelete]);
 
-  useEffect(() => {
-    const fetchSupervisors = async () => {
-      try {
-        const response = await axios.get(`${baseUrl}/api/v1/admin/users`);
-        if (response.status === 200) {
-          const supervisorUsers = response.data.filter(
-            (item) => item.userRole === "SUPERVISOR"
-          );
-          setSupervisors(supervisorUsers);
-        }
-      } catch (error) {
-        console.log(error);
+  const fetchSupervisors = async () => {
+    try {
+      const response = await axios.get(`${baseUrl}/api/v1/admin/users`);
+      if (response.status === 200) {
+        const supervisorUsers = response.data.filter(
+          (item) => item.userRole === "SUPERVISOR"
+        );
+        setSupervisors(supervisorUsers);
       }
-    };
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  useEffect(() => {
     fetchSupervisors();
   }, [openAssignDialog]);
+
+  const fetchTraineesDetails = async () => {
+    try {
+      const response = await axios.get(`${baseUrl}/api/v1/admin/trainees`);
+      if (response.status === 200) {
+        const processedData = preprocessTraineeDetails(response.data);
+        setTraineesDetails(processedData);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  useEffect(() => {
+    fetchTraineesDetails();
+  }, [userIdToDelete]);
 
   return (
     <div style={{ padding: "3rem" }}>
@@ -254,10 +290,15 @@ const TraineesList = () => {
           />
         </Grid>
         <div>
-          <IconButton color="primary" onClick={exportToExcel}>
-            <DownloadIcon />
-            &nbsp;Export
-          </IconButton>
+          <Button
+            variant="contained"
+            color="secondary"
+            startIcon={<DownloadIcon />}
+            onClick={exportToExcel}
+          >
+            {" "}
+            Export
+          </Button>
           <Button
             variant="contained"
             color="primary"
