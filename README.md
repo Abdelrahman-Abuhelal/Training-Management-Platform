@@ -12,29 +12,28 @@ The primary goal of this application is to provide a centralized platform for HR
 - Refresh token
 - Logout mechanism
 
-# System Features
-
+##  System Features
 - Three Portals for three user types: Trainee, Supervisor, SuperAdmin.
 - Secure routing mechanism based on roles using ReactJS.
   
 ## Trainees
-- Trainees can register their personal details (Profile).
-- Trainees can submit their form answers.
+- Register their personal details (Profile).
+- Submit their form answers.
   
 ## Supervisors
-- Supervisors can view their trainees.
-- Supervisors can assign tasks to their trainees plan.
-- Supervisors can add resources to their trainees plan.
-- Supervisors can review the trainees' skills during Internship.
+- View their trainees.
+- Assign tasks to their trainees plan.
+- Add resources to their trainees plan.
+- Review the trainees' skills during Internship.
   
 ## HR managers
-- HR managers can view all trainees, all supervisors.
-- HR managers can create, edit, and delete trainees profiles.
-- HR managers can update their academic grades.
-- HR managers can assign trainees to a supervisor.
-- HR managers can create any type of review form questions (text, multi-choices, one-choice).
-- HR managers can add announcements to trainees and supervisors.
-- HR managers can view all reviews done by supervisors and trainees.
+- View all trainees, all supervisors.
+- Create, edit, and delete trainees profiles.
+- Update their academic grades.
+- Assign trainees to a supervisor.
+- Create any type of review form questions (text, multi-choices, one-choice).
+- Add announcements to trainees and supervisors.
+- View all submitted forms by supervisors and trainees.
   
 
 ## Class Diagram
