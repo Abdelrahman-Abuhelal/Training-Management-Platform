@@ -181,6 +181,8 @@ const TraineesList = () => {
     });
   };
 
+ 
+
   const handleAssignConfirm = async () => {
     try {
       const traineeIds = selectedTrainees.map((user) => user.userId);
@@ -312,12 +314,11 @@ const TraineesList = () => {
         <div>
           <Button
             variant="contained"
-            color="secondary"
+            color="primary"
             startIcon={<DownloadIcon />}
             onClick={exportToExcel}
           >
-            {" "}
-            Export
+            Export As Excel
           </Button>
           <Button
             variant="contained"

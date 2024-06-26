@@ -22,6 +22,10 @@ import {
 import { Alert } from "@mui/material";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import DeleteIcon from "@mui/icons-material/Delete";
+import { jsPDF } from "jspdf";
+import autoTable from "jspdf-autotable";
+import PictureAsPdfOutlinedIcon from "@mui/icons-material/PictureAsPdfOutlined";
+
 const EditTrainee = () => {
   const navigate = useNavigate();
   const { userId } = useParams();
@@ -48,12 +52,16 @@ const EditTrainee = () => {
   // courses and grades
   const [courses, setCourses] = useState([]);
   const [selectedCourses, setSelectedCourses] = useState([]);
-  const [traineeDetailsSnackbarSuccess, setTraineeDetailsSnackbarSuccess] = useState(false);
-  const [traineeDetailsSnackbarError, setTraineeDetailsSnackbarError] = useState(false);
-
+  const [traineeDetailsSnackbarSuccess, setTraineeDetailsSnackbarSuccess] =
+    useState(false);
+  const [traineeDetailsSnackbarError, setTraineeDetailsSnackbarError] =
+    useState(false);
+  const [
+    traineeDetailsSnackbarErrorMessage,
+    setTraineeDetailsSnackbarErrorMessage,
+  ] = useState("");
   const [gradesSnackbarSuccess, setGradesSnackbarSuccess] = useState(false);
   const [gradesSnackbarError, setGradesSnackbarError] = useState(false);
-  const [traineeDetailsSnackbarErrorMessage,setTraineeDetailsSnackbarErrorMessage] = useState("");
 
   const baseUrl = import.meta.env.VITE_PORT_URL;
 
@@ -118,7 +126,7 @@ const EditTrainee = () => {
       if (response.status === 200) {
         const fetchedCourses = response.data;
         console.log("Fetched Courses:", fetchedCourses); //  debugging
-  
+
         // Ensure fetchedCourses is an array before mapping
         if (Array.isArray(fetchedCourses)) {
           setCourses(
@@ -138,7 +146,6 @@ const EditTrainee = () => {
       console.error("Error fetching courses:", error);
     }
   };
-  
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -149,9 +156,11 @@ const EditTrainee = () => {
       return;
     }
 
-    if (! /^05\d{8}$/.test(phoneNumber)) {
+    if (!/^05\d{8}$/.test(phoneNumber)) {
       setTraineeDetailsSnackbarError(true);
-      setTraineeDetailsSnackbarErrorMessage("Phone Number must start with '05' and have 10 digits ");
+      setTraineeDetailsSnackbarErrorMessage(
+        "Phone Number must start with '05' and have 10 digits "
+      );
       return;
     }
 
@@ -162,8 +171,6 @@ const EditTrainee = () => {
     e.preventDefault();
 
     setShowDetailsConfirmation(false);
-
-
 
     const formData = {
       fullNameInArabic,
@@ -193,7 +200,6 @@ const EditTrainee = () => {
       console.error("Error:", error);
     }
   };
-
 
   const handleCancel = () => {
     // User cancelled action
@@ -334,15 +340,40 @@ const EditTrainee = () => {
     }
   };
 
-  // const handleSelectChange = (e) => {
-  //   const value = e.target.value;
-  //   if (selectedCourses.includes(value)) {
-  //     alert("You've already selected this course.");
-  //     e.target.value = '';
-  //   } else {
-  //     setSelectedCourses([...selectedCourses, value]);
-  //   }
-  // };
+  const generatePDF = () => {
+    const doc = new jsPDF();
+
+    doc.text(username + " Details", 14, 20);
+    autoTable(doc, {
+      startY: 25,
+      head: [["Field", "Value"]],
+      body: [
+        ["Username", username],
+        ["Full Name", userFullName],
+        ["Full Name (Arabic)", fullNameInArabic],
+        ["Phone Number", phoneNumber],
+        ["ID Type", idType],
+        ["ID Number", idNumber],
+        ["City", city],
+        ["Address", address],
+        ["University Name", universityName],
+        ["University Major", universityMajor],
+        ["Expected Graduation Date", expectedGraduationDate],
+        ["Training Field", trainingField],
+        ["Branch Location", branchLocation],
+      ],
+    });
+
+    doc.addPage();
+    doc.text(username + " Taken Courses and Grades", 14, 20);
+    autoTable(doc, {
+      startY: 25,
+      head: [["Course", "Grade"]],
+      body: courses.map((course) => [course.course, course.grade]),
+    });
+
+    doc.save(username + "_Details.pdf");
+  };
 
   return (
     <Container maxWidth="lg">
@@ -725,6 +756,18 @@ const EditTrainee = () => {
           </Grid>
         </Grid>
       </form>
+      <Box display="flex" justifyContent="center" mt={2}>
+        <Button
+          variant="contained"
+          color="primary"
+          startIcon={<PictureAsPdfOutlinedIcon />}
+          sx={{ mb: 7 }}
+          size="large"
+          onClick={generatePDF}
+        >
+          Export Profile to PDF
+        </Button>
+      </Box>
 
       {/* Confirmation Dialog for Details */}
       <Dialog open={showDetailsConfirmation} onClose={handleCancel}>
@@ -792,7 +835,7 @@ const EditTrainee = () => {
           severity="error"
           sx={{ width: "100%" }}
         >
-        {traineeDetailsSnackbarErrorMessage}
+          {traineeDetailsSnackbarErrorMessage}
         </Alert>
       </Snackbar>
 
