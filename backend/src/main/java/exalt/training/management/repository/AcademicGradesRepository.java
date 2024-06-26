@@ -12,7 +12,7 @@ import java.util.Optional;
 public interface AcademicGradesRepository extends JpaRepository<AcademicGrades, Long> {
  boolean existsAcademicGradesByType(CourseType type);
  Optional<AcademicGrades> findAcademicGradesByTypeAndTrainee_Id(CourseType courseType, Long id);
- Optional<List<AcademicGrades>> findAllByTrainee_Id(Long id);
+ Optional<List<AcademicGrades>> findByTraineeId(Long traineeId);
 
  void deleteAllByTrainee_Id(Long id);
 }

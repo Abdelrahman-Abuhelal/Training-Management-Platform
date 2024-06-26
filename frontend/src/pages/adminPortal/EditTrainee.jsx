@@ -117,18 +117,28 @@ const EditTrainee = () => {
       );
       if (response.status === 200) {
         const fetchedCourses = response.data;
-        setCourses(
-          fetchedCourses.map((course) => ({
-            course: course.type,
-            grade: course.mark,
-          }))
-        );
-        setSelectedCourses(fetchedCourses.map((course) => course.type));
+        console.log("Fetched Courses:", fetchedCourses); //  debugging
+  
+        // Ensure fetchedCourses is an array before mapping
+        if (Array.isArray(fetchedCourses)) {
+          setCourses(
+            fetchedCourses.map((course) => ({
+              course: course.type,
+              grade: course.mark,
+            }))
+          );
+          setSelectedCourses(fetchedCourses.map((course) => course.type));
+        } else {
+          console.error("Error: Response data is not an array");
+        }
+      } else {
+        console.error("Fetch Courses Failed:", response.statusText);
       }
     } catch (error) {
-      console.error("Error:", error);
+      console.error("Error fetching courses:", error);
     }
   };
+  
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -184,21 +194,6 @@ const EditTrainee = () => {
     }
   };
 
-  // const handlePhoneNumberChange = (e) => {
-  //   let value = e.target.value;
-  //   if (/^05\d*$/.test(value)) {
-  //     setPhoneNumber(value);
-  //   } else if (value === "" || /^05\d*$/.test(value.slice(0, 3))) {
-  //     setPhoneNumber(value);
-  //   }
-  // };
-
-  // const handleIdNumberChange = (e) => {
-  //   const value = e.target.value;
-  //   if (/^\d{0,9}$/.test(value)) {
-  //     setIdNumber(value);
-  //   }
-  // };
 
   const handleCancel = () => {
     // User cancelled action

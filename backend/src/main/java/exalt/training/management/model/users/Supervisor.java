@@ -28,11 +28,12 @@ public class Supervisor {
     @ToString.Exclude
     private AppUser user;
 
-    @ManyToMany(mappedBy = "supervisors", fetch = FetchType.EAGER) // Trainee already has this field
+    @ManyToMany(mappedBy = "supervisors")
     private List<Trainee> trainees;
 
     @ManyToMany(cascade = CascadeType.PERSIST) // Consider adding cascade type if needed
     private List<SuperAdmin> superAdmins;
+
     @Nullable
     @ManyToMany
     private List<Form> forms;

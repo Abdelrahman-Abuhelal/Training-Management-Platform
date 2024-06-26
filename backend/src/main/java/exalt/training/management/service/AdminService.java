@@ -140,9 +140,9 @@ public class AdminService {
 
 
     @Transactional
-    public void assignSupervisorsToTrainees(List<Long> supervisorIds, List<Long> traineeIds) {
-        List<Supervisor> supervisors = supervisorRepository.findAllById(supervisorRepository.findSupervisorIdsByUserIds(supervisorIds));
-        List<Trainee> trainees = traineeRepository.findAllById(traineeRepository.findTraineeIdsByUserIds(traineeIds));
+    public void assignSupervisorsToTrainees(List<Long> supervisorUserIds, List<Long> traineeUserIds) {
+        List<Supervisor> supervisors = supervisorRepository.findAllById(supervisorRepository.findSupervisorIdsByUserIds(supervisorUserIds));
+        List<Trainee> trainees = traineeRepository.findAllById(traineeRepository.findTraineeIdsByUserIds(traineeUserIds));
 
         log.info("Supervisors : "+supervisors+"; Trainees :  "+ trainees);
 
@@ -153,6 +153,21 @@ public class AdminService {
         }
 
         traineeRepository.saveAll(trainees);
+    }
+
+
+    public List<Long> getSupervisorsUserIdsByTraineeUserId(Long traineeUserId) {
+        Optional<Trainee> traineeOpt = traineeRepository.findTraineeByUserId(traineeUserId);
+        if (!traineeOpt.isPresent()) {
+            throw new AppUserNotFoundException("Trainee not found with ID: " + traineeUserId);
+        }
+        Trainee trainee=traineeOpt.get();
+        List<Supervisor> hisSupervisors=trainee.getSupervisors().stream().toList();
+        List<Long> supervisorIds = hisSupervisors.stream()
+                .map(Supervisor::getId)
+                .collect(Collectors.toList());
+        //  Return UserIDs for the supervisors
+        return appUserRepository.findUserIdsBySupervisorIds(supervisorIds);
     }
 
     @Transactional
@@ -206,7 +221,7 @@ public class AdminService {
         if (trainee == null) {
             throw new AppUserNotFoundException("User is not a Trainee");
         }
-        return academicGradesRepository.findAllByTrainee_Id(trainee.getId()).orElseThrow(()-> new AcademicGradesNotFoundException("There are no academic grades for this trainee"));
+        return academicGradesRepository.findByTraineeId(trainee.getId()).orElseThrow(()-> new AcademicGradesNotFoundException("There are no academic grades for this trainee"));
 
     }
 

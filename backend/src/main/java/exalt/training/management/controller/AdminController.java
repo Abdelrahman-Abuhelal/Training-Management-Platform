@@ -89,6 +89,14 @@ public class AdminController {
         return new ResponseEntity<>(message, HttpStatus.OK);
     }
 
+    @Operation(summary = "Get Supervisor User IDs for a Trainee User ID", security =  @SecurityRequirement(name = "loginAuth"))
+    @PreAuthorize("hasAnyRole('SUPER_ADMIN')")
+    @GetMapping("/supervisorsUserIds/{userId}")
+    public ResponseEntity <List<Long>> getSupervisorsUserIdsByForTrainee(@PathVariable Long userId) {
+        List <Long> SupervisorUserIds = adminService.getSupervisorsUserIdsByTraineeUserId(userId);
+        return new ResponseEntity<>(SupervisorUserIds, HttpStatus.OK);
+    }
+
     @Operation(summary = "Update User using his Id", security =  @SecurityRequirement(name = "loginAuth"))
     @PreAuthorize("hasAnyRole('SUPER_ADMIN','SUPERVISOR')")
     @PutMapping("/users/{id}")

@@ -20,8 +20,8 @@ import AccountBoxIcon from '@mui/icons-material/AccountBox';
 import GroupsIcon from '@mui/icons-material/Groups';
 const routes = [
   { path: "/dashboard", name: "Dashboard", icon: <SpaceDashboardIcon /> },
-  { path: "/trainees", name: "Trainees", icon: <GroupsIcon /> },
   { path: "/supervisors", name: "Supervisors", icon: <AccountBoxIcon /> },
+  { path: "/trainees", name: "Trainees", icon: <GroupsIcon /> },
   { path: "/form-templates", name: "Form Templates", icon: <ListAltIcon /> },
   { path: "/create-forms", name: "Create Forms", icon: <ListAltIcon /> },
   { path: "/create-announcements", name: "Create Announcements", icon: <CampaignIcon /> },

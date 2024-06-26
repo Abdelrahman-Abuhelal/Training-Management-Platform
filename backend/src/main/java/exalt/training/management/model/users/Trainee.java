@@ -45,18 +45,21 @@ public class Trainee {
 
     @Nullable
     @OneToMany(mappedBy = "trainee",cascade = CascadeType.ALL)
-    @JsonIgnore
+    @JsonManagedReference
     @ToString.Exclude
     private Set<AcademicGrades> academicGrades;
 
     @ManyToMany
-    @JsonIgnore
+    @JoinTable(
+            name = "trainee_supervisor",
+            joinColumns = @JoinColumn(name = "trainee_id"),
+            inverseJoinColumns = @JoinColumn(name = "supervisor_id")
+    )
     private List<Supervisor> supervisors;
+
     @ManyToMany
     @JsonIgnore
     private List<Form> forms;
-
-
 
     @OneToOne
     @JsonBackReference

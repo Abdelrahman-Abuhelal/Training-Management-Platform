@@ -133,8 +133,28 @@ const TraineesList = () => {
     }
   };
 
-  const handleAssignToSupervisor = () => {
-    setOpenAssignDialog(true);
+  const handleAssignToSupervisor = async () => {
+    if (selectedTrainees.length === 1) {
+      const traineeId = selectedTrainees[0].userId;
+      try {
+        const response = await axios.get(
+          `${baseUrl}/api/v1/admin/supervisorsUserIds/${traineeId}`
+        );
+        if (response.status === 200) {
+          const supervisorUserIds = response.data;
+          setSelectedSupervisors(
+            supervisors.filter((supervisor) =>
+              supervisorUserIds.includes(supervisor.userId)
+            )
+          );
+          setOpenAssignDialog(true);
+        } else {
+          console.error("Failed to fetch supervisors");
+        }
+      } catch (error) {
+        console.error("Error fetching supervisors:", error);
+      }
+    }
   };
 
   const handleCloseAssignDialog = () => {
@@ -163,7 +183,7 @@ const TraineesList = () => {
 
   const handleAssignConfirm = async () => {
     try {
-      const traineeIds = selectedTrainees.map((trainee) => trainee.userId);
+      const traineeIds = selectedTrainees.map((user) => user.userId);
       const supervisorIds = selectedSupervisors.map(
         (supervisor) => supervisor.userId
       );
@@ -253,7 +273,7 @@ const TraineesList = () => {
   };
   useEffect(() => {
     fetchSupervisors();
-  }, [openAssignDialog]);
+  }, [openAssignDialog]); // Trigger fetch when dialog opens
 
   const fetchTraineesDetails = async () => {
     try {

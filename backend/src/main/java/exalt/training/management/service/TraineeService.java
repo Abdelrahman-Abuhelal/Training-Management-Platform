@@ -6,6 +6,7 @@ import exalt.training.management.mapper.TraineeMapper;
 import exalt.training.management.model.*;
 import exalt.training.management.model.forms.Form;
 import exalt.training.management.model.users.AppUser;
+import exalt.training.management.model.users.Supervisor;
 import exalt.training.management.model.users.Trainee;
 import exalt.training.management.repository.AcademicGradesRepository;
 import exalt.training.management.repository.TraineeRepository;
@@ -80,6 +81,9 @@ public class TraineeService {
 
         return "Trainee Data Registered Successfully";
     }
+
+
+
 
 /*    public List<Form> findFormsByTraineeId(Long traineeId) {
         return entityManager.createQuery(
