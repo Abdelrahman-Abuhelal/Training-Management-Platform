@@ -29,6 +29,7 @@ public class Supervisor {
     private AppUser user;
 
     @ManyToMany(mappedBy = "supervisors")
+    @JsonBackReference
     private List<Trainee> trainees;
 
     @ManyToMany(cascade = CascadeType.PERSIST) // Consider adding cascade type if needed

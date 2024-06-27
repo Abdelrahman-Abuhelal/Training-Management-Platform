@@ -55,6 +55,7 @@ public class Trainee {
             joinColumns = @JoinColumn(name = "trainee_id"),
             inverseJoinColumns = @JoinColumn(name = "supervisor_id")
     )
+    @JsonManagedReference
     private List<Supervisor> supervisors;
 
     @ManyToMany

@@ -181,8 +181,6 @@ const TraineesList = () => {
     });
   };
 
- 
-
   const handleAssignConfirm = async () => {
     try {
       const traineeIds = selectedTrainees.map((user) => user.userId);
@@ -311,7 +309,8 @@ const TraineesList = () => {
             sx={{ maxWidth: "250px" }} // Adjust the maxWidth as needed
           />
         </Grid>
-        <div>
+        <div >
+          {" "}
           <Button
             variant="contained"
             color="primary"
@@ -325,7 +324,7 @@ const TraineesList = () => {
             color="primary"
             onClick={handleAssignToSupervisor}
             disabled={selectedTrainees.length !== 1}
-          >
+            style={{ marginLeft: '8px' }}>
             Assign to Supervisor
           </Button>
         </div>

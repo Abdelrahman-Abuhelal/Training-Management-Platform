@@ -10,6 +10,7 @@ import {
   Grid,
   MenuItem,
   Box,
+  Paper,
   FormControl,
   InputLabel,
   Button,
@@ -65,11 +66,7 @@ const EditTrainee = () => {
 
   const baseUrl = import.meta.env.VITE_PORT_URL;
 
-  useEffect(() => {
-    userData();
-    fetchUserData();
-    fetchUserCourses();
-  }, []);
+
 
   const userData = async () => {
     try {
@@ -80,11 +77,18 @@ const EditTrainee = () => {
         const userData = response.data;
         setUsername(userData.userUsername);
         setUserFullName(userData.userFirstName + " " + userData.userLastName);
+        console.log("Is Ok")
       }
     } catch (error) {
-      console.error("Error:", error);
+      console.error("Error:", error.message);
     }
   };
+  
+  useEffect(() => {
+    userData();
+    fetchUserData();
+    fetchUserCourses();
+  }, []);
 
   const fetchUserData = async () => {
     try {
@@ -394,10 +398,12 @@ const EditTrainee = () => {
       <Button onClick={navigateBack} startIcon={<ArrowBackIcon />}>
         Back to Trainees
       </Button>
-
+      <Paper elevation={3} sx={{ p: 4, m: 6}}>
       <form onSubmit={handleSubmit}>
         <FormControl fullWidth>
-          <Typography align="center" variant="h6" gutterBottom>
+          <Typography  sx={{
+          marginBottom: "1rem",
+        }} align="center" variant="h6" gutterBottom>
             {userFullName} Profile
           </Typography>
 
@@ -644,10 +650,12 @@ const EditTrainee = () => {
           </Box>
         </FormControl>
       </form>
+      </Paper>
 
+      <Paper elevation={3} sx={{ p: 4, m: 6}}>
       <form
         onSubmit={handleAcademicGradesSubmit}
-        style={{ paddingTop: "40px", paddingBottom: "80px" }}
+        style={{ paddingBottom: "1rem" }}
       >
         <Grid container spacing={3}>
           <Grid item xs={12}>
@@ -756,6 +764,7 @@ const EditTrainee = () => {
           </Grid>
         </Grid>
       </form>
+      </Paper>
       <Box display="flex" justifyContent="center" mt={2}>
         <Button
           variant="contained"
