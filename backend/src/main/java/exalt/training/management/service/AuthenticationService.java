@@ -192,41 +192,58 @@ public class AuthenticationService {
         return "Your password has been changed";
     }
 
+    public AuthenticationResponse refreshToken(String refreshToken) {
+        String userEmail = tokenService.extractEmail(refreshToken);
 
-
-
-    public void refreshToken(
-            HttpServletRequest request,
-            HttpServletResponse response
-    ) throws IOException {
-        final String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
-        final String refreshToken;
-        final String userEmail;
-        if (authHeader == null ||!authHeader.startsWith("Bearer ")) {
-            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-            log.info("Token is not good");
-            return;
-        }
-        refreshToken = authHeader.substring(7);
-        userEmail = tokenService.extractEmail(refreshToken);
         if (userEmail != null) {
-            var user = this.appUserRepository.findByEmail(userEmail)
+            var user = appUserRepository.findByEmail(userEmail)
                     .orElseThrow();
             if (tokenService.isTokenValid(refreshToken, user)) {
                 var loginToken = tokenService.generateRefreshToken(user);
                 revokeAllUserTokens(user);
                 saveUserLoginToken(user, loginToken);
-                var authResponse = AuthenticationResponse.builder()
+                return AuthenticationResponse.builder()
                         .loginToken(loginToken)
                         .refreshToken(refreshToken)
                         .build();
-                response.setStatus(HttpServletResponse.SC_OK);
-                new ObjectMapper().writeValue(response.getOutputStream(), authResponse);
             }
-        }else {
-            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
         }
+        return null;
     }
+
+
+//    public void refreshToken(
+//            HttpServletRequest request,
+//            HttpServletResponse response
+//    ) throws IOException {
+//        final String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
+//        final String refreshToken;
+//        final String userEmail;
+//        if (authHeader == null ||!authHeader.startsWith("Bearer ")) {
+//            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+//            log.info("Token is not good");
+//            return;
+//        }
+//        refreshToken = authHeader.substring(7);
+//        userEmail = tokenService.extractEmail(refreshToken);
+//        if (userEmail != null) {
+//            var user = this.appUserRepository.findByEmail(userEmail)
+//                    .orElseThrow();
+//            if (tokenService.isTokenValid(refreshToken, user)) {
+//                var loginToken = tokenService.generateRefreshToken(user);
+//                revokeAllUserTokens(user);
+//                saveUserLoginToken(user, loginToken);
+//                var authResponse = AuthenticationResponse.builder()
+//                        .loginToken(loginToken)
+//                        .refreshToken(refreshToken)
+//                        .build();
+//                response.setStatus(HttpServletResponse.SC_OK);
+//                new ObjectMapper().writeValue(response.getOutputStream(), authResponse);
+//            }
+//        }else {
+//            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+//        }
+//    }
 
 
 }

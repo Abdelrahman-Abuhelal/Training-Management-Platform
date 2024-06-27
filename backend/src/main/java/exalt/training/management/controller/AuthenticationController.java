@@ -12,6 +12,7 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -53,14 +54,30 @@ public class AuthenticationController {
        return ResponseEntity.ok(authService.forgotPasswordViaEmail(forgotPasswordEmail));
     }
 
-    @Operation(summary = "Refresh Your Token")
     @PostMapping("/refresh-token")
-    public void refreshToken(
-            HttpServletRequest request,
-            HttpServletResponse response
-    ) throws IOException {
-        authService.refreshToken(request, response);
+    public ResponseEntity<AuthenticationResponse> refreshToken(HttpServletRequest request) {
+        final String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        String refreshToken = authHeader.substring(7);
+        AuthenticationResponse authResponse = authService.refreshToken(refreshToken);
+
+        if (authResponse != null) {
+            return ResponseEntity.ok(authResponse);
+        } else {
+            return ResponseEntity.badRequest().build();
+        }
     }
+//    @Operation(summary = "Refresh Your Token")
+//    @PostMapping("/refresh-token")
+//    public void refreshToken(
+//            HttpServletRequest request,
+//            HttpServletResponse response
+//    ) throws IOException {
+//        authService.refreshToken(request, response);
+//    }
 
 
     @Operation(summary = "Complete Your Registration (Confirmation-Token Required)", security =  @SecurityRequirement(name = "confirmationAuth") )
