@@ -25,9 +25,9 @@ import {
   Grid,
   FormGroup,
   FormControlLabel,
-  InputLabel,
-  Select,
-  Menu,
+  ListItem,
+  ListItemAvatar ,
+  Avatar ,
   MenuItem,
   InputAdornment,
 } from "@mui/material";
@@ -292,56 +292,56 @@ const TraineesList = () => {
 
   return (
     <div style={{ padding: "3rem" }}>
-      <div className="flex items-center justify-between mb-4">
-        <Grid item>
-          <TextField
-            placeholder="Search username"
-            variant="outlined"
-            value={searchTerm}
-            onChange={handleSearchChange}
-            InputProps={{
-              startAdornment: (
-                <InputAdornment position="start">
-                  <SearchIcon />
-                </InputAdornment>
-              ),
-            }}
-            sx={{ maxWidth: "250px" }} // Adjust the maxWidth as needed
-          />
-        </Grid>
-        <div >
-          {" "}
-          <Button
-            variant="contained"
-            color="primary"
-            startIcon={<DownloadIcon />}
-            onClick={exportToExcel}
-          >
-            Export As Excel
-          </Button>
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={handleAssignToSupervisor}
-            disabled={selectedTrainees.length !== 1}
-            style={{ marginLeft: '8px' }}>
-            Assign to Supervisor
-          </Button>
-        </div>
+  <Paper className="flex items-center justify-between mb-4" sx={{ padding: '16px', backgroundColor:"#e6e6fa"}}>
+      <Grid item>
+        <TextField
+          placeholder="Search username"
+          variant="outlined"
+          value={searchTerm}
+          onChange={handleSearchChange}
+          InputProps={{
+            startAdornment: (
+              <InputAdornment position="start">
+                <SearchIcon />
+              </InputAdornment>
+            ),
+          }}
+          sx={{ maxWidth: '250px' }} // Adjust the maxWidth as needed
+        />
+      </Grid>
+      <div>
+        <Button
+          variant="contained"
+          color="primary"
+          startIcon={<DownloadIcon />}
+          onClick={exportToExcel}
+        >
+          Export As Excel
+        </Button>
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={handleAssignToSupervisor}
+          disabled={selectedTrainees.length !== 1}
+          sx={{ marginLeft: '8px' }}
+        >
+          Assign to Supervisor
+        </Button>
       </div>
-      <Paper sx={{ border: "1px solid #ccc", mt: 2 }}>
-        <Typography
+    </Paper>
+      <Paper sx={{ border: "1px solid #ccc", mt: 5 }}>
+      <Typography
           variant="h5"
           component="h2"
           gutterBottom
           align="center"
-          sx={{ fontWeight: "bold", mt: 3, ml: 1 }}
+          sx={{ fontWeight: "bold", mt: 2, ml: 1 }}
         >
           List of Trainees
         </Typography>
         <TableContainer component={Paper}>
           <Table aria-label="trainee table">
-            <TableHead>
+            <TableHead sx={{ borderTop: "1px solid #ccc",borderBottom: "1px solid #ccc"}}>
               <TableRow>
                 <TableCell>
                   <Checkbox
@@ -435,68 +435,58 @@ const TraineesList = () => {
         onRowsPerPageChange={handleChangeRowsPerPage}
       />
 
-      {/* Assign Dialog */}
-      <Dialog open={openAssignDialog} onClose={handleCloseAssignDialog}>
-        <DialogTitle>Assign Supervisors</DialogTitle>
-        <DialogContent dividers>
-          <Grid container direction="column" alignItems="center">
-            <Grid item xs={12}>
-              <FormControl component="fieldset">
-                <FormGroup>
-                  {supervisors.map((supervisor) => (
-                    <FormControlLabel
-                      key={supervisor.userId}
-                      control={
-                        <Checkbox
-                          checked={selectedSupervisors.some(
-                            (item) => item.userId === supervisor.userId
-                          )}
-                          onChange={(e) =>
-                            handleSupervisorCheckboxChange(e, supervisor)
-                          }
-                        />
-                      }
-                      label={supervisor.userUsername}
-                    />
-                  ))}
-                </FormGroup>
-              </FormControl>
-            </Grid>
-          </Grid>
-        </DialogContent>
-        <DialogActions>
-          <Grid container justifyContent="center">
-            <Button onClick={handleCloseAssignDialog}>Cancel</Button>
-            <Button
-              variant="contained"
-              color="primary"
-              onClick={handleAssignConfirm}
-            >
-              Assign
-            </Button>
-          </Grid>
-        </DialogActions>
-      </Dialog>
+      
 
       {/* Delete Dialog */}
-      <Dialog open={openDeleteDialog} onClose={handleCloseDeleteDialog}>
-        <DialogTitle>Delete Confirmation</DialogTitle>
-        <DialogContent>
-          <Typography variant="h6" sx={{ mb: 2 }}>
-            Are you sure you want to delete '{usernameToDelete}'?
-          </Typography>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleCloseDeleteDialog}>Cancel</Button>
+      <Dialog open={openAssignDialog} onClose={handleCloseAssignDialog}>
+      <DialogTitle>Assign Supervisors</DialogTitle>
+      <DialogContent dividers>
+        <Grid container direction="column" alignItems="center">
+          <Grid item xs={12}>
+            <FormControl component="fieldset">
+              <FormGroup>
+                {supervisors.map((supervisor) => (
+                  <ListItem
+                    key={supervisor.userId}
+                    disablePadding
+                    dense
+                    button
+                    onClick={(e) =>
+                      handleSupervisorCheckboxChange(e, supervisor)}
+                  >
+                    <ListItemAvatar>
+                      <Avatar>{supervisor.userUsername.charAt(0)}</Avatar>
+                    </ListItemAvatar>
+                    <ListItemText primary={supervisor.userUsername} />
+                    <Checkbox
+                      edge="end"
+                      checked={selectedSupervisors.some(
+                        (item) => item.userId === supervisor.userId
+                      )}
+                      onChange={(e) =>
+                        handleSupervisorCheckboxChange(e, supervisor)
+                      }
+                    />
+                  </ListItem>
+                ))}
+              </FormGroup>
+            </FormControl>
+          </Grid>
+        </Grid>
+      </DialogContent>
+      <DialogActions>
+        <Grid container justifyContent="center">
+          <Button onClick={handleCloseAssignDialog}>Cancel</Button>
           <Button
             variant="contained"
-            color="error"
-            onClick={handleConfirmDelete}
+            color="primary"
+            onClick={handleAssignConfirm}
           >
-            Delete
+            Assign
           </Button>
-        </DialogActions>
-      </Dialog>
+        </Grid>
+      </DialogActions>
+    </Dialog>
     </div>
   );
 };

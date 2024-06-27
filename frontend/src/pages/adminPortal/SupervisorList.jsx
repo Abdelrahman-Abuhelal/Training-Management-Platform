@@ -122,7 +122,8 @@ const HR_Supervisors_List = () => {
     fetchSupervisors();
   }, [userIdToDelete, sortDirection, orderBy]);
 
-  useEffect(() => {
+  useEffect(
+    () => {
     const fetchTrainees = async () => {
       try {
         const response = await axios.get(`${baseUrl}/api/v1/admin/users`);
@@ -137,7 +138,8 @@ const HR_Supervisors_List = () => {
       }
     };
     fetchTrainees();
-  }, []);
+  }, []
+);
 
   const handleDelete = (user) => {
     setUserIdToDelete(user.userId);
@@ -230,6 +232,7 @@ const HR_Supervisors_List = () => {
               variant="outlined"
               value={searchTerm}
               onChange={handleSearchChange}
+
               InputProps={{
                 startAdornment: (
                   <InputAdornment position="start">
@@ -237,7 +240,7 @@ const HR_Supervisors_List = () => {
                   </InputAdornment>
                 ),
               }}
-              sx={{ maxWidth: "250px" }} // Adjust the maxWidth as needed
+              sx={{ maxWidth: "250px", mr:"1rem",mt:"1rem" }} // Adjust the maxWidth as needed
             />
           </Grid>
         </Grid>
