@@ -136,7 +136,7 @@ const FormTemplatePage = () => {
   return (
     <div style={{ display: "flex", justifyContent: "center" }}>
       <Paper elevation={3} sx={{ p: 4, m: 6, width: "70%", maxWidth: 1000 }}>
-     <Button sx={{ pb: 2 }}  onClick={() => {
+     <Button sx={{ pb: 4 }}  onClick={() => {
               navigate(`/form-templates/`);
             }} startIcon={<ArrowBackIcon />}>
         Back to Forms

@@ -4,12 +4,15 @@ import exalt.training.management.dto.FillFormDto;
 import exalt.training.management.dto.FormCreationDto;
 import exalt.training.management.dto.FormDataDto;
 import exalt.training.management.dto.FormDto;
+import exalt.training.management.exception.FormNotFoundException;
 import exalt.training.management.model.forms.Form;
 import exalt.training.management.service.FormService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -20,6 +23,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/forms")
+@Slf4j
 public class FormController {
 
 
@@ -44,7 +48,13 @@ public class FormController {
     @PreAuthorize("hasAnyRole('SUPER_ADMIN')")
     @Operation(summary = "Get All Forms (Admin Only)" , security =  @SecurityRequirement(name = "loginAuth"))
     public ResponseEntity <List<FormDto>> getAllForms() {
-        return ResponseEntity.ok(formService.getAllForms());
+        try {
+            return ResponseEntity.ok(formService.getAllForms());
+        } catch (Exception e) {
+            String errorMessage = "Error retrieving forms: " + e.getMessage();
+            // Log the error
+            log.error(errorMessage, e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);        }
     }
 
     @GetMapping("/{formId}")
@@ -59,6 +69,31 @@ public class FormController {
     public ResponseEntity<String> updateForm(@PathVariable Long formId, @RequestBody @Valid FormDataDto formDataDto) {
         return ResponseEntity.ok(formService.updateForm(formId,formDataDto));
     }
+
+    @PutMapping(value = "/{formId}/send")
+    @PreAuthorize("hasAnyRole('SUPER_ADMIN')")
+    @Operation(summary = "Send Form Template to users" , security =  @SecurityRequirement(name = "loginAuth"))
+    public ResponseEntity<String> sendFormToUsers(
+            @PathVariable Long formId,
+            @RequestBody List<Long> userIds
+    ) {
+        try {
+            String result = formService.sendFormToUsers(formId, userIds);
+            return ResponseEntity.ok(result);
+        } catch (FormNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error sending form: " + e.getMessage());
+        }    }
+
+    @GetMapping("/{formId}/users-assigned")
+    @PreAuthorize("hasAnyRole('TRAINEE','SUPERVISOR','SUPER_ADMIN')")
+    @Operation(summary = "Get Users which The form is assigned to" , security =  @SecurityRequirement(name = "loginAuth"))
+    public ResponseEntity<List<Long>> getUsersFormIsAssignedTo(@PathVariable Long formId) {
+        return ResponseEntity.ok(formService.getUsersFormIsAssignedTo(formId));
+    }
+
+
 
 //    @PutMapping("/{formId}")
 //    @PreAuthorize("hasAnyRole('TRAINEE','SUPERVISOR','SUPER_ADMIN')")

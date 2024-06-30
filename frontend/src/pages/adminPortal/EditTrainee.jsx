@@ -20,6 +20,7 @@ import {
   DialogActions,
   Snackbar,
 } from "@mui/material";
+import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
 import { Alert } from "@mui/material";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -392,7 +393,7 @@ const EditTrainee = () => {
         }}
       >
         {" "}
-        Edit Trainee Profile
+        <ManageAccountsIcon/>  Edit Profile 
       </Typography>
 
       <Button onClick={navigateBack} startIcon={<ArrowBackIcon />}>

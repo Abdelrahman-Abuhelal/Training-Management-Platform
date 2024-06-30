@@ -1,4 +1,4 @@
-import { RouterProvider, createBrowserRouter } from "react-router-dom";
+import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 import { useAuth } from "../provider/authProvider";
 import { ProtectedRoute } from "./ProtectedRoute";
 import CreateUsersForm from "../pages/adminPortal/CreateUsersForm.jsx";
@@ -28,15 +28,14 @@ import Resources from "../pages/supervisorPortal/Resources.jsx";
 import AnnouncementForm from "../pages/adminPortal/CreateAnnounments.jsx";
 import FormTemplates from "../pages/adminPortal/FormTemplates.jsx"
 import FormTemplatePage from "../pages/adminPortal/FormTemplatePage.jsx"
+import NotFound from '../pages/NotFound.jsx';
 
 const Routes = () => {
   const { user } = useAuth();
   const isAuthenticated = user !== null && user.login_token !== null;
-  const isTrainee = user !== null && user.appUserDto.userRole === "TRAINEE";
-  const isSupervisor =
-    user !== null && user.appUserDto.userRole === "SUPERVISOR";
-  const isSuperAdmin =
-    user !== null && user.appUserDto.userRole === "SUPER_ADMIN";
+  const isTrainee = user !== null && user.appUserDto.userRole === 'TRAINEE';
+  const isSupervisor = user !== null && user.appUserDto.userRole === 'SUPERVISOR';
+  const isSuperAdmin = user !== null && user.appUserDto.userRole === 'SUPER_ADMIN';
   // console.log("user", user);
   // console.log("isAuthenticated", isAuthenticated);
   // console.log("isTrainee", isTrainee);
@@ -45,51 +44,26 @@ const Routes = () => {
 
   // accessible to all users
   const routesForPublic = [
-    {
-      path: "/dev",
-      element: <div>Abdelrahman Abuhelal Page</div>,
-    },
-    {
-      path: "/about-us",
-      element: <div>About Us</div>,
-    },
-    {
-      path: "/test",
-      element: <TraineeProfile />,
-    },
+    { path: '/dev', element: <div>Abdelrahman Abuhelal Page</div> },
+    { path: '/about-us', element: <div>About Us</div> },
+    { path: '/test', element: <TraineeProfile /> },
   ];
 
   // accessible only to authenticated users
   const routesForTraineeOnly = [
     {
-      path: "/",
+      path: '/',
       element: <ProtectedRoute />,
-      // Wrap the component in ProtectedRoute
       children: [
         {
-          path: "/",
-          element: <TraineeLayout />, // Supervisor layout component
+          path: '/',
+          element: <TraineeLayout />,
           children: [
-            {
-              path: "/",
-              element: <TraineeHome />,
-            },
-            {
-              path: "/dashboard",
-              element: <TraineeHome />,
-            },
-            {
-              path: "/profile",
-              element: <TraineeProfile />,
-            },
-            {
-              path: "/forms",
-              element: <FormsList />,
-            },
-            {
-              path: "/forms/:formId",
-              element: <FillForm />,
-            },
+            { path: '/', element: <TraineeHome /> },
+            { path: '/dashboard', element: <TraineeHome /> },
+            { path: '/profile', element: <TraineeProfile /> },
+            { path: '/forms', element: <FormsList /> },
+            { path: '/forms/:formId', element: <FillForm /> },
           ],
         },
       ],
@@ -98,46 +72,20 @@ const Routes = () => {
 
   const routesForSupervisorOnly = [
     {
-      path: "/",
-      element: <ProtectedRoute />, // Wrap the component in ProtectedRoute
+      path: '/',
+      element: <ProtectedRoute />,
       children: [
         {
-          path: "/",
-          element: <SupervisorLayout />, // Supervisor layout component
+          path: '/',
+          element: <SupervisorLayout />,
           children: [
-            {
-              path: "/", // Default child route
-              element: <SupervisorHome />,
-            },
-            {
-              path: "/dashboard", // Default child route
-              element: <SupervisorHome />,
-            },
-            {
-              path: "/my-trainees",
-              element: <Supervisor_Trainees_List />,
-            },
-            // {
-            //   path:"/resources",
-            //   element: <GoogleDriveAuth/>
-            // },
-            {
-              path:"/review-form/:userId",
-              element: <ReviewForm />
-            },
-            {
-              path: "/view-trainee/:userId",
-              element: <TraineeProfileView />,
-            },
-            {
-              path: "/add-resource",
-              element: <Resources />,
-            },
-            {
-              path: "/assign-task",
-              element: <AssignTask />,
-            },
-            // Add more child routes as needed
+            { path: '/', element: <SupervisorHome /> },
+            { path: '/dashboard', element: <SupervisorHome /> },
+            { path: '/my-trainees', element: <Supervisor_Trainees_List /> },
+            { path: '/review-form/:userId', element: <ReviewForm /> },
+            { path: '/view-trainee/:userId', element: <TraineeProfileView /> },
+            { path: '/add-resource', element: <Resources /> },
+            { path: '/assign-task', element: <AssignTask /> },
           ],
         },
       ],
@@ -146,58 +94,24 @@ const Routes = () => {
 
   const routesForSuperAdminOnly = [
     {
-      path: "/",
+      path: '/',
       element: <ProtectedRoute />,
       children: [
         {
-          path: "/",
-          element: <AdminLayout />, 
+          path: '/',
+          element: <AdminLayout />,
           children: [
-            {
-              path: "/",
-              element: <AdminHome />,
-            },
-            {
-              path: "/dashboard",
-              element: <AdminHome />,
-            },
-            {
-              path: "/trainees",
-              element: <HR_Trainees_List />,
-            },
-            {
-              path: "/supervisors",
-              element: <HR_Supervisors_List />,
-            },
-            {
-              path: "/create-forms",
-              element: <FormBuilder />,
-            },
-            {
-              path:"/form-templates",
-              element: <FormTemplates />,
-            },
-            {
-              path:"/form-templates/:formId",
-              element: <FormTemplatePage />,
-            },
-            {
-              path: "/edit-trainee/:userId",
-              element: <EditTrainee />,
-            },
-    
-            {
-              path: "/create-users",
-              element: <CreateUsersForm />,
-            },
-            {
-              path:"/supervisors/:userId/trainees",
-              element: <SupervisorTraineesList />
-            },
-            {
-              path: "/create-announcements",
-              element: <AnnouncementForm />
-            }
+            { path: '/', element: <AdminHome /> },
+            { path: '/dashboard', element: <AdminHome /> },
+            { path: '/trainees', element: <HR_Trainees_List /> },
+            { path: '/supervisors', element: <HR_Supervisors_List /> },
+            { path: '/create-forms', element: <FormBuilder /> },
+            { path: '/form-templates', element: <FormTemplates /> },
+            { path: '/form-templates/:formId', element: <FormTemplatePage /> },
+            { path: '/edit-trainee/:userId', element: <EditTrainee /> },
+            { path: '/create-users', element: <CreateUsersForm /> },
+            { path: '/supervisors/:userId/trainees', element: <SupervisorTraineesList /> },
+            { path: '/create-announcements', element: <AnnouncementForm /> },
           ],
         },
       ],
@@ -205,34 +119,23 @@ const Routes = () => {
   ];
 
   const routesForNotAuthenticatedOnly = [
-    {
-      path: "/",
-      element: <Login />,
-    },
-    {
-      path: "/confirm-account/:token",
-      element: <CompleteRegistration />,
-    },
-    {
-      path: "/forgot-password-email",
-      element: <ForgotPasswordEmail />,
-    },
-    {
-      path: "/forgot-password-reset/:token",
-      element: <ForgotPasswordReset />,
-    },
-    {
-      path: "/create-users-form",
-      element: <CreateUsersForm />,
-    },
+    { path: '/', element: <Login /> },
+    { path: '/confirm-account/:token', element: <CompleteRegistration /> },
+    { path: '/forgot-password-email', element: <ForgotPasswordEmail /> },
+    { path: '/forgot-password-reset/:token', element: <ForgotPasswordReset /> },
+    { path: '/create-users-form', element: <CreateUsersForm /> },
   ];
 
-  const router = createBrowserRouter([
-    ...(!isAuthenticated ? routesForNotAuthenticatedOnly : []),
+  const allRoutes = [
+    ...routesForPublic,
+    ...(isAuthenticated ? [] : routesForNotAuthenticatedOnly),
     ...(isTrainee ? routesForTraineeOnly : []),
     ...(isSupervisor ? routesForSupervisorOnly : []),
     ...(isSuperAdmin ? routesForSuperAdminOnly : []),
-  ]);
+    { path: '*', element: <NotFound /> }, // Fallback for undefined routes
+  ];
+
+  const router = createBrowserRouter(allRoutes);
 
   return <RouterProvider router={router} />;
 };

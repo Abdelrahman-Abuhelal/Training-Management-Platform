@@ -4,6 +4,7 @@ import { deleteFormTemplateAPI, fetchFormTemplatesAPI } from "../../apis/forms";
 import { useNavigate } from 'react-router-dom';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
+import AddIcon from '@mui/icons-material/Add';
 import {
   TableContainer,
   Table,
@@ -31,6 +32,7 @@ import {
   Avatar,
   IconButton
 } from "@mui/material";
+import CheckCircleIcon from '@mui/icons-material/CheckCircle'; // Import the icon
 
 const FormTemplates = () => {
   const [formTemplates, setFormTemplates] = useState([]);
@@ -41,6 +43,8 @@ const FormTemplates = () => {
   const [snackbarMessage, setSnackbarMessage] = useState("");
   const [showSendFormModal, setShowSendFormModal] = useState(false);
   const [selectedUsers, setSelectedUsers] = useState([]);
+  const [usersAlreadySent,setUsersAlreadySent]=useState([]);
+  const [idToSend,setIdToSend]=useState(null);
   const [trainees,setTrainees]= useState([]);
   const [supervisors,setSupervisors]= useState([]);
   const navigate  = useNavigate();
@@ -55,7 +59,9 @@ const FormTemplates = () => {
     setIdToDelete(formId);
     setShowConfirmation(true);
   }
-
+ const formBuilderPage = ()=>{
+  navigate("/create-forms")
+ }
 
   const handleSearchUsers = (query) => {
     setSearchQuery(query);
@@ -64,7 +70,11 @@ const FormTemplates = () => {
   const filteredTrainees = trainees.filter((user) =>
     user.userUsername.toLowerCase().includes(searchQuery.toLowerCase())
   );
-  
+
+  const filteredSupervisors = supervisors.filter((user) =>
+    user.userUsername.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
   const handleDeleteForm = (formId) => {
     deleteFormTemplateAPI(formId)
       .then(() => {
@@ -112,9 +122,9 @@ const FormTemplates = () => {
   };
 
   const handleSendForm = () => {
-    // Logic to send form to selected users
     console.log("Sending form to:", selectedUsers);
-    // Close modal after sending
+    sendFormAPI();
+    setSelectedUsers([]);
     setShowSendFormModal(false);
     // Additional logic to handle sending the form template
   };
@@ -132,6 +142,29 @@ const FormTemplates = () => {
     setSelectedUsers(newSelectedUsers);
   };
 
+  const getUsersAssignedTo = async () => {
+    try{
+      const response = await axios.get(`${baseUrl}/api/v1/forms/${idToSend}/users-assigned`);
+      setUsersAlreadySent(response.data);
+      console.log(response.data);
+    }catch(error){
+      console.log(error);
+    }
+  }
+
+  const sendFormAPI = async () => {
+    try {
+      const response = await axios.put(`${baseUrl}/api/v1/forms/${idToSend}/send`,
+        selectedUsers
+      );
+      setIdToSend(null)
+      if (response.status === 200) {
+        console.log(response.data);
+      }     
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const fetchTrainees = async () => {
     try {
@@ -146,9 +179,6 @@ const FormTemplates = () => {
       console.log(error);
     }
   };
-  useEffect(() => {
-    fetchTrainees();
-  }, [showSendFormModal]);
 
   const fetchSupervisors = async () => {
     try {
@@ -163,14 +193,25 @@ const FormTemplates = () => {
       console.log(error);
     }
   };
+
   useEffect(() => {
+    getUsersAssignedTo();
+    fetchTrainees();
     fetchSupervisors();
   }, [showSendFormModal]);
 
-  const openSendFormModal = () => {
+  const openSendFormModal = (formId) => {
     setShowSendFormModal(true);
+    setIdToSend(formId);
     // Additional logic to prepare the modal (e.g., fetching users to display)
   };
+
+const handleCancelSendForm = () => {
+  setIdToSend(null)
+  setSelectedUsers([]);
+  setShowSendFormModal(false);
+}
+
 
   if (loading) {
     return <Typography>Loading...</Typography>;
@@ -178,60 +219,77 @@ const FormTemplates = () => {
 
   return (
     <Box sx={{ margin: '2rem auto', maxWidth: '1000px' }}>
-        <Paper sx={{ padding: '2rem', border: '0.5px solid #ccc' }}>
+  <Paper sx={{ padding: '2rem', border: '0.5px solid #ccc' }}>
         <Typography
-        variant="h5"
-        gutterBottom
-        align="center"
-        sx={{
-          fontWeight: "bold",
-          marginBottom: "1rem", // Example of custom margin
-        }}
-      >
-        Form Templates
-      </Typography>
-      <TableContainer component={Paper} sx={{  border: '1px solid #ddd' }}>
-        <Table>
-        <TableHead sx={{ backgroundColor: '#f5f5f5' }}>
-        <TableRow>
-        <TableCell sx={{ fontWeight: 'bold', borderBottom: '1px solid #ddd' }}>
-        <Typography variant="subtitle1" fontWeight="bold">
-                  Title
-                </Typography>
-              </TableCell>
-              <TableCell sx={{ fontWeight: 'bold', borderBottom: '1px solid #ddd' }}>
-              <Typography variant="subtitle1" fontWeight="bold">
-                  Description
-                </Typography>
-              </TableCell>
-              <TableCell sx={{ fontWeight: 'bold', borderBottom: '1px solid #ddd' }}>
-              <Typography variant="subtitle1" fontWeight="bold">
-                  Actions
-                </Typography>
-              </TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {formTemplates.map((form) => (
-              <TableRow key={form.id}>
-                <TableCell>{form.title}</TableCell>
-                <TableCell>{form.description}</TableCell>
-                <TableCell>
-                  <Button variant="outlined" color="primary" onClick={() => handleViewForm(form.id)}>
-                    <EditIcon/>
-                  </Button>
-                  <Button variant="outlined" color="error" onClick={() => viewConfirmation(form.id)}>
-                    <DeleteIcon/>
-                  </Button>
-                  <Button variant="outlined" color="primary" onClick={openSendFormModal}>
-                    Send
-                  </Button>
+          variant="h5"
+          gutterBottom
+          align="center"
+          sx={{
+            fontWeight: "bold",
+            marginBottom: "1rem",
+          }}
+        >
+          EXALT Form Templates
+        </Typography>
+        <Box sx={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '1rem' }}>
+          <Button onClick={formBuilderPage} startIcon={<AddIcon />}>
+            Create new Form
+          </Button>
+        </Box>
+        <TableContainer component={Paper} sx={{ border: '1px solid #ddd' }}>
+          <Table>
+            <TableHead sx={{ backgroundColor: '#f5f5f5' }}>
+              <TableRow>
+                <TableCell sx={{ fontWeight: 'bold', borderBottom: '1px solid #ddd' }}>
+                  <Typography variant="subtitle1" fontWeight="bold">
+                    Title
+                  </Typography>
+                </TableCell>
+                <TableCell sx={{ fontWeight: 'bold', borderBottom: '1px solid #ddd' }}>
+                  <Typography variant="subtitle1" fontWeight="bold">
+                    Description
+                  </Typography>
+                </TableCell>
+                <TableCell sx={{ fontWeight: 'bold', borderBottom: '1px solid #ddd' }}>
+                  <Typography variant="subtitle1" fontWeight="bold">
+                  </Typography>
+                </TableCell>
+                <TableCell sx={{ fontWeight: 'bold', borderBottom: '1px solid #ddd' }}>
+                  <Typography variant="subtitle1" fontWeight="bold">
+                  </Typography>
+                </TableCell>
+                <TableCell sx={{ fontWeight: 'bold', borderBottom: '1px solid #ddd' }}>
+                  <Typography variant="subtitle1" fontWeight="bold">
+                  </Typography>
                 </TableCell>
               </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
+            </TableHead>
+            <TableBody>
+              {formTemplates.map((form) => (
+                <TableRow key={form.id}>
+                  <TableCell>{form.title}</TableCell>
+                  <TableCell>{form.description}</TableCell>
+                  <TableCell>
+                    <Button variant="outlined" color="primary" onClick={() => openSendFormModal(form.id)}>
+                      Send
+                    </Button>
+                  </TableCell>
+                  <TableCell>
+                    <Button variant="outlined" color="primary" onClick={() => handleViewForm(form.id)}>
+                      <EditIcon />
+                    </Button>
+                  </TableCell>
+                  <TableCell>
+                  <Button variant="outlined" color="error" onClick={() => viewConfirmation(form.id)}>
+                      <DeleteIcon />
+                    </Button>
+                  </TableCell>
+  
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
       </Paper>
 
       <Dialog open={showConfirmation} onClose={handleCancel}>
@@ -251,8 +309,8 @@ const FormTemplates = () => {
         </DialogActions>
       </Dialog>
 
-      <Dialog open={showSendFormModal} onClose={() => setShowSendFormModal(false)}>
-        <DialogTitle>Select Users</DialogTitle>
+      <Dialog open={showSendFormModal} onClose={handleCancelSendForm}>
+      <DialogTitle>Select Users</DialogTitle>
         <DialogContent>
           <TextField
             autoFocus
@@ -265,7 +323,7 @@ const FormTemplates = () => {
             onChange={(e) => handleSearchUsers(e.target.value)} 
           />
           <List>
-            <Typography> Traineess </Typography>
+            <Typography> Trainees </Typography>
             {filteredTrainees.map((user) => (
             <ListItem key={user.userId} button onClick={handleUserToggle(user.userId)}>
                 <ListItemAvatar>
@@ -274,6 +332,30 @@ const FormTemplates = () => {
                   </Avatar>
                 </ListItemAvatar>
                 <ListItemText primary={user.userUsername} />
+                {usersAlreadySent.includes(user.userId) && (
+                  <CheckCircleIcon color="success" /> 
+                )}
+                <Checkbox
+                  edge="end"
+                  onChange={handleUserToggle(user.userId)}
+                  checked={selectedUsers.indexOf(user.userId) !== -1}
+                />
+              </ListItem>
+            ))}
+          </List>
+          <List>
+            <Typography> Supervisors </Typography>
+            {filteredSupervisors.map((user) => (
+            <ListItem key={user.userId} button onClick={handleUserToggle(user.userId)}>
+                <ListItemAvatar>
+                  <Avatar>
+                  {user.userUsername.charAt(0)} {/* Add user avatar or initials */}
+                  </Avatar>
+                </ListItemAvatar>
+                <ListItemText primary={user.userUsername} />
+                {usersAlreadySent.includes(user.userId) && (
+                  <CheckCircleIcon color="success" /> 
+                )}
                 <Checkbox
                   edge="end"
                   onChange={handleUserToggle(user.userId)}
@@ -284,7 +366,7 @@ const FormTemplates = () => {
           </List>
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => setShowSendFormModal(false)} color="primary">
+          <Button onClick={handleCancelSendForm} color="primary">
             Cancel
           </Button>
           <Button onClick={handleSendForm} color="primary">

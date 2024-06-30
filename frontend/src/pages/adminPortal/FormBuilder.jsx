@@ -3,6 +3,7 @@ import { useForm } from "react-hook-form";
 import axios from "axios";
 import TextField from "@mui/material/TextField";
 import IconButton from "@mui/material/IconButton";
+import { useNavigate } from 'react-router-dom';
 import DeleteIcon from "@mui/icons-material/Delete";
 import Button from "@mui/material/Button";
 import MenuItem from "@mui/material/MenuItem";
@@ -20,11 +21,13 @@ import {
   Snackbar,
   Alert,
 } from "@mui/material";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 
 const FormBuilder = () => {
   const baseUrl = import.meta.env.VITE_PORT_URL;
   const [showConfirmation, setShowConfirmation] = useState(false);
   const [showSnackbar, setShowSnackbar] = useState(false);
+  const navigate  = useNavigate();
 
   const {
     register,
@@ -130,6 +133,9 @@ const FormBuilder = () => {
     );
   };
 
+  const navigateBack = () => {
+    navigate(`/form-templates`);
+  };
   const onSubmit = async (data) => {
     setShowConfirmation(true);
   };
@@ -144,12 +150,17 @@ const FormBuilder = () => {
 
   return (
     <div style={{ display: "flex", justifyContent: "center" }}>
+     
       <Paper elevation={3} sx={{ p: 4, m: 6, width: "75%", maxWidth: 1100 }}>
-        <Typography variant="h4" gutterBottom>
-          Form Builder
+       <Button   onClick={navigateBack} startIcon={<ArrowBackIcon />}>
+        Form Templates
+      </Button>
+        <Typography align="center" variant="h4" gutterBottom>
+         EXALT Form Builder
         </Typography>
-        <Typography variant="h6" gutterBottom>
-          Create any needed form by filling the required details.
+        <br />
+        <Typography align="center" variant="h6" gutterBottom>
+          Create any needed form by filling the required fields.
         </Typography>
         <br />
         <form onSubmit={handleSubmit(onSubmit)}>
@@ -202,10 +213,10 @@ const FormBuilder = () => {
                 >
                   <MenuItem value="text">Text</MenuItem>
                   <MenuItem value="one-answer-selection">
-                    One Answer Selection
+                    One Selection
                   </MenuItem>
                   <MenuItem value="multiple-answer-selection">
-                    Multiple Answer Selection
+                    Multiple Selections
                   </MenuItem>
                 </Select>
               </FormControl>
