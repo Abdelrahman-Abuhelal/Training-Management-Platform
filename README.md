@@ -21,9 +21,9 @@ The primary goal of this application is to provide a centralized platform for HR
 - Submit their form answers.
   
 ## Supervisors
-- View their trainees.
-- Assign tasks to their trainees plan.
-- Add resources to their trainees plan.
+- View their trainees profiles.
+- Assign tasks to their trainees portal.
+- Add resources to their trainees portal.
 - Review the trainees' skills during Internship.
   
 ## HR managers
