@@ -2,8 +2,8 @@
 It is a Training Management Application designed to streamline and enhance the process of managing training periods for Palestinian students within the company branches during summer or winter breaks.
 The primary goal of this application is to provide a centralized platform for HR managers, supervisors, and trainees to efficiently oversee and participate in the training process.
 
-Project Timeline : Dec 2023 - March 2024 , June 2024 - September 2024
-Project duration : 6 months.
+- Project Timeline : Dec 2023 - March 2024 , June 2024 - September 2024
+- Project Duration : 6 months.
 
 ## Security Features
 - User registration and login with JWT authentication
