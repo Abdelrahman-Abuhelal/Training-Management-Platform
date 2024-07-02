@@ -23,6 +23,6 @@ public class AppUserDto {
 
     private AppUserRole userRole;
 
-
+    private Boolean userEnabled;
 
 }

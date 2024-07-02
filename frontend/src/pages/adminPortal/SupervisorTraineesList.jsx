@@ -25,6 +25,7 @@ import {
 import { useNavigate } from "react-router-dom";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import SearchIcon from "@mui/icons-material/Search";
+import SearchComponent from "../../components/Search";
 
 const Supervisor_Trainees_List = () => {
   const { userId } = useParams();
@@ -41,13 +42,19 @@ const Supervisor_Trainees_List = () => {
   const navigate = useNavigate();
 
   const filteredTrainees = trainees.filter((trainee) =>
-    trainee.userUsername.toLowerCase().includes(searchTerm.toLowerCase())
+    trainee.userUsername.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    trainee.userFirstName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    trainee.userLastName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    trainee.userEmail.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   const paginatedTrainees = filteredTrainees.slice(
     page * rowsPerPage,
     page * rowsPerPage + rowsPerPage
   );
+  const capitalizeFirstLetter = (string) => {
+    return string.charAt(0).toUpperCase() + string.slice(1).toLowerCase();
+  };
 
   const fetchTrainees = async () => {
     try {
@@ -72,8 +79,10 @@ const Supervisor_Trainees_List = () => {
       );
       if (response.status === 200) {
         const userData = response.data;
-        setUsername(userData.userUsername);
-        setUserFullName(userData.userFirstName + " " + userData.userLastName);
+        setUsername(userData.userFirstName);
+        setUserFullName(
+          capitalizeFirstLetter(userData.userFirstName) + " " + capitalizeFirstLetter(userData.userLastName)
+        );
       }
     } catch (error) {
       console.error("Error:", error);
@@ -143,24 +152,12 @@ const Supervisor_Trainees_List = () => {
         </Grid>
         <Grid item>
           <Typography variant="h5" component="h2" gutterBottom>
-            {username}'s Trainees
+            {userFullName}'s Trainees
           </Typography>
         </Grid>
         <Grid item>
-          <TextField
-            placeholder="Search username"
-            variant="outlined"
-            value={searchTerm}
-            onChange={handleSearchChange}
-            InputProps={{
-              startAdornment: (
-                <InputAdornment position="start">
-                  <SearchIcon />
-                </InputAdornment>
-              ),
-            }}
-            sx={{ maxWidth: "250px" }} // Adjust the maxWidth as needed
-          />
+          <SearchComponent searchTerm={searchTerm} onSearchChange={handleSearchChange} />
+
         </Grid>
       </Grid>
 

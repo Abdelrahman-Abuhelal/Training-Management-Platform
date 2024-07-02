@@ -163,6 +163,9 @@ const FormTemplatePage = () => {
             sx={{ marginBottom: 2 }}
             fullWidth
           />
+          <br />
+          <br />
+
           {formData.questions.map((question, questionIndex) => (
             <div key={questionIndex}>
               <TextField

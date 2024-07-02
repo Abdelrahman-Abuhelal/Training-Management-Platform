@@ -17,6 +17,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @Slf4j
 public class AppUserService {
@@ -72,7 +74,9 @@ public class AppUserService {
         log.info(user.getFirstName()+" account has been activated (ACTIVE)");
         return "Account has been activated";
     }
-
+    public List<AppUser> getAllEnabledUsers() {
+        return appUserRepository.findByEnabledTrue();
+    }
     public boolean userAlreadyExists(String username){
         return appUserRepository.findByEmail(username).isPresent();
     }

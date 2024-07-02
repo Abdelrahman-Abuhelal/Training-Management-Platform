@@ -1,9 +1,6 @@
 package exalt.training.management.controller;
 
-import exalt.training.management.dto.FillFormDto;
-import exalt.training.management.dto.FormCreationDto;
-import exalt.training.management.dto.FormDataDto;
-import exalt.training.management.dto.FormDto;
+import exalt.training.management.dto.*;
 import exalt.training.management.exception.FormNotFoundException;
 import exalt.training.management.model.forms.Form;
 import exalt.training.management.service.FormService;
@@ -93,6 +90,11 @@ public class FormController {
         return ResponseEntity.ok(formService.getUsersFormIsAssignedTo(formId));
     }
 
+//    @Operation(summary = "Find all forms", security =  @SecurityRequirement(name = "loginAuth"))
+//    @PutMapping("/users/{userId}")
+//    public ResponseEntity<String> getFormsByUserId(@PathVariable Long userId)  {
+//        return ResponseEntity.ok(formService.getFormsByUserId(userId));
+//    }
 
 
 //    @PutMapping("/{formId}")

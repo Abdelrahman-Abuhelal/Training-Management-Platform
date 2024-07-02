@@ -25,7 +25,7 @@ const routes = [
   { path: "/form-templates", name: "Form Templates", icon: <ListAltIcon /> },
   { path: "/create-forms", name: "Create Forms", icon: <ListAltIcon /> },
   { path: "/create-announcements", name: "Create Announcements", icon: <CampaignIcon /> },
-  { path: "/create-users", name: "Create Users", icon: <GroupAddIcon /> },
+  { path: "/users", name: "User Management", icon: <GroupAddIcon /> },
   { path: "/change-password", name: "Settings", icon: <SettingsIcon /> },
 ];
 

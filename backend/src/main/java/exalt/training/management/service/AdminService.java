@@ -235,6 +235,13 @@ public class AdminService {
         }
         return userMapper.userToUserDto(users);
     }
+    public List<AppUserDto> getAllEnabledUsers(){
+        List<AppUser>users= appUserService.getAllEnabledUsers();
+        if (users.isEmpty()){
+            throw new AppUserNotFoundException("There are no enabled Users in the System");
+        }
+        return userMapper.userToUserDto(users);
+    }
 
     public Trainee getTraineeById(Long id){
         Optional<Trainee> trainee=traineeRepository.findById(id);

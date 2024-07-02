@@ -14,6 +14,7 @@ import java.util.Optional;
 public interface AppUserRepository extends JpaRepository<AppUser, Long> {
     Boolean existsByUsername(String username);
     Optional<AppUser> findByEmail(String email);
+    List<AppUser> findByEnabledTrue();
 
     Optional <List<AppUser>> findByRole(AppUserRole role);
     @Query("SELECT u FROM AppUser u WHERE u.trainee.id = :traineeId")

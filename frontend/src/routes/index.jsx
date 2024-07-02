@@ -29,7 +29,7 @@ import AnnouncementForm from "../pages/adminPortal/CreateAnnounments.jsx";
 import FormTemplates from "../pages/adminPortal/FormTemplates.jsx"
 import FormTemplatePage from "../pages/adminPortal/FormTemplatePage.jsx"
 import NotFound from '../pages/NotFound.jsx';
-
+import UserManagement from '../pages/adminPortal/UserManagement.jsx';
 const Routes = () => {
   const { user } = useAuth();
   const isAuthenticated = user !== null && user.login_token !== null;
@@ -109,7 +109,7 @@ const Routes = () => {
             { path: '/form-templates', element: <FormTemplates /> },
             { path: '/form-templates/:formId', element: <FormTemplatePage /> },
             { path: '/edit-trainee/:userId', element: <EditTrainee /> },
-            { path: '/create-users', element: <CreateUsersForm /> },
+            { path: '/users', element: <UserManagement /> },
             { path: '/supervisors/:userId/trainees', element: <SupervisorTraineesList /> },
             { path: '/create-announcements', element: <AnnouncementForm /> },
           ],

@@ -22,6 +22,7 @@ public interface AppUserMapper {
     @Mapping(source = "appUser.firstName",target = "userFirstName")
     @Mapping(source = "appUser.lastName",target = "userLastName")
     @Mapping(source = "appUser.username",target = "userUsername")
+    @Mapping(source = "appUser.enabled",target = "userEnabled")
     AppUserDto userToUserDto(AppUser appUser);
 
     @Mapping(source = "appUser.id",target = "userId")
@@ -30,13 +31,16 @@ public interface AppUserMapper {
     @Mapping(source = "appUser.firstName",target = "userFirstName")
     @Mapping(source = "appUser.lastName",target = "userLastName")
     @Mapping(source = "appUser.username",target = "userUsername")
+    @Mapping(source = "appUser.enabled",target = "userEnabled")
     List<AppUserDto> userToUserDto(List<AppUser> appUser);
+
     @Mapping(source = "appUserDto.userId",target = "id")
     @Mapping(source = "appUserDto.userEmail",target = "email")
     @Mapping(source = "appUserDto.userRole",target = "role")
     @Mapping(source = "appUserDto.userFirstName",target = "firstName")
     @Mapping(source = "appUserDto.userLastName",target = "lastName")
     @Mapping(source = "appUserDto.userUsername",target = "username")
+    @Mapping(source = "appUserDto.userEnabled",target = "enabled")
     AppUser userDtoToUser(AppUserDto appUserDto);
 
     @Mapping(source = "appUserDto.userId",target = "id")
@@ -45,6 +49,7 @@ public interface AppUserMapper {
     @Mapping(source = "appUserDto.userLastName",target = "lastName")
     @Mapping(source = "appUserDto.userRole",target = "role")
     @Mapping(source = "appUserDto.userUsername",target = "username")
+    @Mapping(source = "appUserDto.userEnabled",target = "enabled")
     AppUser userDtoToUser(AppUserDto appUserDto, @MappingTarget AppUser appUser);
 
     @Mapping(source = "appUserRequestDto.firstName",target = "firstName")

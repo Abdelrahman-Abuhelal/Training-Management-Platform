@@ -387,13 +387,11 @@ const EditTrainee = () => {
         gutterBottom
         align="center"
         sx={{
-          marginBottom: "1rem",
           marginTop: "1rem",
           color: "#1976D2",
         }}
       >
-        {" "}
-        <ManageAccountsIcon/>  Edit Profile 
+        <ManageAccountsIcon fontSize="large"/>  Edit Profile 
       </Typography>
 
       <Button onClick={navigateBack} startIcon={<ArrowBackIcon />}>

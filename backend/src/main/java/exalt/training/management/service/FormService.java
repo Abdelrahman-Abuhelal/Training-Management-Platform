@@ -2,6 +2,7 @@ package exalt.training.management.service;
 
 
 import exalt.training.management.dto.*;
+import exalt.training.management.exception.AppUserNotFoundException;
 import exalt.training.management.exception.FormNotFoundException;
 import exalt.training.management.mapper.FormMapper;
 import exalt.training.management.mapper.QuestionMapper;
@@ -151,6 +152,11 @@ public class FormService {
                 .collect(Collectors.toList());
 
         return userIds;   }
+
+//    public Forms getFormsByUserId(Long userId) {
+//    AppUser appUser =appUserRepository.findById(userId).orElseThrow(() -> new AppUserNotFoundException("User not found with that ID"));
+//    appUser.getForms();
+//    }
 
 //   public List <FormDataDto> getAllTraineeForms(){
 //        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();

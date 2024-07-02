@@ -24,19 +24,20 @@ import {
   FormControl,
   Grid,
   FormGroup,
+  Box,
   FormControlLabel,
   ListItem,
-  ListItemAvatar ,
-  Avatar ,
+  ListItemAvatar,
+  Avatar,
   MenuItem,
   InputAdornment,
 } from "@mui/material";
+import SearchComponent from "../../components/Search";
 import DeleteIcon from "@mui/icons-material/Delete";
 import DownloadIcon from "@mui/icons-material/Download";
 import { useNavigate } from "react-router-dom";
 import * as XLSX from "xlsx";
-import SearchIcon from "@mui/icons-material/Search";
-
+import PeopleOutlineIcon from '@mui/icons-material/PeopleOutline';
 const TraineesList = () => {
   const baseUrl = import.meta.env.VITE_PORT_URL;
   const [trainees, setTrainees] = useState([]);
@@ -54,9 +55,15 @@ const TraineesList = () => {
   const [supervisors, setSupervisors] = useState([]); // State to hold all supervisors
   const [openAssignDialog, setOpenAssignDialog] = useState(false); // Dialog state
   const navigate = useNavigate();
+  const headerTextStyle = { fontSize: '1.1rem', fontWeight: 'bold' }; // Header text style
+  const bodyTextStyle = { fontSize: '0.9rem' }; // Body text style
+
 
   const filteredTrainees = trainees.filter((trainee) =>
-    trainee.userUsername.toLowerCase().includes(searchTerm.toLowerCase())
+    trainee.userUsername.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    trainee.userFirstName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    trainee.userLastName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    trainee.userEmail.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   const paginatedTrainees = filteredTrainees.slice(
@@ -290,64 +297,54 @@ const TraineesList = () => {
     fetchTraineesDetails();
   }, [userIdToDelete]);
 
+
+
+
   return (
     <div style={{ padding: "3rem" }}>
-  <Paper className="flex items-center justify-between mb-4" sx={{ padding: '16px', backgroundColor:"#e6e6fa"}}>
-      <Grid item>
-        <TextField
-          placeholder="Search username"
-          variant="outlined"
-          value={searchTerm}
-          onChange={handleSearchChange}
-          InputProps={{
-            startAdornment: (
-              <InputAdornment position="start">
-                <SearchIcon />
-              </InputAdornment>
-            ),
-          }}
-          sx={{ maxWidth: '250px' }} // Adjust the maxWidth as needed
-        />
-      </Grid>
-      <div>
-        <Button
-          variant="contained"
-          color="primary"
-          startIcon={<DownloadIcon />}
-          onClick={exportToExcel}
-        >
-          Export As Excel
-        </Button>
-        <Button
-          variant="contained"
-          color="primary"
-          onClick={handleAssignToSupervisor}
-          disabled={selectedTrainees.length !== 1}
-          sx={{ marginLeft: '8px' }}
-        >
-          Assign to Supervisor
-        </Button>
-      </div>
-    </Paper>
+      <Paper className="flex items-center justify-between mb-4" sx={{ padding: '16px', backgroundColor: "#e6e6fa" }}>
+      <SearchComponent searchTerm={searchTerm} onSearchChange={handleSearchChange} />
+        <div>
+          <Button
+            variant="contained"
+            color="primary"
+            startIcon={<DownloadIcon />}
+            onClick={exportToExcel}
+            sx={{ fontSize: "1.0rem", }}
+          >
+            Export As Excel
+          </Button>
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={handleAssignToSupervisor}
+            disabled={selectedTrainees.length !== 1}
+            sx={{ fontSize: "1.0rem", marginLeft: '8px' }}
+          >
+            Assign to Supervisor
+          </Button>
+        </div>
+      </Paper>
       <Paper sx={{ border: "1px solid #ccc", mt: 5 }}>
-      <Typography
+        <Typography
           variant="h5"
           component="h2"
           gutterBottom
           align="center"
-          sx={{ fontWeight: "bold", mt: 2, ml: 1 }}
+          sx={{ fontSize: "1.7rem", fontWeight: "bold", mt: 2, ml: 1 }}
         >
-          List of Trainees
+          <Box display="flex" alignItems="center" justifyContent="center">
+            <PeopleOutlineIcon fontSize="large" sx={{ mr: 1 }} />
+            Trainees 
+          </Box>
         </Typography>
         <TableContainer component={Paper}>
           <Table aria-label="trainee table">
-            <TableHead sx={{ borderTop: "1px solid #ccc",borderBottom: "1px solid #ccc"}}>
+            <TableHead sx={{ borderTop: "1px solid #ccc", borderBottom: "1px solid #ccc" }}>
               <TableRow>
                 <TableCell>
                   <Checkbox
-                    checked={
-                      selectedTrainees.length === paginatedTrainees.length
-                    }
+                    checked={selectedTrainees.length === paginatedTrainees.length}
                     onChange={(e) => {
                       if (e.target.checked) {
                         setSelectedTrainees(paginatedTrainees);
@@ -357,31 +354,32 @@ const TraineesList = () => {
                     }}
                   />
                 </TableCell>
-                <TableCell variant="head">
+                <TableCell>
                   <TableSortLabel
                     active={orderBy === "userUsername"}
                     direction={sortDirection}
-                    onClick={(event) =>
-                      handleRequestSort(event, "userUsername")
-                    }
+                    onClick={(event) => handleRequestSort(event, "userUsername")}
                   >
-                    <Typography variant="h6">Username</Typography>
+                    <Typography sx={headerTextStyle}>Username</Typography>
                   </TableSortLabel>
                 </TableCell>
-                <TableCell variant="head">
-                  <Typography variant="h6">First Name</Typography>
+                <TableCell>
+                  <Typography sx={headerTextStyle}>First Name</Typography>
                 </TableCell>
-                <TableCell variant="head">
-                  <Typography variant="h6">Last Name</Typography>
+                <TableCell>
+                  <Typography sx={headerTextStyle}>Last Name</Typography>
                 </TableCell>
-                <TableCell variant="head">
-                  <Typography variant="h6">Email</Typography>
+                <TableCell>
+                  <Typography sx={headerTextStyle}>Email</Typography>
                 </TableCell>
-                <TableCell variant="head">
-                  <Typography variant="h6">Role</Typography>
+                <TableCell>
+                  <Typography sx={headerTextStyle}>Role</Typography>
                 </TableCell>
-                <TableCell variant="head">
-                  <Typography variant="h6">Actions</Typography>
+                <TableCell align="center">
+                  <Typography sx={headerTextStyle}>Edit Profile</Typography>
+                </TableCell>
+                <TableCell align="center">
+                  <Typography sx={headerTextStyle}>Actions</Typography>
                 </TableCell>
               </TableRow>
             </TableHead>
@@ -396,28 +394,39 @@ const TraineesList = () => {
                       onChange={(e) => handleCheckboxChange(e, item)}
                     />
                   </TableCell>
-                  <TableCell>{item.userUsername}</TableCell>
-                  <TableCell>{item.userFirstName}</TableCell>
-                  <TableCell>{item.userLastName}</TableCell>
-                  <TableCell>{item.userEmail}</TableCell>
                   <TableCell>
-                    {item.userRole.charAt(0).toUpperCase() +
-                      item.userRole.slice(1).toLowerCase()}
+                    <Typography sx={bodyTextStyle}>{item.userUsername}</Typography>
                   </TableCell>
                   <TableCell>
+                    <Typography sx={bodyTextStyle}>{item.userFirstName}</Typography>
+                  </TableCell>
+                  <TableCell>
+                    <Typography sx={bodyTextStyle}>{item.userLastName}</Typography>
+                  </TableCell>
+                  <TableCell>
+                    <Typography sx={bodyTextStyle}>{item.userEmail}</Typography>
+                  </TableCell>
+                  <TableCell>
+                    <Typography sx={bodyTextStyle}>
+                      {item.userRole.charAt(0).toUpperCase() + item.userRole.slice(1).toLowerCase()}
+                    </Typography>
+                  </TableCell>
+                  <TableCell align="center">
                     <IconButton
                       size="small"
                       onClick={() => navigate(`/edit-trainee/${item.userId}`)}
                       color="primary"
                     >
-                      <ManageAccountsIcon />
+                      <ManageAccountsIcon fontSize="large" />
                     </IconButton>
+                  </TableCell>
+                  <TableCell align="center">
                     <IconButton
                       size="small"
                       onClick={() => handleDelete(item)}
                       color="error"
                     >
-                      <DeleteIcon />
+                      <DeleteIcon fontSize="large" />
                     </IconButton>
                   </TableCell>
                 </TableRow>
@@ -435,58 +444,58 @@ const TraineesList = () => {
         onRowsPerPageChange={handleChangeRowsPerPage}
       />
 
-      
+
 
       {/* Delete Dialog */}
       <Dialog open={openAssignDialog} onClose={handleCloseAssignDialog}>
-      <DialogTitle>Assign Supervisors</DialogTitle>
-      <DialogContent dividers>
-        <Grid container direction="column" alignItems="center">
-          <Grid item xs={12}>
-            <FormControl component="fieldset">
-              <FormGroup>
-                {supervisors.map((supervisor) => (
-                  <ListItem
-                    key={supervisor.userId}
-                    disablePadding
-                    dense
-                    button
-                    onClick={(e) =>
-                      handleSupervisorCheckboxChange(e, supervisor)}
-                  >
-                    <ListItemAvatar>
-                      <Avatar>{supervisor.userUsername.charAt(0)}</Avatar>
-                    </ListItemAvatar>
-                    <ListItemText primary={supervisor.userUsername} />
-                    <Checkbox
-                      edge="end"
-                      checked={selectedSupervisors.some(
-                        (item) => item.userId === supervisor.userId
-                      )}
-                      onChange={(e) =>
-                        handleSupervisorCheckboxChange(e, supervisor)
-                      }
-                    />
-                  </ListItem>
-                ))}
-              </FormGroup>
-            </FormControl>
+        <DialogTitle>Assign Supervisors</DialogTitle>
+        <DialogContent dividers>
+          <Grid container direction="column" alignItems="center">
+            <Grid item xs={12}>
+              <FormControl component="fieldset">
+                <FormGroup>
+                  {supervisors.map((supervisor) => (
+                    <ListItem
+                      key={supervisor.userId}
+                      disablePadding
+                      dense
+                      button
+                      onClick={(e) =>
+                        handleSupervisorCheckboxChange(e, supervisor)}
+                    >
+                      <ListItemAvatar>
+                        <Avatar>{supervisor.userUsername.charAt(0)}</Avatar>
+                      </ListItemAvatar>
+                      <ListItemText primary={supervisor.userUsername} />
+                      <Checkbox
+                        edge="end"
+                        checked={selectedSupervisors.some(
+                          (item) => item.userId === supervisor.userId
+                        )}
+                        onChange={(e) =>
+                          handleSupervisorCheckboxChange(e, supervisor)
+                        }
+                      />
+                    </ListItem>
+                  ))}
+                </FormGroup>
+              </FormControl>
+            </Grid>
           </Grid>
-        </Grid>
-      </DialogContent>
-      <DialogActions>
-        <Grid container justifyContent="center">
-          <Button onClick={handleCloseAssignDialog}>Cancel</Button>
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={handleAssignConfirm}
-          >
-            Assign
-          </Button>
-        </Grid>
-      </DialogActions>
-    </Dialog>
+        </DialogContent>
+        <DialogActions>
+          <Grid container justifyContent="center">
+            <Button onClick={handleCloseAssignDialog}>Cancel</Button>
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={handleAssignConfirm}
+            >
+              Assign
+            </Button>
+          </Grid>
+        </DialogActions>
+      </Dialog>
     </div>
   );
 };

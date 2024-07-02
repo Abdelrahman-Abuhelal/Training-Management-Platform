@@ -8,6 +8,7 @@ import {
   TableContainer,
   Table,
   TableHead,
+  Box,
   TableRow,
   TableCell,
   TableBody,
@@ -31,8 +32,12 @@ import GroupIcon from "@mui/icons-material/Group";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { useNavigate } from "react-router-dom";
 import * as XLSX from "xlsx";
+import SearchComponent from "../../components/Search";
+import { Padding } from "@mui/icons-material";
 import DownloadIcon from "@mui/icons-material/Download";
-import SearchIcon from "@mui/icons-material/Search";
+import PeopleOutlineIcon from '@mui/icons-material/PeopleOutline';
+
+
 
 const HR_Supervisors_List = () => {
   const baseUrl = import.meta.env.VITE_PORT_URL;
@@ -52,8 +57,10 @@ const HR_Supervisors_List = () => {
   const [selectedTrainees, setSelectedTrainees] = useState([]);
 
   const filteredSupervisors = supervisors.filter((supervisor) =>
-    supervisor.userUsername.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+    supervisor.userUsername.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    supervisor.userFirstName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    supervisor.userLastName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    supervisor.userEmail.toLowerCase().includes(searchTerm.toLowerCase()));
 
   const paginatedSupervisors = filteredSupervisors.slice(
     page * rowsPerPage,
@@ -112,6 +119,7 @@ const HR_Supervisors_List = () => {
         });
         setAllSupervisors(sortedSupervisors);
         setSupervisors(sortedSupervisors);
+        console.log("success")
       }
     } catch (error) {
       console.log(error);
@@ -124,22 +132,24 @@ const HR_Supervisors_List = () => {
 
   useEffect(
     () => {
-    const fetchTrainees = async () => {
-      try {
-        const response = await axios.get(`${baseUrl}/api/v1/admin/users`);
-        if (response.status === 200) {
-          const traineeUsers = response.data.filter(
-            (item) => item.userRole === "TRAINEE"
-          );
-          setAvailableTrainees(traineeUsers);
+      const fetchTrainees = async () => {
+        try {
+          const response = await axios.get(`${baseUrl}/api/v1/admin/users`);
+          if (response.status === 200) {
+            const traineeUsers = response.data.filter(
+              (item) => item.userRole === "TRAINEE"
+            );
+            setAvailableTrainees(traineeUsers);
+            console.log("success2")
+
+          }
+        } catch (error) {
+          console.log(error);
         }
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    fetchTrainees();
-  }, []
-);
+      };
+      fetchTrainees();
+    }, []
+  );
 
   const handleDelete = (user) => {
     setUserIdToDelete(user.userId);
@@ -208,7 +218,21 @@ const HR_Supervisors_List = () => {
   };
 
   return (
-    <div style={{ padding: "5rem" }}>
+    <div style={{ padding: "3rem" }}>
+      <Paper className="flex items-center justify-between mb-4" sx={{ padding: '16px', backgroundColor: "#e6e6fa" }}>
+        <SearchComponent searchTerm={searchTerm} onSearchChange={handleSearchChange} />
+        <div>
+          <Button
+            variant="contained"
+            color="primary"
+            startIcon={<DownloadIcon />}
+            onClick={exportToExcel}
+            sx={{ fontSize: "1.0rem", }}
+          >
+            Export As Excel
+          </Button>
+        </div>
+      </Paper>
       <Paper sx={{ border: "1px solid #ccc", mt: 2 }}>
         <Grid
           container
@@ -223,30 +247,20 @@ const HR_Supervisors_List = () => {
               align="right"
               sx={{ fontWeight: "bold", mt: 3, ml: 1 }}
             >
-              List of Supervisors
+              <Box >
+                <PeopleOutlineIcon fontSize="large" sx={{ mr: 1 }} />
+                Supervisors
+              </Box>
             </Typography>
           </Grid>
           <Grid item>
-            <TextField
-              placeholder="Search username"
-              variant="outlined"
-              value={searchTerm}
-              onChange={handleSearchChange}
-
-              InputProps={{
-                startAdornment: (
-                  <InputAdornment position="start">
-                    <SearchIcon />
-                  </InputAdornment>
-                ),
-              }}
-              sx={{ maxWidth: "250px", mr:"1rem",mt:"1rem" }} // Adjust the maxWidth as needed
-            />
+            <SearchComponent sx={{}}
+              searchTerm={searchTerm} onSearchChange={handleSearchChange} />
           </Grid>
         </Grid>
 
         <TableContainer component={Paper} sx={{ mt: 3 }}>
-          <Table aria-label="supervisor table">
+          <Table aria-label="supervisor table" >
             <TableHead>
               <TableRow>
                 <TableCell>
@@ -283,13 +297,18 @@ const HR_Supervisors_List = () => {
                   </Typography>
                 </TableCell>
                 <TableCell>
-                  <Typography variant="subtitle1" fontWeight="bold">
+                  <Typography align="center" variant="subtitle1" fontWeight="bold">
+                    Assigned Trainees
+                  </Typography>
+                </TableCell>
+                <TableCell>
+                  <Typography align="center" variant="subtitle1" fontWeight="bold">
                     Actions
                   </Typography>
                 </TableCell>
               </TableRow>
             </TableHead>
-            <TableBody>
+            <TableBody >
               {paginatedSupervisors.map((item) => (
                 <TableRow key={item.userId} hover>
                   <TableCell>{item.userUsername}</TableCell>
@@ -300,22 +319,25 @@ const HR_Supervisors_List = () => {
                     {item.userRole.charAt(0).toUpperCase() +
                       item.userRole.slice(1).toLowerCase()}
                   </TableCell>
-                  <TableCell>
+                  <TableCell align="center">
                     <IconButton
-                      size="small"
                       onClick={() =>
                         navigate(`/supervisors/${item.userId}/trainees`)
                       }
                       color="primary"
                     >
-                      <GroupIcon />
+                      <GroupIcon fontSize="large"
+                      />
                     </IconButton>
+                  </TableCell>
+                  <TableCell align="center"
+                  >
+
                     <IconButton
-                      size="small"
                       onClick={() => handleDelete(item)}
                       color="error"
                     >
-                      <DeleteIcon />
+                      <DeleteIcon fontSize="large" />
                     </IconButton>
                   </TableCell>
                 </TableRow>
