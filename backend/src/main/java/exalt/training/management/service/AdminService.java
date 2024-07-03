@@ -56,7 +56,7 @@ public class AdminService {
             throw new UserAlreadyExistsException(request.getEmail() + " already exists!");
         }
         // add exception when the username is already taken
-        if(appUserService.usernameAlreadyTaken(request.getUsername())){
+        if(appUserService.usernameIsNotUnique(request.getUsername())){
             throw new UserAlreadyExistsException(request.getUsername() + " : this username already reserved before!");
         }
         var user = AppUser.builder()
@@ -117,7 +117,14 @@ public class AdminService {
     }
 
     public String updateUserById(Long id, AppUserRequestDto appUserRequestDto){
+        String username = appUserRequestDto.getUserUsername();
+        log.info("Updating user with ID: {} with username: {}", id, username);
         AppUser appUser= getFullUserById(id);
+        if(!username.equals(appUser.getUsername())){
+            if(appUserService.usernameIsNotUnique(username)){
+                throw new UserAlreadyExistsException(username + " : this username already reserved before!");
+            }
+        }
         appUserRepository.save(userMapper.userRequestDtoToUser(appUserRequestDto,appUser));
         return "User with ID : " + appUser.getId() +" have been updated";
     }
@@ -228,6 +235,9 @@ public class AdminService {
     public AppUser getFullUserById(Long id){
         return appUserRepository.findById(id).orElseThrow(()-> new AppUserNotFoundException("There is no user with this ID: "+ id));
     }
+
+
+
     public List<AppUserDto> getAllUsers(){
         List<AppUser>users= appUserRepository.findAll();
         if (users.isEmpty()){

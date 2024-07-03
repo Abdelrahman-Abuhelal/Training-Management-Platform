@@ -19,16 +19,15 @@ import lombok.NoArgsConstructor;
 public class AppUserRequestDto {
 
 
-    private String username;
+    private String userUsername;
 
     @Size(max = 50)
-    private String firstName;
+    private String userFirstName;
 
     @Size(max = 50)
-    private String lastName;
+    private String userLastName;
 
-    @Size(max = 50)
-    private String fullName;
+    private Boolean userEnabled;
 
 
 

@@ -27,7 +27,7 @@ public class AdminController {
     private final AdminService adminService;
     private final AcademicGradesService academicGradesService;
 
-    @Operation(summary = "Create User, Secret API (SUPER_ADMIN, SUPERVISOR, or TRAINEE)", security =  @SecurityRequirement(name = "apiKey"))
+    @Operation(summary = "Create User, Using Secret Header API only ", security =  @SecurityRequirement(name = "apiKey"))
     @PostMapping("/create-user-secret")
     public ResponseEntity<String> createUserSecret(@RequestBody @Valid UserCreationRequest request) {
         return ResponseEntity.ok(adminService.createUserSecret(request));
@@ -56,6 +56,14 @@ public class AdminController {
         return ResponseEntity.ok(adminService.deleteUser(id));
     }
 
+    @Operation(summary = "Update User using his Id", security =  @SecurityRequirement(name = "loginAuth"))
+    @PreAuthorize("hasAnyRole('SUPER_ADMIN')")
+    @PutMapping("/users/{id}")
+    public ResponseEntity<String> updateUserDetails(@PathVariable Long id
+            ,@RequestBody AppUserRequestDto appUserRequestDto){
+        String message = adminService.updateUserById(id,appUserRequestDto);
+        return new ResponseEntity<>(message, HttpStatus.OK);
+    }
 
     @Operation(summary = "Get All Enabled Users", security =  @SecurityRequirement(name = "loginAuth"))
     @PreAuthorize("hasAnyRole('SUPER_ADMIN','SUPERVISOR')")
@@ -105,14 +113,7 @@ public class AdminController {
         return new ResponseEntity<>(SupervisorUserIds, HttpStatus.OK);
     }
 
-    @Operation(summary = "Update User using his Id", security =  @SecurityRequirement(name = "loginAuth"))
-    @PreAuthorize("hasAnyRole('SUPER_ADMIN','SUPERVISOR')")
-    @PutMapping("/users/{id}")
-    public ResponseEntity<String> updateUserDetails(@PathVariable Long id
-            ,@RequestBody AppUserRequestDto appUserRequestDto){
-        String message = adminService.updateUserById(id,appUserRequestDto);
-        return new ResponseEntity<>(message, HttpStatus.OK);
-    }
+
 
 
     @PutMapping("/update-trainee/{userId}")

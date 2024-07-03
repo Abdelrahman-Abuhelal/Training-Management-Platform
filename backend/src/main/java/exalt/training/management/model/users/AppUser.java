@@ -58,7 +58,7 @@ public class AppUser implements UserDetails {
 
     @Nullable
     @JsonManagedReference
-    @OneToOne(mappedBy = "user")
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     private Trainee trainee;
 
     @Nullable

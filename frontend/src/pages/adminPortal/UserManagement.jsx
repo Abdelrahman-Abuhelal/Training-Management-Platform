@@ -2,14 +2,20 @@ import React, { useState, useEffect } from 'react';
 import {
   Table, TableBody, TableCell, TableContainer, TableHead, TableRow,
   Paper, Button, Dialog, DialogActions, DialogContent, DialogTitle, Box, IconButton,
-  TextField, Checkbox, TableSortLabel, Toolbar, Typography, MenuItem, FormControl, Select
+  TextField, Checkbox, TableSortLabel, Toolbar, Typography, MenuItem, FormControl, Select, Snackbar
 } from '@mui/material';
 import axios from 'axios';
 import AddIcon from '@mui/icons-material/Add';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import SearchComponent from '../../components/Search';
+import { useAuth } from "../../provider/authProvider";
+import FormControlLabel from '@mui/material/FormControlLabel';
+import MuiAlert from '@mui/material/Alert';
+
 const UserManagement = () => {
+  const { user } = useAuth();
+  const { login_token } = user;
   const baseUrl = import.meta.env.VITE_PORT_URL;
   const [users, setUsers] = useState([]);
   const [filteredUsers, setFilteredUsers] = useState([]);
@@ -23,15 +29,26 @@ const UserManagement = () => {
     userFirstName: '',
     userLastName: '',
     userUsername: '',
-    userRole: ''
+    userRole: '',
+    userEnabled: false // Assuming new users are enabled by default
   });
 
+  // Snackbar states
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState('');
+  const [snackbarSeverity, setSnackbarSeverity] = useState('success'); // 'success', 'error', 'warning', 'info'
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [userToDelete, setUserToDelete] = useState(null);
+
   useEffect(() => {
-    axios.get(`${baseUrl}/api/v1/admin/users`)
-      .then(response => {
-        setUsers(response.data);
-        setFilteredUsers(response.data);
-      })
+    axios.get(`${baseUrl}/api/v1/admin/users`, {
+      headers: {
+        Authorization: `Bearer ${login_token}`
+      }
+    }).then(response => {
+      setUsers(response.data);
+      setFilteredUsers(response.data);
+    })
       .catch(error => console.error(error));
   }, []);
 
@@ -41,12 +58,25 @@ const UserManagement = () => {
   };
 
   const handleDelete = (userId) => {
-    axios.delete(`/api/users/${userId}`)
+    setUserToDelete(userId);
+    setDeleteDialogOpen(true);
+  };
+  
+  const handleConfirmDelete = (userId) => {
+    axios.delete(`${baseUrl}/api/v1/admin/users/${userId}`, {
+      headers: {
+        Authorization: `Bearer ${login_token}`
+      }
+    })
       .then(() => {
         setUsers(users.filter(user => user.userId !== userId));
         setFilteredUsers(filteredUsers.filter(user => user.userId !== userId));
+        showSnackbar('User deleted successfully', 'success');
       })
-      .catch(error => console.error(error));
+      .catch(error => {
+        console.error(error);
+        showSnackbar('Failed to delete user', 'error');
+      });
   };
 
   const handleClose = () => {
@@ -56,28 +86,41 @@ const UserManagement = () => {
 
   const handleSave = () => {
     if (currentUser) {
-      axios.put(`/api/users/${currentUser.userId}`, currentUser)
+      axios.put(`${baseUrl}/api/v1/admin/users/${currentUser.userId}`, currentUser, {
+        headers: {
+          Authorization: `Bearer ${login_token}`
+        }
+      })
         .then(response => {
-          setUsers(users.map(user => (user.userId === currentUser.userId ? currentUser : user)));
-          setFilteredUsers(filteredUsers.map(user => (user.userId === currentUser.userId ? currentUser : user)));
+          const updatedUser = response.data;
+          setUsers(users.map(user => (user.userId === currentUser.userId ? updatedUser : user)));
+          setFilteredUsers(filteredUsers.map(user => (user.userId === currentUser.userId ? updatedUser : user)));
           handleClose();
+          showSnackbar('User updated successfully', 'success');
         })
-        .catch(error => console.error(error));
+        .catch(error => {
+          console.error(error);
+          showSnackbar('Failed to update user', 'error');
+        });
     } else {
-      axios.post(`/api/users`, newUser)
+      axios.post(`${baseUrl}/api/v1/admin/users`, newUser)
         .then(response => {
           setUsers([...users, response.data]);
           setFilteredUsers([...filteredUsers, response.data]);
           handleClose();
+          showSnackbar('User created successfully', 'success');
         })
-        .catch(error => console.error(error));
+        .catch(error => {
+          console.error(error);
+          showSnackbar('Failed to create user', 'error');
+        });
     }
   };
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
+    const { name, value, type, checked } = e.target;
     if (currentUser) {
-      setCurrentUser({ ...currentUser, [name]: value });
+      setCurrentUser({ ...currentUser, [name]: type === 'checkbox' ? checked : value });
     } else {
       setNewUser({ ...newUser, [name]: value });
     }
@@ -105,6 +148,16 @@ const UserManagement = () => {
       return 0;
     });
     setFilteredUsers(sortedUsers);
+  };
+
+  const showSnackbar = (message, severity) => {
+    setSnackbarMessage(message);
+    setSnackbarSeverity(severity);
+    setSnackbarOpen(true);
+  };
+
+  const closeSnackbar = () => {
+    setSnackbarOpen(false);
   };
 
   return (
@@ -199,7 +252,12 @@ const UserManagement = () => {
                     <TableCell>{user.userUsername}</TableCell>
                     <TableCell>{user.userRole}</TableCell>
                     <TableCell>
-                      <Checkbox checked={user.userEnabled} disabled />
+                      <Checkbox
+                        checked={user.userEnabled}
+                        onChange={handleChange}
+                        name="userEnabled"
+                        color="primary"
+                      />
                     </TableCell>
                     <TableCell>
                       <IconButton onClick={() => handleEdit(user)} color="primary">
@@ -269,12 +327,64 @@ const UserManagement = () => {
                 <MenuItem value="SUPER_ADMIN">Admin</MenuItem>
               </Select>
             </FormControl>
+            {currentUser && (
+              <FormControl fullWidth margin="dense">
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      checked={currentUser ? currentUser.userEnabled : newUser.userEnabled}
+                      onChange={handleChange}
+                      name="userEnabled"
+                      color="primary"
+                    />
+                  }
+                  label="Enabled User"
+                  labelPlacement="end"
+                />
+              </FormControl>
+            )}
           </DialogContent>
           <DialogActions>
             <Button onClick={handleClose}>Cancel</Button>
             <Button onClick={handleSave}>Save</Button>
           </DialogActions>
         </Dialog>
+
+        <Dialog open={deleteDialogOpen} onClose={() => setDeleteDialogOpen(false)}>
+          <DialogTitle>Confirm Delete</DialogTitle>
+          <DialogContent>
+            <Typography>Are you sure you want to delete this user?</Typography>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={() => setDeleteDialogOpen(false)}>Cancel</Button>
+            <Button
+              onClick={() => {
+                handleConfirmDelete(userToDelete);
+                setDeleteDialogOpen(false);
+              }}
+              color="error"
+            >
+              Delete
+            </Button>
+          </DialogActions>
+        </Dialog>
+
+
+        <Snackbar
+          open={snackbarOpen}
+          autoHideDuration={6000}
+          onClose={closeSnackbar}
+          anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
+        >
+          <MuiAlert
+            elevation={6}
+            variant="filled"
+            onClose={closeSnackbar}
+            severity={snackbarSeverity}
+          >
+            {snackbarMessage}
+          </MuiAlert>
+        </Snackbar>
 
       </Paper>
     </div>

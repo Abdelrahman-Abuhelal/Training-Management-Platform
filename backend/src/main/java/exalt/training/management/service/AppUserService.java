@@ -159,7 +159,7 @@ public class AppUserService {
                 .orElseThrow(()-> new AppUserNotFoundException("There is no registered user with this email"));
     }
 
-    public Boolean usernameAlreadyTaken(String username){
+    public Boolean usernameIsNotUnique(String username){
         return appUserRepository.existsByUsername(username);
     }
 

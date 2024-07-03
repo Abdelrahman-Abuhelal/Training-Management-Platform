@@ -52,10 +52,10 @@ public interface AppUserMapper {
     @Mapping(source = "appUserDto.userEnabled",target = "enabled")
     AppUser userDtoToUser(AppUserDto appUserDto, @MappingTarget AppUser appUser);
 
-    @Mapping(source = "appUserRequestDto.firstName",target = "firstName")
-    @Mapping(source = "appUserRequestDto.lastName",target = "lastName")
-    @Mapping(source = "appUserRequestDto.fullName",target = "fullName")
-    @Mapping(source = "appUserRequestDto.username",target = "username")
+    @Mapping(source = "appUserRequestDto.userFirstName",target = "firstName")
+    @Mapping(source = "appUserRequestDto.userLastName",target = "lastName")
+    @Mapping(source = "appUserRequestDto.userUsername",target = "username")
+    @Mapping(source = "appUserRequestDto.userEnabled",target = "enabled")
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     AppUser userRequestDtoToUser(AppUserRequestDto appUserRequestDto,@MappingTarget AppUser appUser);
 
