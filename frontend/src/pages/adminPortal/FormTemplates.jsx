@@ -32,10 +32,12 @@ import {
 } from "@mui/material";
 import CheckCircleIcon from '@mui/icons-material/CheckCircle'; // Import the icon
 import { useAuth } from "../../provider/authProvider";
+import SearchComponent from "../../components/Search";
 
 const FormTemplates = () => {
   const { user } = useAuth();
   const { login_token } = user;
+  const [searchTerm, setSearchTerm] = useState("");
   const [formTemplates, setFormTemplates] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showConfirmation, setShowConfirmation] = useState(false);
@@ -68,13 +70,18 @@ const FormTemplates = () => {
     setSearchQuery(query);
   };
 
-  const filteredTrainees = trainees.filter((user) =>
-    user.userUsername.toLowerCase().includes(searchQuery.toLowerCase())
+  const filteredTrainees = trainees.filter((trainee) =>
+    trainee.userUsername.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    trainee.userFirstName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    trainee.userLastName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    trainee.userEmail.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  const filteredSupervisors = supervisors.filter((user) =>
-    user.userUsername.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  const filteredSupervisors = supervisors.filter((supervisor) =>
+    supervisor.userUsername.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    supervisor.userFirstName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    supervisor.userLastName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    supervisor.userEmail.toLowerCase().includes(searchTerm.toLowerCase()));
 
   const handleDeleteForm = (formId) => {
     axios.delete(`${baseUrl}/api/v1/forms/${formId}`, {
@@ -242,6 +249,10 @@ const FormTemplates = () => {
 
 
 
+  const handleSearchChange = (event) => {
+    setSearchTerm(event.target.value);
+    setPage(0); // Reset page when search term changes
+  };
 
   const handleCancelSendForm = () => {
     setIdToSend(null)
@@ -349,16 +360,8 @@ const FormTemplates = () => {
       <Dialog open={showSendFormModal} onClose={handleCancelSendForm}>
         <DialogTitle>Select Users</DialogTitle>
         <DialogContent>
-          <TextField
-            autoFocus
-            margin="dense"
-            id="searchUsers"
-            label="Search Users"
-            type="text"
-            fullWidth
-            variant="outlined"
-            onChange={(e) => handleSearchUsers(e.target.value)}
-          />
+        <SearchComponent searchTerm={searchTerm} onSearchChange={handleSearchChange} />
+
           <List>
             <Typography> Trainees </Typography>
             {filteredTrainees.map((user) => (
@@ -368,7 +371,7 @@ const FormTemplates = () => {
                     {user.userUsername.charAt(0)} {/* Add user avatar or initials */}
                   </Avatar>
                 </ListItemAvatar>
-                <ListItemText primary={user.userUsername} />
+                <ListItemText primary={user.userFirstName+" "+user.userLastName} />
                 {usersAlreadySent.includes(user.userId) && (
                   <CheckCircleIcon color="success" />
                 )}
@@ -389,7 +392,7 @@ const FormTemplates = () => {
                     {user.userUsername.charAt(0)} {/* Add user avatar or initials */}
                   </Avatar>
                 </ListItemAvatar>
-                <ListItemText primary={user.userUsername} />
+                <ListItemText primary={user.userFirstName+" "+user.userLastName}/>
                 {usersAlreadySent.includes(user.userId) && (
                   <CheckCircleIcon color="success" />
                 )}

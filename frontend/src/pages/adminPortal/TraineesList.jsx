@@ -369,7 +369,7 @@ const TraineesList = () => {
         </Typography>
         <TableContainer component={Paper}>
           <Table aria-label="trainee table">
-            <TableHead sx={{ borderTop: "1px solid #ccc", borderBottom: "1px solid #ccc" }}>
+            <TableHead sx={{  borderBottom: "1px solid #ccc" }}>
               <TableRow>
                 <TableCell>
                   <Checkbox
@@ -383,6 +383,13 @@ const TraineesList = () => {
                     }}
                   />
                 </TableCell>
+                
+                <TableCell>
+                  <Typography sx={headerTextStyle}>Trainee Name</Typography>
+                </TableCell>
+                <TableCell>
+                  <Typography sx={headerTextStyle}>Email</Typography>
+                </TableCell>
                 <TableCell>
                   <TableSortLabel
                     active={orderBy === "userUsername"}
@@ -393,19 +400,10 @@ const TraineesList = () => {
                   </TableSortLabel>
                 </TableCell>
                 <TableCell>
-                  <Typography sx={headerTextStyle}>First Name</Typography>
-                </TableCell>
-                <TableCell>
-                  <Typography sx={headerTextStyle}>Last Name</Typography>
-                </TableCell>
-                <TableCell>
-                  <Typography sx={headerTextStyle}>Email</Typography>
-                </TableCell>
-                <TableCell>
                   <Typography sx={headerTextStyle}>Role</Typography>
                 </TableCell>
                 <TableCell align="center">
-                  <Typography sx={headerTextStyle}>Edit Profile</Typography>
+                  <Typography sx={headerTextStyle}>Profile</Typography>
                 </TableCell>
                 <TableCell align="center">
                   <Typography sx={headerTextStyle}>Actions</Typography>
@@ -424,16 +422,13 @@ const TraineesList = () => {
                     />
                   </TableCell>
                   <TableCell>
-                    <Typography sx={bodyTextStyle}>{item.userUsername}</Typography>
-                  </TableCell>
-                  <TableCell>
-                    <Typography sx={bodyTextStyle}>{item.userFirstName}</Typography>
-                  </TableCell>
-                  <TableCell>
-                    <Typography sx={bodyTextStyle}>{item.userLastName}</Typography>
+                    <Typography sx={bodyTextStyle}>{item.userFirstName+" "+item.userLastName}</Typography>
                   </TableCell>
                   <TableCell>
                     <Typography sx={bodyTextStyle}>{item.userEmail}</Typography>
+                  </TableCell>
+                  <TableCell>
+                    <Typography sx={bodyTextStyle}>{item.userUsername}</Typography>
                   </TableCell>
                   <TableCell>
                     <Typography sx={bodyTextStyle}>
@@ -442,21 +437,19 @@ const TraineesList = () => {
                   </TableCell>
                   <TableCell align="center">
                     <IconButton
-                      size="small"
                       onClick={() => navigate(`/edit-trainee/${item.userId}`)}
                       color="primary"
                     >
-                      <ManageAccountsIcon fontSize="large" />
+                      <ManageAccountsIcon fontSize="medium"/>
                     </IconButton>
                   </TableCell>
                   <TableCell align="center">
                     <IconButton
-                      size="small"
                       onClick={() => handleDelete(item)}
                       color="error"
                     >
-                      <DeleteIcon fontSize="large" />
-                    </IconButton>
+                      <DeleteIcon fontSize="medium" />
+                      </IconButton>
                   </TableCell>
                 </TableRow>
               ))}

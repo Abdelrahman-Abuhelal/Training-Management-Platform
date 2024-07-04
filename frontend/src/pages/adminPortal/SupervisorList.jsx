@@ -89,10 +89,10 @@ const HR_Supervisors_List = () => {
     try {
       const response = await axios.delete(
         `${baseUrl}/api/v1/admin/users/${userId}`, {
-          headers: {
-            Authorization: `Bearer ${login_token}`
-          }
+        headers: {
+          Authorization: `Bearer ${login_token}`
         }
+      }
       );
       if (response.status === 200) {
         console.log("Supervisor deleted successfully");
@@ -192,10 +192,10 @@ const HR_Supervisors_List = () => {
         {
           trainees: selectedTrainees,
         }, {
-          headers: {
-            Authorization: `Bearer ${login_token}`
-          }
+        headers: {
+          Authorization: `Bearer ${login_token}`
         }
+      }
       );
       if (response.status === 200) {
         console.log("Trainees assigned successfully");
@@ -232,48 +232,41 @@ const HR_Supervisors_List = () => {
     <div style={{ padding: "3rem" }}>
       <Paper className="flex items-center justify-between mb-4" sx={{ padding: '16px', backgroundColor: "#e6e6fa" }}>
         <SearchComponent searchTerm={searchTerm} onSearchChange={handleSearchChange} />
-        <div>
-          <Button
-            variant="contained"
-            color="primary"
-            startIcon={<DownloadIcon />}
-            onClick={exportToExcel}
-            sx={{ fontSize: "1.0rem", }}
-          >
-            Export As Excel
-          </Button>
-        </div>
+
       </Paper>
       <Paper sx={{ border: "1px solid #ccc", mt: 2 }}>
-        <Grid
-          container
-          spacing={3}
-          justifyContent="space-between"
-          alignItems="center"
-        >
+      <Grid container  justifyContent="center">
+
           <Grid item xs={12} sm={6}>
             <Typography
               variant="h5"
               component="h2"
-              align="right"
-              sx={{ fontWeight: "bold", mt: 3, ml: 1 }}
-            >
+              sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 'bold', mt: 3 }}
+              >
               <Box >
                 <PeopleOutlineIcon fontSize="large" sx={{ mr: 1 }} />
                 Supervisors
               </Box>
             </Typography>
           </Grid>
-          <Grid item>
-            <SearchComponent sx={{}}
-              searchTerm={searchTerm} onSearchChange={handleSearchChange} />
-          </Grid>
+
         </Grid>
 
         <TableContainer component={Paper} sx={{ mt: 3 }}>
           <Table aria-label="supervisor table" >
             <TableHead>
               <TableRow>
+
+                <TableCell>
+                  <Typography variant="subtitle1" fontWeight="bold">
+                    Supervisor Name
+                  </Typography>
+                </TableCell>
+                <TableCell>
+                  <Typography variant="subtitle1" fontWeight="bold">
+                    Email
+                  </Typography>
+                </TableCell>
                 <TableCell>
                   <TableSortLabel
                     active={orderBy === "userUsername"}
@@ -286,21 +279,6 @@ const HR_Supervisors_List = () => {
                       Username
                     </Typography>
                   </TableSortLabel>
-                </TableCell>
-                <TableCell>
-                  <Typography variant="subtitle1" fontWeight="bold">
-                    First Name
-                  </Typography>
-                </TableCell>
-                <TableCell>
-                  <Typography variant="subtitle1" fontWeight="bold">
-                    Last Name
-                  </Typography>
-                </TableCell>
-                <TableCell>
-                  <Typography variant="subtitle1" fontWeight="bold">
-                    Email
-                  </Typography>
                 </TableCell>
                 <TableCell>
                   <Typography variant="subtitle1" fontWeight="bold">
@@ -322,10 +300,10 @@ const HR_Supervisors_List = () => {
             <TableBody >
               {paginatedSupervisors.map((item) => (
                 <TableRow key={item.userId} hover>
-                  <TableCell>{item.userUsername}</TableCell>
-                  <TableCell>{item.userFirstName}</TableCell>
-                  <TableCell>{item.userLastName}</TableCell>
+                  <TableCell>{item.userFirstName + " " + item.userLastName}</TableCell>
                   <TableCell>{item.userEmail}</TableCell>
+                  <TableCell>{item.userUsername}</TableCell>
+
                   <TableCell>
                     {item.userRole.charAt(0).toUpperCase() +
                       item.userRole.slice(1).toLowerCase()}

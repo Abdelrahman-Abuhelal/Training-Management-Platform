@@ -21,7 +21,7 @@ import java.util.Set;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(exclude = {"academicGrades","supervisors"  ,"user","reviews","reviewSubmissions"})
+@EqualsAndHashCode(exclude = {"academicGrades","supervisors"  ,"user","forms"})
 public class Trainee {
 
 
