@@ -43,8 +43,8 @@ public class AdminControllerTests {
         when(adminService.createUserSecret(any())).thenReturn(expectedResponse);
 
         // Prepare request data
-        UserCreationRequest request = UserCreationRequest.builder().email("valid@gmail.com").firstName("asfdsa").lastName("asdasd")
-                .role(AppUserRole.TRAINEE).username("dsadasd").build();
+        UserCreationRequest request = UserCreationRequest.builder().userEmail("valid@gmail.com").userFirstName("asfdsa").userLastName("asdasd")
+                .userRole(AppUserRole.TRAINEE).userUsername("dsadasd").build();
         ObjectMapper objectMapper = new ObjectMapper();  // Create an ObjectMapper instance
         String requestBody = objectMapper.writeValueAsString(request);
         // Perform the simulated POST request

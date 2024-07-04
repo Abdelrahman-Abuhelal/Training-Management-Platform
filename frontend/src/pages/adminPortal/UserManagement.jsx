@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import {
   Table, TableBody, TableCell, TableContainer, TableHead, TableRow,
   Paper, Button, Dialog, DialogActions, DialogContent, DialogTitle, Box, IconButton,
-  TextField, Checkbox, TableSortLabel, Toolbar, Typography, MenuItem, FormControl, Select, Snackbar
+  TextField, Checkbox, TableSortLabel, Toolbar, Typography, MenuItem, FormControl, Select, Snackbar, CircularProgress
 } from '@mui/material';
 import axios from 'axios';
 import AddIcon from '@mui/icons-material/Add';
@@ -29,9 +29,8 @@ const UserManagement = () => {
     userFirstName: '',
     userLastName: '',
     userUsername: '',
-    userRole: '',
-    userEnabled: false // Assuming new users are enabled by default
-  });
+    userRole: ''
+    });
 
   // Snackbar states
   const [snackbarOpen, setSnackbarOpen] = useState(false);
@@ -39,9 +38,10 @@ const UserManagement = () => {
   const [snackbarSeverity, setSnackbarSeverity] = useState('success'); // 'success', 'error', 'warning', 'info'
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [userToDelete, setUserToDelete] = useState(null);
+  const [loading, setLoading] = useState(false); // Loading state for save button
 
   useEffect(() => {
-    axios.get(`${baseUrl}/api/v1/admin/users`, {
+    axios.get(`${baseUrl}/api/v1/admin/all-users`, {
       headers: {
         Authorization: `Bearer ${login_token}`
       }
@@ -61,7 +61,7 @@ const UserManagement = () => {
     setUserToDelete(userId);
     setDeleteDialogOpen(true);
   };
-  
+
   const handleConfirmDelete = (userId) => {
     axios.delete(`${baseUrl}/api/v1/admin/users/${userId}`, {
       headers: {
@@ -85,37 +85,53 @@ const UserManagement = () => {
   };
 
   const handleSave = () => {
+    setLoading(true); 
     if (currentUser) {
       axios.put(`${baseUrl}/api/v1/admin/users/${currentUser.userId}`, currentUser, {
         headers: {
           Authorization: `Bearer ${login_token}`
         }
       })
-        .then(response => {
-          const updatedUser = response.data;
-          setUsers(users.map(user => (user.userId === currentUser.userId ? updatedUser : user)));
-          setFilteredUsers(filteredUsers.map(user => (user.userId === currentUser.userId ? updatedUser : user)));
-          handleClose();
-          showSnackbar('User updated successfully', 'success');
-        })
-        .catch(error => {
-          console.error(error);
-          showSnackbar('Failed to update user', 'error');
-        });
+      .then(response => {
+        const updatedUser = response.data;
+        setUsers(users.map(user => (user.userId === currentUser.userId ? updatedUser : user)));
+        setFilteredUsers(filteredUsers.map(user => (user.userId === currentUser.userId ? updatedUser : user)));
+        handleClose();
+        showSnackbar('User updated successfully', 'success');
+      })
+      .catch(error => {
+        console.error(error);
+        showSnackbar('Failed to update user', 'error');
+      })
+      .finally(() => setLoading(false)); 
     } else {
-      axios.post(`${baseUrl}/api/v1/admin/users`, newUser)
-        .then(response => {
+      axios.post(`${baseUrl}/api/v1/admin/create-user`, newUser, {
+        headers: {
+          Authorization: `Bearer ${login_token}`
+        }
+      })
+      .then(response => {
+        if (response.status === 200) {
           setUsers([...users, response.data]);
           setFilteredUsers([...filteredUsers, response.data]);
           handleClose();
-          showSnackbar('User created successfully', 'success');
-        })
-        .catch(error => {
-          console.error(error);
+          showSnackbar('Email verification sent to the user', 'success');
+        }
+      })
+      .catch(error => {
+        if (error.response && error.response.status === 400) {
+          const validationErrors = error.response.data.detailMessageArguments;
+          showSnackbar(`Validation error: ${validationErrors.join(', ')}`, 'error');
+        } else if (error.response && error.response.status === 409) {
+          showSnackbar('User with this email or username exists already!', 'error');
+        } else {
           showSnackbar('Failed to create user', 'error');
-        });
+        }
+      })
+      .finally(() => setLoading(false)); // Set loading to false when request is done
     }
   };
+  
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -244,7 +260,7 @@ const UserManagement = () => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {filteredUsers.map(user => (
+                {filteredUsers.map((user) => (
                   <TableRow key={user.userId}>
                     <TableCell>{user.userEmail}</TableCell>
                     <TableCell>{user.userFirstName}</TableCell>
@@ -252,19 +268,14 @@ const UserManagement = () => {
                     <TableCell>{user.userUsername}</TableCell>
                     <TableCell>{user.userRole}</TableCell>
                     <TableCell>
-                      <Checkbox
-                        checked={user.userEnabled}
-                        onChange={handleChange}
-                        name="userEnabled"
-                        color="primary"
-                      />
+                      <Checkbox checked={user.userEnabled} disabled />
                     </TableCell>
                     <TableCell>
-                      <IconButton onClick={() => handleEdit(user)} color="primary">
-                        <EditIcon fontSize="medium" />
+                      <IconButton color="primary" onClick={() => handleEdit(user)}>
+                        <EditIcon />
                       </IconButton>
-                      <IconButton onClick={() => handleDelete(user.userId)} color="error">
-                        <DeleteIcon fontSize="medium" />
+                      <IconButton color="secondary" onClick={() => handleDelete(user.userId)}>
+                        <DeleteIcon />
                       </IconButton>
                     </TableCell>
                   </TableRow>
@@ -273,120 +284,112 @@ const UserManagement = () => {
             </Table>
           </TableContainer>
         </Paper>
-
-        <Dialog open={open} onClose={handleClose}>
-          <DialogTitle>{currentUser ? "Edit User" : "Add User"}</DialogTitle>
-          <DialogContent>
-            <TextField
-              margin="dense"
-              name="userEmail"
-              label="Email"
-              type="email"
-              fullWidth
-              value={currentUser ? currentUser.userEmail : newUser.userEmail}
-              onChange={handleChange}
-              disabled={!!currentUser}
-            />
-            <TextField
-              margin="dense"
-              name="userFirstName"
-              label="First Name"
-              fullWidth
-              value={currentUser ? currentUser.userFirstName : newUser.userFirstName}
-              onChange={handleChange}
-            />
-            <TextField
-              margin="dense"
-              name="userLastName"
-              label="Last Name"
-              fullWidth
-              value={currentUser ? currentUser.userLastName : newUser.userLastName}
-              onChange={handleChange}
-            />
-            <TextField
-              margin="dense"
-              name="userUsername"
-              label="Username"
-              fullWidth
-              value={currentUser ? currentUser.userUsername : newUser.userUsername}
-              onChange={handleChange}
-            />
-            <FormControl fullWidth margin="dense">
-              <Select
-                name="userRole"
-                value={currentUser ? currentUser.userRole : newUser.userRole}
-                onChange={handleChange}
-                displayEmpty
-                disabled={!!currentUser}
-              >
-                <MenuItem value="" disabled>
-                  Select Role
-                </MenuItem>
-                <MenuItem value="TRAINEE">Trainee</MenuItem>
-                <MenuItem value="SUPERVISOR">Supervisor</MenuItem>
-                <MenuItem value="SUPER_ADMIN">Admin</MenuItem>
-              </Select>
-            </FormControl>
-            {currentUser && (
-              <FormControl fullWidth margin="dense">
-                <FormControlLabel
-                  control={
-                    <Checkbox
-                      checked={currentUser ? currentUser.userEnabled : newUser.userEnabled}
-                      onChange={handleChange}
-                      name="userEnabled"
-                      color="primary"
-                    />
-                  }
-                  label="Enabled User"
-                  labelPlacement="end"
-                />
-              </FormControl>
-            )}
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={handleClose}>Cancel</Button>
-            <Button onClick={handleSave}>Save</Button>
-          </DialogActions>
-        </Dialog>
-
-        <Dialog open={deleteDialogOpen} onClose={() => setDeleteDialogOpen(false)}>
-          <DialogTitle>Confirm Delete</DialogTitle>
-          <DialogContent>
-            <Typography>Are you sure you want to delete this user?</Typography>
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={() => setDeleteDialogOpen(false)}>Cancel</Button>
-            <Button
-              onClick={() => {
-                handleConfirmDelete(userToDelete);
-                setDeleteDialogOpen(false);
-              }}
-              color="error"
-            >
-              Delete
-            </Button>
-          </DialogActions>
-        </Dialog>
-
-
-        <Snackbar
-          open={snackbarOpen}
-          autoHideDuration={6000}
-          onClose={closeSnackbar}
-          anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
-        >
-          <MuiAlert
-            elevation={6}
-            variant="filled"
-            onClose={closeSnackbar}
-            severity={snackbarSeverity}
-          >
-            {snackbarMessage}
-          </MuiAlert>
-        </Snackbar>
-
       </Paper>
+
+      <Dialog open={open} onClose={handleClose}>
+        <DialogTitle>{currentUser ? 'Edit User' : 'Add New User'}</DialogTitle>
+        <DialogContent>
+          <TextField
+            margin="dense"
+            name="userEmail"
+            label="Email"
+            type="email"
+            fullWidth
+            value={currentUser ? currentUser.userEmail : newUser.userEmail}
+            onChange={handleChange}
+          />
+          <TextField
+            margin="dense"
+            name="userFirstName"
+            label="First Name"
+            type="text"
+            fullWidth
+            value={currentUser ? currentUser.userFirstName : newUser.userFirstName}
+            onChange={handleChange}
+          />
+          <TextField
+            margin="dense"
+            name="userLastName"
+            label="Last Name"
+            type="text"
+            fullWidth
+            value={currentUser ? currentUser.userLastName : newUser.userLastName}
+            onChange={handleChange}
+          />
+          <TextField
+            margin="dense"
+            name="userUsername"
+            label="Username"
+            type="text"
+            fullWidth
+            value={currentUser ? currentUser.userUsername : newUser.userUsername}
+            onChange={handleChange}
+          />
+          <FormControl fullWidth margin="dense">
+            <Select
+              name="userRole"
+              value={currentUser ? currentUser.userRole : newUser.userRole}
+              onChange={handleChange}
+              displayEmpty
+              disabled={!!currentUser}
+            >
+              <MenuItem value="" disabled>
+                Select Role
+              </MenuItem>
+              <MenuItem value="TRAINEE">Trainee</MenuItem>
+              <MenuItem value="SUPERVISOR">Supervisor</MenuItem>
+              <MenuItem value="SUPER_ADMIN">Admin</MenuItem>
+            </Select>
+          </FormControl>
+          {currentUser && ( 
+            <FormControlLabel
+            control={
+              <Checkbox
+                name="userEnabled"
+                checked={currentUser ? currentUser.userEnabled : null}
+                onChange={handleChange}
+              />
+            }
+            label="Enabled"
+          />  )}
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose} color="primary">Cancel</Button>
+          <Button onClick={handleSave} color="primary" disabled={loading}>
+            {loading ? <CircularProgress size={24} /> : 'Save'}
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+      <Dialog
+        open={deleteDialogOpen}
+        onClose={() => setDeleteDialogOpen(false)}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">{"Confirm Delete"}</DialogTitle>
+        <DialogContent>
+          <Typography>Are you sure you want to delete this user?</Typography>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setDeleteDialogOpen(false)} color="primary">Cancel</Button>
+          <Button
+            onClick={() => {
+              handleConfirmDelete(userToDelete);
+              setDeleteDialogOpen(false);
+            }}
+            color="secondary"
+          >
+            Delete
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+      <Snackbar open={snackbarOpen} autoHideDuration={6000} onClose={closeSnackbar}>
+        <MuiAlert onClose={closeSnackbar} severity={snackbarSeverity} sx={{ width: '100%' }}>
+          {snackbarMessage}
+        </MuiAlert>
+      </Snackbar>
     </div>
   );
 };

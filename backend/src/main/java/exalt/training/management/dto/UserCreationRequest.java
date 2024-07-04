@@ -16,18 +16,18 @@ public class UserCreationRequest {
 
     @Email(message = "Please provide a valid email address")
     @NotEmpty(message = "Email should not be empty")
-    private String email;
+    private String userEmail;
 
     @NotEmpty(message = "Username should not be empty")
-    private String username;
+    private String userUsername;
 
     @NotEmpty(message = "First name should not be empty")
-    private String firstName;
+    private String userFirstName;
 
     @NotEmpty(message = "Last name should not be empty")
-    private String lastName;
+    private String userLastName;
 
     @Enumerated(EnumType.STRING)
     @NotNull(message = "Role should not be empty")
-    private AppUserRole role;
+    private AppUserRole userRole;
 }

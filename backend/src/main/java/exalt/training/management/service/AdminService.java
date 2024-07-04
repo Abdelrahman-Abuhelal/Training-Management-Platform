@@ -52,19 +52,19 @@ public class AdminService {
 
 
     public String createUserSecret(UserCreationRequest request) {
-        if (appUserService.userAlreadyExists(request.getEmail())){
-            throw new UserAlreadyExistsException(request.getEmail() + " already exists!");
+        if (appUserService.userAlreadyExists(request.getUserEmail())){
+            throw new UserAlreadyExistsException(request.getUserEmail() + " already exists!");
         }
         // add exception when the username is already taken
-        if(appUserService.usernameIsNotUnique(request.getUsername())){
-            throw new UserAlreadyExistsException(request.getUsername() + " : this username already reserved before!");
+        if(appUserService.usernameIsNotUnique(request.getUserUsername())){
+            throw new UserAlreadyExistsException(request.getUserUsername() + " : this username already reserved before!");
         }
         var user = AppUser.builder()
-                .email(request.getEmail())
-                .firstName(request.getFirstName())
-                .lastName(request.getLastName())
-                .username(request.getUsername())
-                .role(request.getRole())
+                .email(request.getUserEmail())
+                .firstName(request.getUserFirstName())
+                .lastName(request.getUserLastName())
+                .username(request.getUserUsername())
+                .role(request.getUserRole())
                 .enabled(false)
                 .build();
         log.info("User Created: " + user.toString());
@@ -120,7 +120,7 @@ public class AdminService {
         String username = appUserRequestDto.getUserUsername();
         log.info("Updating user with ID: {} with username: {}", id, username);
         AppUser appUser= getFullUserById(id);
-        if(!username.equals(appUser.getUsername())){
+        if(username!=null && !username.equals(appUser.getUsername())){
             if(appUserService.usernameIsNotUnique(username)){
                 throw new UserAlreadyExistsException(username + " : this username already reserved before!");
             }
