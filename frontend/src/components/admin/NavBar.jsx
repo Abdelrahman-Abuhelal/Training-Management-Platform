@@ -33,7 +33,7 @@ export default function AdminButtonAppBar() {
   // Retrieve user information from authentication context
   const { user } = useAuth();
   const { appUserDto } = user;
-  const { userUsername } = appUserDto;
+  const { userFirstName,userLastName} = appUserDto;
 
   return (
     <Box sx={{ flexGrow: 1 }}>
@@ -55,7 +55,7 @@ export default function AdminButtonAppBar() {
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
             <AccountCircle sx={{ mr: 1 }} />
             <Typography variant="body1" sx={{ mr: 2 }}>
-              {userUsername}
+              {userFirstName+" "+userLastName}
             </Typography>
             <Logout />
           </Box>

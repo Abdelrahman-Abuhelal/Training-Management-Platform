@@ -3,7 +3,6 @@ import axios from "axios";
 
 import {
   Grid,
-  InputAdornment,
   Typography,
   TableContainer,
   Table,
@@ -12,7 +11,6 @@ import {
   TableRow,
   TableCell,
   TableBody,
-  TextField,
   TableSortLabel,
   TablePagination,
   Paper,
@@ -33,14 +31,14 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import { useNavigate } from "react-router-dom";
 import * as XLSX from "xlsx";
 import SearchComponent from "../../components/Search";
-import { Padding } from "@mui/icons-material";
 import DownloadIcon from "@mui/icons-material/Download";
 import PeopleOutlineIcon from '@mui/icons-material/PeopleOutline';
-
-
+import { useAuth } from "../../provider/authProvider";
 
 const HR_Supervisors_List = () => {
   const baseUrl = import.meta.env.VITE_PORT_URL;
+  const { user } = useAuth();
+  const { login_token } = user;
   const [supervisors, setSupervisors] = useState([]);
   const [allSupervisors, setAllSupervisors] = useState([]);
   const navigate = useNavigate();
@@ -90,7 +88,11 @@ const HR_Supervisors_List = () => {
   const deleteUser = async (userId) => {
     try {
       const response = await axios.delete(
-        `${baseUrl}/api/v1/admin/users/${userId}`
+        `${baseUrl}/api/v1/admin/users/${userId}`, {
+          headers: {
+            Authorization: `Bearer ${login_token}`
+          }
+        }
       );
       if (response.status === 200) {
         console.log("Supervisor deleted successfully");
@@ -103,7 +105,11 @@ const HR_Supervisors_List = () => {
 
   const fetchSupervisors = async () => {
     try {
-      const response = await axios.get(`${baseUrl}/api/v1/admin/users`);
+      const response = await axios.get(`${baseUrl}/api/v1/admin/users`, {
+        headers: {
+          Authorization: `Bearer ${login_token}`
+        }
+      });
       if (response.status === 200) {
         const supervisorUsers = response.data.filter(
           (item) => item.userRole === "SUPERVISOR"
@@ -119,7 +125,6 @@ const HR_Supervisors_List = () => {
         });
         setAllSupervisors(sortedSupervisors);
         setSupervisors(sortedSupervisors);
-        console.log("success")
       }
     } catch (error) {
       console.log(error);
@@ -134,14 +139,16 @@ const HR_Supervisors_List = () => {
     () => {
       const fetchTrainees = async () => {
         try {
-          const response = await axios.get(`${baseUrl}/api/v1/admin/users`);
+          const response = await axios.get(`${baseUrl}/api/v1/admin/users`, {
+            headers: {
+              Authorization: `Bearer ${login_token}`
+            }
+          });
           if (response.status === 200) {
             const traineeUsers = response.data.filter(
               (item) => item.userRole === "TRAINEE"
             );
             setAvailableTrainees(traineeUsers);
-            console.log("success2")
-
           }
         } catch (error) {
           console.log(error);
@@ -184,6 +191,10 @@ const HR_Supervisors_List = () => {
         `${baseUrl}/api/v1/supervisor/${selectedSupervisor.userId}/assign`,
         {
           trainees: selectedTrainees,
+        }, {
+          headers: {
+            Authorization: `Bearer ${login_token}`
+          }
         }
       );
       if (response.status === 200) {
@@ -326,7 +337,7 @@ const HR_Supervisors_List = () => {
                       }
                       color="primary"
                     >
-                      <GroupIcon fontSize="large"
+                      <GroupIcon fontSize="medium"
                       />
                     </IconButton>
                   </TableCell>
@@ -337,7 +348,7 @@ const HR_Supervisors_List = () => {
                       onClick={() => handleDelete(item)}
                       color="error"
                     >
-                      <DeleteIcon fontSize="large" />
+                      <DeleteIcon fontSize="medium" />
                     </IconButton>
                   </TableCell>
                 </TableRow>

@@ -13,12 +13,14 @@ import Typography from "@mui/material/Typography";
 import Paper from "@mui/material/Paper";
 import InputLabel from '@mui/material/InputLabel';
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import { useAuth } from "../../provider/authProvider";
 
 const FormTemplatePage = () => {
   const { formId } = useParams();
   const baseUrl = import.meta.env.VITE_PORT_URL;
   const navigate = useNavigate();
-
+  const { user } = useAuth();
+  const { login_token } = user;
   const {
     register,
     handleSubmit,
@@ -35,7 +37,11 @@ const FormTemplatePage = () => {
   useEffect(() => {
     const fetchFormDetails = async () => {
       try {
-        const response = await axios.get(`${baseUrl}/api/v1/forms/${formId}`);
+        const response = await axios.get(`${baseUrl}/api/v1/forms/${formId}`, {
+          headers: {
+            Authorization: `Bearer ${login_token}`
+          }
+        });
         const form = response.data;
         setFormData(form);
         setValue("title", form.title);
@@ -92,11 +98,13 @@ const FormTemplatePage = () => {
 
   const formUpdateAPI = async () => {
     try {
-        const response = await axios.put(
-            `${baseUrl}/api/v1/forms/${formId}`,
-            formData,
-            { headers: { "Content-Type": "application/json" } }  
-          );
+      const response = await axios.put(
+        `${baseUrl}/api/v1/forms/${formId}`,
+        formData, {
+        headers: {
+          Authorization: `Bearer ${login_token}`
+        }
+      })
       if (response.status === 200) {
         console.log("Form updated successfully");
         console.log(formData);
@@ -136,11 +144,11 @@ const FormTemplatePage = () => {
   return (
     <div style={{ display: "flex", justifyContent: "center" }}>
       <Paper elevation={3} sx={{ p: 4, m: 6, width: "70%", maxWidth: 1000 }}>
-     <Button sx={{ pb: 4 }}  onClick={() => {
-              navigate(`/form-templates/`);
-            }} startIcon={<ArrowBackIcon />}>
-        Back to Forms
-      </Button>
+        <Button sx={{ mb: 4 }} onClick={() => {
+          navigate(`/form-templates/`);
+        }} startIcon={<ArrowBackIcon />}>
+          Back to Forms
+        </Button>
 
         <form onSubmit={handleSubmit(onSubmit)}>
           <TextField

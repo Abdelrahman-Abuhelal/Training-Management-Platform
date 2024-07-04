@@ -27,10 +27,13 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import { jsPDF } from "jspdf";
 import autoTable from "jspdf-autotable";
 import PictureAsPdfOutlinedIcon from "@mui/icons-material/PictureAsPdfOutlined";
+import { useAuth } from "../../provider/authProvider";
 
 const EditTrainee = () => {
   const navigate = useNavigate();
   const { userId } = useParams();
+  const { user } = useAuth();
+  const { login_token } = user;
   // user info
   const [username, setUsername] = useState("");
   const [userFullName, setUserFullName] = useState("");
@@ -72,7 +75,11 @@ const EditTrainee = () => {
   const userData = async () => {
     try {
       const response = await axios.get(
-        `${baseUrl}/api/v1/admin/users/${userId}`
+        `${baseUrl}/api/v1/admin/users/${userId}`, {
+          headers: {
+            Authorization: `Bearer ${login_token}`
+          }
+        }
       );
       if (response.status === 200) {
         const userData = response.data;
@@ -94,7 +101,11 @@ const EditTrainee = () => {
   const fetchUserData = async () => {
     try {
       const response = await axios.get(
-        `${baseUrl}/api/v1/admin/trainee-info/${userId}`
+        `${baseUrl}/api/v1/admin/trainee-info/${userId}`, {
+          headers: {
+            Authorization: `Bearer ${login_token}`
+          }
+        }
       );
       if (response.status === 200) {
         const userData = response.data;
@@ -108,10 +119,10 @@ const EditTrainee = () => {
         setUniversityMajor(userData.universityMajor || "");
         setExpectedGraduationDate(userData.expectedGraduationDate || "");
         setExpectedGraduationYear(
-          userData.expectedGraduationDate.slice(0, 4) || ""
+         userData.expectedGraduationDate ? userData.expectedGraduationDate.slice(0, 4) : ""
         );
         setExpectedGraduationMonth(
-          userData.expectedGraduationDate.slice(-2) || ""
+          userData.expectedGraduationDate ? userData.expectedGraduationDate.slice(-2) : ""
         );
         setTrainingField(userData.trainingField || "");
         setBranchLocation(userData.branchLocation || "");
@@ -126,7 +137,11 @@ const EditTrainee = () => {
   const fetchUserCourses = async () => {
     try {
       const response = await axios.get(
-        `${baseUrl}/api/v1/admin/trainees/${userId}/grades`
+        `${baseUrl}/api/v1/admin/trainees/${userId}/grades`, {
+          headers: {
+            Authorization: `Bearer ${login_token}`
+          }
+        }
       );
       if (response.status === 200) {
         const fetchedCourses = response.data;
@@ -194,7 +209,11 @@ const EditTrainee = () => {
     try {
       const response = await axios.put(
         `${baseUrl}/api/v1/admin/update-trainee/${userId}`,
-        formData
+        formData, {
+          headers: {
+            Authorization: `Bearer ${login_token}`
+          }
+        }
       );
       if (response.status === 200) {
         console.log("Data updated by admin: ", response.data);
@@ -262,7 +281,11 @@ const EditTrainee = () => {
 
       await axios.put(
         `${baseUrl}/api/v1/admin/trainees/${userId}/grades`,
-        finalCoursesObject
+        finalCoursesObject, {
+          headers: {
+            Authorization: `Bearer ${login_token}`
+          }
+        }
       );
 
       console.log("Grades updated successfully");
@@ -777,7 +800,6 @@ const EditTrainee = () => {
         </Button>
       </Box>
 
-      {/* Confirmation Dialog for Details */}
       <Dialog open={showDetailsConfirmation} onClose={handleCancel}>
         <DialogTitle>Confirmation</DialogTitle>
         <DialogContent>

@@ -13,7 +13,7 @@ import {
   TablePagination,
   IconButton,
   Checkbox,
-  InputAdornment ,
+  InputAdornment,
   Paper,
   Grid,
   Button,
@@ -21,11 +21,13 @@ import {
 } from "@mui/material"; // MUI components (or your preferred library)
 import GroupsIcon from '@mui/icons-material/Groups';
 import { useNavigate } from "react-router-dom";
-import { Link } from "react-router-dom";
-import SearchIcon from "@mui/icons-material/Search";
 
+import { useAuth } from "../../provider/authProvider";
+import SearchComponent from "../../components/Search";
 const Supervisor_Trainees_List = () => {
   const baseUrl = import.meta.env.VITE_PORT_URL;
+  const { user } = useAuth();
+  const { login_token } = user;
   const [trainees, setTrainees] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [page, setPage] = useState(0);
@@ -35,9 +37,14 @@ const Supervisor_Trainees_List = () => {
   const [selectedTrainees, setSelectedTrainees] = useState([]);
   const navigate = useNavigate();
 
+
   const filteredTrainees = trainees.filter((trainee) =>
-    trainee.userUsername.toLowerCase().includes(searchTerm.toLowerCase())
+    trainee.userUsername.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    trainee.userFirstName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    trainee.userLastName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    trainee.userEmail.toLowerCase().includes(searchTerm.toLowerCase())
   );
+
 
   const paginatedTrainees = filteredTrainees.slice(
     page * rowsPerPage,
@@ -47,7 +54,11 @@ const Supervisor_Trainees_List = () => {
   const fetchTrainees = async () => {
     try {
       const response = await axios.get(
-        `${baseUrl}/api/v1/supervisor/my-trainees`
+        `${baseUrl}/api/v1/supervisor/my-trainees`, {
+        headers: {
+          Authorization: `Bearer ${login_token}`
+        }
+      }
       );
       if (response.status === 200) {
         const traineeUsers = response.data;
@@ -101,27 +112,14 @@ const Supervisor_Trainees_List = () => {
 
   return (
     <div style={{ padding: "3rem" }}>
-    <Grid container spacing={3} justifyContent="space-between" alignItems="center">
+      <Grid container spacing={3} justifyContent="space-between" alignItems="center">
         <Grid item xs={12} sm={6}>
           <Typography variant="h5" component="h2">
-          My Trainees   <GroupsIcon style={{ fontSize: '30px' }} />
+            My Trainees   <GroupsIcon style={{ fontSize: '30px' }} />
           </Typography>
         </Grid>
         <Grid item>
-          <TextField
-            placeholder="Search username"
-            variant="outlined"
-            value={searchTerm}
-            onChange={handleSearchChange}
-            InputProps={{
-              startAdornment: (
-                <InputAdornment position="start">
-                  <SearchIcon />
-                </InputAdornment>
-              ),
-            }}
-            sx={{ maxWidth: "250px" }} // Adjust the maxWidth as needed
-          />
+          <SearchComponent searchTerm={searchTerm} onSearchChange={handleSearchChange} />
         </Grid>
 
       </Grid>
@@ -163,9 +161,6 @@ const Supervisor_Trainees_List = () => {
               <TableCell>
                 <Typography variant="h6">Role</Typography>
               </TableCell>
-              <TableCell>
-                <Typography variant="h6">Actions</Typography>
-              </TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -188,15 +183,6 @@ const Supervisor_Trainees_List = () => {
                 <TableCell>{item.userLastName}</TableCell>
                 <TableCell>{item.userEmail}</TableCell>
                 <TableCell>{item.userRole}</TableCell>
-                <TableCell>
-                  <IconButton
-                    size="small"
-                    onClick={() => handleViewReview(item)}
-                    color="primary"
-                  >
-                    <ReviewsIcon /> &nbsp; Add review
-                  </IconButton>
-                </TableCell>
               </TableRow>
             ))}
           </TableBody>

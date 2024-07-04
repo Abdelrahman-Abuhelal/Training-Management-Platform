@@ -38,8 +38,13 @@ import DownloadIcon from "@mui/icons-material/Download";
 import { useNavigate } from "react-router-dom";
 import * as XLSX from "xlsx";
 import PeopleOutlineIcon from '@mui/icons-material/PeopleOutline';
+import { useAuth } from "../../provider/authProvider";
+
+
 const TraineesList = () => {
   const baseUrl = import.meta.env.VITE_PORT_URL;
+  const { user } = useAuth();
+  const { login_token } = user;
   const [trainees, setTrainees] = useState([]);
   const [traineesDetails, setTraineesDetails] = useState([]);
   const [searchTerm, setSearchTerm] = useState(""); // Search state
@@ -74,7 +79,11 @@ const TraineesList = () => {
   const deleteUser = async (userId) => {
     try {
       const response = await axios.delete(
-        `${baseUrl}/api/v1/admin/users/${userId}`
+        `${baseUrl}/api/v1/admin/users/${userId}`, {
+          headers: {
+            Authorization: `Bearer ${login_token}`
+          }
+        }
       );
       if (response.status === 200) {
         console.log("Trainee deleted successfully");
@@ -145,7 +154,11 @@ const TraineesList = () => {
       const traineeId = selectedTrainees[0].userId;
       try {
         const response = await axios.get(
-          `${baseUrl}/api/v1/admin/supervisorsUserIds/${traineeId}`
+          `${baseUrl}/api/v1/admin/supervisorsUserIds/${traineeId}`, {
+            headers: {
+              Authorization: `Bearer ${login_token}`
+            }
+          }
         );
         if (response.status === 200) {
           const supervisorUserIds = response.data;
@@ -200,6 +213,10 @@ const TraineesList = () => {
         {
           traineeIds,
           supervisorIds,
+        }, {
+          headers: {
+            Authorization: `Bearer ${login_token}`
+          }
         }
       );
 
@@ -250,7 +267,11 @@ const TraineesList = () => {
 
   const fetchTrainees = async () => {
     try {
-      const response = await axios.get(`${baseUrl}/api/v1/admin/users`);
+      const response = await axios.get(`${baseUrl}/api/v1/admin/users`, {
+        headers: {
+          Authorization: `Bearer ${login_token}`
+        }
+      });
       if (response.status === 200) {
         const traineeUsers = response.data.filter(
           (item) => item.userRole === "TRAINEE"
@@ -267,7 +288,11 @@ const TraineesList = () => {
 
   const fetchSupervisors = async () => {
     try {
-      const response = await axios.get(`${baseUrl}/api/v1/admin/users`);
+      const response = await axios.get(`${baseUrl}/api/v1/admin/users` , {
+        headers: {
+          Authorization: `Bearer ${login_token}`
+        }
+      });
       if (response.status === 200) {
         const supervisorUsers = response.data.filter(
           (item) => item.userRole === "SUPERVISOR"
@@ -284,7 +309,11 @@ const TraineesList = () => {
 
   const fetchTraineesDetails = async () => {
     try {
-      const response = await axios.get(`${baseUrl}/api/v1/admin/trainees`);
+      const response = await axios.get(`${baseUrl}/api/v1/admin/trainees`, {
+        headers: {
+          Authorization: `Bearer ${login_token}`
+        }
+      });
       if (response.status === 200) {
         const processedData = preprocessTraineeDetails(response.data);
         setTraineesDetails(processedData);

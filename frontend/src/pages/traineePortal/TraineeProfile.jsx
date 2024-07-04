@@ -1,24 +1,29 @@
 import React, { useState, useEffect } from "react";
-import { 
-  Container, 
-  Typography, 
-  TextField, 
-  Select, 
-  MenuItem, 
-  Button, 
-  Box, 
-  Dialog, 
-  DialogActions, 
-  DialogContent, 
-  DialogContentText, 
+import {
+  Container,
+  Typography,
+  TextField,
+  Select,
+  MenuItem,
+  Button,
+  Box,
+  Dialog,
+  Alert,
+  DialogActions,
+  DialogContent,
+  Snackbar,
   DialogTitle,
   FormControl,
   InputLabel
 } from "@mui/material";
 import axios from "axios";
 import "../style/traineeProfile.css";
+import { useAuth } from "../../provider/authProvider";
 
 const TraineeProfile = () => {
+  const baseUrl = import.meta.env.VITE_PORT_URL;
+  const { user } = useAuth();
+  const { login_token } = user;
   const [fullNameInArabic, setFullNameInArabic] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [idType, setIdType] = useState("");
@@ -33,19 +38,28 @@ const TraineeProfile = () => {
   const [trainingField, setTrainingField] = useState("");
   const [branchLocation, setBranchLocation] = useState("");
   const [idNumberError, setIdNumberError] = useState("");
-  const [showConfirmation, setShowConfirmation] = useState(false);
-
-  const baseUrl = import.meta.env.VITE_PORT_URL;
+  const [showDetailsConfirmation, setShowDetailsConfirmation] = useState(false);
+  const [traineeDetailsSnackbarSuccess, setTraineeDetailsSnackbarSuccess] =
+    useState(false);
+  const [traineeDetailsSnackbarError, setTraineeDetailsSnackbarError] =
+    useState(false);
+  const [
+    traineeDetailsSnackbarErrorMessage,
+    setTraineeDetailsSnackbarErrorMessage,
+  ] = useState("");
 
   useEffect(() => {
-fetchUserData();
+    fetchUserData();
   }, []);
 
   const fetchUserData = async () => {
     try {
       const response = await axios.get(
-        `${baseUrl}/api/v1/trainee-operations/my-profile`
-      );
+        `${baseUrl}/api/v1/trainee-operations/my-profile`, {
+          headers: {
+            Authorization: `Bearer ${login_token}`
+          }
+        });
       if (response.status === 200) {
         const userData = response.data;
         setFullNameInArabic(userData.fullNameInArabic || "");
@@ -58,7 +72,7 @@ fetchUserData();
         setUniversityMajor(userData.universityMajor || "");
         setExpectedGraduationDate(userData.expectedGraduationDate || "");
         setExpectedGraduationYear(userData.expectedGraduationDate.slice(0, 4) || "");
-        setExpectedGraduationMonth(userData.expectedGraduationDate.slice(-2)|| "");
+        setExpectedGraduationMonth(userData.expectedGraduationDate.slice(-2) || "");
         setTrainingField(userData.trainingField || "");
         setBranchLocation(userData.branchLocation || "");
       } else {
@@ -69,33 +83,32 @@ fetchUserData();
     }
   };
 
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    setShowConfirmation(true);
+    // Show confirmation dialog
+    if (idNumber.length !== 9) {
+      setTraineeDetailsSnackbarError(true);
+      setTraineeDetailsSnackbarErrorMessage("ID Number must be 9 digits");
+      return;
+    }
+
+    if (!/^05\d{8}$/.test(phoneNumber)) {
+      setTraineeDetailsSnackbarError(true);
+      setTraineeDetailsSnackbarErrorMessage(
+        "Phone Number must start with '05' and have 10 digits "
+      );
+      return;
+    }
+    setShowDetailsConfirmation(true);
   };
 
-  const handleIdNumberChange = (e) => {
-    const value = e.target.value;
-    if (/^\d{0,9}$/.test(value)) {
-      setIdNumber(value);
-    }
-  };
 
-  const handlePhoneNumberChange = (e) => {
-    let value = e.target.value;
-    if (/^05\d*$/.test(value)) {
-      setPhoneNumber(value);
-    } else if (value === "" || /^05\d*$/.test(value.slice(0, 3))) {
-      setPhoneNumber(value);
-    }
-  };
-  
+
   const handleConfirm = async (e) => {
     e.preventDefault();
-    setShowConfirmation(false);
-    if (idNumber.length > 0 && idNumber.length !== 9) {
-      setIdNumberError("ID Number must be 9 digits");
-    }
+    setShowDetailsConfirmation(false);
+
     const formData = {
       fullNameInArabic,
       phoneNumber,
@@ -112,10 +125,14 @@ fetchUserData();
     try {
       const response = await axios.put(
         `${baseUrl}/api/v1/trainee-operations/update-me`,
-        formData
+        formData, {
+        headers: {
+          Authorization: `Bearer ${login_token}`
+        }
+      }
       );
       if (response.status === 200) {
-        localStorage.setItem("traineeProfile", JSON.stringify(formData));
+        setTraineeDetailsSnackbarSuccess(true);
       }
       console.log("Response:", response.data);
     } catch (error) {
@@ -124,8 +141,9 @@ fetchUserData();
   };
 
   const handleCancel = () => {
-    setShowConfirmation(false);
+    setShowDetailsConfirmation(false);
   };
+
 
   const handleMonthChange = (e) => {
     setExpectedGraduationMonth(e.target.value);
@@ -219,9 +237,10 @@ fetchUserData();
             variant="outlined"
             label="ID Number"
             value={idNumber}
-            onChange={handleIdNumberChange}
+            onChange={(e) => setIdNumber(e.target.value)}
             error={!!idNumberError}
             helperText={idNumberError}
+            inputProps={{ inputMode: "numeric" }}
           />
         </Box>
         <Box mb={2}>
@@ -230,7 +249,7 @@ fetchUserData();
             variant="outlined"
             label="Phone Number starts with '05'"
             value={phoneNumber}
-            onChange={handlePhoneNumberChange}
+            onChange={(e) => setPhoneNumber(e.target.value)}
           />
         </Box>
         <Box mb={2}>
@@ -242,13 +261,35 @@ fetchUserData();
               label="University Name"
             >
               <MenuItem value=""></MenuItem>
-              <MenuItem value="Birzeit">Birzeit University</MenuItem>
-              <MenuItem value="Alquds">Alquds University</MenuItem>
-              <MenuItem value="Polytechnic">Polytechnic University</MenuItem>
-              <MenuItem value="Bethlehem">Bethlehem University</MenuItem>
-              <MenuItem value="An-Najah">An-Najah University</MenuItem>
-              <MenuItem value="Arab American">Arab American University</MenuItem>
-              <MenuItem value="OTHER">Other</MenuItem>
+              <MenuItem value="Al-Quds University">
+                Al-Quds University
+              </MenuItem>
+              <MenuItem value="Birzeit University">
+                Birzeit University
+              </MenuItem>
+              <MenuItem value="Bethlehem University">
+                Bethlehem University
+              </MenuItem>
+              <MenuItem value="Al-Quds Open University">
+                Al-Quds Open University
+              </MenuItem>
+              <MenuItem value="Arab American University">
+                Arab American University
+              </MenuItem>
+              <MenuItem value="Hebron University">Hebron University</MenuItem>
+              <MenuItem value="Ibrahimieh College">
+                Ibrahimieh College
+              </MenuItem>
+              <MenuItem value="Khodori Institute, Tulkarm">
+                Khodori Institute, Tulkarm
+              </MenuItem>
+              <MenuItem value="Palestine Ahliya University">
+                Palestine Ahliya University
+              </MenuItem>
+              <MenuItem value="Palestine Polytechnic University">
+                Palestine Polytechnic University
+              </MenuItem>
+              <MenuItem value="Other">Other</MenuItem>
             </Select>
           </FormControl>
         </Box>
@@ -272,8 +313,8 @@ fetchUserData();
         <Box mb={2}>
           <Box display="flex" justifyContent="space-between">
             <FormControl variant="outlined" style={{ width: "48%" }}>
-            <InputLabel>Graduation Year Date (expected)</InputLabel>
-            <Select
+              <InputLabel>Graduation Year Date (expected)</InputLabel>
+              <Select
                 value={expectedGraduationYear}
                 onChange={handleYearChange}
                 label="Graduation Year Date (expected)"
@@ -281,7 +322,7 @@ fetchUserData();
                 <MenuItem value=""></MenuItem>
                 {[...Array(10).keys()].map((i) => (
                   <MenuItem key={i} value={new Date().getFullYear() + i}>
-                    {new Date().getFullYear()+ i}
+                    {new Date().getFullYear() + i}
                   </MenuItem>
                 ))}
               </Select>
@@ -351,22 +392,53 @@ fetchUserData();
           </Button>
         </Box>
       </form>
-      <Dialog open={showConfirmation} onClose={handleCancel}>
+      <Dialog open={showDetailsConfirmation} onClose={handleCancel}>
         <DialogTitle>Confirmation</DialogTitle>
         <DialogContent>
-          <DialogContentText>
-            Are you sure you want to submit the profile information?
-          </DialogContentText>
+          <Typography>Are you sure you want to save the details?</Typography>
         </DialogContent>
         <DialogActions>
           <Button onClick={handleCancel} color="primary">
             Cancel
           </Button>
-          <Button onClick={handleConfirm} color="primary">
+          <Button onClick={handleConfirm} color="primary" variant="contained">
             Confirm
           </Button>
         </DialogActions>
       </Dialog>
+
+      <Snackbar
+        open={traineeDetailsSnackbarSuccess}
+        autoHideDuration={6000}
+        onClose={() => setTraineeDetailsSnackbarSuccess(false)}
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+      >
+        <Alert
+          onClose={() => setTraineeDetailsSnackbarSuccess(false)}
+          severity="success"
+          sx={{ width: "100%" }}
+        >
+          Your details have been saved.
+        </Alert>
+      </Snackbar>
+      <Snackbar
+        open={traineeDetailsSnackbarError}
+        autoHideDuration={6000}
+        onClose={() => setTraineeDetailsSnackbarError(false)}
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+      >
+        <Alert
+          onClose={() => {
+            setTraineeDetailsSnackbarError(false);
+            setTraineeDetailsSnackbarErrorMessage("");
+          }}
+          severity="error"
+          sx={{ width: "100%" }}
+        >
+          {traineeDetailsSnackbarErrorMessage}
+        </Alert>
+      </Snackbar>
+
     </Container>
   );
 };

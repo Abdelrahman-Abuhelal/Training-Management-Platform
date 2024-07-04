@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { deleteFormTemplateAPI, fetchFormTemplatesAPI } from "../../apis/forms";
 import { useNavigate } from 'react-router-dom';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
@@ -16,10 +15,10 @@ import {
   Typography,
   Box,
   Button,
-  Dialog, 
+  Dialog,
   DialogActions,
-  DialogContent, 
-  DialogContentText, 
+  DialogContent,
+  DialogContentText,
   DialogTitle,
   Snackbar,
   Alert,
@@ -30,11 +29,13 @@ import {
   ListItem,
   ListItemAvatar,
   Avatar,
-  IconButton
 } from "@mui/material";
 import CheckCircleIcon from '@mui/icons-material/CheckCircle'; // Import the icon
+import { useAuth } from "../../provider/authProvider";
 
 const FormTemplates = () => {
+  const { user } = useAuth();
+  const { login_token } = user;
   const [formTemplates, setFormTemplates] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showConfirmation, setShowConfirmation] = useState(false);
@@ -43,11 +44,11 @@ const FormTemplates = () => {
   const [snackbarMessage, setSnackbarMessage] = useState("");
   const [showSendFormModal, setShowSendFormModal] = useState(false);
   const [selectedUsers, setSelectedUsers] = useState([]);
-  const [usersAlreadySent,setUsersAlreadySent]=useState([]);
-  const [idToSend,setIdToSend]=useState(null);
-  const [trainees,setTrainees]= useState([]);
-  const [supervisors,setSupervisors]= useState([]);
-  const navigate  = useNavigate();
+  const [usersAlreadySent, setUsersAlreadySent] = useState([]);
+  const [idToSend, setIdToSend] = useState(null);
+  const [trainees, setTrainees] = useState([]);
+  const [supervisors, setSupervisors] = useState([]);
+  const navigate = useNavigate();
   const baseUrl = import.meta.env.VITE_PORT_URL;
   const [searchQuery, setSearchQuery] = useState("");
 
@@ -59,9 +60,9 @@ const FormTemplates = () => {
     setIdToDelete(formId);
     setShowConfirmation(true);
   }
- const formBuilderPage = ()=>{
-  navigate("/create-forms")
- }
+  const formBuilderPage = () => {
+    navigate("/create-forms")
+  }
 
   const handleSearchUsers = (query) => {
     setSearchQuery(query);
@@ -76,13 +77,16 @@ const FormTemplates = () => {
   );
 
   const handleDeleteForm = (formId) => {
-    deleteFormTemplateAPI(formId)
-      .then(() => {
-        setSnackbarMessage("Form has been deleted successfully.");
-        setSnackbarOpen(true);
-        setIdToDelete(null);
-        fetchFormTemplates(); // Refresh form templates after deletion
-      })
+    axios.delete(`${baseUrl}/api/v1/forms/${formId}`, {
+      headers: {
+        Authorization: `Bearer ${login_token}`
+      }
+    }).then(() => {
+      setSnackbarMessage("Form has been deleted successfully.");
+      setSnackbarOpen(true);
+      setIdToDelete(null);
+      fetchFormTemplates(); // Refresh form templates after deletion
+    })
       .catch((error) => {
         console.error("Error deleting form template:", error);
         setSnackbarMessage("Error deleting form template.");
@@ -91,7 +95,7 @@ const FormTemplates = () => {
       .finally(() => {
         setShowConfirmation(false);
       });
-  } 
+  }
 
   const handleCancel = () => {
     setShowConfirmation(false);
@@ -99,11 +103,15 @@ const FormTemplates = () => {
   };
 
   const fetchFormTemplates = () => {
-    fetchFormTemplatesAPI()
-      .then((data) => {
-        setFormTemplates(data);
-        setLoading(false);
-      })
+    axios.get(`${baseUrl}/api/v1/forms`, {
+      headers: {
+        Authorization: `Bearer ${login_token}`
+      }
+    }).then((response) => {
+      console.log(response.data);
+      setFormTemplates(response.data);
+      setLoading(false);
+    })
       .catch((error) => {
         setLoading(false);
         console.error("Error fetching form templates:", error);
@@ -112,7 +120,7 @@ const FormTemplates = () => {
 
   useEffect(() => {
     fetchFormTemplates();
-  }, []); // Empty dependency array means this effect runs once on component mount
+  }, []);
 
   const handleSnackbarClose = (event, reason) => {
     if (reason === 'clickaway') {
@@ -126,7 +134,6 @@ const FormTemplates = () => {
     sendFormAPI();
     setSelectedUsers([]);
     setShowSendFormModal(false);
-    // Additional logic to handle sending the form template
   };
 
   const handleUserToggle = (userId) => () => {
@@ -142,12 +149,19 @@ const FormTemplates = () => {
     setSelectedUsers(newSelectedUsers);
   };
 
+
+
+
   const getUsersAssignedTo = async () => {
-    try{
-      const response = await axios.get(`${baseUrl}/api/v1/forms/${idToSend}/users-assigned`);
+    try {
+      const response = await axios.get(`${baseUrl}/api/v1/forms/${idToSend}/users-assigned`, {
+        headers: {
+          Authorization: `Bearer ${login_token}`
+        }
+      });
       setUsersAlreadySent(response.data);
       console.log(response.data);
-    }catch(error){
+    } catch (error) {
       console.log(error);
     }
   }
@@ -156,11 +170,15 @@ const FormTemplates = () => {
     try {
       const response = await axios.put(`${baseUrl}/api/v1/forms/${idToSend}/send`,
         selectedUsers
-      );
+        , {
+          headers: {
+            Authorization: `Bearer ${login_token}`
+          }
+        });
       setIdToSend(null)
       if (response.status === 200) {
         console.log(response.data);
-      }     
+      }
     } catch (error) {
       console.log(error);
     }
@@ -168,7 +186,11 @@ const FormTemplates = () => {
 
   const fetchTrainees = async () => {
     try {
-      const response = await axios.get(`${baseUrl}/api/v1/admin/users`);
+      const response = await axios.get(`${baseUrl}/api/v1/admin/users`, {
+        headers: {
+          Authorization: `Bearer ${login_token}`
+        }
+      });
       if (response.status === 200) {
         const traineeUsers = response.data.filter(
           (item) => item.userRole === "TRAINEE"
@@ -182,7 +204,11 @@ const FormTemplates = () => {
 
   const fetchSupervisors = async () => {
     try {
-      const response = await axios.get(`${baseUrl}/api/v1/admin/users`);
+      const response = await axios.get(`${baseUrl}/api/v1/admin/users`, {
+        headers: {
+          Authorization: `Bearer ${login_token}`
+        }
+      });
       if (response.status === 200) {
         const supervisorUsers = response.data.filter(
           (item) => item.userRole === "SUPERVISOR"
@@ -194,23 +220,34 @@ const FormTemplates = () => {
     }
   };
 
-  useEffect(() => {
-    getUsersAssignedTo();
-    fetchTrainees();
-    fetchSupervisors();
-  }, [showSendFormModal]);
-
   const openSendFormModal = (formId) => {
-    setShowSendFormModal(true);
     setIdToSend(formId);
-    // Additional logic to prepare the modal (e.g., fetching users to display)
+    setShowSendFormModal(true);
   };
 
-const handleCancelSendForm = () => {
-  setIdToSend(null)
-  setSelectedUsers([]);
-  setShowSendFormModal(false);
-}
+  useEffect(() => {
+    if (idToSend !== null) {
+      console.log(idToSend);
+      getUsersAssignedTo();
+    }
+  }, [idToSend]);
+
+
+  useEffect(() => {
+    if (showSendFormModal) {
+      fetchTrainees();
+      fetchSupervisors();
+    }
+  }, [showSendFormModal]);
+
+
+
+
+  const handleCancelSendForm = () => {
+    setIdToSend(null)
+    setSelectedUsers([]);
+    setShowSendFormModal(false);
+  }
 
 
   if (loading) {
@@ -219,7 +256,7 @@ const handleCancelSendForm = () => {
 
   return (
     <Box sx={{ margin: '2rem auto', maxWidth: '1000px' }}>
-  <Paper sx={{ padding: '2rem', border: '0.5px solid #ccc' }}>
+      <Paper sx={{ padding: '2rem', border: '0.5px solid #ccc' }}>
         <Typography
           variant="h5"
           gutterBottom
@@ -280,11 +317,11 @@ const handleCancelSendForm = () => {
                     </Button>
                   </TableCell>
                   <TableCell>
-                  <Button variant="outlined" color="error" onClick={() => viewConfirmation(form.id)}>
+                    <Button variant="outlined" color="error" onClick={() => viewConfirmation(form.id)}>
                       <DeleteIcon />
                     </Button>
                   </TableCell>
-  
+
                 </TableRow>
               ))}
             </TableBody>
@@ -310,7 +347,7 @@ const handleCancelSendForm = () => {
       </Dialog>
 
       <Dialog open={showSendFormModal} onClose={handleCancelSendForm}>
-      <DialogTitle>Select Users</DialogTitle>
+        <DialogTitle>Select Users</DialogTitle>
         <DialogContent>
           <TextField
             autoFocus
@@ -320,20 +357,20 @@ const handleCancelSendForm = () => {
             type="text"
             fullWidth
             variant="outlined"
-            onChange={(e) => handleSearchUsers(e.target.value)} 
+            onChange={(e) => handleSearchUsers(e.target.value)}
           />
           <List>
             <Typography> Trainees </Typography>
             {filteredTrainees.map((user) => (
-            <ListItem key={user.userId} button onClick={handleUserToggle(user.userId)}>
+              <ListItem key={user.userId} button onClick={handleUserToggle(user.userId)}>
                 <ListItemAvatar>
                   <Avatar>
-                  {user.userUsername.charAt(0)} {/* Add user avatar or initials */}
+                    {user.userUsername.charAt(0)} {/* Add user avatar or initials */}
                   </Avatar>
                 </ListItemAvatar>
                 <ListItemText primary={user.userUsername} />
                 {usersAlreadySent.includes(user.userId) && (
-                  <CheckCircleIcon color="success" /> 
+                  <CheckCircleIcon color="success" />
                 )}
                 <Checkbox
                   edge="end"
@@ -346,15 +383,15 @@ const handleCancelSendForm = () => {
           <List>
             <Typography> Supervisors </Typography>
             {filteredSupervisors.map((user) => (
-            <ListItem key={user.userId} button onClick={handleUserToggle(user.userId)}>
+              <ListItem key={user.userId} button onClick={handleUserToggle(user.userId)}>
                 <ListItemAvatar>
                   <Avatar>
-                  {user.userUsername.charAt(0)} {/* Add user avatar or initials */}
+                    {user.userUsername.charAt(0)} {/* Add user avatar or initials */}
                   </Avatar>
                 </ListItemAvatar>
                 <ListItemText primary={user.userUsername} />
                 {usersAlreadySent.includes(user.userId) && (
-                  <CheckCircleIcon color="success" /> 
+                  <CheckCircleIcon color="success" />
                 )}
                 <Checkbox
                   edge="end"

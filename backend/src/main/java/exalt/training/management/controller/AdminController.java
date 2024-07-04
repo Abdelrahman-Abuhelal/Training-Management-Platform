@@ -52,6 +52,7 @@ public class AdminController {
     @Operation(summary = "Delete User", security =  @SecurityRequirement(name = "loginAuth"))
     @PreAuthorize("hasRole('SUPER_ADMIN')")
     @DeleteMapping("/users/{id}")
+
     public ResponseEntity<String> deleteUser(@PathVariable Long id)  {
         return ResponseEntity.ok(adminService.deleteUser(id));
     }

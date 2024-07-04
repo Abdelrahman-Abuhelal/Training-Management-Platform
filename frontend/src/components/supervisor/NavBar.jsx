@@ -3,7 +3,6 @@ import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
-import Button from "@mui/material/Button";
 import IconButton from "@mui/material/IconButton";
 import MenuIcon from "@mui/icons-material/Menu";
 import AccountCircle from "@mui/icons-material/AccountCircle"; // Import the AccountCircle icon
@@ -33,7 +32,7 @@ export default function SupervisorButtonAppBar() {
   // Retrieve user information from authentication context
   const { user } = useAuth();
   const { appUserDto } = user;
-  const { userUsername } = appUserDto;
+  const { userFirstName,userLastName} = appUserDto;
 
   return (
     <Box sx={{ flexGrow: 1 }}>
@@ -55,7 +54,7 @@ export default function SupervisorButtonAppBar() {
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
             <AccountCircle sx={{ mr: 1 }} />
             <Typography variant="body1" sx={{ mr: 2 }}>
-              {userUsername}
+            {userFirstName+" "+userLastName}
             </Typography>
             <Logout />
           </Box>

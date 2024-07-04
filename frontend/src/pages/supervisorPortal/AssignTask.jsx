@@ -166,7 +166,7 @@ const AssignTask = () => {
     <div style={{ display: "flex", justifyContent: "center"}}>
 <Paper elevation={3} sx={{ p: 3, m: 6 , width: "70%", maxWidth: 1000}} >
 
-      <Typography  variant="h4" sx={{ marginBottom: '2rem' }}>&nbsp;&nbsp;Assign Task</Typography>
+      <Typography  variant="h4" sx={{ marginBottom: '2rem' }} align="center">&nbsp;&nbsp;Assign Task</Typography>
       <Box sx={{ display: "flex", flexWrap: "wrap", gap: 2 }}>
         <TextField
           label="Task Name"
