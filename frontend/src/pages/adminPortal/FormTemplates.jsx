@@ -115,7 +115,6 @@ const FormTemplates = () => {
         Authorization: `Bearer ${login_token}`
       }
     }).then((response) => {
-      console.log(response.data);
       setFormTemplates(response.data);
       setLoading(false);
     })
@@ -167,7 +166,6 @@ const FormTemplates = () => {
         }
       });
       setUsersAlreadySent(response.data);
-      console.log(response.data);
     } catch (error) {
       console.log(error);
     }
@@ -184,7 +182,6 @@ const FormTemplates = () => {
         });
       setIdToSend(null)
       if (response.status === 200) {
-        console.log(response.data);
       }
     } catch (error) {
       console.log(error);
@@ -234,7 +231,6 @@ const FormTemplates = () => {
 
   useEffect(() => {
     if (idToSend !== null) {
-      console.log(idToSend);
       getUsersAssignedTo();
     }
   }, [idToSend]);

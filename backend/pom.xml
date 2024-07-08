@@ -141,16 +141,19 @@
         </dependencies>
     </dependencyManagement>
     <build>
+        <finalName>training-management-system-service</finalName>
         <plugins>
-
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.11.0</version>
-                <executions>
-                <execution>
-                <id>default-compile</id>
                 <configuration>
+                    <source>${java.version}</source>
+                    <target>${java.version}</target>
                     <annotationProcessorPaths>
                         <path>
                             <groupId>org.mapstruct</groupId>
@@ -162,22 +165,20 @@
                             <artifactId>lombok</artifactId>
                             <version>1.18.30</version>
                         </path>
-                        <dependency>
+                        <path>
                             <groupId>org.projectlombok</groupId>
                             <artifactId>lombok-mapstruct-binding</artifactId>
                             <version>0.2.0</version>
-                        </dependency>
+                        </path>
                     </annotationProcessorPaths>
                     <compilerArgs>
                         <arg>-Amapstruct.suppressGeneratorTimestamp=true</arg>
                         <arg>-Amapstruct.defaultComponentModel=spring</arg>
                     </compilerArgs>
                 </configuration>
-                </execution>
-                </executions>
             </plugin>
         </plugins>
-
     </build>
+
 
 </project>

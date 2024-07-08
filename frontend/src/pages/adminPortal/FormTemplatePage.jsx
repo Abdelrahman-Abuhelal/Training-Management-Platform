@@ -107,7 +107,6 @@ const FormTemplatePage = () => {
       })
       if (response.status === 200) {
         console.log("Form updated successfully");
-        console.log(formData);
       }
     } catch (error) {
       console.error("Error:", error);
@@ -115,7 +114,6 @@ const FormTemplatePage = () => {
   };
 
   const onSubmit = (data) => {
-    console.log("Form submitted:", data);
     formUpdateAPI();
   };
 
