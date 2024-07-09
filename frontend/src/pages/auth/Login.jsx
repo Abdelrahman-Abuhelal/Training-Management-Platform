@@ -2,8 +2,8 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { NavLink } from "react-router-dom";
-import "../style/Login.css";
 import { useAuth } from "../../provider/authProvider";
+import { Container, Box, Typography, TextField, Button, Link, Alert } from "@mui/material";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -26,19 +26,19 @@ const Login = () => {
     }
 
     await axios.post(`${baseUrl}/api/v1/auth/login`, {
-        email,
-        password,
-      }).then((response) => {
-        if (response.status === 200) {
-          setError("");
-          setUserData(response.data);
-          navigate("/", { replace: true });
-        } else if (response.status === 401) {
-          setError("Invalid email or password");
-        } else {
-          setError(response.data.message || "Login failed");
-        }
-      })
+      email,
+      password,
+    }).then((response) => {
+      if (response.status === 200) {
+        setError("");
+        setUserData(response.data);
+        navigate("/", { replace: true });
+      } else if (response.status === 401) {
+        setError("Invalid email or password");
+      } else {
+        setError(response.data.message || "Login failed");
+      }
+    })
       .catch((error) => {
         setError("Login failed");
         console.error("Login failed:", error);
@@ -46,85 +46,69 @@ const Login = () => {
   };
 
   return (
-    <div className="login-container">
-      <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
-        <div className="sm:mx-auto sm:w-full sm:max-w-sm">
+    <Container maxWidth="xs">
+      <Box display="flex" flexDirection="column" justifyContent="center" alignItems="center" minHeight="100vh">
+        <Box textAlign="center" mb={4}>
+          <Box display="flex" justifyContent="center" mb={2}>
+            <img
+              src="/EXALT_LOGO2.png"
+              alt="Exalt Logo"
+              style={{ height: "50px", marginBottom: "20px" }}
+            />
+          </Box>
+          <Box display="flex" justifyContent="center" mb={2}>
 
-          <img
-            className="mx-auto h-20 w-auto"
-            src="/EXALT_LOGO2.png" // Replace with your logo image
-            alt="Exalt Logo"
-          /> 
-          <img
-            className="mx-auto h-43 w-52"
-            src="TMS_LOGO.jpg" // Replace with your logo image
-            alt="TMS Logo"
-            style={{ borderRadius: "10px" }} // Adjust the radius as needed
-          />
+            <img
+              src="TMS_LOGO.jpg"
+              alt="TMS Logo"
+              style={{ height: "180px", borderRadius: "10px" }}
+            />                      </Box>
 
-<h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
+          <Typography variant="h4" component="h1" mt={2}>
             Login Page
-          </h2>
-        </div>
-        <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-          <form onSubmit={handleSubmit}>
-            <div>
-              <div className="mt-2">
-                <label
-                  htmlFor="email"
-                  className="block text-sm font-medium text-gray-700"
-                >
-                  Email address
-                </label>
-                <input
-                  type="email"
-                  id="email"
-                  className="shadow-sm block w-full px-3 py-2 text-gray-700 border rounded-md focus:outline-none focus:ring-indigo-500 focus:ring-width-1"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                />
-              </div>
-            </div>
-            <br />
-            <div>
-              <div className="mt-2">
-                <label
-                  htmlFor="password"
-                  className="block text-sm font-medium text-gray-700"
-                >
-                  Password
-                </label>
-                <input
-                  type="password"
-                  id="password"
-                  className="shadow-sm block w-full px-3 py-2 text-gray-700 border rounded-md focus:outline-none focus:ring-indigo-500 focus:ring-width-1"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                />
-              </div>
-            </div>
-            <NavLink
-              style={{ float: "right", paddingBottom: 10, paddingTop: 5 }}
-              to="/forgot-password-email"
-            >
+          </Typography>
+        </Box>
+        <Box component="form" onSubmit={handleSubmit} width="100%">
+          <TextField
+            fullWidth
+            margin="normal"
+            id="email"
+            label="Email address"
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
+          <TextField
+            fullWidth
+            margin="normal"
+            id="password"
+            label="Password"
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
+          <Box textAlign="right" my={1}>
+            <Link component={NavLink} to="/forgot-password-email">
               Forgot Password?
-            </NavLink>
-
-            <br />
-            <br />
-
-            <button
-              type="submit"
-              className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-            >
-              Login
-            </button>
-            {error && <p className="alert alert-warning">{error}</p>}
-          </form>
-        </div>
-      </div>
-    </div>
+            </Link>
+          </Box>
+          <Button
+            fullWidth
+            variant="contained"
+            color="primary"
+            type="submit"
+          >
+            Login
+          </Button>
+          {error && (
+            <Alert severity="warning" style={{ marginTop: "20px" }}>
+              {error}
+            </Alert>
+          )}
+        </Box>
+      </Box>
+    </Container>
   );
-}; 
+};
 
 export default Login;

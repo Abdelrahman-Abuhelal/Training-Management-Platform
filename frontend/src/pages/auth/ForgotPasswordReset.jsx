@@ -2,6 +2,17 @@ import React, { useState } from "react";
 import axios from "axios";
 import { useParams } from "react-router-dom";
 import { NavLink } from 'react-router-dom';
+import {
+  Box,
+  Button,
+  Container,
+  CssBaseline,
+  TextField,
+  Typography,
+  Avatar,
+  Alert,
+} from '@mui/material';
+import LockResetIcon from '@mui/icons-material/LockReset';
 
 const ForgotPasswordReset = () => {
   const { token } = useParams();
@@ -51,7 +62,7 @@ const ForgotPasswordReset = () => {
         },
         {
           headers: {
-            Authorization: `Bearer ${token}`, 
+            Authorization: `Bearer ${token}`,
           },
         }
       );
@@ -74,74 +85,74 @@ const ForgotPasswordReset = () => {
   };
 
   return (
-    <div className="forgot-password-reset-container">
-      <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
-        <div className="sm:mx-auto sm:w-full sm:max-w-sm">
-          <img
-            className="mx-auto h-20 w-auto"
-            src="/EXALT_LOGO2.png" 
-          />
-           <img
-            className="mx-auto h-40 w-auto"
-            src="/TMS_LOGO.jpg" // Replace with your logo image
-            alt="TMS Logo"
-            style={{ borderRadius: "10px" }} // Adjust the radius as needed
-          />
-          <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
+    <Container component="main" maxWidth="xs">
+      <Box display="flex" flexDirection="column" justifyContent="center" alignItems="center" minHeight="100vh">
+
+        <Box textAlign="center" mb={1}>
+          <Box display="flex" justifyContent="center" mb={2}>
+            <img
+              src="/EXALT_LOGO2.png"
+              alt="Exalt Logo"
+              style={{ height: "50px", marginBottom: "20px" }}
+            />
+          </Box>
+          <Box display="flex" justifyContent="center" mb={2}>
+
+            <img
+              src="/TMS_LOGO.jpg"
+              alt="TMS Logo"
+              style={{ height: "180px", borderRadius: "10px" }}
+            />
+          </Box>
+          <Typography component="h1" variant="h5">
             Reset Your Password
-          </h2>
-        </div>
-        <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-          <form onSubmit={handleSubmit}>
-            <div>
-              <div className="mt-2">
-                <input
-                  type="password"
-                  placeholder="Password"
-                  className="shadow-sm block w-full px-3 py-2 text-gray-700 border rounded-md focus:outline-none focus:ring-indigo-500 focus:ring-width-1"
-                  value={newPassword}
-                  onChange={(e) => setNewPassword(e.target.value)}
-                  />
-                </div>
-              </div>
-              <br />
-  
-              <div>
-                <div className="mt-2">
-                  <input
-                    type="password"
-                    placeholder="Confirm Password"
-                    className="shadow-sm block w-full px-3 py-2 text-gray-700 border rounded-md focus:outline-none focus:ring-indigo-500 focus:ring-width-1"
-                    value={confirmationPassword}
-                    onChange={(e) => setConfirmationPassword(e.target.value)}
-                  />
-                </div>
-              </div>
-              <NavLink style={{ float: "right", paddingBottom:10, paddingTop:5 }} to="../">Back to Login?</NavLink>
-              <br />
-              <button
-                className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-                type="submit"
-              >
-                Submit
-              </button>
-              {NotMatchedPasswrodAlert && (
-                <div class="alert alert-warning">Passwords don't match</div>
-              )}
-  
-              {passwordError && (
-                <div class="alert alert-warning">{passwordError}</div>
-              )}
-  
-              {showSuccessAlert && (
-                <div class="alert alert-success">Password has been changed</div>
-              )}
-            </form>
-          </div>
-        </div>
-      </div>
-    );
-  };
-  
-  export default ForgotPasswordReset;
-  
+          </Typography>
+        </Box>
+
+        <Box component="form" onSubmit={handleSubmit} sx={{ mt: 1 }}>
+          <TextField
+            margin="normal"
+            required
+            fullWidth
+            label="Password"
+            type="password"
+            id="newPassword"
+            value={newPassword}
+            onChange={(e) => setNewPassword(e.target.value)}
+            autoFocus
+          />
+          <TextField
+            margin="normal"
+            required
+            fullWidth
+            label="Confirm Password"
+            type="password"
+            id="confirmationPassword"
+            value={confirmationPassword}
+            onChange={(e) => setConfirmationPassword(e.target.value)}
+          />
+          <NavLink style={{ float: "right", paddingBottom: 10, paddingTop: 5 }} to="../">Back to Login?</NavLink>
+          <Button
+            type="submit"
+            fullWidth
+            variant="contained"
+            sx={{ mt: 3, mb: 2 }}
+          >
+            Submit
+          </Button>
+          {NotMatchedPasswrodAlert && (
+            <Alert severity="warning">Passwords don't match</Alert>
+          )}
+          {passwordError && (
+            <Alert severity="warning">{passwordError}</Alert>
+          )}
+          {showSuccessAlert && (
+            <Alert severity="success">Password has been changed</Alert>
+          )}
+        </Box>
+      </Box>
+    </Container>
+  );
+};
+
+export default ForgotPasswordReset;

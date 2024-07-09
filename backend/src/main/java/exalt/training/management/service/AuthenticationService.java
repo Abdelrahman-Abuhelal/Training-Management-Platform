@@ -13,6 +13,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -81,7 +82,7 @@ public class AuthenticationService {
         mailMessage.setTo(user.getEmail());
         mailMessage.setSubject("[Training Management System] Please reset your password");
         mailMessage.setText("To change your password in the Exalt Training Application, please click here : "
-                +"http://localhost:5173/forgot-password-reset/"+token);
+                +"http://192.168.40.11:5173/forgot-password-reset/"+token);
         emailService.sendEmail(mailMessage);
         log.info("Forgot-Pass Token: " + token);
     }
