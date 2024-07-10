@@ -3,13 +3,12 @@ import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
-import Button from "@mui/material/Button";
 import IconButton from "@mui/material/IconButton";
 import MenuIcon from "@mui/icons-material/Menu";
-import AccountCircle from "@mui/icons-material/AccountCircle"; // Import the AccountCircle icon
-import TemporaryDrawer from "./SideBar";
+import AccountCircle from "@mui/icons-material/AccountCircle";
 import Logout from "../../pages/auth/Logout";
 import { useAuth } from "../../provider/authProvider";
+import TemporaryDrawer from "./SideBar";
 
 export default function AdminButtonAppBar() {
   const [state, setState] = React.useState({
@@ -33,7 +32,7 @@ export default function AdminButtonAppBar() {
   // Retrieve user information from authentication context
   const { user } = useAuth();
   const { appUserDto } = user;
-  const { userFirstName,userLastName} = appUserDto;
+  const { userFirstName, userLastName } = appUserDto;
 
   return (
     <Box sx={{ flexGrow: 1 }}>
@@ -49,23 +48,24 @@ export default function AdminButtonAppBar() {
           >
             <MenuIcon />
           </IconButton>
-          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+          <Typography variant="h6" component="div" sx={{ flexGrow: 1, fontSize: { xs: '1.0rem', sm: '1.5rem' } }}>
             EXALT Training Platform
           </Typography>
-          <Box sx={{ display: 'flex', alignItems: 'center' }}>
-            <AccountCircle sx={{ mr: 1 }} />
-            <Typography variant="body1" sx={{ mr: 2 }}>
-              {userFirstName+" "+userLastName}
+          <Box sx={{ display: "flex", alignItems: "center", fontSize: '0.875rem' }}>
+            <AccountCircle sx={{ mr: 1, fontSize: '2rem' }} />
+            <Typography variant="body1" sx={{ mr: 1, display: { xs: 'none', sm: 'block' } }}>
+              {userFirstName + " " + userLastName}
             </Typography>
             <Logout />
           </Box>
         </Toolbar>
       </AppBar>
+
       <TemporaryDrawer
         state={state}
         setState={setState}
         toggleDrawer={toggleDrawer}
-      ></TemporaryDrawer>
+      />
     </Box>
   );
 }

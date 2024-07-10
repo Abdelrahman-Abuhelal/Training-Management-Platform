@@ -33,6 +33,11 @@ import {
 import CheckCircleIcon from '@mui/icons-material/CheckCircle'; // Import the icon
 import { useAuth } from "../../provider/authProvider";
 import SearchComponent from "../../components/Search";
+import ViewAgendaIcon from '@mui/icons-material/ViewAgenda';
+import FeedIcon from '@mui/icons-material/Feed';
+import FactCheckIcon from '@mui/icons-material/FactCheck';
+
+
 
 const FormTemplates = () => {
   const { user } = useAuth();
@@ -273,7 +278,7 @@ const FormTemplates = () => {
             marginBottom: "1rem",
           }}
         >
-          EXALT Form Templates
+          <FactCheckIcon fontSize="large"/> EXALT Form Templates 
         </Typography>
         <Box sx={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '1rem' }}>
           <Button onClick={formBuilderPage} startIcon={<AddIcon />}>

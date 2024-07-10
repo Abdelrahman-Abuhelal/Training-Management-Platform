@@ -39,7 +39,7 @@ import { useNavigate } from "react-router-dom";
 import * as XLSX from "xlsx";
 import PeopleOutlineIcon from '@mui/icons-material/PeopleOutline';
 import { useAuth } from "../../provider/authProvider";
-
+import { useMediaQuery, useTheme } from '@mui/material';
 
 const TraineesList = () => {
   const baseUrl = import.meta.env.VITE_PORT_URL;
@@ -62,7 +62,8 @@ const TraineesList = () => {
   const navigate = useNavigate();
   const headerTextStyle = { fontSize: '1.1rem', fontWeight: 'bold' }; // Header text style
   const bodyTextStyle = { fontSize: '0.9rem' }; // Body text style
-
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
   const filteredTrainees = trainees.filter((trainee) =>
     trainee.userUsername.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -80,10 +81,10 @@ const TraineesList = () => {
     try {
       const response = await axios.delete(
         `${baseUrl}/api/v1/admin/users/${userId}`, {
-          headers: {
-            Authorization: `Bearer ${login_token}`
-          }
+        headers: {
+          Authorization: `Bearer ${login_token}`
         }
+      }
       );
       if (response.status === 200) {
         console.log("Trainee deleted successfully");
@@ -155,10 +156,10 @@ const TraineesList = () => {
       try {
         const response = await axios.get(
           `${baseUrl}/api/v1/admin/supervisorsUserIds/${traineeId}`, {
-            headers: {
-              Authorization: `Bearer ${login_token}`
-            }
+          headers: {
+            Authorization: `Bearer ${login_token}`
           }
+        }
         );
         if (response.status === 200) {
           const supervisorUserIds = response.data;
@@ -214,10 +215,10 @@ const TraineesList = () => {
           traineeIds,
           supervisorIds,
         }, {
-          headers: {
-            Authorization: `Bearer ${login_token}`
-          }
+        headers: {
+          Authorization: `Bearer ${login_token}`
         }
+      }
       );
 
       if (response.status === 200) {
@@ -288,7 +289,7 @@ const TraineesList = () => {
 
   const fetchSupervisors = async () => {
     try {
-      const response = await axios.get(`${baseUrl}/api/v1/admin/users` , {
+      const response = await axios.get(`${baseUrl}/api/v1/admin/users`, {
         headers: {
           Authorization: `Bearer ${login_token}`
         }
@@ -330,16 +331,18 @@ const TraineesList = () => {
 
 
   return (
-    <div style={{ padding: "3rem" }}>
-      <Paper className="flex items-center justify-between mb-4" sx={{ padding: '16px', backgroundColor: "#e6e6fa" }}>
-      <SearchComponent searchTerm={searchTerm} onSearchChange={handleSearchChange} />
-        <div>
+    <div style={{ padding: isMobile ?"0.5rem": "3rem" }}>
+      <Paper className="flex items-center justify-between mb-4" sx={{ padding: isMobile?'3px':'16px' }}>
+      <SearchComponent   searchTerm={searchTerm} onSearchChange={handleSearchChange} />
+      <div>
           <Button
             variant="contained"
             color="primary"
             startIcon={<DownloadIcon />}
             onClick={exportToExcel}
-            sx={{ fontSize: "1.0rem", }}
+            sx={{
+              fontSize: isMobile ? "0.55rem" : "1.0rem", maxWidth: isMobile ? "8rem" : "12rem"
+            }}
           >
             Export As Excel
           </Button>
@@ -348,8 +351,12 @@ const TraineesList = () => {
             color="primary"
             onClick={handleAssignToSupervisor}
             disabled={selectedTrainees.length !== 1}
-            sx={{ fontSize: "1.0rem", marginLeft: '8px' }}
-          >
+            sx={{
+              fontSize: isMobile ? "0.55rem" : "1.0rem",
+              marginLeft: isMobile ? '0' : '8px',
+              marginTop: isMobile ? '8px' : '0',
+              maxWidth: isMobile ? "8rem" : "12rem"
+            }}          >
             Assign to Supervisor
           </Button>
         </div>
@@ -364,12 +371,12 @@ const TraineesList = () => {
         >
           <Box display="flex" alignItems="center" justifyContent="center">
             <PeopleOutlineIcon fontSize="large" sx={{ mr: 1 }} />
-            Trainees 
+            Trainees
           </Box>
         </Typography>
         <TableContainer component={Paper}>
           <Table aria-label="trainee table">
-            <TableHead sx={{  borderBottom: "1px solid #ccc" }}>
+            <TableHead sx={{ borderBottom: "1px solid #ccc" }}>
               <TableRow>
                 <TableCell>
                   <Checkbox
@@ -383,7 +390,7 @@ const TraineesList = () => {
                     }}
                   />
                 </TableCell>
-                
+
                 <TableCell>
                   <Typography sx={headerTextStyle}>Trainee Name</Typography>
                 </TableCell>
@@ -422,7 +429,7 @@ const TraineesList = () => {
                     />
                   </TableCell>
                   <TableCell>
-                    <Typography sx={bodyTextStyle}>{item.userFirstName+" "+item.userLastName}</Typography>
+                    <Typography sx={bodyTextStyle}>{item.userFirstName + " " + item.userLastName}</Typography>
                   </TableCell>
                   <TableCell>
                     <Typography sx={bodyTextStyle}>{item.userEmail}</Typography>
@@ -440,7 +447,7 @@ const TraineesList = () => {
                       onClick={() => navigate(`/edit-trainee/${item.userId}`)}
                       color="primary"
                     >
-                      <ManageAccountsIcon fontSize="medium"/>
+                      <ManageAccountsIcon fontSize="medium" />
                     </IconButton>
                   </TableCell>
                   <TableCell align="center">
@@ -449,7 +456,7 @@ const TraineesList = () => {
                       color="error"
                     >
                       <DeleteIcon fontSize="medium" />
-                      </IconButton>
+                    </IconButton>
                   </TableCell>
                 </TableRow>
               ))}

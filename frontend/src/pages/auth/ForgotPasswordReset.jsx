@@ -12,7 +12,6 @@ import {
   Avatar,
   Alert,
 } from '@mui/material';
-import LockResetIcon from '@mui/icons-material/LockReset';
 
 const ForgotPasswordReset = () => {
   const { token } = useParams();

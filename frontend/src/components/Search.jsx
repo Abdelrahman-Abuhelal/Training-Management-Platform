@@ -2,8 +2,12 @@ import React from 'react';
 import TextField from '@mui/material/TextField';
 import InputAdornment from '@mui/material/InputAdornment';
 import SearchIcon from '@mui/icons-material/Search';
+import { useMediaQuery, useTheme } from '@mui/material';
 
 const SearchComponent = ({ searchTerm, onSearchChange }) => {
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+
   return (
     <TextField
       placeholder="Search"
@@ -17,7 +21,19 @@ const SearchComponent = ({ searchTerm, onSearchChange }) => {
           </InputAdornment>
         ),
       }}
-      sx={{ maxWidth: '300px' ,p:"0.8rem"}} // Adjust the maxWidth as needed
+      sx={{
+        mb: '0.8rem',
+        maxWidth: isMobile ? '90%' : '400px', // Adjust width based on screen size
+        width: isMobile ? '90%' : '40%',
+        height: '36px',
+        '& input': {
+          padding: '0.8rem',
+          fontSize: '0.875rem',
+        },
+        '& .MuiOutlinedInput-root': {
+          borderRadius: '24px',
+        },
+      }}
     />
   );
 };

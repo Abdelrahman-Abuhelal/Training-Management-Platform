@@ -9,6 +9,8 @@ import exalt.training.management.model.users.AppUser;
 import exalt.training.management.repository.AppUserRepository;
 import exalt.training.management.repository.TokenRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.mail.MessagingException;
+import jakarta.mail.internet.MimeMessage;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
@@ -16,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.mail.SimpleMailMessage;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -77,14 +80,29 @@ public class AuthenticationService {
 
 
 
-    public void sendForgotPasswordEmail(AppUser user,String token){
-        SimpleMailMessage mailMessage = new SimpleMailMessage();
-        mailMessage.setTo(user.getEmail());
-        mailMessage.setSubject("[Training Management System] Please reset your password");
-        mailMessage.setText("To change your password in the Exalt Training Application, please click here : "
-                +"http://192.168.40.11:5173/forgot-password-reset/"+token);
-        emailService.sendEmail(mailMessage);
-        log.info("Forgot-Pass Token: " + token);
+    public void sendForgotPasswordEmail(AppUser user, String token) {
+        try {
+            String subject = "[Training Management System] Please reset your password";
+            String resetPasswordLink = "http://localhost:5173/forgot-password-reset/" + token;
+            String htmlContent = "<div style=\"font-family: Arial, sans-serif;\">"
+                    + "<h2 style=\"color: #00449e;\">Reset Your Password</h2>"
+                    + "<p>Dear " + user.getUsername() + ",</p>"
+                    + "<p>To change your password in the Exalt Training Application, please click the link below:</p>"
+                    + "<p><a href=\"" + resetPasswordLink + "\" "
+                    + "style=\"background-color: #00449e; color: white; padding: 10px 20px; text-decoration: none; "
+                    + "border-radius: 5px;\" target=\"_blank\">Reset Password</a></p>"
+                    + "<p>If you didn't request this, you can ignore this email.</p>"
+                    + "<p>Best regards,<br/>"
+                    + "The Training Management System Team</p>"
+                    + "</div>";
+
+            MimeMessage mimeMessage = emailService.createMimeMessage(user.getEmail(), subject, htmlContent);
+            emailService.sendEmail(mimeMessage);
+            log.info("Forgot-Pass Token: " + token);
+        } catch (MessagingException e) {
+            // Handle exception
+            e.printStackTrace();
+        }
     }
 
     public void checkConnectedUserAuthentication(Principal connectedAppUser) {

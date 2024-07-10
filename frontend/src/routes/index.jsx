@@ -1,7 +1,6 @@
 import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 import { useAuth } from "../provider/authProvider";
 import { ProtectedRoute } from "./ProtectedRoute";
-import CreateUsersForm from "../pages/adminPortal/CreateUsersForm.jsx";
 import CompleteRegistration from "../pages/auth/CompleteRegistration.jsx";
 import ForgotPasswordEmail from "../pages/auth/ForgotPasswordEmail.jsx";
 import ForgotPasswordReset from "../pages/auth/ForgotPasswordReset.jsx";
@@ -30,6 +29,8 @@ import FormTemplates from "../pages/adminPortal/FormTemplates.jsx"
 import FormTemplatePage from "../pages/adminPortal/FormTemplatePage.jsx"
 import NotFound from '../pages/NotFound.jsx';
 import UserManagement from '../pages/adminPortal/UserManagement.jsx';
+import ChangePassword from '../pages/auth/ChangePassword.jsx'
+
 const Routes = () => {
   const { user } = useAuth();
   const isAuthenticated = user !== null && user.login_token !== null;
@@ -103,15 +104,16 @@ const Routes = () => {
           children: [
             { path: '/', element: <AdminHome /> },
             { path: '/dashboard', element: <AdminHome /> },
+            { path: '/users', element: <UserManagement /> },
             { path: '/trainees', element: <HR_Trainees_List /> },
             { path: '/supervisors', element: <HR_Supervisors_List /> },
+            { path: '/supervisors/:userId/trainees', element: <SupervisorTraineesList /> },
             { path: '/create-forms', element: <FormBuilder /> },
             { path: '/form-templates', element: <FormTemplates /> },
             { path: '/form-templates/:formId', element: <FormTemplatePage /> },
             { path: '/edit-trainee/:userId', element: <EditTrainee /> },
-            { path: '/users', element: <UserManagement /> },
-            { path: '/supervisors/:userId/trainees', element: <SupervisorTraineesList /> },
             { path: '/create-announcements', element: <AnnouncementForm /> },
+            { path: '/change-password', element: <ChangePassword /> },
           ],
         },
       ],
@@ -123,7 +125,6 @@ const Routes = () => {
     { path: '/confirm-account/:token', element: <CompleteRegistration /> },
     { path: '/forgot-password-email', element: <ForgotPasswordEmail /> },
     { path: '/forgot-password-reset/:token', element: <ForgotPasswordReset /> },
-    { path: '/create-users-form', element: <CreateUsersForm /> },
   ];
 
   const allRoutes = [

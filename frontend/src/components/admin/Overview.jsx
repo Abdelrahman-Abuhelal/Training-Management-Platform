@@ -10,7 +10,7 @@ function Overview() {
   };
 
   return (
-    <Grid container spacing={3} style={{ marginTop: 20 }}>
+    <Grid container spacing={3} sx={{ marginTop: { xs: 2, sm: 3 } }}>
       <Grid item xs={12} sm={6} md={6}>
         <Paper style={paperStyle}>
           <Typography variant="h6">Active Trainees</Typography>

@@ -34,6 +34,7 @@ import SearchComponent from "../../components/Search";
 import DownloadIcon from "@mui/icons-material/Download";
 import PeopleOutlineIcon from '@mui/icons-material/PeopleOutline';
 import { useAuth } from "../../provider/authProvider";
+import { useMediaQuery, useTheme } from '@mui/material';
 
 const HR_Supervisors_List = () => {
   const baseUrl = import.meta.env.VITE_PORT_URL;
@@ -53,7 +54,8 @@ const HR_Supervisors_List = () => {
   const [selectedSupervisor, setSelectedSupervisor] = useState(null);
   const [availableTrainees, setAvailableTrainees] = useState([]);
   const [selectedTrainees, setSelectedTrainees] = useState([]);
-
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const filteredSupervisors = supervisors.filter((supervisor) =>
     supervisor.userUsername.toLowerCase().includes(searchTerm.toLowerCase()) ||
     supervisor.userFirstName.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -229,8 +231,8 @@ const HR_Supervisors_List = () => {
   };
 
   return (
-    <div style={{ padding: "3rem" }}>
-      <Paper className="flex items-center justify-between mb-4" sx={{ padding: '16px', backgroundColor: "#e6e6fa" }}>
+    <div style={{ padding: isMobile ?"0.5rem": "3rem" }}>
+      <Paper className="flex items-center justify-between mb-4" sx={{ padding: '16px'}}>
         <SearchComponent searchTerm={searchTerm} onSearchChange={handleSearchChange} />
 
       </Paper>

@@ -14,6 +14,7 @@ import Paper from "@mui/material/Paper";
 import InputLabel from '@mui/material/InputLabel';
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { useAuth } from "../../provider/authProvider";
+import { useMediaQuery, useTheme } from '@mui/material';
 
 const FormTemplatePage = () => {
   const { formId } = useParams();
@@ -21,6 +22,8 @@ const FormTemplatePage = () => {
   const navigate = useNavigate();
   const { user } = useAuth();
   const { login_token } = user;
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const {
     register,
     handleSubmit,
@@ -141,8 +144,8 @@ const FormTemplatePage = () => {
 
   return (
     <div style={{ display: "flex", justifyContent: "center" }}>
-      <Paper elevation={3} sx={{ p: 4, m: 6, width: "70%", maxWidth: 1000 }}>
-        <Button sx={{ mb: 4 }} onClick={() => {
+      <Paper elevation={3} sx={{ p: isMobile?2:4, m:isMobile?1: 6, width: isMobile?"90%":"75%", maxWidth: 1100 }}>
+      <Button sx={{ mb: 4 }} onClick={() => {
           navigate(`/form-templates/`);
         }} startIcon={<ArrowBackIcon />}>
           Back to Forms

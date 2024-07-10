@@ -12,6 +12,8 @@ import SearchComponent from '../../components/Search';
 import { useAuth } from "../../provider/authProvider";
 import FormControlLabel from '@mui/material/FormControlLabel';
 import MuiAlert from '@mui/material/Alert';
+import { useTheme } from '@mui/material/styles';
+import useMediaQuery from '@mui/material/useMediaQuery';
 
 const UserManagement = () => {
   const { user } = useAuth();
@@ -30,8 +32,9 @@ const UserManagement = () => {
     userLastName: '',
     userUsername: '',
     userRole: ''
-    });
-
+  });
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   // Snackbar states
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState('');
@@ -85,53 +88,53 @@ const UserManagement = () => {
   };
 
   const handleSave = () => {
-    setLoading(true); 
+    setLoading(true);
     if (currentUser) {
       axios.put(`${baseUrl}/api/v1/admin/users/${currentUser.userId}`, currentUser, {
         headers: {
           Authorization: `Bearer ${login_token}`
         }
       })
-      .then(response => {
-        const updatedUser = response.data;
-        setUsers(users.map(user => (user.userId === currentUser.userId ? updatedUser : user)));
-        setFilteredUsers(filteredUsers.map(user => (user.userId === currentUser.userId ? updatedUser : user)));
-        handleClose();
-        showSnackbar('User updated successfully', 'success');
-      })
-      .catch(error => {
-        console.error(error);
-        showSnackbar('Failed to update user', 'error');
-      })
-      .finally(() => setLoading(false)); 
+        .then(response => {
+          const updatedUser = response.data;
+          setUsers(users.map(user => (user.userId === currentUser.userId ? updatedUser : user)));
+          setFilteredUsers(filteredUsers.map(user => (user.userId === currentUser.userId ? updatedUser : user)));
+          handleClose();
+          showSnackbar('User updated successfully', 'success');
+        })
+        .catch(error => {
+          console.error(error);
+          showSnackbar('Failed to update user', 'error');
+        })
+        .finally(() => setLoading(false));
     } else {
       axios.post(`${baseUrl}/api/v1/admin/create-user`, newUser, {
         headers: {
           Authorization: `Bearer ${login_token}`
         }
       })
-      .then(response => {
-        if (response.status === 200) {
-          setUsers([...users, response.data]);
-          setFilteredUsers([...filteredUsers, response.data]);
-          handleClose();
-          showSnackbar('Email verification sent to the user', 'success');
-        }
-      })
-      .catch(error => {
-        if (error.response && error.response.status === 400) {
-          const validationErrors = error.response.data.detailMessageArguments;
-          showSnackbar(`Validation error: ${validationErrors.join(', ')}`, 'error');
-        } else if (error.response && error.response.status === 409) {
-          showSnackbar('User with this email or username exists already!', 'error');
-        } else {
-          showSnackbar('Failed to create user', 'error');
-        }
-      })
-      .finally(() => setLoading(false)); // Set loading to false when request is done
+        .then(response => {
+          if (response.status === 200) {
+            setUsers([...users, response.data]);
+            setFilteredUsers([...filteredUsers, response.data]);
+            handleClose();
+            showSnackbar('Email verification sent to the user', 'success');
+          }
+        })
+        .catch(error => {
+          if (error.response && error.response.status === 400) {
+            const validationErrors = error.response.data.detailMessageArguments;
+            showSnackbar(`Validation error: ${validationErrors.join(', ')}`, 'error');
+          } else if (error.response && error.response.status === 409) {
+            showSnackbar('User with this email or username exists already!', 'error');
+          } else {
+            showSnackbar('Failed to create user', 'error');
+          }
+        })
+        .finally(() => setLoading(false)); // Set loading to false when request is done
     }
   };
-  
+
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -179,19 +182,19 @@ const UserManagement = () => {
   return (
     <div style={{ display: "flex", justifyContent: "center" }}>
       <Paper elevation={3} sx={{ p: 2, m: 3, width: "95%", maxWidth: 1800 }}>
-        <Toolbar>
-          <Typography variant="h6" component="div" sx={{ flex: '1 2 100%' }}>
+      <Toolbar sx={{ flexDirection: isMobile ? 'column' : 'row', alignItems: isMobile ?'center': 'normal', gap: isMobile ? 2 : 0 }}>
+      <Typography variant="h6" component="div" sx={{ flex: isMobile ? '1 1 100%' : '1 2 100%', textAlign: isMobile ? 'center' : 'left' }}>
             User Management
           </Typography>
-          <SearchComponent sx={{ maxWidth: '350px', height: '36px' }}
+          <SearchComponent
             searchTerm={searchTerm} onSearchChange={handleSearch} />
-          <Box style={{ marginLeft: '10px' }}>
-            <Button
+          <Box style={{ marginLeft: isMobile ? 0 : '10px', marginBottom: isMobile ? '10px' : 0 }}>
+          <Button
               variant="contained"
               color="primary"
               onClick={() => setOpen(true)}
               startIcon={<AddIcon />}
-              sx={{ minWidth: '150px', height: '36px' }}
+              sx={{ minWidth: '150px', minHeight: '40px' }}
             >
               New User
             </Button>
@@ -341,17 +344,17 @@ const UserManagement = () => {
               <MenuItem value="SUPER_ADMIN">Admin</MenuItem>
             </Select>
           </FormControl>
-          {currentUser && ( 
+          {currentUser && (
             <FormControlLabel
-            control={
-              <Checkbox
-                name="userEnabled"
-                checked={currentUser ? currentUser.userEnabled : null}
-                onChange={handleChange}
-              />
-            }
-            label="Enabled"
-          />  )}
+              control={
+                <Checkbox
+                  name="userEnabled"
+                  checked={currentUser ? currentUser.userEnabled : null}
+                  onChange={handleChange}
+                />
+              }
+              label="Enabled"
+            />)}
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose} color="primary">Cancel</Button>

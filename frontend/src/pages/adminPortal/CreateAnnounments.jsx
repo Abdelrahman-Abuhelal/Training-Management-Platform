@@ -15,6 +15,8 @@ import {
   AddPhotoAlternate as AddPhotoAlternateIcon,
   Delete as DeleteIcon,
 } from "@mui/icons-material";
+import { useTheme } from '@mui/material/styles';
+import useMediaQuery from '@mui/material/useMediaQuery';
 
 const AnnouncementForm = () => {
   const [announcement, setAnnouncement] = useState({
@@ -22,7 +24,8 @@ const AnnouncementForm = () => {
     description: "",
     images: [],
   });
-
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setAnnouncement({ ...announcement, [name]: value });
@@ -50,9 +53,10 @@ const AnnouncementForm = () => {
   };
 
   return (
-    <Paper elevation={3} sx={{ p: 4, m: 10 }}>
+    <div style={{ display: "flex", justifyContent: "center" }}>
+ <Paper elevation={3} sx={{ p: isMobile?'4%': '3%', m: isMobile?'5%':'5%' ,width:isMobile?'90%':'70%' }}>
       <Typography variant="h5" gutterBottom>
-        Add New Announcement
+        Add Announcement
       </Typography>
       <form onSubmit={handleSubmit}>
         <TextField
@@ -117,6 +121,7 @@ const AnnouncementForm = () => {
         </Button>
       </form>
     </Paper>
+    </div>
   );
 };
 

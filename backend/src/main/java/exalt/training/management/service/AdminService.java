@@ -12,9 +12,12 @@ import exalt.training.management.repository.AcademicGradesRepository;
 import exalt.training.management.repository.AppUserRepository;
 import exalt.training.management.repository.SupervisorRepository;
 import exalt.training.management.repository.TraineeRepository;
+import jakarta.mail.MessagingException;
+import jakarta.mail.internet.MimeMessage;
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -82,14 +85,29 @@ public class AdminService {
     }
 
 
-    public void sendCompleteRegistrationEmail(AppUser user,String confirmationToken){
-        SimpleMailMessage mailMessage = new SimpleMailMessage();
-        mailMessage.setTo(user.getEmail());
-        mailMessage.setSubject("[Training Management System] Complete Registration!");
-        mailMessage.setText("To confirm your account in the Exalt Training Application, please complete registration here : "
-                +"http://localhost:5173/confirm-account/"+confirmationToken);
-        emailService.sendEmail(mailMessage);
+    public void sendCompleteRegistrationEmail(AppUser user, String confirmationToken) {
+        try {
+            String subject = "[Training Management System] Complete Registration!";
+            String htmlContent = "<div style=\"font-family: Arial, sans-serif;\">"
+                    + "<h2 style=\"color: #00449e;\">Complete Registration for Exalt Training Application</h2>"
+                    + "<p>Dear " + user.getUsername() + ",</p>"
+                    + "<p>To confirm your account in the Exalt Training Application, please click the link below:</p>"
+                    + "<p><a href=\"http://192.168.40.11:5173/confirm-account/" + confirmationToken + "\" "
+                    + "style=\"background-color: #00449e; color: white; padding: 10px 20px; text-decoration: none; "
+                    + "border-radius: 5px;\" target=\"_blank\">Complete Registration</a></p>"
+                    + "<p>If you didn't request this, you can ignore this email.</p>"
+                    + "<p>Best regards,<br/>"
+                    + "The Training Management System Team</p>"
+                    + "</div>";
+
+            MimeMessage mimeMessage = emailService.createMimeMessage(user.getEmail(), subject, htmlContent);
+            emailService.sendEmail(mimeMessage);
+        } catch (MessagingException e) {
+            // Handle exception
+            e.printStackTrace();
+        }
     }
+
 
     public String deactivateUser(Long id){
         if(appUserRepository.findById(id).isEmpty()){

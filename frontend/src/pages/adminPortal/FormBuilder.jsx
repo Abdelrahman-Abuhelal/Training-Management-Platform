@@ -22,13 +22,16 @@ import {
   Alert,
 } from "@mui/material";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import DrawIcon from '@mui/icons-material/Draw';
+import { useMediaQuery, useTheme } from '@mui/material';
 
 const FormBuilder = () => {
   const baseUrl = import.meta.env.VITE_PORT_URL;
   const [showConfirmation, setShowConfirmation] = useState(false);
   const [showSnackbar, setShowSnackbar] = useState(false);
   const navigate  = useNavigate();
-
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const {
     register,
     handleSubmit,
@@ -151,12 +154,12 @@ const FormBuilder = () => {
   return (
     <div style={{ display: "flex", justifyContent: "center" }}>
      
-      <Paper elevation={3} sx={{ p: 4, m: 6, width: "75%", maxWidth: 1100 }}>
+      <Paper elevation={3} sx={{ p: isMobile?2:4, m:isMobile?1: 6, width: isMobile?"90%":"75%", maxWidth: 1100 }}>
        <Button   onClick={navigateBack} startIcon={<ArrowBackIcon />}>
         Form Templates
       </Button>
         <Typography align="center" variant="h4" gutterBottom>
-         EXALT Form Builder
+         EXALT Form Builder <DrawIcon fontSize="large"/>
         </Typography>
         <br />
         <Typography align="center" variant="h6" gutterBottom>
@@ -236,7 +239,7 @@ const FormBuilder = () => {
           <Button onClick={handleAddQuestion} variant="outlined" sx={{ mt: 2 }}>
             Add Question
           </Button>
-          <Button type="submit" variant="contained" sx={{ mt: 2, ml: 2 }}>
+          <Button type="submit" variant="contained" sx={{ mt: 2, ml:isMobile? 0.5: 2 }}>
             Create Form
           </Button>
         </form>

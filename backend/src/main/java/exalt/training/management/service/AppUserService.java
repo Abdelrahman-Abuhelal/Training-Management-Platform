@@ -132,7 +132,7 @@ public class AppUserService {
 
         // check if the current password is correct
         if (!passwordEncoder.matches(request.getCurrentPassword(), user.getPassword())) {
-            throw new IllegalStateException("Wrong password");
+            throw new IllegalStateException("Wrong current password");
         }
         // check if the two new passwords are the same
         if (!request.getNewPassword().equals(request.getConfirmationPassword())) {
