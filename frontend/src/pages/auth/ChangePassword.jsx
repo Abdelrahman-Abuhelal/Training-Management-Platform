@@ -104,7 +104,7 @@ const ChangePassword = () => {
         <Container component="main" maxWidth="xs">
             <CssBaseline />
             <Box display="flex" flexDirection="column" justifyContent="center" alignItems="center" minHeight="100vh">
-                <Paper elevation={3} sx={{ p: 3, width: isMobile ? '80%' : '150%' }}>
+                <Paper elevation={3} sx={{ p: isMobile ? 1:3, width: isMobile ? '70%' : '150%' }}>
                     <Box display="flex" flexDirection="column" alignItems="center">
                         <Avatar sx={{ m: 1, bgcolor: 'black' }}>
                             <LockOutlinedIcon />

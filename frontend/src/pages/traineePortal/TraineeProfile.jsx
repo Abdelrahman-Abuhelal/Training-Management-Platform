@@ -47,6 +47,9 @@ const TraineeProfile = () => {
     traineeDetailsSnackbarErrorMessage,
     setTraineeDetailsSnackbarErrorMessage,
   ] = useState("");
+  const [isSubmitted, setIsSubmitted] = useState(false);
+
+
 
   useEffect(() => {
     fetchUserData();
@@ -56,10 +59,10 @@ const TraineeProfile = () => {
     try {
       const response = await axios.get(
         `${baseUrl}/api/v1/trainee-operations/my-profile`, {
-          headers: {
-            Authorization: `Bearer ${login_token}`
-          }
-        });
+        headers: {
+          Authorization: `Bearer ${login_token}`
+        }
+      });
       if (response.status === 200) {
         const userData = response.data;
         setFullNameInArabic(userData.fullNameInArabic || "");
@@ -75,6 +78,11 @@ const TraineeProfile = () => {
         setExpectedGraduationMonth(userData.expectedGraduationDate.slice(-2) || "");
         setTrainingField(userData.trainingField || "");
         setBranchLocation(userData.branchLocation || "");
+
+        if (userData.fullNameInArabic) {
+          setIsSubmitted(true);
+        }
+
       } else {
         console.error("Error:", response.data);
       }
@@ -133,6 +141,7 @@ const TraineeProfile = () => {
       );
       if (response.status === 200) {
         setTraineeDetailsSnackbarSuccess(true);
+        setIsSubmitted(true);
       }
       console.log("Response:", response.data);
     } catch (error) {
@@ -143,7 +152,10 @@ const TraineeProfile = () => {
   const handleCancel = () => {
     setShowDetailsConfirmation(false);
   };
-
+  const getDirection = (text) => {
+    const arabicPattern = /[\u0600-\u06FF]/;
+    return arabicPattern.test(text) ? 'rtl' : 'ltr';
+  };
 
   const handleMonthChange = (e) => {
     setExpectedGraduationMonth(e.target.value);
@@ -181,10 +193,12 @@ const TraineeProfile = () => {
             value={fullNameInArabic}
             onChange={(e) => setFullNameInArabic(e.target.value)}
             inputProps={{ dir: "rtl", lang: "ar" }}
+            disabled={isSubmitted}
           />
         </Box>
         <Box mb={2}>
-          <FormControl fullWidth variant="outlined">
+          <FormControl fullWidth variant="outlined" disabled={isSubmitted}
+          >
             <InputLabel>Nearest City</InputLabel>
             <Select
               value={city}
@@ -214,10 +228,15 @@ const TraineeProfile = () => {
             label="Address ( Village / Street name )"
             value={address}
             onChange={(e) => setAddress(e.target.value)}
+            InputProps={{
+              style: { direction: getDirection(address) }
+            }}
+            disabled={isSubmitted}
           />
         </Box>
         <Box mb={2}>
-          <FormControl fullWidth variant="outlined">
+          <FormControl fullWidth variant="outlined" disabled={isSubmitted}
+          >
             <InputLabel>ID type</InputLabel>
             <Select
               value={idType}
@@ -241,6 +260,7 @@ const TraineeProfile = () => {
             error={!!idNumberError}
             helperText={idNumberError}
             inputProps={{ inputMode: "numeric" }}
+            disabled={isSubmitted}
           />
         </Box>
         <Box mb={2}>
@@ -250,10 +270,12 @@ const TraineeProfile = () => {
             label="Phone Number starts with '05'"
             value={phoneNumber}
             onChange={(e) => setPhoneNumber(e.target.value)}
+            disabled={isSubmitted}
           />
         </Box>
         <Box mb={2}>
-          <FormControl fullWidth variant="outlined">
+          <FormControl fullWidth variant="outlined" disabled={isSubmitted}
+          >
             <InputLabel>University Name</InputLabel>
             <Select
               value={universityName}
@@ -294,7 +316,8 @@ const TraineeProfile = () => {
           </FormControl>
         </Box>
         <Box mb={2}>
-          <FormControl fullWidth variant="outlined">
+          <FormControl fullWidth variant="outlined" disabled={isSubmitted}
+          >
             <InputLabel>University Major</InputLabel>
             <Select
               value={universityMajor}
@@ -312,7 +335,8 @@ const TraineeProfile = () => {
         </Box>
         <Box mb={2}>
           <Box display="flex" justifyContent="space-between">
-            <FormControl variant="outlined" style={{ width: "48%" }}>
+            <FormControl variant="outlined" style={{ width: "48%" }} disabled={isSubmitted}
+            >
               <InputLabel>Graduation Year Date (expected)</InputLabel>
               <Select
                 value={expectedGraduationYear}
@@ -327,7 +351,8 @@ const TraineeProfile = () => {
                 ))}
               </Select>
             </FormControl>
-            <FormControl variant="outlined" style={{ width: "48%" }}>
+            <FormControl variant="outlined" style={{ width: "48%" }} disabled={isSubmitted}
+            >
               <InputLabel>Graduation Month Date (expected)</InputLabel>
               <Select
                 value={expectedGraduationMonth}
@@ -352,7 +377,8 @@ const TraineeProfile = () => {
           </Box>
         </Box>
         <Box mb={2}>
-          <FormControl fullWidth variant="outlined">
+          <FormControl fullWidth variant="outlined" disabled={isSubmitted}
+          >
             <InputLabel>Training Field</InputLabel>
             <Select
               value={trainingField}
@@ -371,7 +397,8 @@ const TraineeProfile = () => {
           </FormControl>
         </Box>
         <Box mb={2}>
-          <FormControl fullWidth variant="outlined">
+          <FormControl fullWidth variant="outlined" disabled={isSubmitted}
+          >
             <InputLabel>Branch Location</InputLabel>
             <Select
               value={branchLocation}
@@ -387,7 +414,8 @@ const TraineeProfile = () => {
           </FormControl>
         </Box>
         <Box mb={2}>
-          <Button variant="contained" color="primary" type="submit">
+          <Button variant="contained" color="primary" type="submit" disabled={isSubmitted}
+          >
             Submit
           </Button>
         </Box>

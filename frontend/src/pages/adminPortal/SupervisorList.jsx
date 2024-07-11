@@ -231,20 +231,23 @@ const HR_Supervisors_List = () => {
   };
 
   return (
-    <div style={{ padding: isMobile ?"0.5rem": "3rem" }}>
-      <Paper className="flex items-center justify-between mb-4" sx={{ padding: '16px'}}>
-        <SearchComponent searchTerm={searchTerm} onSearchChange={handleSearchChange} />
-
-      </Paper>
+    <div style={{ padding: isMobile ? "0.5rem" : "3rem" }}>
+      <Paper className="flex items-center justify-between mb-4" sx={{ padding: '16px' }}>
+        <Box sx={{ flex: '1 1 auto', maxWidth: isMobile ? '100%' : '33%' }}> {/* Ensure SearchComponent doesn't take all space */}
+          <SearchComponent
+            searchTerm={searchTerm}
+            onSearchChange={handleSearchChange}
+          />
+        </Box>     </Paper>
       <Paper sx={{ border: "1px solid #ccc", mt: 2 }}>
-      <Grid container  justifyContent="center">
+        <Grid container justifyContent="center">
 
           <Grid item xs={12} sm={6}>
             <Typography
               variant="h5"
               component="h2"
               sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 'bold', mt: 3 }}
-              >
+            >
               <Box >
                 <PeopleOutlineIcon fontSize="large" sx={{ mr: 1 }} />
                 Supervisors

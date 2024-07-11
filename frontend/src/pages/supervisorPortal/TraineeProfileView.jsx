@@ -7,7 +7,7 @@ import {
   Container,
   Typography,
   TextField,
-  Select,Button,
+  Select, Button,
   MenuItem,
   Box,
   FormControl,
@@ -90,10 +90,10 @@ const TraineeProfileView = () => {
 
   return (
     <Container>
-       <Box mt={2}>
-      <Button onClick={navigateBack} startIcon={<ArrowBackIcon />}>
-        Back to Trainees
-      </Button> 
+      <Box mt={2}>
+        <Button onClick={navigateBack} startIcon={<ArrowBackIcon />}>
+          Back to Trainees
+        </Button>
       </Box>
       <Box mt={4}>
         <Typography variant="h6" gutterBottom align="center" mb={2}>
@@ -110,10 +110,12 @@ const TraineeProfileView = () => {
             name="fullNameInArabic"
             inputProps={{ dir: "rtl", lang: "ar" }}
             onChange={handleChange}
+            disabled
           />
         </Box>
         <Box mb={2}>
-          <FormControl fullWidth variant="outlined">
+          <FormControl fullWidth variant="outlined" disabled
+          >
             <InputLabel>Nearest City</InputLabel>
             <Select
               value={traineeData.city}
@@ -145,10 +147,12 @@ const TraineeProfileView = () => {
             value={traineeData.address}
             name="address"
             onChange={handleChange}
+            disabled
           />
         </Box>
         <Box mb={2}>
-          <FormControl fullWidth variant="outlined">
+          <FormControl fullWidth variant="outlined" disabled
+          >
             <InputLabel>ID type</InputLabel>
             <Select
               value={traineeData.idType}
@@ -172,6 +176,7 @@ const TraineeProfileView = () => {
             name="idNumber"
             inputProps={{ inputMode: "numeric" }}
             onChange={handleChange}
+            disabled
           />
         </Box>
         <Box mb={2}>
@@ -182,10 +187,12 @@ const TraineeProfileView = () => {
             value={traineeData.phoneNumber}
             name="phoneNumber"
             onChange={handleChange}
+            disabled
           />
         </Box>
         <Box mb={2}>
-          <FormControl fullWidth variant="outlined">
+          <FormControl fullWidth variant="outlined" disabled
+          >
             <InputLabel>University Name</InputLabel>
             <Select
               value={traineeData.universityName}
@@ -209,7 +216,8 @@ const TraineeProfileView = () => {
           </FormControl>
         </Box>
         <Box mb={2}>
-          <FormControl fullWidth variant="outlined">
+          <FormControl fullWidth variant="outlined" disabled
+          >
             <InputLabel>University Major</InputLabel>
             <Select
               value={traineeData.universityMajor}
@@ -226,9 +234,10 @@ const TraineeProfileView = () => {
             </Select>
           </FormControl>
         </Box>
-        <Box mb={2}>
+        <Box mb={2} >
           <Box display="flex" justifyContent="space-between">
-            <FormControl variant="outlined" style={{ width: "48%" }}>
+            <FormControl variant="outlined" style={{ width: "48%" }} disabled
+            >
               <InputLabel>Graduation Year Date (expected)</InputLabel>
               <Select
                 value={traineeData.expectedGraduationYear}
@@ -244,7 +253,8 @@ const TraineeProfileView = () => {
                 ))}
               </Select>
             </FormControl>
-            <FormControl variant="outlined" style={{ width: "48%" }}>
+            <FormControl variant="outlined" style={{ width: "48%" }} disabled
+            >
               <InputLabel>Graduation Month Date (expected)</InputLabel>
               <Select
                 value={traineeData.expectedGraduationMonth}
@@ -270,7 +280,8 @@ const TraineeProfileView = () => {
           </Box>
         </Box>
         <Box mb={2}>
-          <FormControl fullWidth variant="outlined">
+          <FormControl fullWidth variant="outlined" disabled
+          >
             <InputLabel>Training Field</InputLabel>
             <Select
               value={traineeData.trainingField}
@@ -290,7 +301,8 @@ const TraineeProfileView = () => {
           </FormControl>
         </Box>
         <Box mb={2}>
-          <FormControl fullWidth variant="outlined">
+          <FormControl fullWidth variant="outlined" disabled
+          >
             <InputLabel>Branch Location</InputLabel>
             <Select
               value={traineeData.branchLocation}

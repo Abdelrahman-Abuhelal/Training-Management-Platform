@@ -331,17 +331,28 @@ const TraineesList = () => {
 
 
   return (
-    <div style={{ padding: isMobile ?"0.5rem": "3rem" }}>
-      <Paper className="flex items-center justify-between mb-4" sx={{ padding: isMobile?'3px':'16px' }}>
-      <SearchComponent   searchTerm={searchTerm} onSearchChange={handleSearchChange} />
-      <div>
+    <div style={{ padding: isMobile ? "0.5rem" : "3rem" }}>
+
+      <Paper className="flex flex-col sm:flex-row items-center justify-between mb-4" sx={{ padding: isMobile ? '3px' : '16px' }}>
+        {/* Search Component */}
+        <div className="flex-1">
+          <Box sx={{ maxWidth: isMobile ? '100%' : '80%' }}>
+            <SearchComponent
+              searchTerm={searchTerm}
+              onSearchChange={handleSearchChange}
+            />
+          </Box>  </div>
+
+        {/* Buttons */}
+        <div className="flex flex-col sm:flex-row gap-2 mt-2 sm:mt-0 sm:ml-4">
           <Button
             variant="contained"
             color="primary"
             startIcon={<DownloadIcon />}
             onClick={exportToExcel}
             sx={{
-              fontSize: isMobile ? "0.55rem" : "1.0rem", maxWidth: isMobile ? "8rem" : "12rem"
+              fontSize: isMobile ? "0.55rem" : "1.0rem",
+              maxWidth: isMobile ? "8rem" : "12rem"
             }}
           >
             Export As Excel
@@ -353,10 +364,10 @@ const TraineesList = () => {
             disabled={selectedTrainees.length !== 1}
             sx={{
               fontSize: isMobile ? "0.55rem" : "1.0rem",
-              marginLeft: isMobile ? '0' : '8px',
               marginTop: isMobile ? '8px' : '0',
               maxWidth: isMobile ? "8rem" : "12rem"
-            }}          >
+            }}
+          >
             Assign to Supervisor
           </Button>
         </div>

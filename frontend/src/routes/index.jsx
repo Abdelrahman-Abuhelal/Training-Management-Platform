@@ -12,7 +12,6 @@ import FormBuilder from "../pages/adminPortal/FormBuilder.jsx";
 import AdminHome from "../components/admin/Home.jsx";
 import TraineeHome from "../components/trainee/Home.jsx";
 import SupervisorHome from "../components/supervisor/Home.jsx";
-import FormsList from "../pages/traineePortal/FormsList.jsx";
 import FillForm from "../pages/traineePortal/FillForm.jsx";
 import SupervisorLayout from "../pages/supervisorPortal/SupervisorLayout.jsx";
 import TraineeLayout from "../pages/traineePortal/TraineeLayout.jsx";
@@ -30,7 +29,7 @@ import FormTemplatePage from "../pages/adminPortal/FormTemplatePage.jsx"
 import NotFound from '../pages/NotFound.jsx';
 import UserManagement from '../pages/adminPortal/UserManagement.jsx';
 import ChangePassword from '../pages/auth/ChangePassword.jsx'
-
+import FormsList from '../pages/allPortals/FormsList.jsx';
 const Routes = () => {
   const { user } = useAuth();
   const isAuthenticated = user !== null && user.login_token !== null;
@@ -65,6 +64,7 @@ const Routes = () => {
             { path: '/profile', element: <TraineeProfile /> },
             { path: '/forms', element: <FormsList /> },
             { path: '/forms/:formId', element: <FillForm /> },
+            { path: '/change-password', element: <ChangePassword /> },
           ],
         },
       ],
@@ -83,10 +83,12 @@ const Routes = () => {
             { path: '/', element: <SupervisorHome /> },
             { path: '/dashboard', element: <SupervisorHome /> },
             { path: '/my-trainees', element: <Supervisor_Trainees_List /> },
+            { path: '/forms', element: <FormsList /> },
             { path: '/review-form/:userId', element: <ReviewForm /> },
             { path: '/view-trainee/:userId', element: <TraineeProfileView /> },
             { path: '/add-resource', element: <Resources /> },
             { path: '/assign-task', element: <AssignTask /> },
+            { path: '/change-password', element: <ChangePassword /> },
           ],
         },
       ],
@@ -106,6 +108,7 @@ const Routes = () => {
             { path: '/dashboard', element: <AdminHome /> },
             { path: '/users', element: <UserManagement /> },
             { path: '/trainees', element: <HR_Trainees_List /> },
+            { path: '/forms', element: <FormsList /> },
             { path: '/supervisors', element: <HR_Supervisors_List /> },
             { path: '/supervisors/:userId/trainees', element: <SupervisorTraineesList /> },
             { path: '/create-forms', element: <FormBuilder /> },

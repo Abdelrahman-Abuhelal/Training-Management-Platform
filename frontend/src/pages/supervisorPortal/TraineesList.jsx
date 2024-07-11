@@ -10,7 +10,7 @@ import {
   TableCell,
   TableBody,
   TablePagination,
-  Checkbox,
+  Checkbox, Box,
   Paper,
   Grid,
   Button,
@@ -18,9 +18,11 @@ import {
 } from "@mui/material"; // MUI components (or your preferred library)
 import GroupsIcon from '@mui/icons-material/Groups';
 import { useNavigate } from "react-router-dom";
-
+import { useTheme } from '@mui/material/styles';
+import useMediaQuery from '@mui/material/useMediaQuery';
 import { useAuth } from "../../provider/authProvider";
 import SearchComponent from "../../components/Search";
+import BreadcrumbsComponent from "../../components/BreadCrumbs";
 const Supervisor_Trainees_List = () => {
   const baseUrl = import.meta.env.VITE_PORT_URL;
   const { user } = useAuth();
@@ -33,7 +35,8 @@ const Supervisor_Trainees_List = () => {
   const [sortDirection, setSortDirection] = useState("asc");
   const [selectedTrainees, setSelectedTrainees] = useState([]);
   const navigate = useNavigate();
-
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
   const filteredTrainees = trainees.filter((trainee) =>
     trainee.userUsername.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -108,18 +111,23 @@ const Supervisor_Trainees_List = () => {
   });
 
   return (
-    <div style={{ padding: "3rem" }}>
-      <Grid container spacing={3} justifyContent="space-between" alignItems="center">
-        <Grid item xs={12} sm={6}>
-          <Typography variant="h5" component="h2">
-            My Trainees   <GroupsIcon style={{ fontSize: '30px' }} />
-          </Typography>
-        </Grid>
-        <Grid item>
+    <div style={{ padding:isMobile?"1rem" : "3rem" }}>
+      <Grid container alignItems="center">
+        <Grid item xs={isMobile?6:3} style={{ textAlign: 'left' }}>
           <SearchComponent searchTerm={searchTerm} onSearchChange={handleSearchChange} />
         </Grid>
 
+        <Grid item xs={6} >
+          <Typography variant="h5" component="h2" align="center">
+            My Trainees <GroupsIcon style={{ fontSize: '30px' }} />
+          </Typography>
+        </Grid>
+
+        <Grid item xs={isMobile?0:3} />
+
       </Grid>
+
+
 
       <TableContainer component={Paper}>
         <Table aria-label="trainee table">

@@ -31,8 +31,8 @@ const TraineeHome = () => {
               <div className="col-lg-3 col-6">
                 <div className="small-box bg-warning">
                   <div className="inner">
-                    <h3>44</h3>
-                    <p>User Registrations</p>
+                    <h3>17</h3>
+                    <p>Collegues Trainees</p>
                   </div>
                   <div className="icon">
                     <i className="ion ion-person-add" />
@@ -46,9 +46,9 @@ const TraineeHome = () => {
                 <div className="small-box bg-success">
                   <div className="inner">
                     <h3>
-                      53<sup style={{ fontSize: 20 }}>%</sup>
+                      3<sup style={{ fontSize: 20 }}>%</sup>
                     </h3>
-                    <p>New Registrations Rate</p>
+                    <p>Tasks Assigned</p>
                   </div>
                   <div className="icon">
                     <i className="ion ion-stats-bars" />
@@ -62,8 +62,8 @@ const TraineeHome = () => {
               <div className="col-lg-3 col-6">
                 <div className="small-box bg-danger">
                   <div className="inner">
-                    <h3>65</h3>
-                    <p>Unique Visitors</p>
+                    <h3>2</h3>
+                    <p>Tasks Done</p>
                   </div>
                   <div className="icon">
                     <i className="ion ion-pie-graph" />
@@ -76,8 +76,8 @@ const TraineeHome = () => {
               <div className="col-lg-3 col-6">
                 <div className="small-box bg-info">
                   <div className="inner">
-                    <h3>24</h3>
-                    <p>New Trainees</p>
+                    <h3>12</h3>
+                    <p>Resources Assigned</p>
                   </div>
                   <div className="icon">
                     <i className="ion ion-bag" />
