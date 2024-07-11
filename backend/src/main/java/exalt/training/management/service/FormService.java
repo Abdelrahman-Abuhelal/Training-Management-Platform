@@ -12,13 +12,12 @@ import exalt.training.management.model.users.AppUser;
 import exalt.training.management.repository.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -153,10 +152,18 @@ public class FormService {
 
         return userIds;   }
 
-//    public Forms getFormsByUserId(Long userId) {
-//    AppUser appUser =appUserRepository.findById(userId).orElseThrow(() -> new AppUserNotFoundException("User not found with that ID"));
-//    appUser.getForms();
-//    }
+    public List<Form> getMyForms() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+
+        Optional<AppUser> optionalUser = appUserRepository.findByUsername(username);
+        if (optionalUser.isPresent()) {
+            AppUser user = optionalUser.get();
+            return user.getForms();
+        }
+
+        return Collections.emptyList();
+    }
 
 //   public List <FormDataDto> getAllTraineeForms(){
 //        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();

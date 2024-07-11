@@ -83,17 +83,17 @@ public class AuthenticationService {
     public void sendForgotPasswordEmail(AppUser user, String token) {
         try {
             String subject = "[Training Management System] Please reset your password";
-            String resetPasswordLink = "http://localhost:5173/forgot-password-reset/" + token;
+            String resetPasswordLink = "http://192.168.40.11:5173/forgot-password-reset/" + token;
             String htmlContent = "<div style=\"font-family: Arial, sans-serif;\">"
                     + "<h2 style=\"color: #00449e;\">Reset Your Password</h2>"
-                    + "<p>Dear " + user.getUsername() + ",</p>"
+                    + "<p>Dear " + user.getFirstName() +" "+user.getLastName()+ ",</p>"
                     + "<p>To change your password in the Exalt Training Application, please click the link below:</p>"
                     + "<p><a href=\"" + resetPasswordLink + "\" "
                     + "style=\"background-color: #00449e; color: white; padding: 10px 20px; text-decoration: none; "
                     + "border-radius: 5px;\" target=\"_blank\">Reset Password</a></p>"
                     + "<p>If you didn't request this, you can ignore this email.</p>"
                     + "<p>Best regards,<br/>"
-                    + "The Training Management System Team</p>"
+                    + "Exalt Training System Team</p>"
                     + "</div>";
 
             MimeMessage mimeMessage = emailService.createMimeMessage(user.getEmail(), subject, htmlContent);

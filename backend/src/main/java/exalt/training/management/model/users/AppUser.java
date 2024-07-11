@@ -71,13 +71,14 @@ public class AppUser implements UserDetails {
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     private SuperAdmin superAdmin;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     @Nullable
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     @JsonManagedReference
     private List<Token> tokens;
 
     @Nullable
     @ManyToMany(mappedBy = "usersAssignedTo", cascade = CascadeType.ALL)
+    @JsonManagedReference
     private List<Form> forms;
 
 

@@ -25,15 +25,12 @@ public class TraineeService {
     private final TraineeRepository traineeRepository;
     private final TraineeMapper traineeMapper;
 
-    private final AcademicGradesRepository academicGradesRepository;
 
 
     public TraineeService(TraineeRepository traineeRepository,
-                          TraineeMapper traineeMapper,
-                          AcademicGradesRepository academicGradesRepository) {
+                          TraineeMapper traineeMapper) {
         this.traineeRepository = traineeRepository;
         this.traineeMapper = traineeMapper;
-        this.academicGradesRepository = academicGradesRepository;
     }
 
     public void saveTrainee(Trainee trainee){

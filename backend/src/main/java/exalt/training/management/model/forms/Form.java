@@ -38,7 +38,7 @@ public class Form {
             joinColumns = @JoinColumn(name = "form_id"),
             inverseJoinColumns = @JoinColumn(name = "user_id")
     )
-    @JsonManagedReference
+    @JsonBackReference
     private List<AppUser> usersAssignedTo;
 
     // Getters and setters

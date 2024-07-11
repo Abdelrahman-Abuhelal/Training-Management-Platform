@@ -3,7 +3,9 @@ package exalt.training.management.controller;
 
 import exalt.training.management.dto.ChangePasswordRequest;
 import exalt.training.management.dto.PasswordRequest;
+import exalt.training.management.model.forms.Form;
 import exalt.training.management.service.AppUserService;
+import exalt.training.management.service.FormService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.servlet.http.HttpServletRequest;
@@ -14,6 +16,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -22,6 +25,8 @@ import java.security.Principal;
 public class AppUserController {
 
     private final AppUserService appUserService;
+
+    private final FormService formService;
 
 
 
@@ -33,7 +38,13 @@ public class AppUserController {
         return ResponseEntity.ok(appUserService.changePassword(changePasswordRequest));
     }
 
-
+    @Operation(summary = "Get User Forms", security =  @SecurityRequirement(name = "loginAuth"))
+    @GetMapping("/forms")
+    @PreAuthorize("hasAnyRole('TRAINEE','SUPERVISOR','SUPER_ADMIN')")
+    public ResponseEntity<List<Form>> getMyForms() {
+        List<Form> forms = formService.getMyForms();
+        return ResponseEntity.ok(forms);
+    }
 
 
     // i want to create a endpoint to take object and add it to the trainee table, and use the login token to find the user who is in the system
