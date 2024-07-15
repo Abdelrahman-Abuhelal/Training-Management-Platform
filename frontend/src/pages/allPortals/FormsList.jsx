@@ -37,7 +37,7 @@ const FormsList = () => {
             headerName: 'Name',
             width: 300,
             renderCell: (params) => (
-                <div>{params.value.length > 50 ? `${params.value.substring(0, 50)}...` : params.value}</div>
+                <div>{params.value.length > 40 ? `${params.value.substring(0, 40)}...` : params.value}</div>
             )
         },
         {
@@ -45,15 +45,15 @@ const FormsList = () => {
             headerName: 'Description',
             width: 300,
             renderCell: (params) => (
-                <div>{params.value.length > 50 ? `${params.value.substring(0, 50)}...` : params.value}</div>
+                <div>{params.value.length > 40 ? `${params.value.substring(0, 40)}...` : params.value}</div>
             )
         },
         {
             field: 'questions',
-            headerName: 'Questions',
+            headerName: 'No. Questions',
             width: 150,
             renderCell: (params) => (
-                <div>{params.value.length}</div>
+                <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>{params.value.length}</div>
             )
         },
         {
@@ -76,7 +76,7 @@ const FormsList = () => {
 
     return (
         <Paper elevation={3} style={{margin:'40px', padding: '50px', height: 'auto', width: 'auto'}}>
-            <Typography variant="h5" gutterBottom >
+            <Typography variant="h4" gutterBottom style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
                 Forms List
             </Typography>
             <div style={{ height: 340, width: '100%' }}>

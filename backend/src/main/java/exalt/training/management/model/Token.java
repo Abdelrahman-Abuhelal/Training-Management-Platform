@@ -32,6 +32,6 @@ public class Token {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(nullable = false)
-    @JsonBackReference
+    @JsonBackReference(value = "token-user")
     private AppUser user;
 }

@@ -2,6 +2,8 @@ package exalt.training.management.model.users;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import exalt.training.management.model.forms.Form;
 import exalt.training.management.model.forms.FormSubmission;
 import jakarta.persistence.*;
@@ -16,7 +18,7 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(exclude = {"user","trainees","superAdmins","reviews","reviewSubmissions"})
+@EqualsAndHashCode(exclude = {"user","trainees","superAdmins"})
 public class Supervisor {
 
     @Id
@@ -24,7 +26,6 @@ public class Supervisor {
     private Long id;
 
     @OneToOne
-    @JsonBackReference
     @ToString.Exclude
     private AppUser user;
 
@@ -32,12 +33,10 @@ public class Supervisor {
     @JsonBackReference
     private List<Trainee> trainees;
 
-    @ManyToMany(cascade = CascadeType.PERSIST) // Consider adding cascade type if needed
+    @ManyToMany(cascade = CascadeType.PERSIST)
     private List<SuperAdmin> superAdmins;
 
-    @Nullable
-    @ManyToMany
-    private List<Form> forms;
+
 
 
 }

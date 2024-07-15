@@ -381,8 +381,8 @@ const TraineesList = () => {
           sx={{ fontSize: "1.7rem", fontWeight: "bold", mt: 2, ml: 1 }}
         >
           <Box display="flex" alignItems="center" justifyContent="center">
-            <PeopleOutlineIcon fontSize="large" sx={{ mr: 1 }} />
-            Trainees
+            (<PeopleOutlineIcon fontSize="large" />)
+            Active Trainees
           </Box>
         </Typography>
         <TableContainer component={Paper}>
@@ -403,7 +403,8 @@ const TraineesList = () => {
                 </TableCell>
 
                 <TableCell>
-                  <Typography sx={headerTextStyle}>Trainee Name</Typography>
+                  <Typography sx={headerTextStyle}>Full Name
+                  </Typography>
                 </TableCell>
                 <TableCell>
                   <Typography sx={headerTextStyle}>Email</Typography>
@@ -458,7 +459,7 @@ const TraineesList = () => {
                       onClick={() => navigate(`/edit-trainee/${item.userId}`)}
                       color="primary"
                     >
-                      <ManageAccountsIcon fontSize="medium" />
+                      <ManageAccountsIcon fontSize="large" />
                     </IconButton>
                   </TableCell>
                   <TableCell align="center">
@@ -466,7 +467,7 @@ const TraineesList = () => {
                       onClick={() => handleDelete(item)}
                       color="error"
                     >
-                      <DeleteIcon fontSize="medium" />
+                      <DeleteIcon fontSize="large" />
                     </IconButton>
                   </TableCell>
                 </TableRow>

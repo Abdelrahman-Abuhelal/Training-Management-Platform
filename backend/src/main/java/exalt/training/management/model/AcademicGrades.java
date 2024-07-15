@@ -26,7 +26,6 @@ public class AcademicGrades {
 
     @ManyToOne
     @JsonBackReference
-
     private Trainee trainee;
 
     public AcademicGrades(CourseType courseType, Double mark, Trainee trainee) {

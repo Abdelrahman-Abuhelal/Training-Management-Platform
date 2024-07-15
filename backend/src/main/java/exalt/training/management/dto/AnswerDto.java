@@ -1,7 +1,9 @@
 package exalt.training.management.dto;
 
-import exalt.training.management.model.forms.Answer;
 import exalt.training.management.model.forms.Question;
+import jakarta.persistence.CollectionTable;
+import jakarta.persistence.ElementCollection;
+import jakarta.persistence.JoinColumn;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -12,9 +14,9 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class FillFormDto {
+public class AnswerDto {
 
+    private Question question;
 
-    private List<AnswerDto> answers;
-
+    private List<String> selectedOptionsContent;
 }

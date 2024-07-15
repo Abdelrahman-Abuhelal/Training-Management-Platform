@@ -22,22 +22,18 @@ import {
   DialogTitle,
   Snackbar,
   Alert,
-  TextField,
-  Checkbox,
-  ListItemText,
   List,
   ListItem,
+  ListItemText,
   ListItemAvatar,
   Avatar,
+  Checkbox,
+  Grid,
 } from "@mui/material";
 import CheckCircleIcon from '@mui/icons-material/CheckCircle'; // Import the icon
 import { useAuth } from "../../provider/authProvider";
 import SearchComponent from "../../components/Search";
-import ViewAgendaIcon from '@mui/icons-material/ViewAgenda';
-import FeedIcon from '@mui/icons-material/Feed';
 import FactCheckIcon from '@mui/icons-material/FactCheck';
-
-
 
 const FormTemplates = () => {
   const { user } = useAuth();
@@ -58,6 +54,9 @@ const FormTemplates = () => {
   const navigate = useNavigate();
   const baseUrl = import.meta.env.VITE_PORT_URL;
   const [searchQuery, setSearchQuery] = useState("");
+  const [page, setPage] = useState(0);
+  const [selectAllTrainees, setSelectAllTrainees] = useState(false);
+  const [selectAllSupervisors, setSelectAllSupervisors] = useState(false);
 
   const handleViewForm = (formId) => {
     navigate(`/form-templates/${formId}`);
@@ -67,12 +66,49 @@ const FormTemplates = () => {
     setIdToDelete(formId);
     setShowConfirmation(true);
   }
+
   const formBuilderPage = () => {
     navigate("/create-forms")
   }
 
   const handleSearchUsers = (query) => {
     setSearchQuery(query);
+  };
+
+  const handleToggleAllTrainees = () => {
+    const newSelected = selectAllTrainees
+      ? selectedUsers.filter(
+        (userId) =>
+          !filteredTrainees.find((trainee) => trainee.userId === userId)
+      )
+      : [
+        ...selectedUsers,
+        ...filteredTrainees
+          .filter((trainee) => !selectedUsers.includes(trainee.userId))
+          .map((trainee) => trainee.userId),
+      ];
+
+    setSelectAllTrainees(!selectAllTrainees);
+    setSelectedUsers(newSelected);
+  };
+
+  const handleToggleAllSupervisors = () => {
+    const newSelected = selectAllSupervisors
+      ? selectedUsers.filter(
+        (userId) =>
+          !filteredSupervisors.find(
+            (supervisor) => supervisor.userId === userId
+          )
+      )
+      : [
+        ...selectedUsers,
+        ...filteredSupervisors
+          .filter((supervisor) => !selectedUsers.includes(supervisor.userId))
+          .map((supervisor) => supervisor.userId),
+      ];
+
+    setSelectAllSupervisors(!selectAllSupervisors);
+    setSelectedUsers(newSelected);
   };
 
   const filteredTrainees = trainees.filter((trainee) =>
@@ -86,7 +122,8 @@ const FormTemplates = () => {
     supervisor.userUsername.toLowerCase().includes(searchTerm.toLowerCase()) ||
     supervisor.userFirstName.toLowerCase().includes(searchTerm.toLowerCase()) ||
     supervisor.userLastName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    supervisor.userEmail.toLowerCase().includes(searchTerm.toLowerCase()));
+    supervisor.userEmail.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
   const handleDeleteForm = (formId) => {
     axios.delete(`${baseUrl}/api/v1/forms/${formId}`, {
@@ -159,9 +196,6 @@ const FormTemplates = () => {
 
     setSelectedUsers(newSelectedUsers);
   };
-
-
-
 
   const getUsersAssignedTo = async () => {
     try {
@@ -240,15 +274,12 @@ const FormTemplates = () => {
     }
   }, [idToSend]);
 
-
   useEffect(() => {
     if (showSendFormModal) {
       fetchTrainees();
       fetchSupervisors();
     }
   }, [showSendFormModal]);
-
-
 
   const handleSearchChange = (event) => {
     setSearchTerm(event.target.value);
@@ -261,13 +292,13 @@ const FormTemplates = () => {
     setShowSendFormModal(false);
   }
 
-
   if (loading) {
     return <Typography>Loading...</Typography>;
   }
 
   return (
-    <Box sx={{ margin: '2rem auto', maxWidth: '1000px' }}>
+
+    <Box sx={{ margin: '2rem auto', maxWidth: '1200px' }}>
       <Paper sx={{ padding: '2rem', border: '0.5px solid #ccc' }}>
         <Typography
           variant="h5"
@@ -278,7 +309,7 @@ const FormTemplates = () => {
             marginBottom: "1rem",
           }}
         >
-          <FactCheckIcon fontSize="large"/> EXALT Form Templates 
+          <FactCheckIcon fontSize="large" /> EXALT Form Templates
         </Typography>
         <Box sx={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '1rem' }}>
           <Button onClick={formBuilderPage} startIcon={<AddIcon />}>
@@ -301,11 +332,12 @@ const FormTemplates = () => {
                 </TableCell>
                 <TableCell sx={{ fontWeight: 'bold', borderBottom: '1px solid #ddd' }}>
                   <Typography variant="subtitle1" fontWeight="bold">
+                    
                   </Typography>
                 </TableCell>
                 <TableCell sx={{ fontWeight: 'bold', borderBottom: '1px solid #ddd' }}>
                   <Typography variant="subtitle1" fontWeight="bold">
-                  </Typography>
+                  Actions</Typography>
                 </TableCell>
                 <TableCell sx={{ fontWeight: 'bold', borderBottom: '1px solid #ddd' }}>
                   <Typography variant="subtitle1" fontWeight="bold">
@@ -319,7 +351,12 @@ const FormTemplates = () => {
                   <TableCell>{form.title}</TableCell>
                   <TableCell>{form.description}</TableCell>
                   <TableCell>
-                    <Button variant="outlined" color="primary" onClick={() => openSendFormModal(form.id)}>
+                    <Button
+                      variant="outlined"
+                      color="primary"
+                      onClick={() => openSendFormModal(form.formId)}
+                      startIcon={<FactCheckIcon />}
+                    >
                       Send
                     </Button>
                   </TableCell>
@@ -329,10 +366,10 @@ const FormTemplates = () => {
                     </Button>
                   </TableCell>
                   <TableCell>
-                    <Button variant="outlined" color="error" onClick={() => viewConfirmation(form.id)}>
-                      <DeleteIcon />
-                    </Button>
-                  </TableCell>
+                  <Button variant="outlined" color="error" onClick={() => viewConfirmation(form.formId)} startIcon={<DeleteIcon />}>
+                    Delete
+                  </Button>
+                </TableCell>
 
                 </TableRow>
               ))}
@@ -341,70 +378,96 @@ const FormTemplates = () => {
         </TableContainer>
       </Paper>
 
-      <Dialog open={showConfirmation} onClose={handleCancel}>
-        <DialogTitle>Confirmation</DialogTitle>
+      {/* Confirmation Dialog */}
+      <Dialog
+        open={showConfirmation}
+        onClose={handleCancel}
+      >
+        <DialogTitle>Confirm Deletion</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            Are you sure to delete this form?
+            Are you sure you want to delete this form template?
           </DialogContentText>
         </DialogContent>
         <DialogActions>
           <Button onClick={handleCancel} color="primary">
             Cancel
           </Button>
-          <Button onClick={() => handleDeleteForm(idToDelete)} color="error">
+          <Button
+            onClick={() => handleDeleteForm(idToDelete)}
+            color="primary"
+            autoFocus
+          >
             Confirm
           </Button>
         </DialogActions>
       </Dialog>
 
-      <Dialog open={showSendFormModal} onClose={handleCancelSendForm}>
-        <DialogTitle>Select Users</DialogTitle>
+      {/* Send Form Modal */}
+      <Dialog open={showSendFormModal} onClose={handleCancelSendForm} maxWidth="lg" fullWidth>
+        <DialogTitle>Select Users to Send Form</DialogTitle>
         <DialogContent>
-        <SearchComponent searchTerm={searchTerm} onSearchChange={handleSearchChange} />
-
-          <List>
-            <Typography> Trainees </Typography>
-            {filteredTrainees.map((user) => (
-              <ListItem key={user.userId} button onClick={handleUserToggle(user.userId)}>
-                <ListItemAvatar>
-                  <Avatar>
-                    {user.userUsername.charAt(0)} {/* Add user avatar or initials */}
-                  </Avatar>
-                </ListItemAvatar>
-                <ListItemText primary={user.userFirstName+" "+user.userLastName} />
-                {usersAlreadySent.includes(user.userId) && (
-                  <CheckCircleIcon color="success" />
-                )}
-                <Checkbox
-                  edge="end"
-                  onChange={handleUserToggle(user.userId)}
-                  checked={selectedUsers.indexOf(user.userId) !== -1}
-                />
-              </ListItem>
-            ))}
-          </List>
-          <List>
-            <Typography> Supervisors </Typography>
-            {filteredSupervisors.map((user) => (
-              <ListItem key={user.userId} button onClick={handleUserToggle(user.userId)}>
-                <ListItemAvatar>
-                  <Avatar>
-                    {user.userUsername.charAt(0)} {/* Add user avatar or initials */}
-                  </Avatar>
-                </ListItemAvatar>
-                <ListItemText primary={user.userFirstName+" "+user.userLastName}/>
-                {usersAlreadySent.includes(user.userId) && (
-                  <CheckCircleIcon color="success" />
-                )}
-                <Checkbox
-                  edge="end"
-                  onChange={handleUserToggle(user.userId)}
-                  checked={selectedUsers.indexOf(user.userId) !== -1}
-                />
-              </ListItem>
-            ))}
-          </List>
+          <SearchComponent
+            placeholder="Search users..."
+            searchQuery={searchTerm}
+            onSearch={handleSearchChange}
+          />
+          <Box sx={{ mt: 2 }}>
+            <Typography variant="h6">Trainees</Typography>
+            <Button
+              onClick={handleToggleAllTrainees}
+              variant="contained"
+              color="primary"
+              size="small"
+              sx={{ mb: 1 }}
+            >
+              {selectAllTrainees ? "Deselect All Trainees" : "Select All Trainees"}
+            </Button>
+            <List>
+              {filteredTrainees.map((trainee) => (
+                <ListItem key={trainee.userId} button onClick={handleUserToggle(trainee.userId)}>
+                  <ListItemAvatar>
+                    <Avatar alt={trainee.userUsername} src={trainee.userAvatar} />
+                  </ListItemAvatar>
+                  <ListItemText primary={`${trainee.userFirstName} ${trainee.userLastName}`} secondary={trainee.userEmail} />
+                  <Checkbox
+                    edge="end"
+                    checked={selectedUsers.includes(trainee.userId)}
+                    tabIndex={-1}
+                    disableRipple
+                  />
+                </ListItem>
+              ))}
+            </List>
+          </Box>
+          <Box sx={{ mt: 2 }}>
+            <Typography variant="h6">Supervisors</Typography>
+            <Button
+              onClick={handleToggleAllSupervisors}
+              variant="contained"
+              color="primary"
+              size="small"
+              sx={{ mb: 1 }}
+            >
+              {selectAllSupervisors ? "Deselect All Supervisors" : "Select All Supervisors"}
+            </Button>
+            <List>
+              {filteredSupervisors.map((supervisor) => (
+                <ListItem key={supervisor.userId} button onClick={handleUserToggle(supervisor.userId)}>
+                  <ListItemAvatar>
+                    <Avatar alt={supervisor.userUsername} src={supervisor.userAvatar} />
+                  </ListItemAvatar>
+                  <ListItemText primary={`${supervisor.userFirstName} ${supervisor.userLastName}`} secondary={supervisor.userEmail} />
+                  <Checkbox
+                    edge="end"
+                    checked={selectedUsers.includes(supervisor.userId)}
+                    tabIndex={-1}
+                    disableRipple
+                  />
+                </ListItem>
+              ))}
+            </List>
+          </Box>
         </DialogContent>
         <DialogActions>
           <Button onClick={handleCancelSendForm} color="primary">
@@ -415,17 +478,6 @@ const FormTemplates = () => {
           </Button>
         </DialogActions>
       </Dialog>
-
-      <Snackbar
-        open={snackbarOpen}
-        autoHideDuration={6000}
-        onClose={handleSnackbarClose}
-      >
-        <Alert onClose={handleSnackbarClose} severity="success">
-          {snackbarMessage}
-        </Alert>
-      </Snackbar>
-
     </Box>
   );
 };

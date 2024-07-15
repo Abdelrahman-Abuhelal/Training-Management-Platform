@@ -246,11 +246,11 @@ const HR_Supervisors_List = () => {
             <Typography
               variant="h5"
               component="h2"
-              sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 'bold', mt: 3 }}
+              sx={{fontSize: "1.7rem", display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 'bold', mt: 3 }}
             >
               <Box >
-                <PeopleOutlineIcon fontSize="large" sx={{ mr: 1 }} />
-                Supervisors
+                (<PeopleOutlineIcon fontSize="large"  />)
+                Active Supervisors
               </Box>
             </Typography>
           </Grid>
@@ -264,7 +264,7 @@ const HR_Supervisors_List = () => {
 
                 <TableCell>
                   <Typography variant="subtitle1" fontWeight="bold">
-                    Supervisor Name
+                    Full Name
                   </Typography>
                 </TableCell>
                 <TableCell>
@@ -320,7 +320,7 @@ const HR_Supervisors_List = () => {
                       }
                       color="primary"
                     >
-                      <GroupIcon fontSize="medium"
+                      <GroupIcon fontSize="large"
                       />
                     </IconButton>
                   </TableCell>
@@ -331,7 +331,7 @@ const HR_Supervisors_List = () => {
                       onClick={() => handleDelete(item)}
                       color="error"
                     >
-                      <DeleteIcon fontSize="medium" />
+                      <DeleteIcon fontSize="large" />
                     </IconButton>
                   </TableCell>
                 </TableRow>

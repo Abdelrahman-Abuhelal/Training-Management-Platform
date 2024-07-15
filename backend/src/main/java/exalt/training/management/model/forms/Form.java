@@ -29,7 +29,7 @@ public class Form {
     private String description;
 
     @OneToMany(mappedBy = "form", cascade = CascadeType.ALL)
-    @JsonManagedReference
+    @JsonManagedReference(value = "question-form")
     private List<Question> questions;
 
     @ManyToMany
@@ -38,7 +38,6 @@ public class Form {
             joinColumns = @JoinColumn(name = "form_id"),
             inverseJoinColumns = @JoinColumn(name = "user_id")
     )
-    @JsonBackReference
     private List<AppUser> usersAssignedTo;
 
     // Getters and setters

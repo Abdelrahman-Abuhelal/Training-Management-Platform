@@ -1,9 +1,8 @@
 package exalt.training.management.model.forms;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import exalt.training.management.model.users.AppUser;
-import exalt.training.management.model.users.SuperAdmin;
-import exalt.training.management.model.users.Supervisor;
-import exalt.training.management.model.users.Trainee;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import lombok.*;
@@ -17,13 +16,15 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@EqualsAndHashCode(exclude = {"user","form","answers"})
 public class FormSubmission {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
     @Nullable
+    @ManyToOne
+    @JsonBackReference(value = "formSubmission-user")
     private AppUser user;
 
     @ManyToOne

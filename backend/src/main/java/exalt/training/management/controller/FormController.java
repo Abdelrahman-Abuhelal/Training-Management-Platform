@@ -90,7 +90,14 @@ public class FormController {
         return ResponseEntity.ok(formService.getUsersFormIsAssignedTo(formId));
     }
 
-
+    @PutMapping("/{formId}/submit")
+    @PreAuthorize("hasAnyRole('TRAINEE','SUPERVISOR','SUPER_ADMIN')")
+    @Operation(summary = "Fill Form with user answers" , security =  @SecurityRequirement(name = "loginAuth"))
+    public ResponseEntity <String> fillFormById(@RequestBody List<AnswerDto> answers, @PathVariable Long formId){
+        log.info("Received answers: " + answers);
+        log.info("Form ID: " + formId);
+        return ResponseEntity.ok(formService.fillForm(answers,formId));
+    }
 
 
 
@@ -103,11 +110,7 @@ public class FormController {
 //    }
 
 
-//    @PutMapping("/{formId}")
-//    @PreAuthorize("hasAnyRole('TRAINEE','SUPERVISOR','SUPER_ADMIN')")
-//    public ResponseEntity <String> fillFormById(@RequestBody FillFormDto fillFormDto, @PathVariable Long formId){
-////        return ResponseEntity.ok(formService.fillForm(fillFormDto,formId));
-//    }
+
 
 
 /*

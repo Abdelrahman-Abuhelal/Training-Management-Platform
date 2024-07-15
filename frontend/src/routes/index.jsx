@@ -12,7 +12,7 @@ import FormBuilder from "../pages/adminPortal/FormBuilder.jsx";
 import AdminHome from "../components/admin/Home.jsx";
 import TraineeHome from "../components/trainee/Home.jsx";
 import SupervisorHome from "../components/supervisor/Home.jsx";
-import FillForm from "../pages/traineePortal/FillForm.jsx";
+import FillForm from "../pages/allPortals/FillForm.jsx";
 import SupervisorLayout from "../pages/supervisorPortal/SupervisorLayout.jsx";
 import TraineeLayout from "../pages/traineePortal/TraineeLayout.jsx";
 import AdminLayout from "../pages/adminPortal/AdminLayout.jsx";
@@ -84,6 +84,7 @@ const Routes = () => {
             { path: '/dashboard', element: <SupervisorHome /> },
             { path: '/my-trainees', element: <Supervisor_Trainees_List /> },
             { path: '/forms', element: <FormsList /> },
+            { path: '/forms/:formId', element: <FillForm /> },
             { path: '/review-form/:userId', element: <ReviewForm /> },
             { path: '/view-trainee/:userId', element: <TraineeProfileView /> },
             { path: '/add-resource', element: <Resources /> },

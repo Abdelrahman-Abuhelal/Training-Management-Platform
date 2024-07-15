@@ -32,6 +32,6 @@ public class Question {
 
     @ManyToOne
     @JoinColumn(name = "form_id")
-    @JsonBackReference
+    @JsonBackReference(value = "question-form")
     private Form form;
 }

@@ -21,7 +21,7 @@ import java.util.Set;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(exclude = {"academicGrades","supervisors"  ,"user","forms"})
+@EqualsAndHashCode(exclude = {"academicGrades","supervisors"  ,"user"})
 public class Trainee {
 
 
@@ -58,12 +58,8 @@ public class Trainee {
     @JsonManagedReference
     private List<Supervisor> supervisors;
 
-    @ManyToMany
-    @JsonIgnore
-    private List<Form> forms;
 
     @OneToOne
-    @JsonBackReference
     @ToString.Exclude
     private AppUser user;
 

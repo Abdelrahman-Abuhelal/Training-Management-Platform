@@ -17,14 +17,13 @@ import java.util.List;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(exclude = {"supervisors","user","reviews","reviewSubmissions"})
+@EqualsAndHashCode(exclude = {"user"})
 public class SuperAdmin {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @OneToOne
-    @JsonBackReference
     @ToString.Exclude
     private AppUser user;
 

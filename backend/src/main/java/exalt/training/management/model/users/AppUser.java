@@ -1,6 +1,7 @@
 package exalt.training.management.model.users;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import exalt.training.management.model.*;
 import exalt.training.management.model.forms.Form;
@@ -57,31 +58,33 @@ public class AppUser implements UserDetails {
     private Boolean enabled = false;
 
     @Nullable
-    @JsonManagedReference
+    @JsonIgnore
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     private Trainee trainee;
 
     @Nullable
-    @JsonManagedReference
+    @JsonIgnore
     @OneToOne(mappedBy = "user" , cascade = CascadeType.ALL)
     private Supervisor supervisor;
 
     @Nullable
-    @JsonManagedReference
+    @JsonIgnore
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     private SuperAdmin superAdmin;
 
     @Nullable
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    @JsonManagedReference
+    @JsonManagedReference(value = "token-user")
     private List<Token> tokens;
 
     @Nullable
     @ManyToMany(mappedBy = "usersAssignedTo", cascade = CascadeType.ALL)
-    @JsonManagedReference
     private List<Form> forms;
 
-
+    @Nullable
+    @OneToMany(mappedBy = "user")
+    @JsonManagedReference(value = "formSubmission-user")
+    private List<FormSubmission> formSubmissions;
 //    @Nullable
 //    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
 //    private List<FormSubmission> formSubmissions;

@@ -4,9 +4,12 @@ package exalt.training.management.service;
 import exalt.training.management.dto.*;
 import exalt.training.management.exception.AppUserNotFoundException;
 import exalt.training.management.exception.FormNotFoundException;
+import exalt.training.management.mapper.AnswerMapper;
 import exalt.training.management.mapper.FormMapper;
 import exalt.training.management.mapper.QuestionMapper;
+import exalt.training.management.model.forms.Answer;
 import exalt.training.management.model.forms.Form;
+import exalt.training.management.model.forms.FormSubmission;
 import exalt.training.management.model.forms.Question;
 import exalt.training.management.model.users.AppUser;
 import exalt.training.management.repository.*;
@@ -29,20 +32,24 @@ public class FormService {
     private final QuestionMapper questionMapper;
     private final FormMapper formMapper;
     private final QuestionRepository questionRepository;
-
+    private final AnswerMapper answerMapper;
     private final AppUserRepository appUserRepository;
 
-
+    private final FormSubmissionRepository formSubmissionRepository;
+private final AnswerRepository answerRepository;
 
 
 
     @Autowired
-    public FormService(FormRepository formRepository, QuestionMapper questionMapper, QuestionRepository questionRepository, FormMapper formMapper, AppUserRepository appUserRepository) {
+    public FormService(FormRepository formRepository, QuestionMapper questionMapper, QuestionRepository questionRepository, FormMapper formMapper, AnswerMapper answerMapper, AppUserRepository appUserRepository, FormSubmissionRepository formSubmissionRepository, AnswerRepository answerRepository) {
         this.formRepository = formRepository;
         this.questionMapper = questionMapper;
         this.questionRepository = questionRepository;
         this.formMapper = formMapper;
+        this.answerMapper = answerMapper;
         this.appUserRepository = appUserRepository;
+        this.formSubmissionRepository = formSubmissionRepository;
+        this.answerRepository = answerRepository;
     }
 
 /*
@@ -182,28 +189,24 @@ public class FormService {
 
 
 
-//@Transactional
-//   public String fillForm(FillFormDto fillFormDto, Long formId)
-//   {
-//       Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-//       var user = (AppUser) authentication.getPrincipal();
-//
-//
-//       FormSubmission formSubmission=new FormSubmission();
-//       Form form= formRepository.findById(formId).orElseThrow(()->new FormNotFoundException("No Review with this ID"));
-//       formSubmission.setForm(form);
-//
-//       if(user.getRole().equals(AppUserRole.TRAINEE)){
-//           formSubmission.setTrainee(user.getTrainee());
-//       }else if(user.getRole().equals(AppUserRole.SUPERVISOR)){
-//           formSubmission.setSupervisor(user.getSupervisor());
-//        }else if(user.getRole().equals(AppUserRole.SUPER_ADMIN)){
-//           formSubmission.setSuperAdmin(user.getSuperAdmin());
-//       }
-//       formSubmission.setAnswers(fillFormDto.getAnswers());
-//       formSubmissionRepository.save(formSubmission);
-//      return "Review has been updated";
-//   }
+   public String fillForm(List<AnswerDto> answers, Long formId)
+   {
+       Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+       var user = (AppUser) authentication.getPrincipal();
+       if (user==null) {
+           throw new AppUserNotFoundException("User is not authenticated!");
+       }
+       FormSubmission formSubmission=new FormSubmission();
+
+       Form form= formRepository.findById(formId).orElseThrow(()->new FormNotFoundException("No Review with this ID"));
+        List<Answer> answersList = answerMapper.answerDtoListToAnswerList(answers);
+        answerRepository.saveAll(answersList);
+       formSubmission.setForm(form);
+       formSubmission.setUser(user);
+       formSubmission.setAnswers(answersList);
+       formSubmissionRepository.save(formSubmission);
+      return "Form has been updated";
+   }
 
 /*    public ReviewDataDto getFormDataByFormId(Long formId){
         Review review = reviewRepository.findById(formId).orElseThrow(()->new FormNotFoundException("Form not found with the provided id"));
