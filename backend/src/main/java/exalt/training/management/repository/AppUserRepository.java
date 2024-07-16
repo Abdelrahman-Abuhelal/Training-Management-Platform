@@ -17,7 +17,6 @@ public interface AppUserRepository extends JpaRepository<AppUser, Long> {
     Optional<AppUser> findByEmail(String email);
     List<AppUser> findByEnabledTrue();
 
-    @EntityGraph(attributePaths = "forms") // Eagerly fetch 'forms'
     Optional<AppUser> findByUsername(String username);
 
     Optional <List<AppUser>> findByRole(AppUserRole role);

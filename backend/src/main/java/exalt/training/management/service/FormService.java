@@ -7,10 +7,7 @@ import exalt.training.management.exception.FormNotFoundException;
 import exalt.training.management.mapper.AnswerMapper;
 import exalt.training.management.mapper.FormMapper;
 import exalt.training.management.mapper.QuestionMapper;
-import exalt.training.management.model.forms.Answer;
-import exalt.training.management.model.forms.Form;
-import exalt.training.management.model.forms.FormSubmission;
-import exalt.training.management.model.forms.Question;
+import exalt.training.management.model.forms.*;
 import exalt.training.management.model.users.AppUser;
 import exalt.training.management.repository.*;
 import lombok.extern.slf4j.Slf4j;
@@ -34,22 +31,24 @@ public class FormService {
     private final QuestionRepository questionRepository;
     private final AnswerMapper answerMapper;
     private final AppUserRepository appUserRepository;
-
+    private final AnswerService answerService;
     private final FormSubmissionRepository formSubmissionRepository;
-private final AnswerRepository answerRepository;
-
+    private final AnswerRepository answerRepository;
+    private final UserFormStatusRepository userFormStatusRepository;
 
 
     @Autowired
-    public FormService(FormRepository formRepository, QuestionMapper questionMapper, QuestionRepository questionRepository, FormMapper formMapper, AnswerMapper answerMapper, AppUserRepository appUserRepository, FormSubmissionRepository formSubmissionRepository, AnswerRepository answerRepository) {
+    public FormService(FormRepository formRepository, QuestionMapper questionMapper, QuestionRepository questionRepository, FormMapper formMapper, AnswerMapper answerMapper, AppUserRepository appUserRepository, AnswerService answerService, FormSubmissionRepository formSubmissionRepository, AnswerRepository answerRepository, UserFormStatusRepository userFormStatusRepository) {
         this.formRepository = formRepository;
         this.questionMapper = questionMapper;
         this.questionRepository = questionRepository;
         this.formMapper = formMapper;
         this.answerMapper = answerMapper;
         this.appUserRepository = appUserRepository;
+        this.answerService = answerService;
         this.formSubmissionRepository = formSubmissionRepository;
         this.answerRepository = answerRepository;
+        this.userFormStatusRepository = userFormStatusRepository;
     }
 
 /*
@@ -134,84 +133,93 @@ private final AnswerRepository answerRepository;
         return "Form with title : " + updatedForm.getTitle() + " has been updated";
     }
 
-    public String sendFormToUsers(Long formId,List<Long>userIds){
+    public String sendFormToUsers(Long formId, List<Long> userIds) {
         Form form = formRepository.findById(formId)
                 .orElseThrow(() -> new FormNotFoundException("Form not found with that ID"));
 
-        List <AppUser>existingUsers= form.getUsersAssignedTo();
         List<AppUser> newUsers = appUserRepository.findAllById(userIds);
 
-        Set<AppUser> allUsers = new HashSet<>(existingUsers);
-        allUsers.addAll(newUsers);
+        Set<UserFormStatus> newUserFormStatuses = newUsers.stream()
+                .map(user -> UserFormStatus.builder()
+                        .form(form)
+                        .user(user)
+                        .status(UserFormStatus.Status.NOT_FILLED)
+                        .build())
+                .collect(Collectors.toSet());
 
-        form.setUsersAssignedTo(new ArrayList<>(allUsers));
+        userFormStatusRepository.saveAll(newUserFormStatuses);
 
-        formRepository.save(form);
         return "Form sent successfully to users with IDs: " + userIds;
     }
 
-    public List<Long> getUsersFormIsAssignedTo(Long formId){
+    public List<Long> getUsersFormIsAssignedTo(Long formId) {
         Form form = formRepository.findById(formId)
                 .orElseThrow(() -> new FormNotFoundException("Form not found with that ID"));
-        List<Long> userIds = form.getUsersAssignedTo().stream()
-                .map(AppUser::getId)
+
+        return form.getUserFormStatuses().stream()
+                .map(status -> status.getUser().getId())
                 .collect(Collectors.toList());
+    }
 
-        return userIds;   }
 
-    public List<Form> getMyForms() {
+    public List<UserFormStatusDto> getMyForms() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();
 
         Optional<AppUser> optionalUser = appUserRepository.findByUsername(username);
         if (optionalUser.isPresent()) {
             AppUser user = optionalUser.get();
-            return user.getForms();
+
+            List<UserFormStatus> userFormStatuses = userFormStatusRepository.findByUser(user);
+
+            // Map UserFormStatus entities to DTOs with Form details
+            List<UserFormStatusDto> userFormStatusDtos = userFormStatuses.stream()
+                    .map(userFormStatus -> {
+                        Form form = userFormStatus.getForm();
+                        return new UserFormStatusDto(
+                                userFormStatus.getId(),
+                                form.getTitle(),
+                                form.getDescription(),
+                                form.getQuestions(),
+                                form.getQuestions().size(),
+                                userFormStatus.getStatus().toString(),
+                                userFormStatus.getSubmissionDate()
+                                );
+                    })
+                    .collect(Collectors.toList());
+
+            return userFormStatusDtos;
         }
 
         return Collections.emptyList();
     }
 
-//   public List <FormDataDto> getAllTraineeForms(){
-//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-//        var user = (AppUser) authentication.getPrincipal();
-//        var trainee = user.getTrainee();
-//        if(trainee == null){
-//            throw new InvalidUserException("User is not a Trainee");
-//        }
-//        List <Form> forms =traineeService.findFormsByTraineeId(trainee.getId());
-//       return formMapper.formCreationDtoListToFormList(forms);
-//   }
 
 
 
-
-
-
-
-   public String fillForm(List<AnswerDto> answers, Long formId)
+   public String fillForm(List<AnswerDto> answerDto, Long userFormId)
    {
        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
        var user = (AppUser) authentication.getPrincipal();
        if (user==null) {
            throw new AppUserNotFoundException("User is not authenticated!");
        }
-       FormSubmission formSubmission=new FormSubmission();
-
-       Form form= formRepository.findById(formId).orElseThrow(()->new FormNotFoundException("No Review with this ID"));
-        List<Answer> answersList = answerMapper.answerDtoListToAnswerList(answers);
-        answerRepository.saveAll(answersList);
-       formSubmission.setForm(form);
-       formSubmission.setUser(user);
-       formSubmission.setAnswers(answersList);
+       UserFormStatus userFormStatus = userFormStatusRepository.findById(userFormId).orElseThrow();
+       List<Answer> answers = answerDto.stream()
+               .map(answerService::convertToEntity)
+               .collect(Collectors.toList());
+       userFormStatus.setStatus(UserFormStatus.Status.FILLED);
+       userFormStatusRepository.save(userFormStatus);
+       FormSubmission formSubmission= FormSubmission.builder()
+               .userFormStatus(userFormStatus)
+               .answers(answers)
+               .user(user)
+               .build();
        formSubmissionRepository.save(formSubmission);
       return "Form has been updated";
    }
 
-/*    public ReviewDataDto getFormDataByFormId(Long formId){
-        Review review = reviewRepository.findById(formId).orElseThrow(()->new FormNotFoundException("Form not found with the provided id"));
-        return ReviewDataDto.builder().ratingsDto(ratingMapper.ratingToRatingDto(review.getRatings())).description(review.getDescription()).type(review.getType()).build();
-    }*/
+
 
 
 }

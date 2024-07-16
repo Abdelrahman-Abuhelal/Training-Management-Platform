@@ -3,6 +3,7 @@ package exalt.training.management.controller;
 
 import exalt.training.management.dto.ChangePasswordRequest;
 import exalt.training.management.dto.PasswordRequest;
+import exalt.training.management.dto.UserFormStatusDto;
 import exalt.training.management.model.forms.Form;
 import exalt.training.management.service.AppUserService;
 import exalt.training.management.service.FormService;
@@ -41,8 +42,8 @@ public class AppUserController {
     @Operation(summary = "Get User Forms", security =  @SecurityRequirement(name = "loginAuth"))
     @GetMapping("/forms")
     @PreAuthorize("hasAnyRole('TRAINEE','SUPERVISOR','SUPER_ADMIN')")
-    public ResponseEntity<List<Form>> getMyForms() {
-        List<Form> forms = formService.getMyForms();
+    public ResponseEntity<List<UserFormStatusDto>> getMyForms() {
+        List<UserFormStatusDto> forms = formService.getMyForms();
         return ResponseEntity.ok(forms);
     }
 

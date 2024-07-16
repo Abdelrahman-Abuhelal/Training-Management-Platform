@@ -16,7 +16,7 @@ import java.util.List;
 @NoArgsConstructor
 public class AnswerDto {
 
-    private Question question;
+    private Long questionId;
 
     private List<String> selectedOptionsContent;
 }

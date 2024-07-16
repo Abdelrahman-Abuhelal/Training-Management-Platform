@@ -354,7 +354,7 @@ const FormTemplates = () => {
                     <Button
                       variant="outlined"
                       color="primary"
-                      onClick={() => openSendFormModal(form.formId)}
+                      onClick={() => openSendFormModal(form.id)}
                       startIcon={<FactCheckIcon />}
                     >
                       Send
@@ -366,7 +366,7 @@ const FormTemplates = () => {
                     </Button>
                   </TableCell>
                   <TableCell>
-                  <Button variant="outlined" color="error" onClick={() => viewConfirmation(form.formId)} startIcon={<DeleteIcon />}>
+                  <Button variant="outlined" color="error" onClick={() => viewConfirmation(form.id)} startIcon={<DeleteIcon />}>
                     Delete
                   </Button>
                 </TableCell>

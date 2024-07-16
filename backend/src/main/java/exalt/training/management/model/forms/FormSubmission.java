@@ -28,7 +28,7 @@ public class FormSubmission {
     private AppUser user;
 
     @ManyToOne
-    private Form form;
+    private UserFormStatus userFormStatus;
 
     @OneToMany(cascade = CascadeType.ALL)
     private List<Answer> answers;

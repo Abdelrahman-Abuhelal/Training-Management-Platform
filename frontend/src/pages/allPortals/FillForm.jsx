@@ -19,48 +19,41 @@ import {
   Container,
   Paper,
   Divider,
+  Snackbar,
+  Alert,
 } from "@mui/material";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from '../../provider/authProvider';
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 
 const FillForm = () => {
   const { formId } = useParams();
   const baseUrl = import.meta.env.VITE_PORT_URL;
   const { user } = useAuth();
   const { login_token } = user;
+  const navigate = useNavigate();
+  const [formData, setFormData] = useState({});
   const [showDetailsConfirmation, setShowDetailsConfirmation] = useState(false);
-  const [formData, setFormData] = useState({
-    title: "",
-    description: "",
-    questions: [],
-  });
-  const [answers, setAnswers] = useState([]); 
+  const [answers, setAnswers] = useState([]);
+  const [formDisabled, setFormDisabled] = useState(false);
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
 
   useEffect(() => {
-    const getFormById = async () => {
-      try {
-        const response = await axios.get(`${baseUrl}/api/v1/forms/${formId}`, {
-          headers: {
-              Authorization: `Bearer ${login_token}`
-          }
-      });
-        if (response.status === 200) {
-          setFormData(response.data);
-          console.log(response.data);
-          setAnswers(
-            response.data.questions.map((question) => ({
-              questionId: question.id,
-              selectedOptionsContent: [],
-            }))
-          );
-        }
-      } catch (error) {
-        console.error(error);
-      }
-    };
+    const storedFormData = localStorage.getItem('selectedForm');
+    if (storedFormData) {
+      const parsedFormData = JSON.parse(storedFormData);
+      setFormData(parsedFormData);
+      setAnswers(parsedFormData.questions.map((question) => ({
+        questionId: question.id,
+        selectedOptionsContent: [],
+      })));
+      setFormDisabled(parsedFormData.status === "FILLED");
+    }
+  }, []);
 
-    getFormById();
-  }, [formId]);
+  useEffect(() => {
+    console.log("Form Data:", formData);
+  }, [formData]);
 
   const handleInputChange = (event, questionId) => {
     const { value } = event.target;
@@ -88,20 +81,30 @@ const FillForm = () => {
       prevAnswers.map((answer) =>
         answer.questionId === questionId
           ? {
-              ...answer,
-              selectedOptionsContent: checked
-                ? [...answer.selectedOptionsContent, optionValue]
-                : answer.selectedOptionsContent.filter(
-                    (item) => item !== optionValue
-                  ),
-            }
+            ...answer,
+            selectedOptionsContent: checked
+              ? [...answer.selectedOptionsContent, optionValue]
+              : answer.selectedOptionsContent.filter(
+                (item) => item !== optionValue
+              ),
+          }
           : answer
       )
     );
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
+
+    const allFieldsFilled = answers.every(
+      (answer) => answer.selectedOptionsContent.length > 0
+    );
+
+    if (!allFieldsFilled) {
+      alert("Please fill all fields before submitting.");
+      return;
+    }
+
     setShowDetailsConfirmation(true);
   };
 
@@ -111,18 +114,19 @@ const FillForm = () => {
     setShowDetailsConfirmation(false);
 
     try {
-      console.log(answers);
       const response = await axios.put(
         `${baseUrl}/api/v1/forms/${formId}/submit`,
-         answers , {
-          headers: {
-            Authorization: `Bearer ${login_token}`,
-                    'Content-Type': 'application/json'
-          }
+        answers, {
+        headers: {
+          Authorization: `Bearer ${login_token}`,
+          'Content-Type': 'application/json'
         }
+      }
       );
       if (response.status === 200) {
-        console.log("Form updated by admin: ", response.data);
+        console.log("form has been submitted")
+        setFormDisabled(true);
+        setSnackbarOpen(true);
       }
     } catch (error) {
       console.error("Error:", error);
@@ -131,6 +135,10 @@ const FillForm = () => {
 
   const handleCancel = () => {
     setShowDetailsConfirmation(false);
+  };
+
+  const handleSnackbarClose = () => {
+    setSnackbarOpen(false);
   };
 
   const renderQuestion = (question) => {
@@ -149,11 +157,13 @@ const FillForm = () => {
             margin="normal"
             multiline
             rows={5}
-/>
+            required
+            disabled={formDisabled}
+          />
         );
       case "one-answer-selection":
         return (
-          <FormControl component="fieldset" margin="normal">
+          <FormControl component="fieldset" margin="normal" required disabled={formDisabled}>
             <RadioGroup
               value={
                 answers.find((answer) => answer.questionId === question.id)
@@ -176,7 +186,7 @@ const FillForm = () => {
         );
       case "multiple-answer-selection":
         return (
-          <FormControl component="fieldset" margin="normal">
+          <FormControl component="fieldset" margin="normal" required disabled={formDisabled}>
             <FormGroup>
               {question.options.map((option, index) => (
                 <FormControlLabel
@@ -210,29 +220,38 @@ const FillForm = () => {
 
   return (
     <Container>
-      <Paper elevation={3} sx={{ p: 3, m: "3rem" }}>
-        <Typography variant="h4" align="center" gutterBottom sx={{mb:"2rem"}}>
-        <strong>{formData.title} Form</strong>
+      <Button sx={{ mt: "2rem" }} onClick={() => {
+        navigate(`/forms/`);
+      }} startIcon={<ArrowBackIcon />}>
+        Back to Forms
+      </Button>
+      <Paper elevation={3} sx={{ p: 3, m: "2rem" }}>
+        <Typography variant="h4" align="center" gutterBottom sx={{ mb: "2rem" }}>
+          <strong>{formData.formTitle} Form</strong>
         </Typography>
-        <Typography variant="h6" gutterBottom sx={{m:"1rem"}}>
-        <strong>Description:</strong> {formData.description}
-        </Typography>
-        <Typography variant="body1" gutterBottom>
+        <Typography variant="h6" gutterBottom sx={{ m: "1rem" }}>
+          <strong>Description:</strong> {formData.formDescription}
         </Typography>
         <Divider sx={{ my: 3 }} />
         <form onSubmit={handleSubmit}>
           {formData.questions &&
             formData.questions.map((question, index) => (
               <Box key={index} m={2}>
-                <Typography variant="h6">{`Q${index + 1}) ${
-                  question.question
-                }`}</Typography>
+                <Typography variant="h6">{`Q${index + 1}) ${question.question}`}</Typography>
                 {renderQuestion(question)}
               </Box>
             ))}
           <Box display="flex" justifyContent="center" mt={3}>
-            <Button variant="contained" type="submit">
+            <Button variant="contained" type="submit" disabled={formDisabled}>
               Send Form
+            </Button>
+            <Button
+              variant="outlined"
+              color="error"
+              onClick={() => navigate("/forms")}
+              sx={{ ml: 2 }}
+            >
+              Cancel
             </Button>
           </Box>
         </form>
@@ -259,6 +278,16 @@ const FillForm = () => {
           </Button>
         </DialogActions>
       </Dialog>
+
+      <Snackbar
+        open={snackbarOpen}
+        autoHideDuration={6000}
+        onClose={handleSnackbarClose}
+      >
+        <Alert onClose={handleSnackbarClose} severity="success" sx={{ width: '100%' }}>
+          Form submitted successfully!
+        </Alert>
+      </Snackbar>
     </Container>
   );
 };

@@ -60,6 +60,7 @@ public class FormController {
     public ResponseEntity<FormCreationDto> getFormById(@PathVariable Long formId) {
         return ResponseEntity.ok(formService.getFormById(formId));
     }
+
     @PutMapping(value = "/{formId}", consumes = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasAnyRole('SUPER_ADMIN')")
     @Operation(summary = "Update Form Info" , security =  @SecurityRequirement(name = "loginAuth"))
@@ -93,11 +94,25 @@ public class FormController {
     @PutMapping("/{formId}/submit")
     @PreAuthorize("hasAnyRole('TRAINEE','SUPERVISOR','SUPER_ADMIN')")
     @Operation(summary = "Fill Form with user answers" , security =  @SecurityRequirement(name = "loginAuth"))
-    public ResponseEntity <String> fillFormById(@RequestBody List<AnswerDto> answers, @PathVariable Long formId){
-        log.info("Received answers: " + answers);
+    public ResponseEntity <String> fillFormById(@RequestBody List<AnswerDto> answerDto, @PathVariable Long formId){
+        log.info("Received answers: " + answerDto);
         log.info("Form ID: " + formId);
-        return ResponseEntity.ok(formService.fillForm(answers,formId));
+        return ResponseEntity.ok(formService.fillForm(answerDto,formId));
     }
+
+//    @GetMapping("/forms/{formId}/status")
+//    @PreAuthorize("hasAnyRole('TRAINEE','SUPERVISOR','SUPER_ADMIN')")
+//    @Operation(summary = "Fill Form with user answers" , security =  @SecurityRequirement(name = "loginAuth"))
+//    public ResponseEntity<Boolean> getFormStatus(@PathVariable Long formId) {
+//        try {
+//            Boolean userFormStatusDto = formService.getFormStatus(formId);
+//            return ResponseEntity.ok(userFormStatusDto);
+//        } catch (FormNotFoundException e) {
+//            return ResponseEntity.notFound().build();
+//        } catch (Exception e) {
+//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+//        }
+//    }
 
 
 
