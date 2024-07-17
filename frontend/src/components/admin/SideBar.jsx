@@ -18,13 +18,14 @@ import CampaignIcon from '@mui/icons-material/Campaign';
 import SettingsIcon from "@mui/icons-material/Settings";
 import AccountBoxIcon from '@mui/icons-material/AccountBox';
 import GroupsIcon from '@mui/icons-material/Groups';
+import AddBoxIcon from '@mui/icons-material/AddBox';
 const routes = [
   { path: "/dashboard", name: "Dashboard", icon: <SpaceDashboardIcon /> },
   { path: "/users", name: "User Management", icon: <GroupAddIcon /> },
-  { path: "/supervisors", name: "Supervisors", icon: <AccountBoxIcon /> },
+  { path: "/supervisors", name: "Supervisors", icon: <GroupsIcon /> },
   { path: "/trainees", name: "Trainees", icon: <GroupsIcon /> },
   { path: "/form-templates", name: "Form Templates", icon: <ListAltIcon /> },
-  { path: "/create-forms", name: "Create Forms", icon: <ListAltIcon /> },
+  { path: "/create-forms", name: "Create Forms", icon: <AddBoxIcon /> },
   { path: "/create-announcements", name: "Create Announcements", icon: <CampaignIcon /> },
   { path: "/change-password", name: "Settings", icon: <SettingsIcon /> },
 ];

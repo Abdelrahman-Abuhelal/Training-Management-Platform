@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import AddIcon from '@mui/icons-material/Add';
+import SendIcon from '@mui/icons-material/Send';
 import {
   TableContainer,
   Table,
@@ -30,6 +31,7 @@ import {
   Checkbox,
   Grid,
 } from "@mui/material";
+import QuestionAnswerIcon from '@mui/icons-material/QuestionAnswer';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle'; // Import the icon
 import { useAuth } from "../../provider/authProvider";
 import SearchComponent from "../../components/Search";
@@ -70,7 +72,9 @@ const FormTemplates = () => {
   const formBuilderPage = () => {
     navigate("/create-forms")
   }
-
+  const openSubmissonsPage = (formId) => {
+    navigate(`/form-submissions/${formId}`);
+  }
   const handleSearchUsers = (query) => {
     setSearchQuery(query);
   };
@@ -299,7 +303,7 @@ const FormTemplates = () => {
   return (
 
     <Box sx={{ margin: '2rem auto', maxWidth: '1200px' }}>
-      <Paper sx={{ padding: '2rem', border: '0.5px solid #ccc' }}>
+      <Paper sx={{ padding: '2rem', border: '0.5px solid #ccc' , backgroundColor: '#F3F7EC' }}>
         <Typography
           variant="h5"
           gutterBottom
@@ -312,11 +316,12 @@ const FormTemplates = () => {
           <FactCheckIcon fontSize="large" /> EXALT Form Templates
         </Typography>
         <Box sx={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '1rem' }}>
-          <Button onClick={formBuilderPage} startIcon={<AddIcon />}>
+          <Button variant="outlined"  onClick={formBuilderPage} startIcon={<AddIcon />}>
             Create new Form
           </Button>
-        </Box>
-        <TableContainer component={Paper} sx={{ border: '1px solid #ddd' }}>
+        </Box>                
+
+        <TableContainer component={Paper} sx={{ border: '1px solid #ddd',minHeight: 450, width: '100%' }}>
           <Table>
             <TableHead sx={{ backgroundColor: '#f5f5f5' }}>
               <TableRow>
@@ -332,15 +337,20 @@ const FormTemplates = () => {
                 </TableCell>
                 <TableCell sx={{ fontWeight: 'bold', borderBottom: '1px solid #ddd' }}>
                   <Typography variant="subtitle1" fontWeight="bold">
-                    
+
                   </Typography>
                 </TableCell>
                 <TableCell sx={{ fontWeight: 'bold', borderBottom: '1px solid #ddd' }}>
                   <Typography variant="subtitle1" fontWeight="bold">
-                  Actions</Typography>
+                    Actions</Typography>
                 </TableCell>
                 <TableCell sx={{ fontWeight: 'bold', borderBottom: '1px solid #ddd' }}>
                   <Typography variant="subtitle1" fontWeight="bold">
+                  </Typography>
+                </TableCell>
+                <TableCell sx={{ fontWeight: 'bold', borderBottom: '1px solid #ddd' }}>
+                  <Typography variant="subtitle1" fontWeight="bold">
+                    Submissions
                   </Typography>
                 </TableCell>
               </TableRow>
@@ -350,27 +360,37 @@ const FormTemplates = () => {
                 <TableRow key={form.id}>
                   <TableCell>{form.title}</TableCell>
                   <TableCell>{form.description}</TableCell>
+
+                  <TableCell>
+                    <Button variant="outlined" color="primary" onClick={() => handleViewForm(form.id)}
+                      startIcon={<EditIcon />}>
+                      Edit
+                    </Button>
+                  </TableCell>
+                  <TableCell>
+                    <Button variant="outlined" color="secondary"
+                      onClick={() => viewConfirmation(form.id)} startIcon={<DeleteIcon />}>
+                      Delete
+                    </Button>
+                  </TableCell>
                   <TableCell>
                     <Button
                       variant="outlined"
                       color="primary"
                       onClick={() => openSendFormModal(form.id)}
-                      startIcon={<FactCheckIcon />}
-                    >
+                      startIcon={<SendIcon />}>
                       Send
                     </Button>
                   </TableCell>
                   <TableCell>
-                    <Button variant="outlined" color="primary" onClick={() => handleViewForm(form.id)}>
-                      <EditIcon />
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      onClick={() => openSubmissonsPage(form.id)}
+                      startIcon={<QuestionAnswerIcon />}>
+                      View Submissions
                     </Button>
                   </TableCell>
-                  <TableCell>
-                  <Button variant="outlined" color="error" onClick={() => viewConfirmation(form.id)} startIcon={<DeleteIcon />}>
-                    Delete
-                  </Button>
-                </TableCell>
-
                 </TableRow>
               ))}
             </TableBody>

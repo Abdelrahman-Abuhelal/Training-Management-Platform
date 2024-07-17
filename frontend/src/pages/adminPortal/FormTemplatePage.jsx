@@ -12,6 +12,14 @@ import Select from "@mui/material/Select";
 import Paper from "@mui/material/Paper";
 import InputLabel from '@mui/material/InputLabel';
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import Snackbar from '@mui/material/Snackbar';
+import MuiAlert from '@mui/material/Alert';
+import Dialog from "@mui/material/Dialog";
+import DialogTitle from "@mui/material/DialogTitle";
+import DialogContent from "@mui/material/DialogContent"
+import DialogContentText from "@mui/material/DialogContentText"
+import DialogActions from "@mui/material/DialogActions";
+
 import { useAuth } from "../../provider/authProvider";
 import { useMediaQuery, useTheme } from '@mui/material';
 
@@ -35,6 +43,9 @@ const FormTemplatePage = () => {
     description: "",
     questions: []
   });
+
+  const [confirmationDialogOpen, setConfirmationDialogOpen] = useState(false);
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
 
   useEffect(() => {
     const fetchFormDetails = async () => {
@@ -98,6 +109,14 @@ const FormTemplatePage = () => {
     setFormData({ ...formData, questions: updatedQuestions });
   };
 
+  const handleOpenDialog = () => {
+    setConfirmationDialogOpen(true);
+  };
+
+  const handleCloseDialog = () => {
+    setConfirmationDialogOpen(false);
+  };
+
   const formUpdateAPI = async () => {
     try {
       const response = await axios.put(
@@ -108,6 +127,7 @@ const FormTemplatePage = () => {
         }
       })
       if (response.status === 200) {
+        setSnackbarOpen(true); // Show snackbar on successful update
         console.log("Form updated successfully");
       }
     } catch (error) {
@@ -116,7 +136,7 @@ const FormTemplatePage = () => {
   };
 
   const onSubmit = (data) => {
-    formUpdateAPI();
+    handleOpenDialog(); // Open confirmation dialog before form submission
   };
 
   const renderOptions = (questionIndex) => {
@@ -143,8 +163,8 @@ const FormTemplatePage = () => {
 
   return (
     <div style={{ display: "flex", justifyContent: "center" }}>
-      <Paper elevation={3} sx={{ p: isMobile?2:4, m:isMobile?1: 6, width: isMobile?"90%":"75%", maxWidth: 1100 }}>
-      <Button sx={{ mb: 4 }} onClick={() => {
+      <Paper elevation={3} sx={{ p: isMobile ? 2 : 4, m: isMobile ? 1 : 6, width: isMobile ? "90%" : "75%", maxWidth: 1100 }}>
+        <Button sx={{ mb: 4 }} onClick={() => {
           navigate(`/form-templates/`);
         }} startIcon={<ArrowBackIcon />}>
           Back to Forms
@@ -234,9 +254,55 @@ const FormTemplatePage = () => {
             Update Form
           </Button>
         </form>
+
+        <ConfirmationDialog
+          open={confirmationDialogOpen}
+          handleClose={handleCloseDialog}
+          handleConfirm={formUpdateAPI}
+        />
+
+        <Snackbar
+          open={snackbarOpen}
+          autoHideDuration={6000}
+          onClose={() => setSnackbarOpen(false)}
+        >
+          <MuiAlert
+            elevation={6}
+            variant="filled"
+            onClose={() => setSnackbarOpen(false)}
+            severity="success"
+          >
+            Form updated successfully
+          </MuiAlert>
+        </Snackbar>
       </Paper>
     </div>
   );
 };
 
 export default FormTemplatePage;
+
+
+const ConfirmationDialog = ({ open, handleClose, handleConfirm }) => {
+  return (
+    <Dialog open={open} onClose={handleClose}>
+      <DialogTitle>Confirm Update</DialogTitle>
+      <DialogContent>
+        <DialogContentText>
+          Are you sure you want to update this form?
+        </DialogContentText>
+      </DialogContent>
+      <DialogActions>
+        <Button onClick={handleClose} color="primary">
+          Cancel
+        </Button>
+        <Button onClick={() => {
+          handleClose();
+          handleConfirm();
+        }} color="primary" autoFocus>
+          Confirm
+        </Button>
+      </DialogActions>
+    </Dialog>
+  );
+};

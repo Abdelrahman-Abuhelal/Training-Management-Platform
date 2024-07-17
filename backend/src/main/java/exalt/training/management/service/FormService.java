@@ -17,6 +17,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -172,7 +173,6 @@ public class FormService {
 
             List<UserFormStatus> userFormStatuses = userFormStatusRepository.findByUser(user);
 
-            // Map UserFormStatus entities to DTOs with Form details
             List<UserFormStatusDto> userFormStatusDtos = userFormStatuses.stream()
                     .map(userFormStatus -> {
                         Form form = userFormStatus.getForm();
@@ -183,7 +183,7 @@ public class FormService {
                                 form.getQuestions(),
                                 form.getQuestions().size(),
                                 userFormStatus.getStatus().toString(),
-                                userFormStatus.getSubmissionDate()
+                                userFormStatus.getCreatedAt()
                                 );
                     })
                     .collect(Collectors.toList());
@@ -195,8 +195,6 @@ public class FormService {
     }
 
 
-
-
    public String fillForm(List<AnswerDto> answerDto, Long userFormId)
    {
        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -205,6 +203,7 @@ public class FormService {
            throw new AppUserNotFoundException("User is not authenticated!");
        }
        UserFormStatus userFormStatus = userFormStatusRepository.findById(userFormId).orElseThrow();
+
        List<Answer> answers = answerDto.stream()
                .map(answerService::convertToEntity)
                .collect(Collectors.toList());
@@ -214,12 +213,27 @@ public class FormService {
                .userFormStatus(userFormStatus)
                .answers(answers)
                .user(user)
+               .form(userFormStatus.getForm())
+               .submittedAt(LocalDateTime.now())
                .build();
        formSubmissionRepository.save(formSubmission);
       return "Form has been updated";
    }
 
+    public List<FormSubmissionDto> getSubmissionsByFormId(Long formId) {
+        List<FormSubmission> submissions = formSubmissionRepository.findByFormId(formId);
+        return submissions.stream().map(this::toDTO).collect(Collectors.toList());
+    }
 
-
+    private FormSubmissionDto toDTO(FormSubmission submission) {
+        FormSubmissionDto dto = new FormSubmissionDto();
+        dto.setId(submission.getId());
+        dto.setUserId(submission.getUser().getId());
+        dto.setFirstName(submission.getUser().getFirstName());
+        dto.setLastName(submission.getUser().getLastName());
+        dto.setEmail(submission.getUser().getEmail());
+        dto.setSubmittedAt(submission.getSubmittedAt());
+        return dto;
+    }
 
 }

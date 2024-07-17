@@ -329,7 +329,7 @@ const HR_Supervisors_List = () => {
 
                     <IconButton
                       onClick={() => handleDelete(item)}
-                      color="error"
+                      color="secondary"
                     >
                       <DeleteIcon fontSize="large" />
                     </IconButton>

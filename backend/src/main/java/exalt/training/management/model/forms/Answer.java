@@ -21,6 +21,8 @@ public class Answer {
     private Long id;
 
     @ManyToOne
+    @JoinColumn(name = "question_id", nullable = true)
+    @JsonBackReference
     private Question question;
 
     @ElementCollection

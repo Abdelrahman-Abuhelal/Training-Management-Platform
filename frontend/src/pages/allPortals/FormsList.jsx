@@ -5,7 +5,6 @@ import { Link } from 'react-router-dom'; // Import Link for navigation
 import axios from 'axios';
 import { useAuth } from '../../provider/authProvider';
 import DescriptionIcon from '@mui/icons-material/Description'; // Example icon
-import { useNavigate } from 'react-router-dom';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle'; // Icon for FILLED status
 import HighlightOffIcon from '@mui/icons-material/HighlightOff'; // Icon for NOT FILLED status
 import AssignmentIcon from '@mui/icons-material/Assignment';
@@ -98,11 +97,11 @@ const FormsList = () => {
                 return <Button
                     variant="contained"
                     color="primary"
-                    startIcon={<DescriptionIcon />}
+                    startIcon={<AssignmentIcon />}
                     component={Link}
                     onClick={() => handleViewClick(params.row)}
                 >
-                    View
+                    View 
                 </Button>
                 }
             
@@ -115,8 +114,8 @@ const FormsList = () => {
 
       return (
         <Paper elevation={3} style={{ margin: '3rem', padding: '1rem', backgroundColor: '#f0f0f0' }}>
-            <Typography variant="h4" gutterBottom style={{ marginBottom: '2rem', display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
-                <AssignmentIcon sx={{ marginRight: '0.5rem' }} fontSize="large" /> Forms
+            <Typography variant="h4" gutterBottom style={{ marginBottom: '1rem', display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
+                <DescriptionIcon sx={{ marginRight: '0.5rem' }} fontSize="large" /> Forms
             </Typography>
             <div style={{ height: 340, width: '100%', backgroundColor: '#ffffff', borderRadius: '5px', overflow: 'hidden' }}>
                 <DataGrid

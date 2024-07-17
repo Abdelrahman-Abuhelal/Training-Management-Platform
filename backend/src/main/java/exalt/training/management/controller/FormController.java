@@ -3,6 +3,7 @@ package exalt.training.management.controller;
 import exalt.training.management.dto.*;
 import exalt.training.management.exception.FormNotFoundException;
 import exalt.training.management.model.forms.Form;
+import exalt.training.management.model.forms.FormSubmission;
 import exalt.training.management.service.FormService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -98,6 +99,13 @@ public class FormController {
         log.info("Received answers: " + answerDto);
         log.info("Form ID: " + formId);
         return ResponseEntity.ok(formService.fillForm(answerDto,formId));
+    }
+
+    @GetMapping("/{formId}/submissions")
+    @PreAuthorize("hasAnyRole('SUPER_ADMIN')")
+    @Operation(summary = "Get Form Submissions by a Form Id" , security =  @SecurityRequirement(name = "loginAuth"))
+    public ResponseEntity<List<FormSubmissionDto>> getFormSubmissionsByFormId(@PathVariable Long formId) {
+        return ResponseEntity.ok(formService.getSubmissionsByFormId(formId));
     }
 
 //    @GetMapping("/forms/{formId}/status")

@@ -30,6 +30,7 @@ import NotFound from '../pages/NotFound.jsx';
 import UserManagement from '../pages/adminPortal/UserManagement.jsx';
 import ChangePassword from '../pages/auth/ChangePassword.jsx'
 import FormsList from '../pages/allPortals/FormsList.jsx';
+import FormSubmissions from '../pages/adminPortal/FornSubmissions.jsx';
 const Routes = () => {
   const { user } = useAuth();
   const isAuthenticated = user !== null && user.login_token !== null;
@@ -115,6 +116,7 @@ const Routes = () => {
             { path: '/create-forms', element: <FormBuilder /> },
             { path: '/form-templates', element: <FormTemplates /> },
             { path: '/form-templates/:formId', element: <FormTemplatePage /> },
+            { path: '/form-submissions/:formId', element: <FormSubmissions /> },
             { path: '/edit-trainee/:userId', element: <EditTrainee /> },
             { path: '/create-announcements', element: <AnnouncementForm /> },
             { path: '/change-password', element: <ChangePassword /> },

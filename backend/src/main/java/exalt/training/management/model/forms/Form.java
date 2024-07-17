@@ -15,11 +15,11 @@ import java.util.List;
 @Entity
 @Table
 @Data
-@ToString(exclude = {"questions", "userFormStatuses"})
+@ToString(exclude = {"questions", "userFormStatuses","formSubmissions"})
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(exclude = {"questions","userFormStatuses"})
+@EqualsAndHashCode(exclude = {"questions","userFormStatuses","formSubmissions"})
 public class Form {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,13 +29,17 @@ public class Form {
 
     private String description;
 
-    @OneToMany(mappedBy = "form", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "form", cascade = CascadeType.ALL,fetch = FetchType.LAZY)
     @JsonManagedReference(value = "question-form")
     private List<Question> questions;
 
-    @OneToMany(mappedBy = "form", cascade = CascadeType.ALL)
-    @JsonIgnore
+    @OneToMany(mappedBy = "form", cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+    @JsonManagedReference(value = "userFormStatus-form")
     private List<UserFormStatus> userFormStatuses;
+
+    @OneToMany(mappedBy = "form", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonManagedReference(value = "formSubmission-form")
+    private List<FormSubmission> formSubmissions;
 
     // Getters and setters
 }

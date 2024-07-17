@@ -7,6 +7,7 @@ import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
@@ -16,21 +17,28 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(exclude = {"user","form","answers"})
+@EqualsAndHashCode(exclude = {"user","userFormStatus","form","answers"})
 public class FormSubmission {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Nullable
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JsonBackReference(value = "formSubmission-user")
     private AppUser user;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JsonBackReference(value = "formSubmission-userFormStatus")
     private UserFormStatus userFormStatus;
 
-    @OneToMany(cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "form_id")
+    @JsonBackReference(value = "formSubmission-form")
+    private Form form;
+
+    @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
     private List<Answer> answers;
+
+    private LocalDateTime submittedAt;
 
 }

@@ -1,4 +1,4 @@
-import "./App.css";
+import './index.css';
 import AuthProvider from "./provider/authProvider";
 import Routes from "./routes";
 

@@ -20,6 +20,6 @@ public class UserFormStatusDto {
     private List<Question> questions;
     private int numberOfQuestions;
     private String status;
-    private LocalDateTime submissionDate;
+    private LocalDateTime createdAt;
 }
 

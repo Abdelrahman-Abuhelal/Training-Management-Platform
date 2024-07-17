@@ -181,7 +181,7 @@ const UserManagement = () => {
 
   return (
     <div style={{ display: "flex", justifyContent: "center" }}>
-      <Paper elevation={3} sx={{ p: 2, m: 3, width: "95%", maxWidth: 1800 }}>
+      <Paper elevation={3} sx={{ p: 3, m: 3, width: "90%", maxWidth: 1800 }}>
       <Toolbar sx={{ flexDirection: isMobile ? 'column' : 'row', alignItems: isMobile ?'center': 'normal', gap: isMobile ? 2 : 0 }}>
       <Typography variant="h6" component="div" sx={{ flex: isMobile ? '1 1 100%' : '1 2 100%', textAlign: isMobile ? 'center' : 'left' }}>
             User Management

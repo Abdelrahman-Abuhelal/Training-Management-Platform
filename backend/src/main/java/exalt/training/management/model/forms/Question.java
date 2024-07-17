@@ -1,6 +1,7 @@
 package exalt.training.management.model.forms;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
@@ -34,4 +35,8 @@ public class Question {
     @JoinColumn(name = "form_id")
     @JsonBackReference(value = "question-form")
     private Form form;
+
+    @OneToMany(mappedBy = "question", cascade = CascadeType.PERSIST)
+    @JsonManagedReference
+    private List<Answer> answers;
 }

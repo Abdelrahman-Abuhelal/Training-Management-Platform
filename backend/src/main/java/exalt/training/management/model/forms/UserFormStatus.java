@@ -20,11 +20,12 @@ public class UserFormStatus {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "form_id", nullable = false)
+    @JsonBackReference(value = "userFormStatus-form")
     private Form form;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     @JsonBackReference(value = "userFormStatus-user")
     private AppUser user;
@@ -32,7 +33,7 @@ public class UserFormStatus {
     @Enumerated(EnumType.STRING)
     private Status status;
 
-    private LocalDateTime submissionDate;
+    private LocalDateTime createdAt;
 
     public enum Status {
         FILLED,

@@ -465,7 +465,7 @@ const TraineesList = () => {
                   <TableCell align="center">
                     <IconButton
                       onClick={() => handleDelete(item)}
-                      color="error"
+                      color="secondary"
                     >
                       <DeleteIcon fontSize="large" />
                     </IconButton>
