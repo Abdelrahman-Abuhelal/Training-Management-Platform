@@ -73,7 +73,7 @@ const FormTemplates = () => {
     navigate("/create-forms")
   }
   const openSubmissonsPage = (formId) => {
-    navigate(`/form-submissions/${formId}`);
+    navigate(`/form-templates/${formId}/submissions`);
   }
   const handleSearchUsers = (query) => {
     setSearchQuery(query);
@@ -313,7 +313,7 @@ const FormTemplates = () => {
             marginBottom: "1rem",
           }}
         >
-          <FactCheckIcon fontSize="large" /> EXALT Form Templates
+          <FactCheckIcon fontSize="large" sx={{mr:'0.3rem'}}/> EXALT Form Templates
         </Typography>
         <Box sx={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '1rem' }}>
           <Button variant="outlined"  onClick={formBuilderPage} startIcon={<AddIcon />}>
@@ -323,7 +323,7 @@ const FormTemplates = () => {
 
         <TableContainer component={Paper} sx={{ border: '1px solid #ddd',minHeight: 450, width: '100%' }}>
           <Table>
-            <TableHead sx={{ backgroundColor: '#f5f5f5' }}>
+            <TableHead >
               <TableRow>
                 <TableCell sx={{ fontWeight: 'bold', borderBottom: '1px solid #ddd' }}>
                   <Typography variant="subtitle1" fontWeight="bold">

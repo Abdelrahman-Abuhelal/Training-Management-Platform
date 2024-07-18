@@ -30,7 +30,8 @@ import NotFound from '../pages/NotFound.jsx';
 import UserManagement from '../pages/adminPortal/UserManagement.jsx';
 import ChangePassword from '../pages/auth/ChangePassword.jsx'
 import FormsList from '../pages/allPortals/FormsList.jsx';
-import FormSubmissions from '../pages/adminPortal/FornSubmissions.jsx';
+import FormSubmissions from '../pages/adminPortal/FormSubmissions.jsx';
+import FormResponse from '../pages/adminPortal/FormResponse.jsx';
 const Routes = () => {
   const { user } = useAuth();
   const isAuthenticated = user !== null && user.login_token !== null;
@@ -115,8 +116,9 @@ const Routes = () => {
             { path: '/supervisors/:userId/trainees', element: <SupervisorTraineesList /> },
             { path: '/create-forms', element: <FormBuilder /> },
             { path: '/form-templates', element: <FormTemplates /> },
-            { path: '/form-templates/:formId', element: <FormTemplatePage /> },
-            { path: '/form-submissions/:formId', element: <FormSubmissions /> },
+            { path: '/form-templates/:formId/submissions', element: <FormSubmissions /> },
+            { path: '/form-templates/:formId/submissions/:submissionId', element: <FormResponse /> },            
+            { path: '/form-templates/:templateId', element: <FormTemplatePage /> },
             { path: '/edit-trainee/:userId', element: <EditTrainee /> },
             { path: '/create-announcements', element: <AnnouncementForm /> },
             { path: '/change-password', element: <ChangePassword /> },

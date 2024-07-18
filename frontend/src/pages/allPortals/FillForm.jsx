@@ -25,6 +25,7 @@ import {
 import { useParams, useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from '../../provider/authProvider';
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 
 const FillForm = () => {
   const { formId } = useParams();
@@ -225,7 +226,14 @@ const FillForm = () => {
       }} startIcon={<ArrowBackIcon />}>
         Back to Forms
       </Button>
-      <Paper elevation={3} sx={{ p: 3, m: "2rem" }}>
+      {formDisabled && (
+        <Box display="flex" justifyContent="flex-end" alignItems="center" sx={{ mb: '1rem' , mr:'2rem'}}>
+          <CheckCircleIcon color="success" sx={{ mr: '0.5rem' }} />
+          <Typography variant="subtitle1" color="success">
+            Form Submitted
+          </Typography>
+        </Box>
+      )}<Paper elevation={3} sx={{ p: 3, m: "2rem" }}>
         <Typography variant="h4" align="center" gutterBottom sx={{ mb: "2rem" }}>
           <strong>{formData.formTitle} Form</strong>
         </Typography>

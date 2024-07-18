@@ -4,6 +4,7 @@ package exalt.training.management.service;
 import exalt.training.management.dto.*;
 import exalt.training.management.exception.AppUserNotFoundException;
 import exalt.training.management.exception.FormNotFoundException;
+import exalt.training.management.exception.FormSubmissionNotFoundException;
 import exalt.training.management.mapper.AnswerMapper;
 import exalt.training.management.mapper.FormMapper;
 import exalt.training.management.mapper.QuestionMapper;
@@ -224,6 +225,10 @@ public class FormService {
         List<FormSubmission> submissions = formSubmissionRepository.findByFormId(formId);
         return submissions.stream().map(this::toDTO).collect(Collectors.toList());
     }
+    public FormSubmissionDto  getSubmissionBySubmissionId(Long submissionId) {
+      FormSubmission formSubmission=  formSubmissionRepository.findById(submissionId).orElseThrow(()->new FormSubmissionNotFoundException("Form with this Id is not found"));
+      return toDTO(formSubmission);
+    }
 
     private FormSubmissionDto toDTO(FormSubmission submission) {
         FormSubmissionDto dto = new FormSubmissionDto();
@@ -234,6 +239,30 @@ public class FormService {
         dto.setEmail(submission.getUser().getEmail());
         dto.setSubmittedAt(submission.getSubmittedAt());
         return dto;
+    }
+
+    public FormResponseDto getFormResponseDataBySubmissionId(Long submissionId) {
+        FormSubmission formSubmission = formSubmissionRepository.findById(submissionId)
+                .orElseThrow(() -> new FormSubmissionNotFoundException("Form Submission not found"));
+
+        return FormResponseDto.builder()
+                .formTitle(formSubmission.getForm().getTitle())
+                .formDescription(formSubmission.getForm().getDescription())
+                .questions(formSubmission.getForm().getQuestions().stream()
+                        .map(q -> QuestionFullDto.builder()
+                                .id(q.getId())
+                                .question(q.getQuestion())
+                                .type(q.getType())
+                                .options(q.getOptions())
+                                .build())
+                        .collect(Collectors.toList()))
+                .answers(formSubmission.getAnswers().stream()
+                        .map(a -> AnswerDto.builder()
+                                .questionId(a.getQuestion().getId())
+                                .selectedOptionsContent(a.getSelectedOptionsContent())
+                                .build())
+                        .collect(Collectors.toList()))
+                .build();
     }
 
 }

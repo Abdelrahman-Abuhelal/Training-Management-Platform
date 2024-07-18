@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { DataGrid } from '@mui/x-data-grid';
-import { Button, Paper, Typography } from '@mui/material';
+import { Button, Paper, Typography, } from '@mui/material';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import { useParams, useNavigate } from "react-router-dom";
@@ -9,7 +9,8 @@ import { useAuth } from "../../provider/authProvider";
 import { useTheme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-
+import FormatListNumberedIcon from '@mui/icons-material/FormatListNumbered';
+import AccessTimeIcon from '@mui/icons-material/AccessTime';
 dayjs.extend(relativeTime);
 
 const FormSubmissions = () => {
@@ -36,13 +37,14 @@ const FormSubmissions = () => {
 
 
     const navigateBack = () => {
-        navigate(`/form-templates`);
+        navigate(`/form-templates/`);
       };
 
     const columns = [
         { field: 'name', headerName: 'Name', width: 180 },
         { field: 'email', headerName: 'Email', width: 300 },
-        { field: 'submittedAt', headerName: 'Submission Time', width: 150 },
+        { field: 'submittedAt', headerName: 'Submission Time', width: 150
+    },
         {
             field: 'actions',
             headerName: 'Actions',
@@ -52,6 +54,7 @@ const FormSubmissions = () => {
                     variant="contained"
                     color="primary"
                     onClick={() => viewFormResponse(params.row.id)}
+                    startIcon={  <FormatListNumberedIcon/> }
                 >
                     View Response
                 </Button>
@@ -83,6 +86,7 @@ const FormSubmissions = () => {
     const viewFormResponse = (id) => {
         // Implement the logic to view the form response for the submission with the given ID
         console.log('View response for submission ID:', id);
+        navigate(`/form-templates/${formId}/submissions/${id}`)
     };
 
     return (
@@ -92,7 +96,7 @@ const FormSubmissions = () => {
                     Form Templates
                 </Button>
                 <Typography className="concert-one-regular" variant="h6" component="div" sx={{ flex: isMobile ? '1 1 100%' : '1 2 100%', textAlign:  'center' , marginBottom:"1rem" }}>
-                    Form Submissions
+                 Form Submissions
                 </Typography>
                 <div style={{ height: 400, width: '100%' }}>
                     <DataGrid sx={{p:'1rem'}} rows={rows} columns={columns} pageSize={5} />

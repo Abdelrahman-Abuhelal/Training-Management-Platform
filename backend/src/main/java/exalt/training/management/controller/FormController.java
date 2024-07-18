@@ -87,7 +87,7 @@ public class FormController {
 
     @GetMapping("/{formId}/users-assigned")
     @PreAuthorize("hasAnyRole('TRAINEE','SUPERVISOR','SUPER_ADMIN')")
-    @Operation(summary = "Get Users which The form is assigned to" , security =  @SecurityRequirement(name = "loginAuth"))
+    @Operation(summary = "Get Users which form is assigned to" , security =  @SecurityRequirement(name = "loginAuth"))
     public ResponseEntity<List<Long>> getUsersFormIsAssignedTo(@PathVariable Long formId) {
         return ResponseEntity.ok(formService.getUsersFormIsAssignedTo(formId));
     }
@@ -103,24 +103,26 @@ public class FormController {
 
     @GetMapping("/{formId}/submissions")
     @PreAuthorize("hasAnyRole('SUPER_ADMIN')")
-    @Operation(summary = "Get Form Submissions by a Form Id" , security =  @SecurityRequirement(name = "loginAuth"))
+    @Operation(summary = "Get Form Submissions by Form Id" , security =  @SecurityRequirement(name = "loginAuth"))
     public ResponseEntity<List<FormSubmissionDto>> getFormSubmissionsByFormId(@PathVariable Long formId) {
         return ResponseEntity.ok(formService.getSubmissionsByFormId(formId));
     }
 
-//    @GetMapping("/forms/{formId}/status")
-//    @PreAuthorize("hasAnyRole('TRAINEE','SUPERVISOR','SUPER_ADMIN')")
-//    @Operation(summary = "Fill Form with user answers" , security =  @SecurityRequirement(name = "loginAuth"))
-//    public ResponseEntity<Boolean> getFormStatus(@PathVariable Long formId) {
-//        try {
-//            Boolean userFormStatusDto = formService.getFormStatus(formId);
-//            return ResponseEntity.ok(userFormStatusDto);
-//        } catch (FormNotFoundException e) {
-//            return ResponseEntity.notFound().build();
-//        } catch (Exception e) {
-//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-//        }
-//    }
+    @GetMapping("/submissions/{subId}")
+    @PreAuthorize("hasAnyRole('SUPER_ADMIN')")
+    @Operation(summary = "Get Form Submissions by Form Id" , security =  @SecurityRequirement(name = "loginAuth"))
+    public ResponseEntity<FormSubmissionDto> getSubmissionBySubmissionId(@PathVariable Long subId) {
+        return ResponseEntity.ok(formService.getSubmissionBySubmissionId(subId));
+    }
+
+    @GetMapping("/submissions/{subId}/response")
+    @PreAuthorize("hasAnyRole('SUPER_ADMIN')")
+    @Operation(summary = "Get Form Response by Submission Id" , security =  @SecurityRequirement(name = "loginAuth"))
+    public ResponseEntity<FormResponseDto>  getFormResponseDataBySubmissionId(@PathVariable Long subId){
+        return ResponseEntity.ok(formService.getFormResponseDataBySubmissionId(subId));
+    }
+
+
 
 
 

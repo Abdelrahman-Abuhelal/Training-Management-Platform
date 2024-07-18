@@ -115,7 +115,7 @@ const FormsList = () => {
       return (
         <Paper elevation={3} style={{ margin: '3rem', padding: '1rem', backgroundColor: '#f0f0f0' }}>
             <Typography variant="h4" gutterBottom style={{ marginBottom: '1rem', display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
-                <DescriptionIcon sx={{ marginRight: '0.5rem' }} fontSize="large" /> Forms
+            Forms <DescriptionIcon sx={{ marginLeft: '0.5rem' }} fontSize="large" /> 
             </Typography>
             <div style={{ height: 340, width: '100%', backgroundColor: '#ffffff', borderRadius: '5px', overflow: 'hidden' }}>
                 <DataGrid

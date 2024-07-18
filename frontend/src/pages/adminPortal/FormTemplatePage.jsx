@@ -19,12 +19,12 @@ import DialogTitle from "@mui/material/DialogTitle";
 import DialogContent from "@mui/material/DialogContent"
 import DialogContentText from "@mui/material/DialogContentText"
 import DialogActions from "@mui/material/DialogActions";
-
+import Typography from "@mui/material/Typography";
 import { useAuth } from "../../provider/authProvider";
 import { useMediaQuery, useTheme } from '@mui/material';
-
+import AutoFixHighIcon from '@mui/icons-material/AutoFixHigh';
 const FormTemplatePage = () => {
-  const { formId } = useParams();
+  const { templateId } = useParams();
   const baseUrl = import.meta.env.VITE_PORT_URL;
   const navigate = useNavigate();
   const { user } = useAuth();
@@ -50,7 +50,7 @@ const FormTemplatePage = () => {
   useEffect(() => {
     const fetchFormDetails = async () => {
       try {
-        const response = await axios.get(`${baseUrl}/api/v1/forms/${formId}`, {
+        const response = await axios.get(`${baseUrl}/api/v1/forms/${templateId}`, {
           headers: {
             Authorization: `Bearer ${login_token}`
           }
@@ -66,7 +66,7 @@ const FormTemplatePage = () => {
     };
 
     fetchFormDetails();
-  }, [formId, baseUrl]);
+  }, [templateId, baseUrl]);
 
   const handleInputChange = (event) => {
     setFormData({
@@ -120,7 +120,7 @@ const FormTemplatePage = () => {
   const formUpdateAPI = async () => {
     try {
       const response = await axios.put(
-        `${baseUrl}/api/v1/forms/${formId}`,
+        `${baseUrl}/api/v1/forms/${templateId}`,
         formData, {
         headers: {
           Authorization: `Bearer ${login_token}`
@@ -169,7 +169,9 @@ const FormTemplatePage = () => {
         }} startIcon={<ArrowBackIcon />}>
           Back to Forms
         </Button>
-
+        <Typography align="center" variant="h4" gutterBottom mb={'1.5rem'}>
+          <AutoFixHighIcon fontSize="large" sx={{mb:'0.5rem'}} />     Edit Template
+        </Typography>
         <form onSubmit={handleSubmit(onSubmit)}>
           <TextField
             {...register("title", { required: true })}
