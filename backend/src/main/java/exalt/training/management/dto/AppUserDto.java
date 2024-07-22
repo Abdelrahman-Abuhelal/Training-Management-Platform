@@ -25,4 +25,6 @@ public class AppUserDto {
 
     private Boolean userEnabled;
 
+    private Boolean userVerified;
+
 }

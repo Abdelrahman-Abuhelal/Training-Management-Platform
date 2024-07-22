@@ -54,7 +54,7 @@ const AnnouncementForm = () => {
 
   return (
     <div style={{ display: "flex", justifyContent: "center" }}>
- <Paper elevation={3} sx={{ p: isMobile?'4%': '3%', m: isMobile?'5%':'5%' ,width:isMobile?'90%':'70%' }}>
+ <Paper elevation={3} sx={{ p: isMobile?'4%': '3%', m: isMobile?'5%':'5%' ,width:isMobile?'90%':'70%',  backgroundColor:'#f8f5f5' }}>
       <Typography variant="h5" gutterBottom>
         Add Announcement
       </Typography>

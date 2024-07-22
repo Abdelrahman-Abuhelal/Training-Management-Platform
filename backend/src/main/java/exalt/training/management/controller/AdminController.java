@@ -174,4 +174,19 @@ public class AdminController {
         return ResponseEntity.ok(adminService.saveAcademicGradesToTrainee(grades, userId));
     }
 
+
+    @Operation(summary = "Get the number of active supervisors", security =  @SecurityRequirement(name = "loginAuth"))
+    @PreAuthorize("hasAnyRole('SUPER_ADMIN')")
+    @GetMapping ("/supervisors/size")
+    public ResponseEntity<Integer> getNumberOfActiveSupervisors() {
+        return ResponseEntity.ok(adminService.getNumberOfActiveSupervisors());
+    }
+
+    @Operation(summary = "Get the number of active trainees", security =  @SecurityRequirement(name = "loginAuth"))
+    @PreAuthorize("hasAnyRole('SUPER_ADMIN')")
+    @GetMapping ("/trainees/size")
+    public ResponseEntity<Integer> getNumberOfActiveTrainees() {
+        return ResponseEntity.ok(adminService.getNumberOfActiveTrainees());
+    }
+
 }

@@ -19,7 +19,7 @@ const FormsList = () => {
             formTitle: row.formTitle,
             formDescription: row.formDescription,
             questions: row.questions,
-            status:row.status
+            status: row.status
         }));
         window.location.href = `/forms/${row.userFormId}`;
     };
@@ -75,7 +75,7 @@ const FormsList = () => {
             width: 150,
             renderCell: (params) => (
                 <div style={{ display: 'flex', alignItems: 'center', height: '100%' }}>
-                    {params.value === 'FILLED' ? 
+                    {params.value === 'FILLED' ?
                         <React.Fragment>
                             <CheckCircleIcon style={{ color: 'green' }} />
                             <Typography variant="body2" style={{ marginLeft: '5px' }}>Done</Typography>
@@ -101,21 +101,21 @@ const FormsList = () => {
                     component={Link}
                     onClick={() => handleViewClick(params.row)}
                 >
-                    View 
+                    View
                 </Button>
-                }
-            
+            }
+
         }
     ];
 
     function getRowId(row) {
         return row.userFormId;
-      }
+    }
 
-      return (
-        <Paper elevation={3} style={{ margin: '3rem', padding: '1rem', backgroundColor: '#f0f0f0' }}>
-            <Typography variant="h4" gutterBottom style={{ marginBottom: '1rem', display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
-            Forms <DescriptionIcon sx={{ marginLeft: '0.5rem' }} fontSize="large" /> 
+    return (
+        <Paper elevation={3} style={{ margin: '3rem', padding: '1rem', backgroundColor: '#f8f5f5' }}>
+            <Typography className="concert-one-regular" variant='inherit' gutterBottom style={{ marginBottom: '1rem', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                Forms <DescriptionIcon sx={{ marginLeft: '0.5rem' }} fontSize="medium" />
             </Typography>
             <div style={{ height: 340, width: '100%', backgroundColor: '#ffffff', borderRadius: '5px', overflow: 'hidden' }}>
                 <DataGrid

@@ -12,6 +12,7 @@ import {
   DialogActions,
   DialogContent,
   Snackbar,
+  Paper,
   DialogTitle,
   FormControl,
   InputLabel
@@ -175,7 +176,8 @@ const TraineeProfile = () => {
   };
 
   return (
-    <Container >
+    <div style={{ padding:  "3rem" }}>
+      <Paper  sx={{ padding: '2rem' ,  backgroundColor:'#f8f5f5', alignItems:'right'}}>
       <Box mt={4}>
         <Typography variant="h6" gutterBottom>
           Trainee Information
@@ -467,7 +469,8 @@ const TraineeProfile = () => {
         </Alert>
       </Snackbar>
 
-    </Container>
+    </Paper>
+    </div>
   );
 };
 

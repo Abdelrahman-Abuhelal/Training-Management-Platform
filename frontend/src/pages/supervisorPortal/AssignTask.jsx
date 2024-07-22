@@ -26,7 +26,7 @@ import {
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-
+import TaskIcon from '@mui/icons-material/Task';
 const AssignTask = () => {
   const baseUrl = import.meta.env.VITE_PORT_URL;
   const APIkey = import.meta.env.VITE_GOOGLE_AI_KEY;
@@ -164,9 +164,9 @@ const AssignTask = () => {
 
   return (
     <div style={{ display: "flex", justifyContent: "center"}}>
-<Paper elevation={3} sx={{ p: 3, m: 6 , width: "70%", maxWidth: 1000}} >
+<Paper elevation={3} sx={{ p: 3, m: 6 , width: "70%", maxWidth: 1000, backgroundColor: '#f8f5f5'}} >
 
-      <Typography  variant="h4" sx={{ marginBottom: '2rem' }} align="center">&nbsp;&nbsp;Assign Task</Typography>
+      <Typography   className="concert-one-regular" variant='inherit'  sx={{ marginBottom: '2rem' }} align="center">&nbsp;Assign Task&nbsp;<TaskIcon fontSize="medium"/></Typography>
       <Box sx={{ display: "flex", flexWrap: "wrap", gap: 2 }}>
         <TextField
           label="Task Name"

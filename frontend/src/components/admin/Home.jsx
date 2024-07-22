@@ -1,8 +1,8 @@
 import AdminButtonAppBar from "./NavBar";
 import Overview from "./Overview.jsx";
-import PieChartForAdmin from "../charts/PieChart/index.jsx"
+// import PieChartForAdmin from "../charts/PieChart/index.jsx"
 import NavTitle from "./NavTitle.jsx";
-import { Box, useTheme, useMediaQuery } from '@mui/material';
+import { Box, useTheme, useMediaQuery, Typography } from '@mui/material';
 
 const AdminHome = () => {
   const theme = useTheme();
@@ -12,14 +12,13 @@ const AdminHome = () => {
       sx={{
         padding: isMobile ? '1rem' : '5rem',
         paddingTop: '1rem',
-        paddingBottom: '2rem',
       }}
     >
-      <NavTitle />
+      <NavTitle/>
       <Overview />
       <br></br>
-      <Box sx={{ marginTop: '1rem' }}>
-        <PieChartForAdmin />
+      <Box sx={{}}>
+        {/* <PieChartForAdmin/> */}
       </Box>
     </Box>
   );

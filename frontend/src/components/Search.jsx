@@ -23,6 +23,7 @@ const SearchComponent = ({ searchTerm, onSearchChange }) => {
       }}
       sx={{
         mb: '0.8rem',
+        
         maxWidth: isMobile ? '90%' : 'auto', // Adjust width based on screen size
         width: isMobile ? '90%' : '100%',
         height: '36px',
@@ -32,6 +33,7 @@ const SearchComponent = ({ searchTerm, onSearchChange }) => {
         },
         '& .MuiOutlinedInput-root': {
           borderRadius: '24px',
+          backgroundColor:'#fff'
         },
       }}
     />

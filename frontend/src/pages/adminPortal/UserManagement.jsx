@@ -14,7 +14,7 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import MuiAlert from '@mui/material/Alert';
 import { useTheme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
-
+import PersonAddIcon from '@mui/icons-material/PersonAdd';
 const UserManagement = () => {
   const { user } = useAuth();
   const { login_token } = user;
@@ -181,9 +181,9 @@ const UserManagement = () => {
 
   return (
     <div style={{ display: "flex", justifyContent: "center" }}>
-      <Paper elevation={3} sx={{ p: 3, m: 3, width: "90%", maxWidth: 1800 }}>
+      <Paper elevation={3} sx={{ p: 3, m: 3, width: "90%", maxWidth: 1800,  backgroundColor:'#f8f5f5' }}>
       <Toolbar sx={{ flexDirection: isMobile ? 'column' : 'row', alignItems: isMobile ?'center': 'normal', gap: isMobile ? 2 : 0 }}>
-      <Typography variant="h6" component="div" sx={{ flex: isMobile ? '1 1 100%' : '1 2 100%', textAlign: isMobile ? 'center' : 'left' }}>
+      <Typography className="concert-one-regular" variant='inherit' component="div" sx={{ flex: isMobile ? '1 1 100%' : '1 2 100%', textAlign: isMobile ? 'center' : 'left' }}>
             User Management
           </Typography>
           <SearchComponent
@@ -259,6 +259,15 @@ const UserManagement = () => {
                       Enabled
                     </TableSortLabel>
                   </TableCell>
+                  <TableCell>
+                    <TableSortLabel
+                      active={orderBy === 'userVerified'}
+                      direction={orderBy === 'userVerified' ? order : 'asc'}
+                      onClick={() => handleSort('userVerified')}
+                    >
+                      Verified
+                    </TableSortLabel>
+                  </TableCell>
                   <TableCell>Actions</TableCell>
                 </TableRow>
               </TableHead>
@@ -272,6 +281,9 @@ const UserManagement = () => {
                     <TableCell>{user.userRole}</TableCell>
                     <TableCell>
                       <Checkbox checked={user.userEnabled} disabled />
+                    </TableCell>
+                    <TableCell>
+                      <Checkbox checked={user.userVerified} disabled />
                     </TableCell>
                     <TableCell>
                       <IconButton color="primary" onClick={() => handleEdit(user)}>
@@ -290,7 +302,7 @@ const UserManagement = () => {
       </Paper>
 
       <Dialog open={open} onClose={handleClose}>
-        <DialogTitle>{currentUser ? 'Edit User' : 'Add New User'}</DialogTitle>
+      <DialogTitle>{currentUser ? 'Edit User' :  'Add New User' }  </DialogTitle>
         <DialogContent>
           <TextField
             margin="dense"

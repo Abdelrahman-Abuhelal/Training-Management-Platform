@@ -1,7 +1,59 @@
-import React from 'react';
+import React, { useState,useEffect } from 'react';
 import { Grid, Paper, Typography } from '@mui/material';
+import axios from 'axios';
+import { useAuth } from "../../provider/authProvider";
 
-function Overview() {
+const Overview =()=>{
+const [traineeSize,setTraineeSize] = useState([]);
+const [supervisorSize,setSupervisorSize] = useState([]);
+const { user } = useAuth();
+const { login_token } = user;
+const baseUrl = import.meta.env.VITE_PORT_URL;
+
+useEffect(() => {
+  traineeSizeAPI();
+  supervisorSizeAPI();
+}, []); 
+
+
+const traineeSizeAPI = async () => {
+  try {
+    const response = await axios.get(
+      `${baseUrl}/api/v1/admin/trainees/size`, {
+        headers: {
+          Authorization: `Bearer ${login_token}`
+        }
+      }
+    );
+    if (response.status === 200) {
+      const size = response.data;
+      console.log(size);
+      setTraineeSize(size);
+    }
+  } catch (error) {
+    console.error("Error:", error);
+  }
+};
+
+
+const supervisorSizeAPI = async () => {
+  try {
+    const response = await axios.get(
+      `${baseUrl}/api/v1/admin/supervisors/size`, {
+        headers: {
+          Authorization: `Bearer ${login_token}`
+        }
+      }
+    );
+    if (response.status === 200) {
+      const size = response.data;
+      console.log(size);
+      setSupervisorSize(size);
+    }
+  } catch (error) {
+    console.error("Error:", error);
+  }
+};
 
   const paperStyle = {
     padding: 20,
@@ -10,17 +62,17 @@ function Overview() {
   };
 
   return (
-    <Grid container spacing={3} sx={{ marginTop: { xs: 2, sm: 3 } }}>
+    <Grid container spacing={3} >
       <Grid item xs={12} sm={6} md={6}>
         <Paper style={paperStyle}>
           <Typography variant="h6">Active Trainees</Typography>
-          <Typography variant="h4">120</Typography>
+          <Typography variant="h4">{traineeSize}</Typography>
         </Paper>
       </Grid>
       <Grid item xs={12} sm={6} md={6}>
         <Paper style={paperStyle}>
           <Typography variant="h6">Active Supervisors</Typography>
-          <Typography variant="h4">15</Typography>
+          <Typography variant="h4">{supervisorSize}</Typography>
         </Paper>
       </Grid>
      

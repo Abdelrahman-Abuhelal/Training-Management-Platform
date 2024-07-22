@@ -232,32 +232,31 @@ const HR_Supervisors_List = () => {
 
   return (
     <div style={{ padding: isMobile ? "0.5rem" : "3rem" }}>
-      <Paper className="flex items-center justify-between mb-4" sx={{ padding: '16px' }}>
-        <Box sx={{ flex: '1 1 auto', maxWidth: isMobile ? '100%' : '33%' }}> {/* Ensure SearchComponent doesn't take all space */}
+      <Paper  sx={{ padding: '16px' ,  backgroundColor:'#f8f5f5', alignItems:'right'}}>
+        <Box sx={{ flex: '1 1 auto', maxWidth: isMobile ? '100%' : '33%' }}> 
           <SearchComponent
             searchTerm={searchTerm}
             onSearchChange={handleSearchChange}
           />
         </Box>     </Paper>
-      <Paper sx={{ border: "1px solid #ccc", mt: 2 }}>
+      <Paper sx={{ p:'1rem',  backgroundColor:'#f8f5f5' }}>
         <Grid container justifyContent="center">
 
           <Grid item xs={12} sm={6}>
             <Typography
-              variant="h5"
-              component="h2"
-              sx={{fontSize: "1.7rem", display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 'bold', mt: 3 }}
+              className="concert-one-regular" variant='inherit' 
+              sx={{fontSize: "1.7rem", display: 'flex', alignItems: 'center', justifyContent: 'center', mt: 3 }}
             >
               <Box >
-                (<PeopleOutlineIcon fontSize="large"  />)
-                Active Supervisors
+                <PeopleOutlineIcon fontSize="large"  />
+                &nbsp; Active Supervisors
               </Box>
             </Typography>
           </Grid>
 
         </Grid>
 
-        <TableContainer component={Paper} sx={{ mt: 3 }}>
+        <TableContainer component={Paper} sx={{mt:'2rem' , p:'1rem'}}>
           <Table aria-label="supervisor table" >
             <TableHead>
               <TableRow>
@@ -320,7 +319,7 @@ const HR_Supervisors_List = () => {
                       }
                       color="primary"
                     >
-                      <GroupIcon fontSize="large"
+                      View <GroupIcon fontSize="large"
                       />
                     </IconButton>
                   </TableCell>
@@ -331,7 +330,7 @@ const HR_Supervisors_List = () => {
                       onClick={() => handleDelete(item)}
                       color="secondary"
                     >
-                      <DeleteIcon fontSize="large" />
+                      <DeleteIcon fontSize="medium" />
                     </IconButton>
                   </TableCell>
                 </TableRow>

@@ -15,7 +15,7 @@ import {
   AddPhotoAlternate as AddPhotoAlternateIcon,
   Delete as DeleteIcon,
 } from "@mui/icons-material";
-
+import TopicIcon from '@mui/icons-material/Topic';
 const ResourceUploader = () => {
   const [resource, setResource] = useState({
     name: "",
@@ -49,10 +49,11 @@ const ResourceUploader = () => {
     console.log(resource);
   };
 
-  return (
-    <Paper elevation={3} sx={{ p: 4, m: 2 }}>
-        <Typography variant="h4" gutterBottom style={{ marginBottom: "1rem" }}>
-        Add New Resource
+  return (<div style={{ display: "flex", justifyContent: "center" }}>
+
+    <Paper elevation={3} sx={{ p: 3, m: 6, width: "70%", maxWidth: 1000, backgroundColor: '#f8f5f5' }} >
+      <Typography className="concert-one-regular" variant='inherit'  gutterBottom style={{ marginBottom: "1rem" }}>
+        Add New Resource <TopicIcon fontSize="medium"/>
       </Typography>
       <form onSubmit={handleSubmit}>
         <TextField
@@ -117,7 +118,8 @@ const ResourceUploader = () => {
         </Button>
       </form>
     </Paper>
-  );
+    </div>
+    );
 };
 
-export default ResourceUploader;
+    export default ResourceUploader;

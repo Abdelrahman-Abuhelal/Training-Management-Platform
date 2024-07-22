@@ -1,10 +1,11 @@
+import  {Typography } from '@mui/material';
 const NavTitle = () => {
-
+return(
 <div className="content-header">
 <div className="container-fluid">
   <div className="row mb-2">
     <div className="col-sm-6">
-      <h1 className="m-0">Admin Dashboard</h1>
+    <Typography  className="concert-one-regular" variant='inherit'>Dashboard:</Typography>
     </div>
     {/* /.col */}
     <div className="col-sm-6">
@@ -12,7 +13,7 @@ const NavTitle = () => {
         <li className="breadcrumb-item">
           <a href="#">Home</a>
         </li>
-        <li className="breadcrumb-item active">Dashboard v1</li>
+        <li className="breadcrumb-item active">Dashboard</li>
       </ol>
     </div>
     {/* /.col */}
@@ -21,7 +22,7 @@ const NavTitle = () => {
 </div>
 {/* /.container-fluid */}
 </div>
-
+);
 }
 
 export default NavTitle;

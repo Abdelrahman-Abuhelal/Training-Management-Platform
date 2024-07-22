@@ -6,6 +6,7 @@ import exalt.training.management.mapper.AppUserMapper;
 import exalt.training.management.mapper.TraineeMapper;
 import exalt.training.management.model.*;
 import exalt.training.management.model.users.AppUser;
+import exalt.training.management.model.users.AppUserRole;
 import exalt.training.management.model.users.Supervisor;
 import exalt.training.management.model.users.Trainee;
 import exalt.training.management.repository.AcademicGradesRepository;
@@ -69,6 +70,7 @@ public class AdminService {
                 .username(request.getUserUsername())
                 .role(request.getUserRole())
                 .enabled(false)
+                .verified(false)
                 .build();
         log.info("User Created: " + user.toString());
         var savedUser = appUserRepository.save(user);
@@ -87,12 +89,14 @@ public class AdminService {
 
     public void sendCompleteRegistrationEmail(AppUser user, String confirmationToken) {
         try {
+            String company_ip= "training.exalt.ps";
+            String local="localhost";
             String subject = "[Training Management System] Complete Registration!";
             String htmlContent = "<div style=\"font-family: Arial, sans-serif;\">"
                     + "<h2 style=\"color: #00449e;\">Complete Registration for Exalt Training Application</h2>"
                     + "<p>Dear " + user.getFirstName() +" "+user.getLastName()+ ",</p>"
                     + "<p>To confirm your account in the Exalt Training Application, please click the link below:</p>"
-                    + "<p><a href=\"http://192.168.40.11:5173/confirm-account/" + confirmationToken + "\" "
+                    + "<p><a href=\"http://"+local+":5173/confirm-account/" + confirmationToken + "\" "
                     + "style=\"background-color: #00449e; color: white; padding: 10px 20px; text-decoration: none; "
                     + "border-radius: 5px;\" target=\"_blank\">Complete Registration</a></p>"
                     + "<p>If you didn't request this, you can ignore this email.</p>"
@@ -310,16 +314,13 @@ public class AdminService {
         return supervisors;
     }
 
-/*    public void deleteTraineeByUsername(String username){
-        Optional<AppUser> appUser = traineeRepository.findByEmail(username);
-        if (appUser.isEmpty()){
-            String message=String.format("the trainee with the username %s  is not found",username);
-            log.info(message);
-            throw new AppUserNotFoundException(message);
-        }
-        traineeRepository.delete(appUser.get());
-        String message=String.format("the trainee with the username %s  is deleted",username);
-        log.info(message);
-    }*/
+    public Integer getNumberOfActiveSupervisors(){
+        List < AppUser> appUsers = appUserRepository.findByRole(AppUserRole.SUPERVISOR).orElseThrow(()->new AppUserNotFoundException("No Supervisors Users"));
+        return Math.toIntExact(appUsers.stream().filter(AppUser::getVerified).count());
+    }
+
+    public Integer getNumberOfActiveTrainees(){
+        List < AppUser> appUsers = appUserRepository.findByRole(AppUserRole.TRAINEE).orElseThrow(()->new AppUserNotFoundException("No Trainees Users"));
+        return Math.toIntExact(appUsers.stream().filter(AppUser::getVerified).count());    }
 
 }

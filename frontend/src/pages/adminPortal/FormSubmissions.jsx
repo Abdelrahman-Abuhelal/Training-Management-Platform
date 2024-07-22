@@ -11,6 +11,7 @@ import useMediaQuery from '@mui/material/useMediaQuery';
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import FormatListNumberedIcon from '@mui/icons-material/FormatListNumbered';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
+import FeedIcon from '@mui/icons-material/Feed';
 dayjs.extend(relativeTime);
 
 const FormSubmissions = () => {
@@ -91,14 +92,14 @@ const FormSubmissions = () => {
 
     return (
         <div style={{ display: "flex", justifyContent: "center" }}>
-            <Paper elevation={3} sx={{ p: "3%", m: "3%", width: "75%", maxWidth: 1800 }}>
+            <Paper elevation={3} sx={{ p: "3%", m: "3%", width: "75%", maxWidth: 1800 ,  backgroundColor:'#f8f5f5'}}>
                 <Button onClick={navigateBack} startIcon={<ArrowBackIcon />}>
                     Form Templates
                 </Button>
-                <Typography className="concert-one-regular" variant="h6" component="div" sx={{ flex: isMobile ? '1 1 100%' : '1 2 100%', textAlign:  'center' , marginBottom:"1rem" }}>
-                 Form Submissions
+                <Typography  className="concert-one-regular" variant='inherit'  component="div" sx={{ flex: isMobile ? '1 1 100%' : '1 2 100%', textAlign:  'center' , marginBottom:"1rem" }}>
+                 Form Submissions <FeedIcon fontSize='large'/>
                 </Typography>
-                <div style={{ height: 400, width: '100%' }}>
+                <div style={{ height: 400, width: '100%',  backgroundColor:'#fff' }}>
                     <DataGrid sx={{p:'1rem'}} rows={rows} columns={columns} pageSize={5} />
                 </div>
             </Paper>

@@ -303,13 +303,11 @@ const FormTemplates = () => {
   return (
 
     <Box sx={{ margin: '2rem auto', maxWidth: '1200px' }}>
-      <Paper sx={{ padding: '2rem', border: '0.5px solid #ccc' , backgroundColor: '#F3F7EC' }}>
+      <Paper sx={{ padding: '2rem', border: '0.5px solid #ccc' ,  backgroundColor:'#f8f5f5'}}>
         <Typography
-          variant="h5"
-          gutterBottom
+          className="concert-one-regular" variant='inherit' 
           align="center"
           sx={{
-            fontWeight: "bold",
             marginBottom: "1rem",
           }}
         >

@@ -20,6 +20,7 @@ import {
   DialogActions,
   Snackbar,
 } from "@mui/material";
+import SchoolIcon from '@mui/icons-material/School';
 import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
 import { Alert } from "@mui/material";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
@@ -76,10 +77,10 @@ const EditTrainee = () => {
     try {
       const response = await axios.get(
         `${baseUrl}/api/v1/admin/users/${userId}`, {
-          headers: {
-            Authorization: `Bearer ${login_token}`
-          }
+        headers: {
+          Authorization: `Bearer ${login_token}`
         }
+      }
       );
       if (response.status === 200) {
         const userData = response.data;
@@ -91,7 +92,7 @@ const EditTrainee = () => {
       console.error("Error:", error.message);
     }
   };
-  
+
   useEffect(() => {
     userData();
     fetchUserData();
@@ -102,10 +103,10 @@ const EditTrainee = () => {
     try {
       const response = await axios.get(
         `${baseUrl}/api/v1/admin/trainee-info/${userId}`, {
-          headers: {
-            Authorization: `Bearer ${login_token}`
-          }
+        headers: {
+          Authorization: `Bearer ${login_token}`
         }
+      }
       );
       if (response.status === 200) {
         const userData = response.data;
@@ -119,7 +120,7 @@ const EditTrainee = () => {
         setUniversityMajor(userData.universityMajor || "");
         setExpectedGraduationDate(userData.expectedGraduationDate || "");
         setExpectedGraduationYear(
-         userData.expectedGraduationDate ? userData.expectedGraduationDate.slice(0, 4) : ""
+          userData.expectedGraduationDate ? userData.expectedGraduationDate.slice(0, 4) : ""
         );
         setExpectedGraduationMonth(
           userData.expectedGraduationDate ? userData.expectedGraduationDate.slice(-2) : ""
@@ -138,10 +139,10 @@ const EditTrainee = () => {
     try {
       const response = await axios.get(
         `${baseUrl}/api/v1/admin/trainees/${userId}/grades`, {
-          headers: {
-            Authorization: `Bearer ${login_token}`
-          }
+        headers: {
+          Authorization: `Bearer ${login_token}`
         }
+      }
       );
       if (response.status === 200) {
         const fetchedCourses = response.data;
@@ -210,10 +211,10 @@ const EditTrainee = () => {
       const response = await axios.put(
         `${baseUrl}/api/v1/admin/update-trainee/${userId}`,
         formData, {
-          headers: {
-            Authorization: `Bearer ${login_token}`
-          }
+        headers: {
+          Authorization: `Bearer ${login_token}`
         }
+      }
       );
       if (response.status === 200) {
         console.log("Data updated by admin: ", response.data);
@@ -282,10 +283,10 @@ const EditTrainee = () => {
       await axios.put(
         `${baseUrl}/api/v1/admin/trainees/${userId}/grades`,
         finalCoursesObject, {
-          headers: {
-            Authorization: `Bearer ${login_token}`
-          }
+        headers: {
+          Authorization: `Bearer ${login_token}`
         }
+      }
       );
 
       console.log("Grades updated successfully");
@@ -405,400 +406,409 @@ const EditTrainee = () => {
 
   return (
     <Container maxWidth="lg">
-      <Typography
-        variant="h5"
-        gutterBottom
-        align="center"
-        sx={{
-          marginTop: "1rem",
-          color: "#1976D2",
-        }}
-      >
-        <ManageAccountsIcon fontSize="large"/>  Edit Profile 
-      </Typography>
 
-      <Button onClick={navigateBack} startIcon={<ArrowBackIcon />}>
-        Back to Trainees
-      </Button>
-      <Paper elevation={3} sx={{ p: 4, m: 6}}>
-      <form onSubmit={handleSubmit}>
-        <FormControl fullWidth>
-          <Typography  sx={{
-          marginBottom: "1rem",
-        }} align="center" variant="h6" gutterBottom>
-            {userFullName} Profile
+      <Grid container alignItems="center" spacing={2} sx={{
+        marginTop: "0.5rem"
+      }}>
+        <Grid item>
+          <Button onClick={navigateBack} startIcon={<ArrowBackIcon />}>
+            Back to Trainees
+          </Button>
+        </Grid>
+        <Grid item xs>
+          <Typography
+            className="concert-one-regular" variant='inherit' gutterBottom
+            align="center"
+            sx={{
+              color: "#1976D2",
+              marginTop: "1.5rem"
+            }}
+          >
+            <ManageAccountsIcon fontSize="large" /> Edit Profile
           </Typography>
+        </Grid>
+        <Grid item>
+          <Box display="flex" justifyContent="right" mt={2}>
+            <Button
+              variant="contained"
+              color="primary"
+              startIcon={<PictureAsPdfOutlinedIcon />}
+              size="large"
+              onClick={generatePDF}
+            >
+              Export Profile to PDF
+            </Button>
+          </Box>
+        </Grid>
+      </Grid>
+      <Paper elevation={3} sx={{ p: 3, m: 4, backgroundColor: '#e6e6fa' }} >
+        <form onSubmit={handleSubmit}>
+          <FormControl fullWidth>
+            <Typography sx={{
+              marginBottom: "2rem",
+            }} align="center" className="concert-one-regular" variant='inherit' gutterBottom>
+              {userFullName}
+            </Typography>
 
-          <Box mb={2}>
-            <TextField
-              fullWidth
-              label="Username"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-              disabled
-            />
-          </Box>
+            <Box mb={2}>
+              <TextField
+                fullWidth
+                label="Username"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                disabled
+              />
+            </Box>
 
-          <Box mb={2}>
-            <TextField
-              fullWidth
-              variant="outlined"
-              label="Full Name in Arabic (الاسم الرباعي كما في الهوية الشخصية)"
-              value={fullNameInArabic}
-              onChange={(e) => setFullNameInArabic(e.target.value)}
-              inputProps={{ dir: "rtl", lang: "ar" }}
-            />
-          </Box>
-          <Box mb={2}>
-            <FormControl fullWidth>
-              <InputLabel>Nearest City</InputLabel>
-              <Select
-                value={city}
-                onChange={(e) => setCity(e.target.value)}
-                label="Nearest City"
-              >
-                <MenuItem value=""></MenuItem>
-                <MenuItem value="Ramallah">Ramallah</MenuItem>
-                <MenuItem value="Tulkarm">Tulkarm</MenuItem>
-                <MenuItem value="Bethlehem">Bethlehem</MenuItem>
-                <MenuItem value="Nablus">Nablus</MenuItem>
-                <MenuItem value="Jerusalem">Jerusalem</MenuItem>
-                <MenuItem value="Jenin">Jenin</MenuItem>
-                <MenuItem value="Jericho">Jericho</MenuItem>
-                <MenuItem value="Hebron">Hebron</MenuItem>
-                <MenuItem value="Qalqilya">Qalqilya</MenuItem>
-                <MenuItem value="Tubas">Tubas</MenuItem>
-                <MenuItem value="Salfit">Salfit</MenuItem>
-                <MenuItem value="OTHER">Other</MenuItem>
-              </Select>
-            </FormControl>
-          </Box>
-
-          <Box mb={2}>
-            <TextField
-              fullWidth
-              variant="outlined"
-              label="Address (Village / Street name)"
-              value={address}
-              onChange={(e) => setAddress(e.target.value)}
-            />
-          </Box>
-
-          <Box mb={2}>
-            <FormControl fullWidth>
-              <InputLabel>ID Type</InputLabel>
-              <Select
-                value={idType}
-                onChange={(e) => setIdType(e.target.value)}
-                label="ID type"
-              >
-                <MenuItem value=""></MenuItem>
-                <MenuItem value="Westbank">Westbank - ضفة</MenuItem>
-                <MenuItem value="Jerusalem">Jerusalem - قدس</MenuItem>
-                <MenuItem value="Other">Other</MenuItem>
-              </Select>
-            </FormControl>
-          </Box>
-
-          <Box mb={2}>
-            <TextField
-              fullWidth
-              label="ID Number"
-              variant="outlined"
-              value={idNumber}
-              onChange={(e) => setIdNumber(e.target.value)}
-              error={!!idNumberError}
-              helperText={idNumberError}
-              inputProps={{ inputMode: "numeric" }}
-            />
-          </Box>
-
-          <Box mb={2}>
-            <TextField
-              fullWidth
-              label="Phone Number starts with '05'"
-              value={phoneNumber}
-              onChange={(e) => setPhoneNumber(e.target.value)}
-            />
-          </Box>
-
-          <Box mb={2}>
-            <FormControl fullWidth>
-              <InputLabel>University Name</InputLabel>
-              <Select
-                value={universityName}
-                onChange={(e) => setUniversityName(e.target.value)}
-                label="University Name"
-              >
-                <MenuItem value=""></MenuItem>
-                <MenuItem value="Al-Quds University">
-                  Al-Quds University
-                </MenuItem>
-                <MenuItem value="Birzeit University">
-                  Birzeit University
-                </MenuItem>
-                <MenuItem value="Bethlehem University">
-                  Bethlehem University
-                </MenuItem>
-                <MenuItem value="Al-Quds Open University">
-                  Al-Quds Open University
-                </MenuItem>
-                <MenuItem value="Arab American University">
-                  Arab American University
-                </MenuItem>
-                <MenuItem value="Hebron University">Hebron University</MenuItem>
-                <MenuItem value="Ibrahimieh College">
-                  Ibrahimieh College
-                </MenuItem>
-                <MenuItem value="Khodori Institute, Tulkarm">
-                  Khodori Institute, Tulkarm
-                </MenuItem>
-                <MenuItem value="Palestine Ahliya University">
-                  Palestine Ahliya University
-                </MenuItem>
-                <MenuItem value="Palestine Polytechnic University">
-                  Palestine Polytechnic University
-                </MenuItem>
-                <MenuItem value="Other">Other</MenuItem>
-              </Select>
-            </FormControl>
-          </Box>
-
-          <Box mb={2}>
-            <FormControl fullWidth>
-              <InputLabel>University Major</InputLabel>
-              <Select
-                value={universityMajor}
-                onChange={(e) => setUniversityMajor(e.target.value)}
-                label="University Major"
-              >
-                <MenuItem value=""></MenuItem>
-                <MenuItem value="Computer_Engineering">
-                  Computer Engineering
-                </MenuItem>
-                <MenuItem value="Computer_Science">Computer Science</MenuItem>
-                <MenuItem value="Information_Technology">
-                  Information Technology
-                </MenuItem>
-                <MenuItem value="Electrical_Engineering">
-                  Electrical Engineering
-                </MenuItem>
-                <MenuItem value="Other">Other</MenuItem>
-              </Select>
-            </FormControl>
-          </Box>
-          <Box mb={2}>
-            <Box display="flex" justifyContent="space-between">
-              <FormControl variant="outlined" style={{ width: "48%" }}>
-                <InputLabel>Graduation Year Date (expected)</InputLabel>
+            <Box mb={2}>
+              <TextField
+                fullWidth
+                variant="outlined"
+                label="Full Name in Arabic (الاسم الرباعي كما في الهوية الشخصية)"
+                value={fullNameInArabic}
+                onChange={(e) => setFullNameInArabic(e.target.value)}
+                inputProps={{ dir: "rtl", lang: "ar" }}
+              />
+            </Box>
+            <Box mb={2}>
+              <FormControl fullWidth>
+                <InputLabel>Nearest City</InputLabel>
                 <Select
-                  value={expectedGraduationYear}
-                  onChange={handleYearChange}
-                  label="Graduation Year Date (expected)"
+                  value={city}
+                  onChange={(e) => setCity(e.target.value)}
+                  label="Nearest City"
                 >
                   <MenuItem value=""></MenuItem>
-                  {[...Array(10).keys()].map((i) => (
-                    <MenuItem key={i} value={new Date().getFullYear() + i}>
-                      {new Date().getFullYear() + i}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
-              <FormControl variant="outlined" style={{ width: "48%" }}>
-                <InputLabel>Graduation Month Date (expected)</InputLabel>
-                <Select
-                  value={expectedGraduationMonth}
-                  onChange={handleMonthChange}
-                  label="Graduation Month Date (expected)"
-                >
-                  <MenuItem value=""></MenuItem>
-                  <MenuItem value="01">January</MenuItem>
-                  <MenuItem value="02">February</MenuItem>
-                  <MenuItem value="03">March</MenuItem>
-                  <MenuItem value="04">April</MenuItem>
-                  <MenuItem value="05">May</MenuItem>
-                  <MenuItem value="06">June</MenuItem>
-                  <MenuItem value="07">July</MenuItem>
-                  <MenuItem value="08">August</MenuItem>
-                  <MenuItem value="09">September</MenuItem>
-                  <MenuItem value="10">October</MenuItem>
-                  <MenuItem value="11">November</MenuItem>
-                  <MenuItem value="12">December</MenuItem>
+                  <MenuItem value="Ramallah">Ramallah</MenuItem>
+                  <MenuItem value="Tulkarm">Tulkarm</MenuItem>
+                  <MenuItem value="Bethlehem">Bethlehem</MenuItem>
+                  <MenuItem value="Nablus">Nablus</MenuItem>
+                  <MenuItem value="Jerusalem">Jerusalem</MenuItem>
+                  <MenuItem value="Jenin">Jenin</MenuItem>
+                  <MenuItem value="Jericho">Jericho</MenuItem>
+                  <MenuItem value="Hebron">Hebron</MenuItem>
+                  <MenuItem value="Qalqilya">Qalqilya</MenuItem>
+                  <MenuItem value="Tubas">Tubas</MenuItem>
+                  <MenuItem value="Salfit">Salfit</MenuItem>
+                  <MenuItem value="OTHER">Other</MenuItem>
                 </Select>
               </FormControl>
             </Box>
-          </Box>
-          <Box mb={2}>
-            <FormControl fullWidth variant="outlined">
-              <InputLabel>Branch Location</InputLabel>
-              <Select
-                value={branchLocation}
-                onChange={(e) => setBranchLocation(e.target.value)}
-                label="Branch Location"
-              >
-                <MenuItem value=""></MenuItem>
-                <MenuItem value="RAMALLAH">Ramallah</MenuItem>
-                <MenuItem value="NABLUS">Nablus</MenuItem>
-                <MenuItem value="BETHLEHEM">Bethlehem</MenuItem>
-                <MenuItem value="OTHER">Other</MenuItem>
-              </Select>
-            </FormControl>
-          </Box>
-          <Box mb={2}>
-            <FormControl fullWidth variant="outlined">
-              <InputLabel>Training Field</InputLabel>
-              <Select
-                value={trainingField}
-                onChange={(e) => setTrainingField(e.target.value)}
-                label="Training Field"
-              >
-                <MenuItem value=""></MenuItem>
-                <MenuItem value="BACKEND">Backend</MenuItem>
-                <MenuItem value="FRONTEND">Frontend</MenuItem>
-                <MenuItem value="QUALITY_ASSURANCE">Quality Assurance</MenuItem>
-                <MenuItem value="MOBILE">Mobile Development</MenuItem>
-                <MenuItem value="DevOps">DevOps</MenuItem>
-                <MenuItem value="DESIGN_VERIFICATION">
-                  Desgin Verification
-                </MenuItem>
-                <MenuItem value="Other">Other</MenuItem>
-              </Select>
-            </FormControl>
-          </Box>
-          <Box mb={2}>
-            <Button fullWidth type="submit" variant="contained" color="primary">
-              Save Details
-            </Button>
-          </Box>
-        </FormControl>
-      </form>
+
+            <Box mb={2}>
+              <TextField
+                fullWidth
+                variant="outlined"
+                label="Address (Village / Street name)"
+                value={address}
+                onChange={(e) => setAddress(e.target.value)}
+              />
+            </Box>
+
+            <Box mb={2}>
+              <FormControl fullWidth>
+                <InputLabel>ID Type</InputLabel>
+                <Select
+                  value={idType}
+                  onChange={(e) => setIdType(e.target.value)}
+                  label="ID type"
+                >
+                  <MenuItem value=""></MenuItem>
+                  <MenuItem value="Westbank">Westbank - ضفة</MenuItem>
+                  <MenuItem value="Jerusalem">Jerusalem - قدس</MenuItem>
+                  <MenuItem value="Other">Other</MenuItem>
+                </Select>
+              </FormControl>
+            </Box>
+
+            <Box mb={2}>
+              <TextField
+                fullWidth
+                label="ID Number"
+                variant="outlined"
+                value={idNumber}
+                onChange={(e) => setIdNumber(e.target.value)}
+                error={!!idNumberError}
+                helperText={idNumberError}
+                inputProps={{ inputMode: "numeric" }}
+              />
+            </Box>
+
+            <Box mb={2}>
+              <TextField
+                fullWidth
+                label="Phone Number starts with '05'"
+                value={phoneNumber}
+                onChange={(e) => setPhoneNumber(e.target.value)}
+              />
+            </Box>
+
+            <Box mb={2}>
+              <FormControl fullWidth>
+                <InputLabel>University Name</InputLabel>
+                <Select
+                  value={universityName}
+                  onChange={(e) => setUniversityName(e.target.value)}
+                  label="University Name"
+                >
+                  <MenuItem value=""></MenuItem>
+                  <MenuItem value="Al-Quds University">
+                    Al-Quds University
+                  </MenuItem>
+                  <MenuItem value="Birzeit University">
+                    Birzeit University
+                  </MenuItem>
+                  <MenuItem value="Bethlehem University">
+                    Bethlehem University
+                  </MenuItem>
+                  <MenuItem value="Al-Quds Open University">
+                    Al-Quds Open University
+                  </MenuItem>
+                  <MenuItem value="Arab American University">
+                    Arab American University
+                  </MenuItem>
+                  <MenuItem value="Hebron University">Hebron University</MenuItem>
+                  <MenuItem value="Ibrahimieh College">
+                    Ibrahimieh College
+                  </MenuItem>
+                  <MenuItem value="Khodori Institute, Tulkarm">
+                    Khodori Institute, Tulkarm
+                  </MenuItem>
+                  <MenuItem value="Palestine Ahliya University">
+                    Palestine Ahliya University
+                  </MenuItem>
+                  <MenuItem value="Palestine Polytechnic University">
+                    Palestine Polytechnic University
+                  </MenuItem>
+                  <MenuItem value="Other">Other</MenuItem>
+                </Select>
+              </FormControl>
+            </Box>
+
+            <Box mb={2}>
+              <FormControl fullWidth>
+                <InputLabel>University Major</InputLabel>
+                <Select
+                  value={universityMajor}
+                  onChange={(e) => setUniversityMajor(e.target.value)}
+                  label="University Major"
+                >
+                  <MenuItem value=""></MenuItem>
+                  <MenuItem value="Computer_Engineering">
+                    Computer Engineering
+                  </MenuItem>
+                  <MenuItem value="Computer_Science">Computer Science</MenuItem>
+                  <MenuItem value="Information_Technology">
+                    Information Technology
+                  </MenuItem>
+                  <MenuItem value="Electrical_Engineering">
+                    Electrical Engineering
+                  </MenuItem>
+                  <MenuItem value="Other">Other</MenuItem>
+                </Select>
+              </FormControl>
+            </Box>
+            <Box mb={2}>
+              <Box display="flex" justifyContent="space-between">
+                <FormControl variant="outlined" style={{ width: "48%" }}>
+                  <InputLabel>Graduation Year Date (expected)</InputLabel>
+                  <Select
+                    value={expectedGraduationYear}
+                    onChange={handleYearChange}
+                    label="Graduation Year Date (expected)"
+                  >
+                    <MenuItem value=""></MenuItem>
+                    {[...Array(10).keys()].map((i) => (
+                      <MenuItem key={i} value={new Date().getFullYear() + i}>
+                        {new Date().getFullYear() + i}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+                <FormControl variant="outlined" style={{ width: "48%" }}>
+                  <InputLabel>Graduation Month Date (expected)</InputLabel>
+                  <Select
+                    value={expectedGraduationMonth}
+                    onChange={handleMonthChange}
+                    label="Graduation Month Date (expected)"
+                  >
+                    <MenuItem value=""></MenuItem>
+                    <MenuItem value="01">January</MenuItem>
+                    <MenuItem value="02">February</MenuItem>
+                    <MenuItem value="03">March</MenuItem>
+                    <MenuItem value="04">April</MenuItem>
+                    <MenuItem value="05">May</MenuItem>
+                    <MenuItem value="06">June</MenuItem>
+                    <MenuItem value="07">July</MenuItem>
+                    <MenuItem value="08">August</MenuItem>
+                    <MenuItem value="09">September</MenuItem>
+                    <MenuItem value="10">October</MenuItem>
+                    <MenuItem value="11">November</MenuItem>
+                    <MenuItem value="12">December</MenuItem>
+                  </Select>
+                </FormControl>
+              </Box>
+            </Box>
+            <Box mb={2}>
+              <FormControl fullWidth variant="outlined">
+                <InputLabel>Branch Location</InputLabel>
+                <Select
+                  value={branchLocation}
+                  onChange={(e) => setBranchLocation(e.target.value)}
+                  label="Branch Location"
+                >
+                  <MenuItem value=""></MenuItem>
+                  <MenuItem value="RAMALLAH">Ramallah</MenuItem>
+                  <MenuItem value="NABLUS">Nablus</MenuItem>
+                  <MenuItem value="BETHLEHEM">Bethlehem</MenuItem>
+                  <MenuItem value="OTHER">Other</MenuItem>
+                </Select>
+              </FormControl>
+            </Box>
+            <Box mb={2}>
+              <FormControl fullWidth variant="outlined">
+                <InputLabel>Training Field</InputLabel>
+                <Select
+                  value={trainingField}
+                  onChange={(e) => setTrainingField(e.target.value)}
+                  label="Training Field"
+                >
+                  <MenuItem value=""></MenuItem>
+                  <MenuItem value="BACKEND">Backend</MenuItem>
+                  <MenuItem value="FRONTEND">Frontend</MenuItem>
+                  <MenuItem value="QUALITY_ASSURANCE">Quality Assurance</MenuItem>
+                  <MenuItem value="MOBILE">Mobile Development</MenuItem>
+                  <MenuItem value="DevOps">DevOps</MenuItem>
+                  <MenuItem value="DESIGN_VERIFICATION">
+                    Desgin Verification
+                  </MenuItem>
+                  <MenuItem value="Other">Other</MenuItem>
+                </Select>
+              </FormControl>
+            </Box>
+            <Box mb={2}>
+              <Button fullWidth type="submit" variant="contained" color="primary">
+                Save Details
+              </Button>
+            </Box>
+          </FormControl>
+        </form>
       </Paper>
 
-      <Paper elevation={3} sx={{ p: 4, m: 6}}>
-      <form
-        onSubmit={handleAcademicGradesSubmit}
-        style={{ paddingBottom: "1rem" }}
-      >
-        <Grid container spacing={3}>
-          <Grid item xs={12}>
-            <Typography variant="h6" align="center" gutterBottom>
-              Academic Courses and Grades
-            </Typography>
-          </Grid>
-          {courses.map((course, index) => (
-            <Grid item xs={12} key={index}>
-              <Grid
-                container
-                alignItems="center"
-                justifyContent="space-between"
-                spacing={2}
-              >
-                <Grid item xs={5}>
-                  <FormControl fullWidth>
-                    <InputLabel id={`course-label-${index}`}>
-                      Select Course
-                    </InputLabel>
-                    <Select
-                      labelId={`course-label-${index}`}
-                      id={`course-select-${index}`}
-                      label={`course-label-${index}`}
-                      value={course.course}
-                      onChange={(e) => handleCourseChange(index, e)}
+      <Paper elevation={3} sx={{ p: 4, m: 6, backgroundColor: '#e6e6fa' }}>
+        <form
+          onSubmit={handleAcademicGradesSubmit}
+          style={{ paddingBottom: "1rem" }}
+        >
+          <Grid container spacing={3}>
+            <Grid item xs={12}>
+              <Typography variant="h6" align="center" gutterBottom>
+                Academic Courses <SchoolIcon />
+              </Typography>
+            </Grid>
+            {courses.map((course, index) => (
+              <Grid item xs={12} key={index}>
+                <Grid
+                  container
+                  alignItems="center"
+                  justifyContent="space-between"
+                  spacing={2}
+                >
+                  <Grid item xs={5}>
+                    <FormControl fullWidth>
+                      <InputLabel id={`course-label-${index}`}>
+                        Select Course
+                      </InputLabel>
+                      <Select
+                        labelId={`course-label-${index}`}
+                        id={`course-select-${index}`}
+                        label={`course-label-${index}`}
+                        value={course.course}
+                        onChange={(e) => handleCourseChange(index, e)}
+                        fullWidth
+                      >
+                        <MenuItem value="">Select Course</MenuItem>
+                        <MenuItem
+                          value="TAWJEEHI"
+                          disabled={selectedCourses.includes("TAWJEEHI")}
+                        >
+                          Tawjeehi
+                        </MenuItem>
+                        <MenuItem
+                          value="UNIVERSITY_GPA"
+                          disabled={selectedCourses.includes("UNIVERSITY_GPA")}
+                        >
+                          University GPA
+                        </MenuItem>
+                        <MenuItem
+                          value="PROGRAMMING_ONE"
+                          disabled={selectedCourses.includes("PROGRAMMING_ONE")}
+                        >
+                          Programming
+                        </MenuItem>
+                        <MenuItem
+                          value="OBJECT_ORIENTED"
+                          disabled={selectedCourses.includes("OBJECT_ORIENTED")}
+                        >
+                          Object Oriented
+                        </MenuItem>
+                        <MenuItem
+                          value="DATA_STRUCTURE"
+                          disabled={selectedCourses.includes("DATA_STRUCTURE")}
+                        >
+                          Data Structure
+                        </MenuItem>
+                        <MenuItem
+                          value="DATABASE_ONE"
+                          disabled={selectedCourses.includes("DATABASE_ONE")}
+                        >
+                          Database One
+                        </MenuItem>
+                        <MenuItem
+                          value="DATABASE_TWO"
+                          disabled={selectedCourses.includes("DATABASE_TWO")}
+                        >
+                          Database Two
+                        </MenuItem>
+                        {/* Add other options here */}
+                      </Select>
+                    </FormControl>
+                  </Grid>
+                  <Grid item xs={5}>
+                    <TextField
                       fullWidth
+                      id={`grade-input-${index}`}
+                      label="Enter Grade"
+                      value={course.grade}
+                      onChange={(e) => handleGradeChange(index, e.target.value)}
+                    />
+                  </Grid>
+                  <Grid item xs={2}>
+                    <Button
+                      variant="contained"
+                      color="error"
+                      onClick={() => removeCourse(index)}
                     >
-                      <MenuItem value="">Select Course</MenuItem>
-                      <MenuItem
-                        value="TAWJEEHI"
-                        disabled={selectedCourses.includes("TAWJEEHI")}
-                      >
-                        Tawjeehi
-                      </MenuItem>
-                      <MenuItem
-                        value="UNIVERSITY_GPA"
-                        disabled={selectedCourses.includes("UNIVERSITY_GPA")}
-                      >
-                        University GPA
-                      </MenuItem>
-                      <MenuItem
-                        value="PROGRAMMING_ONE"
-                        disabled={selectedCourses.includes("PROGRAMMING_ONE")}
-                      >
-                        Programming
-                      </MenuItem>
-                      <MenuItem
-                        value="OBJECT_ORIENTED"
-                        disabled={selectedCourses.includes("OBJECT_ORIENTED")}
-                      >
-                        Object Oriented
-                      </MenuItem>
-                      <MenuItem
-                        value="DATA_STRUCTURE"
-                        disabled={selectedCourses.includes("DATA_STRUCTURE")}
-                      >
-                        Data Structure
-                      </MenuItem>
-                      <MenuItem
-                        value="DATABASE_ONE"
-                        disabled={selectedCourses.includes("DATABASE_ONE")}
-                      >
-                        Database One
-                      </MenuItem>
-                      <MenuItem
-                        value="DATABASE_TWO"
-                        disabled={selectedCourses.includes("DATABASE_TWO")}
-                      >
-                        Database Two
-                      </MenuItem>
-                      {/* Add other options here */}
-                    </Select>
-                  </FormControl>
-                </Grid>
-                <Grid item xs={5}>
-                  <TextField
-                    fullWidth
-                    id={`grade-input-${index}`}
-                    label="Enter Grade"
-                    value={course.grade}
-                    onChange={(e) => handleGradeChange(index, e.target.value)}
-                  />
-                </Grid>
-                <Grid item xs={2}>
-                  <Button
-                    variant="contained"
-                    color="error"
-                    onClick={() => removeCourse(index)}
-                  >
-                    <DeleteIcon />
-                  </Button>
+                      <DeleteIcon />
+                    </Button>
+                  </Grid>
                 </Grid>
               </Grid>
+            ))}
+            <Grid item xs={12}>
+              <Button variant="contained" color="primary" onClick={addCourse}>
+                Add Course
+              </Button>
             </Grid>
-          ))}
-          <Grid item xs={12}>
-            <Button variant="contained" color="primary" onClick={addCourse}>
-              Add Course
-            </Button>
+            <Grid item xs={12}>
+              <Button fullWidth type="submit" variant="contained" color="primary">
+                Save Academic Grades
+              </Button>
+            </Grid>
           </Grid>
-          <Grid item xs={12}>
-            <Button fullWidth type="submit" variant="contained" color="primary">
-              Save Academic Grades
-            </Button>
-          </Grid>
-        </Grid>
-      </form>
+        </form>
       </Paper>
-      <Box display="flex" justifyContent="center" mt={2}>
-        <Button
-          variant="contained"
-          color="primary"
-          startIcon={<PictureAsPdfOutlinedIcon />}
-          sx={{ mb: 7 }}
-          size="large"
-          onClick={generatePDF}
-        >
-          Export Profile to PDF
-        </Button>
-      </Box>
+
 
       <Dialog open={showDetailsConfirmation} onClose={handleCancel}>
         <DialogTitle>Confirmation</DialogTitle>

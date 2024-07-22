@@ -333,59 +333,63 @@ const TraineesList = () => {
   return (
     <div style={{ padding: isMobile ? "0.5rem" : "3rem" }}>
 
-      <Paper className="flex flex-col sm:flex-row items-center justify-between mb-4" sx={{ padding: isMobile ? '3px' : '16px' }}>
-        {/* Search Component */}
-        <div className="flex-1">
-          <Box sx={{ maxWidth: isMobile ? '100%' : '80%' }}>
-            <SearchComponent
-              searchTerm={searchTerm}
-              onSearchChange={handleSearchChange}
-            />
-          </Box>  </div>
+      <Paper sx={{ padding: isMobile ? '3px' : '16px' ,  backgroundColor:'#f8f5f5'}}>
 
-        {/* Buttons */}
-        <div className="flex flex-col sm:flex-row gap-2 mt-2 sm:mt-0 sm:ml-4">
-          <Button
-            variant="contained"
-            color="primary"
-            startIcon={<DownloadIcon />}
-            onClick={exportToExcel}
-            sx={{
-              fontSize: isMobile ? "0.55rem" : "1.0rem",
-              maxWidth: isMobile ? "8rem" : "12rem"
-            }}
-          >
-            Export As Excel
-          </Button>
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={handleAssignToSupervisor}
-            disabled={selectedTrainees.length !== 1}
-            sx={{
-              fontSize: isMobile ? "0.55rem" : "1.0rem",
-              marginTop: isMobile ? '8px' : '0',
-              maxWidth: isMobile ? "8rem" : "12rem"
-            }}
-          >
-            Assign to Supervisor
-          </Button>
+        <div>
+          <Grid container spacing={2} alignItems="center" >
+            <Grid item xs={12} md={6}>
+              <Box sx={{ width: '100%' }}>
+                <SearchComponent
+                  searchTerm={searchTerm}
+                  onSearchChange={handleSearchChange}
+                />
+              </Box>
+            </Grid>
+            <Grid item xs={12} md={3} textAlign="right">
+              <Button
+                variant="contained"
+                color="primary"
+                startIcon={<DownloadIcon />}
+                onClick={exportToExcel}
+                sx={{
+                  fontSize: isMobile ? "0.55rem" : "1.0rem",
+                  maxWidth: isMobile ? "8rem" : "12rem"
+                }}
+              >
+                Export As Excel
+              </Button>
+            </Grid>
+            <Grid item xs={12} md={3} >
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={handleAssignToSupervisor}
+                disabled={selectedTrainees.length !== 1}
+                sx={{
+                  fontSize: isMobile ? "0.55rem" : "1.0rem",
+                  marginTop: isMobile ? '8px' : '0',
+                  maxWidth: isMobile ? "8rem" : "12rem"
+                }}
+              >
+                Assign to Supervisor
+              </Button>
+            </Grid>
+          </Grid>
         </div>
       </Paper>
-      <Paper sx={{ border: "1px solid #ccc", mt: 5 }}>
+      <Paper sx={{  pt:'1rem' ,  backgroundColor:'#f8f5f5', p:'2rem'}}>
         <Typography
-          variant="h5"
-          component="h2"
+          className="concert-one-regular" variant='inherit' 
           gutterBottom
           align="center"
-          sx={{ fontSize: "1.7rem", fontWeight: "bold", mt: 2, ml: 1 }}
+          sx={{ fontSize: "1.7rem", mt: 2, ml: 1 }}
         >
           <Box display="flex" alignItems="center" justifyContent="center">
-            (<PeopleOutlineIcon fontSize="large" />)
-            Active Trainees
+            <PeopleOutlineIcon fontSize="large" />
+            &nbsp; Active Trainees
           </Box>
         </Typography>
-        <TableContainer component={Paper}>
+        <TableContainer component={Paper} sx={{mt:'2rem'}}>
           <Table aria-label="trainee table">
             <TableHead sx={{ borderBottom: "1px solid #ccc" }}>
               <TableRow>
@@ -467,7 +471,7 @@ const TraineesList = () => {
                       onClick={() => handleDelete(item)}
                       color="secondary"
                     >
-                      <DeleteIcon fontSize="large" />
+                      <DeleteIcon fontSize="medium" />
                     </IconButton>
                   </TableCell>
                 </TableRow>

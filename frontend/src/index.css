@@ -1,5 +1,6 @@
 body {
-    background-color: #faf9f9;
+    background-color: #fff;
+
   /* 
     font-family: "Acme", sans-serif;
     font-weight: 400;
@@ -17,7 +18,8 @@ body {
 
   .concert-one-regular {
     font-family: "Concert One", sans-serif;
-    font-weight: 400;
+    font-weight: 600 !important;
     font-style: normal;
+    font-size:x-large !important;
   }
   

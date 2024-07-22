@@ -82,8 +82,10 @@ public class AuthenticationService {
 
     public void sendForgotPasswordEmail(AppUser user, String token) {
         try {
+            String company_ip= "training.exalt.ps";
+            String local="localhost";
             String subject = "[Training Management System] Please reset your password";
-            String resetPasswordLink = "http://192.168.40.11:5173/forgot-password-reset/" + token;
+            String resetPasswordLink = "http://"+local+":5173/forgot-password-reset/" + token;
             String htmlContent = "<div style=\"font-family: Arial, sans-serif;\">"
                     + "<h2 style=\"color: #00449e;\">Reset Your Password</h2>"
                     + "<p>Dear " + user.getFirstName() +" "+user.getLastName()+ ",</p>"

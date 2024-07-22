@@ -70,6 +70,7 @@ public class AppUserService {
         authenticationService.checkValidPasswordMatch(newPass,confirmationPass);
         user.setPassword(passwordEncoder.encode(newPass));
         user.setEnabled(true);
+        user.setVerified(true);
         saveUser(user);
         log.info(user.getFirstName()+" account has been activated (ACTIVE)");
         return "Account has been activated";

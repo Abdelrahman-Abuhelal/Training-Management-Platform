@@ -57,6 +57,10 @@ public class AppUser implements UserDetails {
     @Column(nullable=false)
     private Boolean enabled = false;
 
+    @Column(nullable=false)
+    private Boolean verified = false;
+
+
     @Nullable
     @JsonIgnore
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)

@@ -26,6 +26,7 @@ import { useNavigate } from "react-router-dom";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import SearchIcon from "@mui/icons-material/Search";
 import SearchComponent from "../../components/Search";
+import GroupIcon from "@mui/icons-material/Group";
 
 const Supervisor_Trainees_List = () => {
   const { userId } = useParams();
@@ -134,6 +135,8 @@ const Supervisor_Trainees_List = () => {
 
   return (
     <div style={{ padding: "3rem" }}>
+      <Paper sx={{ p:'1rem',  backgroundColor:'#f8f5f5' }}>
+
       <Grid
         container
         alignItems="center"
@@ -151,8 +154,8 @@ const Supervisor_Trainees_List = () => {
           </IconButton>
         </Grid>
         <Grid item>
-          <Typography variant="h5" component="h2" gutterBottom>
-            {userFullName}'s Trainees
+          <Typography className="concert-one-regular" variant='inherit' component="h2" gutterBottom>
+            {userFullName}'s Trainees <GroupIcon fontSize="large"/>
           </Typography>
         </Grid>
         <Grid item>
@@ -161,7 +164,7 @@ const Supervisor_Trainees_List = () => {
         </Grid>
       </Grid>
 
-      <TableContainer component={Paper}>
+      <TableContainer component={Paper} sx={{mt:'2rem' , p:'1rem'}}>
         <Table aria-label="trainee table">
           <TableHead>
             <TableRow>
@@ -195,12 +198,7 @@ const Supervisor_Trainees_List = () => {
               <TableCell>
                 <Typography variant="h6">Email</Typography>
               </TableCell>
-              <TableCell>
-                <Typography variant="h6">Role</Typography>
-              </TableCell>
-              <TableCell>
-                <Typography variant="h6">Actions</Typography>
-              </TableCell>
+
             </TableRow>
           </TableHead>
           <TableBody>
@@ -218,13 +216,12 @@ const Supervisor_Trainees_List = () => {
                 <TableCell>{item.userFirstName}</TableCell>
                 <TableCell>{item.userLastName}</TableCell>
                 <TableCell>{item.userEmail}</TableCell>
-                <TableCell>{item.userRole}</TableCell>
-                <TableCell></TableCell>
               </TableRow>
             ))}
           </TableBody>
         </Table>
       </TableContainer>
+      </Paper>
       <TablePagination
         rowsPerPageOptions={[5, 10, 25]}
         component="div"
