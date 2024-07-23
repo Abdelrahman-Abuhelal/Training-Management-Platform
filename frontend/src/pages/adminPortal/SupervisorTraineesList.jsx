@@ -135,7 +135,7 @@ const Supervisor_Trainees_List = () => {
 
   return (
     <div style={{ padding: "3rem" }}>
-      <Paper sx={{ p:'1rem',  backgroundColor:'#f8f5f5' }}>
+      <Paper sx={{ p:'1rem',  backgroundColor:'#F5F7F8' }}>
 
       <Grid
         container

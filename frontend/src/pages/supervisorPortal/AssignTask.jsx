@@ -164,7 +164,7 @@ const AssignTask = () => {
 
   return (
     <div style={{ display: "flex", justifyContent: "center"}}>
-<Paper elevation={3} sx={{ p: 3, m: 6 , width: "70%", maxWidth: 1000, backgroundColor: '#f8f5f5'}} >
+<Paper elevation={3} sx={{ p: 3, m: 6 , width: "70%", maxWidth: 1000, backgroundColor: '#F5F7F8'}} >
 
       <Typography   className="concert-one-regular" variant='inherit'  sx={{ marginBottom: '2rem' }} align="center">&nbsp;Assign Task&nbsp;<TaskIcon fontSize="medium"/></Typography>
       <Box sx={{ display: "flex", flexWrap: "wrap", gap: 2 }}>
@@ -175,6 +175,7 @@ const AssignTask = () => {
           onChange={handleTaskNameChange}
           fullWidth
           required
+          sx={{backgroundColor:'#fff'}}
         />
         <FormControl fullWidth>
           <TextField
@@ -186,6 +187,7 @@ const AssignTask = () => {
             value={taskDescription}
             onChange={handleTaskDescriptionChange}
             required
+            sx={{backgroundColor:'#fff'}}
             />
         </FormControl>
         <FormControl fullWidth>
@@ -195,7 +197,8 @@ const AssignTask = () => {
               value={deadline}
               onChange={handleDeadlineChange}
               renderInput={(params) => <TextField {...params} />}
-            />
+              sx={{backgroundColor:'#fff'}}
+/>
           </LocalizationProvider>
         </FormControl>
         <Button
@@ -213,7 +216,8 @@ const AssignTask = () => {
           value={aiResponse}
           onChange={(e) => setResponse(e.target.value)}
           fullWidth
-        />
+          sx={{backgroundColor:'#fff'}}
+          />
       </Box>
       <Typography variant="h6" sx={{ mt: 2 }}>
         Trainee Selection

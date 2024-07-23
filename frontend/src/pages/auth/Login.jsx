@@ -84,7 +84,7 @@ const Login = () => {
             />
           </Box>
 
-          <Typography variant="h4" component="h1" mt={2}>
+          <Typography className="concert-one-regular" variant='inherit' component="h1" mt={2}>
             Login Page
           </Typography>
         </Box>

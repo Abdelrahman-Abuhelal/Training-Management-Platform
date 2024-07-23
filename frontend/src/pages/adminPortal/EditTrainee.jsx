@@ -138,7 +138,7 @@ const EditTrainee = () => {
   const fetchUserCourses = async () => {
     try {
       const response = await axios.get(
-        `${baseUrl}/api/v1/admin/trainees/${userId}/grades`, {
+        `${baseUrl}/api/v1/academic-courses/trainees/${userId}`, {
         headers: {
           Authorization: `Bearer ${login_token}`
         }
@@ -281,7 +281,7 @@ const EditTrainee = () => {
       }, {});
 
       await axios.put(
-        `${baseUrl}/api/v1/admin/trainees/${userId}/grades`,
+        `${baseUrl}/api/v1/academic-courses/trainees/${userId}`,
         finalCoursesObject, {
         headers: {
           Authorization: `Bearer ${login_token}`
@@ -372,7 +372,7 @@ const EditTrainee = () => {
   const generatePDF = () => {
     const doc = new jsPDF();
 
-    doc.text(username + " Details", 14, 20);
+    doc.text(userFullName + " Details", 14, 20);
     autoTable(doc, {
       startY: 25,
       head: [["Field", "Value"]],
@@ -394,7 +394,7 @@ const EditTrainee = () => {
     });
 
     doc.addPage();
-    doc.text(username + " Taken Courses and Grades", 14, 20);
+    doc.text("Courses and Grades", 14, 20);
     autoTable(doc, {
       startY: 25,
       head: [["Course", "Grade"]],
@@ -441,7 +441,7 @@ const EditTrainee = () => {
           </Box>
         </Grid>
       </Grid>
-      <Paper elevation={3} sx={{ p: 3, m: 4, backgroundColor: '#e6e6fa' }} >
+      <Paper elevation={3} sx={{ p: 3, m: 4,  backgroundColor:'#F5F7F8' }} >
         <form onSubmit={handleSubmit}>
           <FormControl fullWidth>
             <Typography sx={{
@@ -695,14 +695,14 @@ const EditTrainee = () => {
         </form>
       </Paper>
 
-      <Paper elevation={3} sx={{ p: 4, m: 6, backgroundColor: '#e6e6fa' }}>
+      <Paper elevation={3} sx={{ p: 4, m: 6,  backgroundColor:'#F5F7F8' }}>
         <form
           onSubmit={handleAcademicGradesSubmit}
           style={{ paddingBottom: "1rem" }}
         >
           <Grid container spacing={3}>
             <Grid item xs={12}>
-              <Typography variant="h6" align="center" gutterBottom>
+              <Typography  className="concert-one-regular" variant='inherit' align="center" gutterBottom>
                 Academic Courses <SchoolIcon />
               </Typography>
             </Grid>

@@ -181,7 +181,7 @@ const UserManagement = () => {
 
   return (
     <div style={{ display: "flex", justifyContent: "center" }}>
-      <Paper elevation={3} sx={{ p: 3, m: 3, width: "90%", maxWidth: 1800,  backgroundColor:'#f8f5f5' }}>
+      <Paper elevation={3} sx={{ p: 3, m: 3, width: "90%", maxWidth: 1800,  backgroundColor:'#F5F7F8' }}>
       <Toolbar sx={{ flexDirection: isMobile ? 'column' : 'row', alignItems: isMobile ?'center': 'normal', gap: isMobile ? 2 : 0 }}>
       <Typography className="concert-one-regular" variant='inherit' component="div" sx={{ flex: isMobile ? '1 1 100%' : '1 2 100%', textAlign: isMobile ? 'center' : 'left' }}>
             User Management
@@ -356,7 +356,7 @@ const UserManagement = () => {
               <MenuItem value="SUPER_ADMIN">Admin</MenuItem>
             </Select>
           </FormControl>
-          {currentUser && (
+          {currentUser && currentUser.userVerified===true && (
             <FormControlLabel
               control={
                 <Checkbox

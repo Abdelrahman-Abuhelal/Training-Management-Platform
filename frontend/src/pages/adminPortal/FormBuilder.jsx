@@ -124,7 +124,7 @@ const FormBuilder = () => {
             label={`Option ${optionIndex + 1}`}
             value={option}
             onChange={(e) => handleOptionChange(questionIndex, optionIndex, e)}
-            sx={{ marginBottom: 2, width: "60%" }}
+            sx={{ marginBottom: 2, width: "60%",backgroundColor:'#FFF'  }}
           />
           <IconButton
             onClick={() => handleRemoveOption(questionIndex, optionIndex)}
@@ -155,14 +155,14 @@ const FormBuilder = () => {
     <div style={{ display: "flex", justifyContent: "center" }}>
      
       <Paper elevation={3} sx={{ p: isMobile?2:4, m:isMobile?1: 6, width: isMobile?"90%":"75%", maxWidth: 1100 ,  backgroundColor:'#e6e6fa'}}>
-       <Button   onClick={navigateBack} startIcon={<ArrowBackIcon />}>
+       <Button  variant="outlined" onClick={navigateBack} startIcon={<ArrowBackIcon />}>
         Form Templates
       </Button>
         <Typography align="center" variant="h4" gutterBottom>
          EXALT Form Builder <DrawIcon fontSize="large"/>
         </Typography>
         <br />
-        <Typography align="center" variant="h6" gutterBottom>
+        <Typography  align="center" variant="h6" gutterBottom>
           Create any needed form by filling the required fields.
         </Typography>
         <br />
@@ -173,7 +173,7 @@ const FormBuilder = () => {
             error={!!errors.title}
             helperText={errors.title?.message}
             onChange={handleInputChange}
-            sx={{ marginBottom: 2 }}
+            sx={{ marginBottom: 3,backgroundColor:'#FFF' }}
             fullWidth
           />
           <TextField
@@ -184,7 +184,7 @@ const FormBuilder = () => {
             error={!!errors.description}
             helperText={errors.description?.message}
             onChange={handleInputChange}
-            sx={{ marginBottom: 2 }}
+            sx={{ marginBottom: 3,backgroundColor:'#FFF' }}
             fullWidth
           />
                   <br />
@@ -199,9 +199,9 @@ const FormBuilder = () => {
                   updatedQuestions[questionIndex].question = e.target.value;
                   setFormData({ ...formData, questions: updatedQuestions });
                 }}
-                sx={{ marginBottom: 2, width: "100%" }}
+                sx={{ marginBottom: 3, width: "100%",backgroundColor:'#FFF'  }}
               />
-              <FormControl sx={{ marginBottom: 2, width: "100%" }}>
+              <FormControl sx={{ marginBottom: 3, width: "100%" ,backgroundColor:'#FFF' }}>
                 <InputLabel id={`question-type-label-${questionIndex}`}>
                   Type of Question
                 </InputLabel>
@@ -234,9 +234,12 @@ const FormBuilder = () => {
               <IconButton onClick={() => handleRemoveQuestion(questionIndex)}>
                 <DeleteIcon />
               </IconButton>
+              <br />                  <br />
+
             </div>
+            
           ))}
-          <Button onClick={handleAddQuestion} variant="outlined" sx={{ mt: 2 }}>
+          <Button onClick={handleAddQuestion} variant="outlined" sx={{ mt: 2 ,backgroundColor:'#FFF' }}>
             Add Question
           </Button>
           <Button type="submit" variant="contained" sx={{ mt: 2, ml:isMobile? 0.5: 2 }}>

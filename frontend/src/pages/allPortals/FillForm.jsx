@@ -220,7 +220,7 @@ const FillForm = () => {
   };
 
   return (
-    <Paper elevation={3} style={{ margin: '3rem', padding: '1rem', backgroundColor: '#f8f5f5' }}>
+    <Paper elevation={3} style={{ margin: '3rem', padding: '1rem', backgroundColor: '#F5F7F8' }}>
       <Button sx={{ mt: "2rem" }} onClick={() => {
         navigate(`/forms/`);
       }} startIcon={<ArrowBackIcon />}>
@@ -233,9 +233,9 @@ const FillForm = () => {
             Form Submitted
           </Typography>
         </Box>
-      )}<Paper elevation={3} sx={{ p: 3, m: "2rem" , backgroundColor: '#f8f5f5' }}>
+      )}<Paper elevation={3} sx={{ p: 3, m: "2rem" , backgroundColor: '#FFF' }}>
         <Typography className="concert-one-regular" variant='inherit' align="center" gutterBottom sx={{ mb: "2rem" }}>
-          <strong>{formData.formTitle} Form</strong>
+          <strong>{formData.formTitle}</strong>
         </Typography>
         <Typography variant="subtitle1" gutterBottom sx={{ m: "1rem" }}>
           <strong>Description:</strong> {formData.formDescription}

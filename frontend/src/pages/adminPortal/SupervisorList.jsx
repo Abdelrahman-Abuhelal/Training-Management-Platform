@@ -232,14 +232,14 @@ const HR_Supervisors_List = () => {
 
   return (
     <div style={{ padding: isMobile ? "0.5rem" : "3rem" }}>
-      <Paper  sx={{ padding: '16px' ,  backgroundColor:'#f8f5f5', alignItems:'right'}}>
+      <Paper  sx={{ padding: '16px' ,  backgroundColor:'#F5F7F8', alignItems:'right'}}>
         <Box sx={{ flex: '1 1 auto', maxWidth: isMobile ? '100%' : '33%' }}> 
           <SearchComponent
             searchTerm={searchTerm}
             onSearchChange={handleSearchChange}
           />
         </Box>     </Paper>
-      <Paper sx={{ p:'1rem',  backgroundColor:'#f8f5f5' }}>
+      <Paper sx={{ p:'1rem',  backgroundColor:'#F5F7F8' }}>
         <Grid container justifyContent="center">
 
           <Grid item xs={12} sm={6}>

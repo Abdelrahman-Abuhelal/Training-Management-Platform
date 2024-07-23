@@ -101,7 +101,7 @@ const Supervisor_Trainees_List = () => {
   const getRowId = (row) => row.id; // Function to get the id for each row
   return (
     <div style={{ display: "flex", justifyContent: "center" }}>
-      <Paper elevation={3} sx={{ p: "3%", m: "3%", width: "75%", maxWidth: 1800, backgroundColor: '#f8f5f5' }}>
+      <Paper elevation={3} sx={{ p: "3%", m: "3%", width: "75%", maxWidth: 1800, backgroundColor: '#F5F7F8' }}>
         <Grid container alignItems="center">
           <Grid item xs={isMobile ? 6 : 3} style={{ textAlign: "left" }}>
             <SearchComponent searchTerm={searchTerm} onSearchChange={setSearchTerm} />

@@ -27,7 +27,13 @@ public class FormController {
 
     private final FormService formService;
 
-
+    @GetMapping("")
+    @Operation(summary = "Get User Forms", security =  @SecurityRequirement(name = "loginAuth"))
+    @PreAuthorize("hasAnyRole('TRAINEE','SUPERVISOR','SUPER_ADMIN')")
+    public ResponseEntity<List<UserFormStatusDto>> getMyForms() {
+        List<UserFormStatusDto> forms = formService.getMyForms();
+        return ResponseEntity.ok(forms);
+    }
     @PostMapping( "/create-form")
     @PreAuthorize("hasAnyRole('SUPERVISOR','SUPER_ADMIN')")
     @Operation(summary = "Create Form by Admin" , security =  @SecurityRequirement(name = "loginAuth"))
@@ -42,7 +48,7 @@ public class FormController {
         return ResponseEntity.ok(formService.deleteForm(formId));
     }
 
-    @GetMapping()
+    @GetMapping("/all")
     @PreAuthorize("hasAnyRole('SUPER_ADMIN')")
     @Operation(summary = "Get All Forms (Admin Only)" , security =  @SecurityRequirement(name = "loginAuth"))
     public ResponseEntity <List<FormDto>> getAllForms() {
@@ -50,7 +56,6 @@ public class FormController {
             return ResponseEntity.ok(formService.getAllForms());
         } catch (Exception e) {
             String errorMessage = "Error retrieving forms: " + e.getMessage();
-            // Log the error
             log.error(errorMessage, e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);        }
     }

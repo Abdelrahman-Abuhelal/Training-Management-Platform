@@ -70,14 +70,6 @@ public class AuthenticationController {
             return ResponseEntity.badRequest().build();
         }
     }
-//    @Operation(summary = "Refresh Your Token")
-//    @PostMapping("/refresh-token")
-//    public void refreshToken(
-//            HttpServletRequest request,
-//            HttpServletResponse response
-//    ) throws IOException {
-//        authService.refreshToken(request, response);
-//    }
 
 
     @Operation(summary = "Complete Your Registration (Confirmation-Token Required)", security =  @SecurityRequirement(name = "confirmationAuth") )

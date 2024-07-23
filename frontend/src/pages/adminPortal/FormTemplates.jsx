@@ -156,7 +156,7 @@ const FormTemplates = () => {
   };
 
   const fetchFormTemplates = () => {
-    axios.get(`${baseUrl}/api/v1/forms`, {
+    axios.get(`${baseUrl}/api/v1/forms/all`, {
       headers: {
         Authorization: `Bearer ${login_token}`
       }
@@ -303,7 +303,7 @@ const FormTemplates = () => {
   return (
 
     <Box sx={{ margin: '2rem auto', maxWidth: '1200px' }}>
-      <Paper sx={{ padding: '2rem', border: '0.5px solid #ccc' ,  backgroundColor:'#f8f5f5'}}>
+      <Paper sx={{ padding: '2rem', border: '0.5px solid #ccc' ,  backgroundColor:'#F5F7F8'}}>
         <Typography
           className="concert-one-regular" variant='inherit' 
           align="center"
@@ -314,7 +314,7 @@ const FormTemplates = () => {
           <FactCheckIcon fontSize="large" sx={{mr:'0.3rem'}}/> EXALT Form Templates
         </Typography>
         <Box sx={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '1rem' }}>
-          <Button variant="outlined"  onClick={formBuilderPage} startIcon={<AddIcon />}>
+          <Button variant="primary" sx={{backgroundColor:'#fff',border: '2px solid #ccc'}} onClick={formBuilderPage} startIcon={<AddIcon />}>
             Create new Form
           </Button>
         </Box>                

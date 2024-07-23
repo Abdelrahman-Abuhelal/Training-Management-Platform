@@ -25,7 +25,6 @@ public class AdminController {
 
 
     private final AdminService adminService;
-    private final AcademicGradesService academicGradesService;
 
     @Operation(summary = "Create User, Using Secret Header API only ", security =  @SecurityRequirement(name = "apiKey"))
     @PostMapping("/create-user-secret")
@@ -125,7 +124,7 @@ public class AdminController {
     }
 
 
-    @Operation(summary = "Get Trainee By Id", security =  @SecurityRequirement(name = "loginAuth"))
+    @Operation(summary = "Get Trainee Profile By Id", security =  @SecurityRequirement(name = "loginAuth"))
     @PreAuthorize("hasAnyRole('SUPER_ADMIN','SUPERVISOR')")
     @GetMapping("/trainees/{id}")
     public ResponseEntity<Trainee> getTraineeProfileInfoByTraineeId(@PathVariable Long id){
@@ -150,29 +149,6 @@ public class AdminController {
     }
 
 
-    // Should add authorization to this endpoint for only SUPER_ADMIN
-    @Operation(summary = "Get All Academic Grades", security =  @SecurityRequirement(name = "loginAuth"))
-    @PreAuthorize("hasAnyRole('SUPER_ADMIN','SUPERVISOR')")
-    @GetMapping("/trainees/grades/all")
-    public ResponseEntity<List<AcademicGrades>> getAllAcademicGrades() {
-        List <AcademicGrades> academicGrades =  academicGradesService.getAllAcademicGrades();
-        return new ResponseEntity<>(academicGrades, HttpStatus.OK);
-    }
-
-    @PreAuthorize("hasAnyRole('SUPER_ADMIN','SUPERVISOR')")
-    @GetMapping("/trainees/{userId}/grades")
-    public ResponseEntity<List<AcademicGrades>> getAcademicGradesForTrainee(@PathVariable Long userId) {
-        List<AcademicGrades> academicGrades =  adminService.getAcademicGradesForTrainee(userId);
-        return new ResponseEntity<>(academicGrades, HttpStatus.OK);
-    }
-
-
-    @Operation(summary = "Save Academic Grades for a trainee using UserId", security =  @SecurityRequirement(name = "loginAuth"))
-    @PreAuthorize("hasAnyRole('SUPER_ADMIN','SUPERVISOR')")
-    @PutMapping ("/trainees/{userId}/grades")
-    public ResponseEntity<String> saveAcademicGradesToTrainee(@RequestBody Map<String, Double> grades, @PathVariable Long userId) {
-        return ResponseEntity.ok(adminService.saveAcademicGradesToTrainee(grades, userId));
-    }
 
 
     @Operation(summary = "Get the number of active supervisors", security =  @SecurityRequirement(name = "loginAuth"))

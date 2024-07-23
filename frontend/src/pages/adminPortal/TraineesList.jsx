@@ -333,7 +333,7 @@ const TraineesList = () => {
   return (
     <div style={{ padding: isMobile ? "0.5rem" : "3rem" }}>
 
-      <Paper sx={{ padding: isMobile ? '3px' : '16px' ,  backgroundColor:'#f8f5f5'}}>
+      <Paper sx={{ padding: isMobile ? '3px' : '16px' ,  backgroundColor:'#F5F7F8'}}>
 
         <div>
           <Grid container spacing={2} alignItems="center" >
@@ -377,7 +377,7 @@ const TraineesList = () => {
           </Grid>
         </div>
       </Paper>
-      <Paper sx={{  pt:'1rem' ,  backgroundColor:'#f8f5f5', p:'2rem'}}>
+      <Paper sx={{  pt:'1rem' ,  backgroundColor:'#F5F7F8', p:'2rem'}}>
         <Typography
           className="concert-one-regular" variant='inherit' 
           gutterBottom

@@ -27,7 +27,6 @@ public class AppUserController {
 
     private final AppUserService appUserService;
 
-    private final FormService formService;
 
 
 
@@ -39,13 +38,7 @@ public class AppUserController {
         return ResponseEntity.ok(appUserService.changePassword(changePasswordRequest));
     }
 
-    @Operation(summary = "Get User Forms", security =  @SecurityRequirement(name = "loginAuth"))
-    @GetMapping("/forms")
-    @PreAuthorize("hasAnyRole('TRAINEE','SUPERVISOR','SUPER_ADMIN')")
-    public ResponseEntity<List<UserFormStatusDto>> getMyForms() {
-        List<UserFormStatusDto> forms = formService.getMyForms();
-        return ResponseEntity.ok(forms);
-    }
+
 
 
     // i want to create a endpoint to take object and add it to the trainee table, and use the login token to find the user who is in the system

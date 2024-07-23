@@ -5,7 +5,7 @@ return(
 <div className="container-fluid">
   <div className="row mb-2">
     <div className="col-sm-6">
-    <Typography  className="concert-one-regular" variant='inherit'>Dashboard:</Typography>
+    <Typography  className="concert-one-regular" variant='inherit'>Admin Dashboard:</Typography>
     </div>
     {/* /.col */}
     <div className="col-sm-6">

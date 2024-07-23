@@ -149,7 +149,7 @@ const FormTemplatePage = () => {
             onChange={(e) =>
               handleOptionChange(questionIndex, optionIndex, e)
             }
-            sx={{ marginBottom: 2, width: "60%" }}
+            sx={{ marginBottom: 2, width: "60%",backgroundColor:'#FFF' }}
           />
           <IconButton
             onClick={() => handleRemoveOption(questionIndex, optionIndex)}
@@ -163,7 +163,7 @@ const FormTemplatePage = () => {
 
   return (
     <div style={{ display: "flex", justifyContent: "center" }}>
-      <Paper elevation={3} sx={{ p: isMobile ? 2 : 4, m: isMobile ? 1 : 6, width: isMobile ? "90%" : "75%", maxWidth: 1100 }}>
+      <Paper elevation={3} sx={{ p: isMobile ? 2 : 4, m: isMobile ? 1 : 6, width: isMobile ? "90%" : "75%", maxWidth: 1100, backgroundColor:'#F5F7F8' }}>
         <Button sx={{ mb: 4 }} onClick={() => {
           navigate(`/form-templates/`);
         }} startIcon={<ArrowBackIcon />}>
@@ -180,7 +180,7 @@ const FormTemplatePage = () => {
             error={!!errors.title}
             helperText={errors.title?.message || ""}
             onChange={handleInputChange}
-            sx={{ marginBottom: 2 }}
+            sx={{ marginBottom: 3,backgroundColor:'#FFF' }}
             fullWidth
           />
           <TextField
@@ -190,7 +190,7 @@ const FormTemplatePage = () => {
             error={!!errors.description}
             helperText={errors.description?.message || ""}
             onChange={handleInputChange}
-            sx={{ marginBottom: 2 }}
+            sx={{ marginBottom: 3,backgroundColor:'#FFF' }}
             fullWidth
           />
           <br />
@@ -206,9 +206,9 @@ const FormTemplatePage = () => {
                   updatedQuestions[questionIndex].question = e.target.value;
                   setFormData({ ...formData, questions: updatedQuestions });
                 }}
-                sx={{ marginBottom: 2, width: "100%" }}
+                sx={{ marginBottom: 3,backgroundColor:'#FFF', width: "100%"  }}
               />
-              <FormControl sx={{ marginBottom: 2, width: "100%" }}>
+              <FormControl sx={{ marginBottom: 2, width: "100%" ,backgroundColor:'#FFF'}}>
                 <InputLabel id={`question-type-label-${questionIndex}`}>
                   Type of Question
                 </InputLabel>

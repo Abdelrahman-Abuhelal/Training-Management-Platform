@@ -177,8 +177,8 @@ const TraineeProfile = () => {
 
   return (
     <div style={{ padding:  "3rem" }}>
-      <Paper  sx={{ padding: '2rem' ,  backgroundColor:'#f8f5f5', alignItems:'right'}}>
-      <Box mt={4}>
+      <Paper  sx={{ padding: '2rem' , backgroundColor: '#F5F7F8', alignItems:'right'}}>
+      <Box mt={1}>
         <Typography variant="h6" gutterBottom>
           Trainee Information
         </Typography>
@@ -186,8 +186,8 @@ const TraineeProfile = () => {
           This page will be shown for HR, remember to add all details.
         </Typography>
       </Box>
-      <form onSubmit={handleSubmit}>
-        <Box mb={2}>
+      <form onSubmit={handleSubmit} >
+        <Box mb={2}  mt={5}>
           <TextField
             fullWidth
             variant="outlined"

@@ -14,11 +14,15 @@ import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import SpaceDashboardIcon from '@mui/icons-material/SpaceDashboard';
 import GroupAddIcon from '@mui/icons-material/GroupAdd';
 import ListAltIcon from '@mui/icons-material/ListAlt';
-
+import CampaignIcon from '@mui/icons-material/Campaign';
 import SettingsIcon from '@mui/icons-material/Settings';
+import TaskAltIcon from '@mui/icons-material/TaskAlt';
+
 const routes = [
   { path: '/dashboard', name: 'Dashboard', icon: <SpaceDashboardIcon /> },
   { path: '/profile', name: 'Profile', icon: <AccountCircleIcon /> },
+  { path: '/announcements', name: 'Announcements', icon: <CampaignIcon /> },
+  { path: '/tasks', name: 'Tasks', icon: <TaskAltIcon /> },
   { path: '/forms', name: 'Forms', icon: <ListAltIcon /> },
   { path: '/change-password', name: 'Settings', icon: <SettingsIcon /> }
 

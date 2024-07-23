@@ -104,7 +104,7 @@ const ChangePassword = () => {
         <Container component="main" maxWidth="xs">
             <CssBaseline />
             <Box display="flex" flexDirection="column" justifyContent="center" alignItems="center" minHeight="100vh">
-                <Paper elevation={3} sx={{ p: isMobile ? 1:3, width: isMobile ? '70%' : '150%',  backgroundColor:'#f8f5f5' }}>
+                <Paper elevation={3} sx={{ p: isMobile ? 1:3, width: isMobile ? '70%' : '150%', backgroundColor: '#F5F7F8' }}>
                     <Box display="flex" flexDirection="column" alignItems="center">
                         <Avatar sx={{ m: 1, bgcolor: 'black' }}>
                             <LockOutlinedIcon />
@@ -122,6 +122,7 @@ const ChangePassword = () => {
                                 id="currentPassword"
                                 value={currentPassword}
                                 onChange={(e) => setCurrentPassword(e.target.value)}
+                                sx={{backgroundColor:'#fff'}}
                                 autoFocus
                             />
                             <TextField
@@ -132,6 +133,7 @@ const ChangePassword = () => {
                                 type="password"
                                 id="newPassword"
                                 value={newPassword}
+                                sx={{backgroundColor:'#fff'}}
                                 onChange={(e) => setNewPassword(e.target.value)}
                             />
                             <TextField
@@ -142,6 +144,7 @@ const ChangePassword = () => {
                                 type="password"
                                 id="confirmationPassword"
                                 value={confirmationPassword}
+                                sx={{backgroundColor:'#fff'}}
                                 onChange={(e) => setConfirmationPassword(e.target.value)}
                             />
                             <Button

@@ -17,7 +17,7 @@ import {
 } from "@mui/icons-material";
 import { useTheme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
-
+import NotificationAddIcon from '@mui/icons-material/NotificationAdd';
 const AnnouncementForm = () => {
   const [announcement, setAnnouncement] = useState({
     name: "",
@@ -55,8 +55,8 @@ const AnnouncementForm = () => {
   return (
     <div style={{ display: "flex", justifyContent: "center" }}>
  <Paper elevation={3} sx={{ p: isMobile?'4%': '3%', m: isMobile?'5%':'5%' ,width:isMobile?'90%':'70%',  backgroundColor:'#f8f5f5' }}>
-      <Typography variant="h5" gutterBottom>
-        Add Announcement
+      <Typography className="concert-one-regular" variant='inherit' gutterBottom>
+        Add Announcement <NotificationAddIcon/>
       </Typography>
       <form onSubmit={handleSubmit}>
         <TextField
