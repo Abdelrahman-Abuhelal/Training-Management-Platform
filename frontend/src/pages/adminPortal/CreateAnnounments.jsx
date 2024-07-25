@@ -54,7 +54,7 @@ const AnnouncementForm = () => {
 
   return (
     <div style={{ display: "flex", justifyContent: "center" }}>
- <Paper elevation={3} sx={{ p: isMobile?'4%': '3%', m: isMobile?'5%':'5%' ,width:isMobile?'90%':'70%',  backgroundColor:'#f8f5f5' }}>
+ <Paper elevation={3} sx={{ p: isMobile?'4%': '3%', m: isMobile?'5%':'5%' ,width:isMobile?'90%':'70%',  backgroundColor:'#F5F7F8' }}>
       <Typography className="concert-one-regular" variant='inherit' gutterBottom>
         Add Announcement <NotificationAddIcon/>
       </Typography>
@@ -67,7 +67,8 @@ const AnnouncementForm = () => {
           value={announcement.name}
           onChange={handleInputChange}
           required
-        />
+          sx={{backgroundColor:'#fff'}}
+          />
         <TextField
           fullWidth
           margin="normal"
@@ -78,7 +79,8 @@ const AnnouncementForm = () => {
           multiline
           rows={4}
           required
-        />
+          sx={{backgroundColor:'#fff'}}
+/>
         <Box display="flex" alignItems="center" mt={2}>
           <input
             accept=".png, .jpg, .jpeg"

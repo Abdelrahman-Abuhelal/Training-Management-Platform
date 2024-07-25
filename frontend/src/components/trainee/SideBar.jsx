@@ -19,12 +19,12 @@ import SettingsIcon from '@mui/icons-material/Settings';
 import TaskAltIcon from '@mui/icons-material/TaskAlt';
 
 const routes = [
-  { path: '/dashboard', name: 'Dashboard', icon: <SpaceDashboardIcon /> },
-  { path: '/profile', name: 'Profile', icon: <AccountCircleIcon /> },
-  { path: '/forms', name: 'Forms', icon: <ListAltIcon /> },
-  { path: '/tasks', name: 'Tasks', icon: <TaskAltIcon /> },
-  { path: '/announcements', name: 'Announcements', icon: <CampaignIcon /> },
-  { path: '/change-password', name: 'Settings', icon: <SettingsIcon /> }
+  { path: '/dashboard', name: 'Dashboard', icon: <SpaceDashboardIcon sx={{ color: 'primary.main' }}/> },
+  { path: '/profile', name: 'Profile', icon: <AccountCircleIcon sx={{ color: 'primary.main' }}/> },
+  { path: '/forms', name: 'Forms', icon: <ListAltIcon sx={{ color: 'primary.main' }}/> },
+  { path: '/tasks', name: 'Tasks', icon: <TaskAltIcon sx={{ color: 'primary.main' }}/> },
+  { path: '/announcements', name: 'Announcements', icon: <CampaignIcon sx={{ color: 'primary.main' }}/> },
+  { path: '/change-password', name: 'Settings', icon: <SettingsIcon sx={{ color: 'primary.main' }}/> }
 
 ];
 

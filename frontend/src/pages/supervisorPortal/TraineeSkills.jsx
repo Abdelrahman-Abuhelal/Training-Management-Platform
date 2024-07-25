@@ -18,8 +18,10 @@ import {
 import DeleteIcon from '@mui/icons-material/Delete';
 import { useAuth } from "../../provider/authProvider";
 import { useParams } from "react-router-dom";
+import StarsIcon from '@mui/icons-material/Stars';
+import StarRateIcon from '@mui/icons-material/StarRate';
 
-// Define skill categories
+
 const skillCategories = [
   "PROGRAMMING_LANGUAGES",
   "TECHNOLOGIES",
@@ -27,7 +29,7 @@ const skillCategories = [
   "SOFT_SKILLS"
 ];
 
-// Define proficiency levels and their background colors
+
 const proficiencyLevels = {
   GOOD: "#d4edda", // light green
   VERY_GOOD: "#c3e6cb", // green
@@ -77,7 +79,9 @@ const TraineeSkills = ({ traineeId }) => {
           Authorization: `Bearer ${login_token}`
         }
       });
-      const savedSkills = response.data;
+      console.log(response.data);
+
+      const savedSkills = response.data.skills;
       const initialSelectedSkills = {
         PROGRAMMING_LANGUAGES: [],
         TECHNOLOGIES: [],
@@ -163,12 +167,11 @@ const TraineeSkills = ({ traineeId }) => {
   const handleSnackbarClose = () => {
     setSnackbarOpen(false);
   };
-
   return (
     <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '100vh', marginTop:'2rem',marginBottom:'4rem' }}>
       <Paper elevation={3} sx={{ p: 3, width: "80%", maxWidth: 1200, backgroundColor: '#F5F7F8', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
         <Typography className="concert-one-regular" variant='inherit' gutterBottom>
-          Manage Trainee Skills
+          Manage Trainee Skills <StarRateIcon/>
         </Typography>
         <Grid container spacing={2}>
           {skillCategories.map(category => (
@@ -217,39 +220,37 @@ const TraineeSkills = ({ traineeId }) => {
                 </Select>
               </FormControl>
               <Grid container spacing={2}>
-                <Grid item xs={12} sm={6}>
-                  <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-                    {selectedSkills[category].filter(skillId => skillId).map(skillId => (
-                      <Box key={skillId} sx={{ display: 'flex', alignItems: 'center', backgroundColor: proficiencyLevels[proficiencies[skillId] || "GOOD"], p: 1, borderRadius: 1 }}>
-                        <Typography sx={{ flexGrow: 1, color: '#000' }}>
-                          {skills.find(skill => skill.id === skillId)?.name || "Unknown Skill"}
-                        </Typography>
-                        <FormControl variant="outlined" sx={{ minWidth: 120, ml: 2 }}>
-                          <InputLabel>Proficiency</InputLabel>
-                          <Select
-                            value={proficiencies[skillId] || "GOOD"}
-                            onChange={(event) => handleSkillChange(category, skillId, event)}
-                            label="Proficiency"
-                            sx={{ backgroundColor: '#fff' }}
-                          >
-                            {Object.keys(proficiencyLevels).map(level => (
-                              <MenuItem
-                                key={level}
-                                value={level}
-                                sx={{ backgroundColor: proficiencyLevels[level] }}
-                              >
-                                {level}
-                              </MenuItem>
-                            ))}
-                          </Select>
-                        </FormControl>
-                        <IconButton size="small" onClick={() => handleDeleteSkill(category, skillId)}>
-                          <DeleteIcon fontSize="small" />
-                        </IconButton>
-                      </Box>
-                    ))}
-                  </Box>
-                </Grid>
+                {selectedSkills[category].filter(skillId => skillId).map((skillId, index) => (
+                  <Grid item xs={12} sm={6} key={skillId}>
+                    <Box sx={{ display: 'flex', alignItems: 'center', backgroundColor: proficiencyLevels[proficiencies[skillId] || "GOOD"], p: 1, borderRadius: 1 }}>
+                      <Typography sx={{ flexGrow: 1, color: '#000' }}>
+                        {skills.find(skill => skill.id === skillId)?.name || "Unknown Skill"}
+                      </Typography>
+                      <FormControl variant="outlined" sx={{ minWidth: 120, ml: 2 }}>
+                        <InputLabel>Proficiency</InputLabel>
+                        <Select
+                          value={proficiencies[skillId] || "GOOD"}
+                          onChange={(event) => handleSkillChange(category, skillId, event)}
+                          label="Proficiency"
+                          sx={{ backgroundColor: '#fff' }}
+                        >
+                          {Object.keys(proficiencyLevels).map(level => (
+                            <MenuItem
+                              key={level}
+                              value={level}
+                              sx={{ backgroundColor: proficiencyLevels[level] }}
+                            >
+                              {level}
+                            </MenuItem>
+                          ))}
+                        </Select>
+                      </FormControl>
+                      <IconButton size="small" onClick={() => handleDeleteSkill(category, skillId)}>
+                        <DeleteIcon fontSize="small" />
+                      </IconButton>
+                    </Box>
+                  </Grid>
+                ))}
               </Grid>
             </Grid>
           ))}
@@ -268,7 +269,7 @@ const TraineeSkills = ({ traineeId }) => {
           autoHideDuration={6000}
           onClose={handleSnackbarClose}
         >
-          <Alert onClose={handleSnackbarClose} severity="success" sx={{ width: '100%' }}>
+          <Alert onClose={handleSnackbarClose}   severity="success" sx={{ width: '100%' }}>
             {snackbarMessage}
           </Alert>
         </Snackbar>

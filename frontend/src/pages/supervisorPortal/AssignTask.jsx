@@ -27,6 +27,8 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import TaskIcon from '@mui/icons-material/Task';
+import { useAuth } from "../../provider/authProvider";
+
 const AssignTask = () => {
   const baseUrl = import.meta.env.VITE_PORT_URL;
   const APIkey = import.meta.env.VITE_GOOGLE_AI_KEY;
@@ -41,7 +43,8 @@ const AssignTask = () => {
   const [sortDirection, setSortDirection] = useState("asc");
   const [selectedTrainees, setSelectedTrainees] = useState([]);
   const [aiResponse, setResponse] = useState("");
-
+  const { user } = useAuth();
+  const { login_token } = user;
   const genAI = new GoogleGenerativeAI(APIkey);
 
   const fetchTrainees = async () => {

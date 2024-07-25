@@ -70,8 +70,8 @@ const AddSkillComponent = () => {
     };
 
     return (
-        <Paper elevation={3} style={{ padding: '30px', maxWidth: '600px', margin: '40px auto' }}>
-            <Typography variant="h4" component="h2" gutterBottom>
+        <Paper elevation={3} style={{ padding: '30px', maxWidth: '600px', margin: '40px auto' ,  backgroundColor:'#F5F7F8'}}>
+            <Typography className="concert-one-regular" variant='inherit' align='center' gutterBottom>
                 Add New Skill
             </Typography>
             <form onSubmit={addSkill} style={{ marginBottom: '20px', display: 'flex', flexDirection: 'column' }}>
@@ -81,7 +81,8 @@ const AddSkillComponent = () => {
                         value={selectedTopic}
                         onChange={(e) => setSelectedTopic(e.target.value)}
                         label="Skill Topic"
-                    >
+                        sx={{backgroundColor:'#fff'}}
+>
                         {SkillTopics.map((topic) => (
                             <MenuItem key={topic.value} value={topic.value}>
                                 {topic.label}
@@ -95,7 +96,8 @@ const AddSkillComponent = () => {
                     onChange={(e) => setNewSkill(e.target.value)}
                     variant="outlined"
                     style={{ marginBottom: '10px' }}
-                />
+                    sx={{backgroundColor:'#fff'}}
+/>
                 <Button type="submit" variant="contained" color="primary">
                     Add
                 </Button>

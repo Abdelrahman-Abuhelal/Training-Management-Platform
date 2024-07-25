@@ -17,13 +17,15 @@ import ListAltIcon from '@mui/icons-material/ListAlt';
 import SettingsIcon from '@mui/icons-material/Settings';
 import AddTaskIcon from '@mui/icons-material/AddTask';
 import NoteAddIcon from '@mui/icons-material/NoteAdd';
+import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
 const routes = [
-  { path: '/dashboard', name: 'Dashboard', icon: <SpaceDashboardIcon /> },
-  { path: '/my-trainees', name: 'My Trainees', icon: <AccountCircleIcon /> },
-  { path: '/assign-task', name: 'Assign Task', icon: <AddTaskIcon /> },
-  { path: '/add-resource', name: 'Add Resource', icon: <NoteAddIcon /> },
-  { path: '/forms', name: 'Forms', icon: <ListAltIcon /> },
-  { path: '/change-password', name: 'Settings', icon: <SettingsIcon /> }
+  { path: '/dashboard', name: 'Dashboard', icon: <SpaceDashboardIcon sx={{ color: 'primary.main' }}/> },
+  { path: '/my-trainees', name: 'My Trainees', icon: <AccountCircleIcon sx={{ color: 'primary.main' }}/> },
+  { path: '/skills', name: 'Trainees Skills', icon: <AutoAwesomeIcon sx={{ color: 'primary.main' }}/> },
+  { path: '/assign-task', name: 'Assign Task', icon: <AddTaskIcon sx={{ color: 'primary.main' }}/> },
+  { path: '/add-resource', name: 'Add Resource', icon: <NoteAddIcon sx={{ color: 'primary.main' }}/> },
+  { path: '/forms', name: 'Forms', icon: <ListAltIcon sx={{ color: 'primary.main' }}/> },
+  { path: '/change-password', name: 'Settings', icon: <SettingsIcon sx={{ color: 'primary.main' }}/> }
 
 ];
 

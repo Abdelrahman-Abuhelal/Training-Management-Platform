@@ -5,13 +5,14 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public  class SkillProficiencyDTO {
-    private Long skillId;
-    private String skillName;
-    private String proficiencyLevel;
-    private String topic;
+public class TraineeSkillsResponseDTO {
+    private Long userId;
+    private String traineeName;
+    private List<SkillProficiencyDTO> skills;
 }

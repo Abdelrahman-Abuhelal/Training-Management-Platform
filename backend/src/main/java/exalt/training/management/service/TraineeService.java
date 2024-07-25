@@ -54,6 +54,7 @@ public class TraineeService {
     }
 
 
+
     public String registerTraineeData(TraineeDataDto traineeDataDTO)  {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         var user = (AppUser) authentication.getPrincipal();

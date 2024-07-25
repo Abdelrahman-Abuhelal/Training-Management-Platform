@@ -34,6 +34,9 @@ import FormSubmissions from '../pages/adminPortal/FormSubmissions.jsx';
 import FormResponse from '../pages/adminPortal/FormResponse.jsx';
 import AddSkillComponent from '../pages/adminPortal/AddSkillComponent.jsx';
 import TraineeSkills from '../pages/supervisorPortal/TraineeSkills.jsx';
+import TraineesSkillsList from '../pages/adminPortal/TraineesSkillsList.jsx';
+import AllTraineesSkills from '../pages/supervisorPortal/AllTraineesSkills.jsx';
+
 const Routes = () => {
   const { user } = useAuth();
   const isAuthenticated = user !== null && user.login_token !== null;
@@ -93,6 +96,7 @@ const Routes = () => {
             { path: '/view-trainee/:userId', element: <TraineeProfileView /> },
             { path: '/add-resource', element: <Resources /> },
             { path: '/add-skills/:userId', element: <TraineeSkills /> },
+            { path: '/skills', element: <AllTraineesSkills /> },
             { path: '/assign-task', element: <AssignTask /> },
             { path: '/change-password', element: <ChangePassword /> },
           ],
@@ -115,7 +119,8 @@ const Routes = () => {
             { path: '/users', element: <UserManagement /> },
             { path: '/trainees', element: <HR_Trainees_List /> },
             { path: '/forms', element: <FormsList /> },
-            { path: '/skills', element: <AddSkillComponent /> },
+            { path: '/skills', element: <TraineesSkillsList /> },
+            { path: '/add-skills', element: <AddSkillComponent /> },
             { path: '/supervisors', element: <HR_Supervisors_List /> },
             { path: '/supervisors/:userId/trainees', element: <SupervisorTraineesList /> },
             { path: '/create-forms', element: <FormBuilder /> },

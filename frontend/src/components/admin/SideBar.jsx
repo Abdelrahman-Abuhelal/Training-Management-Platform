@@ -18,16 +18,18 @@ import CampaignIcon from '@mui/icons-material/Campaign';
 import SettingsIcon from "@mui/icons-material/Settings";
 import GroupsIcon from '@mui/icons-material/Groups';
 import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
-
+import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
+import AddIcon from '@mui/icons-material/Add';
 const routes = [
-  { path: "/dashboard", name: "Dashboard", icon: <SpaceDashboardIcon /> },
-  { path: "/users", name: "User Management", icon: <AdminPanelSettingsIcon /> },
-  { path: "/trainees", name: "Trainees", icon: <GroupsIcon /> },
-  { path: "/supervisors", name: "Supervisors", icon: <GroupsIcon /> },
-  { path: "/form-templates", name: "Forms", icon: <ListAltIcon /> },
-  { path: "/skills", name: "Skills", icon: <GroupsIcon /> },
-  { path: "/create-announcements", name: "Create Announcements", icon: <CampaignIcon /> },
-  { path: "/change-password", name: "Settings", icon: <SettingsIcon /> },
+  { path: "/dashboard", name: "Dashboard", icon: <SpaceDashboardIcon sx={{ color: 'primary.main' }}/> },
+  { path: "/users", name: "User Management", icon: <AdminPanelSettingsIcon sx={{ color: 'primary.main' }}/> },
+  { path: "/trainees", name: "Trainees", icon: <GroupsIcon sx={{ color: 'primary.main' }}/> },
+  { path: "/supervisors", name: "Supervisors", icon: <GroupsIcon sx={{ color: 'primary.main' }}/> },
+  { path: "/form-templates", name: "Forms", icon: <ListAltIcon sx={{ color: 'primary.main' }}/> },
+  { path: "/skills", name: "Skills", icon: <AutoAwesomeIcon sx={{ color: 'primary.main' }}/> },
+  { path: "/add-skills", name: "Add Skills", icon: <AddIcon sx={{ color: 'primary.main' }}/> },
+  { path: "/create-announcements", name: "Create Announcements", icon: <CampaignIcon sx={{ color: 'primary.main' }}/> },
+  { path: "/change-password", name: "Settings", icon: <SettingsIcon sx={{ color: 'primary.main' }}/> },
 ];
 
 export default function TemporaryDrawer({ state, setState, toggleDrawer }) {
