@@ -38,9 +38,8 @@ public class AdminService {
 
     private final SupervisorRepository supervisorRepository;
     private final TraineeMapper traineeMapper;
-    private final AcademicGradesRepository academicGradesRepository;
 
-    public AdminService(TraineeRepository traineeRepository, AppUserRepository appUserRepository, AppUserService appUserService, TokenService tokenService, AuthenticationService authenticationService, EmailService emailService, AppUserMapper userMapper, SupervisorRepository supervisorRepository, TraineeMapper traineeMapper, AcademicGradesRepository academicGradesRepository) {
+    public AdminService(TraineeRepository traineeRepository, AppUserRepository appUserRepository, AppUserService appUserService, TokenService tokenService, AuthenticationService authenticationService, EmailService emailService, AppUserMapper userMapper, SupervisorRepository supervisorRepository, TraineeMapper traineeMapper) {
         this.traineeRepository = traineeRepository;
         this.appUserRepository = appUserRepository;
         this.appUserService = appUserService;
@@ -50,7 +49,6 @@ public class AdminService {
         this.userMapper = userMapper;
         this.supervisorRepository = supervisorRepository;
         this.traineeMapper = traineeMapper;
-        this.academicGradesRepository = academicGradesRepository;
     }
 
 

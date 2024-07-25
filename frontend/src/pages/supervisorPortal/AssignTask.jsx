@@ -47,7 +47,12 @@ const AssignTask = () => {
   const fetchTrainees = async () => {
     try {
       const response = await axios.get(
-        `${baseUrl}/api/v1/supervisor/my-trainees`
+        `${baseUrl}/api/v1/supervisor/my-trainees`,{
+          headers: {
+            Authorization: `Bearer ${login_token}`,
+            'Content-Type': 'application/json'
+          }
+        }
       );
       if (response.status === 200) {
         const traineeUsers = response.data;

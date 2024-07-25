@@ -1,23 +1,22 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import ReviewsIcon from "@mui/icons-material/Reviews";
 import {
   Box,
   Grid,
   Typography,
   Paper,
-  Checkbox,
   Button,
-  TableSortLabel,
 } from "@mui/material"; // MUI components (or your preferred library)
 import { useNavigate } from "react-router-dom";
 import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { useAuth } from "../../provider/authProvider";
 import SearchComponent from "../../components/Search";
-import BreadcrumbsComponent from "../../components/BreadCrumbs";
-import { DataGrid } from "@mui/x-data-grid"; // Import DataGrid component
 import GroupIcon from '@mui/icons-material/Group';
+import { DataGrid } from "@mui/x-data-grid"; // Import DataGrid component
+import StarRateIcon from '@mui/icons-material/StarRate';
+import AccountBoxIcon from '@mui/icons-material/AccountBox';
+
 const Supervisor_Trainees_List = () => {
   const baseUrl = import.meta.env.VITE_PORT_URL;
   const { user } = useAuth();
@@ -42,6 +41,7 @@ const Supervisor_Trainees_List = () => {
         const traineeUsers = response.data.map((trainee) => ({
           ...trainee,
           id: trainee.userId, // Assigning userId as the id
+          fullName: `${trainee.userFirstName} ${trainee.userLastName}` // Merging first name and last name
         }));
         setTrainees(traineeUsers);
       }
@@ -52,14 +52,14 @@ const Supervisor_Trainees_List = () => {
 
   useEffect(() => {
     fetchTrainees();
-  }, [searchTerm]); // Removed page and rowsPerPage from useEffect dependencies
-
-  const handleViewReview = (user) => {
-    navigate(`/review-form/${user.userId}`);
-  };
+  }, [searchTerm]);
 
   const handleViewProfile = (user) => {
     navigate(`/view-trainee/${user.userId}`);
+  };
+
+  const handleAddSkills = (user) => {
+    navigate(`/add-skills/${user.userId}`);
   };
 
   const handleRequestSort = (property) => {
@@ -68,37 +68,50 @@ const Supervisor_Trainees_List = () => {
     setSortDirection(isAsc ? "desc" : "asc");
   };
 
-  const handleCheckboxChange = (e, item) => {
-    const { checked } = e.target;
-    setSelectedTrainees((prevSelected) => {
-      if (checked) {
-        return [...prevSelected, item];
-      } else {
-        return prevSelected.filter((trainee) => trainee.userId !== item.userId);
-      }
-    });
-  };
-
   const columns = [
     {
-      field: "userUsername",
-      headerName: "Username",
+      field: "fullName",
+      headerName: "Full Name",
       flex: 1,
-      sortDirection,
-      sortable: true,
+      minWidth: 200, // Decrease the width of the Full Name column
+    },
+    { field: "userEmail", headerName: "Email", flex: 1 },
+    {
+      field: "actions",
+      headerName: "Actions",
+      flex: 1,
+      minWidth: 200,
       renderCell: (params) => (
-        <Button color="primary" onClick={() => handleViewProfile(params.row)}>
-          {params.value}
-        </Button>
+        <Box
+          display="flex"
+          flexDirection="row" alignItems="center"
+          justifyContent="center"
+          gap={1}
+          sx={{ textAlign: "center" }}
+        >
+          <Button
+            color="primary"
+            variant="contained"
+            startIcon={<AccountBoxIcon />}
+            onClick={() => handleViewProfile(params.row)}
+          >
+            View Profile
+          </Button>
+          <Button
+            color="primary"
+            variant="contained"
+            startIcon={<StarRateIcon />}
+            onClick={() => handleAddSkills(params.row)}
+          >
+            Add Skills
+          </Button>
+        </Box>
       ),
     },
-    { field: "userFirstName", headerName: "First Name", flex: 1 },
-    { field: "userLastName", headerName: "Last Name", flex: 1 },
-    { field: "userEmail", headerName: "Email", flex: 1 },
-    { field: "userRole", headerName: "Role", flex: 1 },
   ];
 
   const getRowId = (row) => row.id; // Function to get the id for each row
+
   return (
     <div style={{ display: "flex", justifyContent: "center" }}>
       <Paper elevation={3} sx={{ p: "3%", m: "3%", width: "75%", maxWidth: 1800, backgroundColor: '#F5F7F8' }}>
@@ -107,8 +120,8 @@ const Supervisor_Trainees_List = () => {
             <SearchComponent searchTerm={searchTerm} onSearchChange={setSearchTerm} />
           </Grid>
           <Grid item xs={6}>
-            <Typography className="concert-one-regular" variant='inherit' component="h2" align="center">
-              My Trainees <GroupIcon/>
+            <Typography className="concert-one-regular"  align="center">
+              My Trainees  &nbsp; <GroupIcon fontSize="large" />
             </Typography>
           </Grid>
           <Grid item xs={isMobile ? 0 : 3} />
@@ -135,7 +148,6 @@ const Supervisor_Trainees_List = () => {
           />
         </Box>
       </Paper>
-
     </div>
   );
 };

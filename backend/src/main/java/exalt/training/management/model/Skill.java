@@ -17,4 +17,10 @@ public class Skill {
 
     @Column(unique = true, nullable = false)
     private String name;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private SkillTopic topic;
+
+
 }

@@ -42,6 +42,15 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
     public ResponseEntity<String> handleFormSubmissionNotFoundException(FormSubmissionNotFoundException e) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
     }
+    @ExceptionHandler(SkillNotFoundException.class)
+    public ResponseEntity<String> handleSkillNotFoundException(SkillNotFoundException e) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+    }
+
+    @ExceptionHandler(TraineeSkillNotFoundException.class)
+    public ResponseEntity<String> handleTraineeSkillNotFoundException(TraineeSkillNotFoundException e) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+    }
 
     @ExceptionHandler(AccessDeniedException.class)
     public ResponseEntity<String> handleAccessDeniedException(AccessDeniedException ex) {

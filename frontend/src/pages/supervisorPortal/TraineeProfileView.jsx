@@ -90,13 +90,13 @@ const TraineeProfileView = () => {
 
   return (
     <Container sx={{backgroundColor:'#F5F7F8' , margin:'auto auto' , marginBottom:'5rem' }}>
-      <Box mt={2}>
-        <Button onClick={navigateBack} startIcon={<ArrowBackIcon />}>
+      <Box mt={4} pt={4}>
+        <Button onClick={navigateBack} startIcon={<ArrowBackIcon />}  variant='contained'>
           Back to Trainees
         </Button>
       </Box>
       <Box mt={4}>
-        <Typography className="concert-one-regular" variant='inherit' gutterBottom align="center" mb={2}>
+        <Typography className="concert-one-regular" variant='inherit' sx={{color:'#1976d2'}} gutterBottom align="center" mb={2}>
           {userFullName}
         </Typography>
       </Box>
@@ -111,7 +111,8 @@ const TraineeProfileView = () => {
             inputProps={{ dir: "rtl", lang: "ar" }}
             onChange={handleChange}
             disabled
-          />
+            sx={{backgroundColor:'#fff'}}
+/>
         </Box>
         <Box mb={2}>
           <FormControl fullWidth variant="outlined" disabled
@@ -122,7 +123,8 @@ const TraineeProfileView = () => {
               label="Nearest City"
               name="city"
               onChange={handleChange}
-            >
+              sx={{backgroundColor:'#fff'}}
+>
               <MenuItem value=""></MenuItem>
               <MenuItem value="Ramallah">Ramallah</MenuItem>
               <MenuItem value="Tulkarm">Tulkarm</MenuItem>
@@ -148,7 +150,8 @@ const TraineeProfileView = () => {
             name="address"
             onChange={handleChange}
             disabled
-          />
+            sx={{backgroundColor:'#fff'}}
+/>
         </Box>
         <Box mb={2}>
           <FormControl fullWidth variant="outlined" disabled
@@ -159,7 +162,8 @@ const TraineeProfileView = () => {
               label="ID type"
               name="idType"
               onChange={handleChange}
-            >
+              sx={{backgroundColor:'#fff'}}
+>
               <MenuItem value=""></MenuItem>
               <MenuItem value="Westbank">Westbank - ضفة</MenuItem>
               <MenuItem value="Jerusalem">Jerusalem - قدس</MenuItem>
@@ -177,7 +181,8 @@ const TraineeProfileView = () => {
             inputProps={{ inputMode: "numeric" }}
             onChange={handleChange}
             disabled
-          />
+            sx={{backgroundColor:'#fff'}}
+/>
         </Box>
         <Box mb={2}>
           <TextField
@@ -188,7 +193,8 @@ const TraineeProfileView = () => {
             name="phoneNumber"
             onChange={handleChange}
             disabled
-          />
+            sx={{backgroundColor:'#fff'}}
+/>
         </Box>
         <Box mb={2}>
           <FormControl fullWidth variant="outlined" disabled
@@ -199,7 +205,8 @@ const TraineeProfileView = () => {
               label="University Name"
               name="universityName"
               onChange={handleChange}
-            >
+              sx={{backgroundColor:'#fff'}}
+>
               <MenuItem value=""></MenuItem>
               <MenuItem value="Al-Quds University">Al-Quds University</MenuItem>
               <MenuItem value="Birzeit University">Birzeit University</MenuItem>
@@ -224,7 +231,8 @@ const TraineeProfileView = () => {
               label="University Major"
               name="universityMajor"
               onChange={handleChange}
-            >
+              sx={{backgroundColor:'#fff'}}
+>
               <MenuItem value=""></MenuItem>
               <MenuItem value="Computer_Engineering">Computer Engineering</MenuItem>
               <MenuItem value="Computer_Science">Computer Science</MenuItem>
@@ -244,7 +252,8 @@ const TraineeProfileView = () => {
                 label="Graduation Year Date (expected)"
                 name="expectedGraduationYear"
                 onChange={handleChange}
-              >
+                sx={{backgroundColor:'#fff'}}
+>
                 <MenuItem value=""></MenuItem>
                 {[...Array(10).keys()].map((i) => (
                   <MenuItem key={i} value={new Date().getFullYear() + i}>
@@ -261,7 +270,8 @@ const TraineeProfileView = () => {
                 label="Graduation Month Date (expected)"
                 name="expectedGraduationMonth"
                 onChange={handleChange}
-              >
+                sx={{backgroundColor:'#fff'}}
+>
                 <MenuItem value=""></MenuItem>
                 <MenuItem value="01">January</MenuItem>
                 <MenuItem value="02">February</MenuItem>
@@ -288,7 +298,8 @@ const TraineeProfileView = () => {
               label="Training Field"
               name="trainingField"
               onChange={handleChange}
-            >
+              sx={{backgroundColor:'#fff'}}
+>
               <MenuItem value=""></MenuItem>
               <MenuItem value="BACKEND">Backend</MenuItem>
               <MenuItem value="FRONTEND">Frontend</MenuItem>
@@ -309,7 +320,8 @@ const TraineeProfileView = () => {
               label="Branch Location"
               name="branchLocation"
               onChange={handleChange}
-            >
+              sx={{backgroundColor:'#fff'}}
+>
               <MenuItem value=""></MenuItem>
               <MenuItem value="RAMALLAH">Ramallah</MenuItem>
               <MenuItem value="NABLUS">Nablus</MenuItem>

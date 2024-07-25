@@ -21,9 +21,9 @@ import TaskAltIcon from '@mui/icons-material/TaskAlt';
 const routes = [
   { path: '/dashboard', name: 'Dashboard', icon: <SpaceDashboardIcon /> },
   { path: '/profile', name: 'Profile', icon: <AccountCircleIcon /> },
-  { path: '/announcements', name: 'Announcements', icon: <CampaignIcon /> },
-  { path: '/tasks', name: 'Tasks', icon: <TaskAltIcon /> },
   { path: '/forms', name: 'Forms', icon: <ListAltIcon /> },
+  { path: '/tasks', name: 'Tasks', icon: <TaskAltIcon /> },
+  { path: '/announcements', name: 'Announcements', icon: <CampaignIcon /> },
   { path: '/change-password', name: 'Settings', icon: <SettingsIcon /> }
 
 ];

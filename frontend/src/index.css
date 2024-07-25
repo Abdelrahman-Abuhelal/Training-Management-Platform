@@ -9,14 +9,15 @@ body {
   
   }
   
-  .oswald-heading  {
+  /* .oswald-heading  {
     font-family: "Oswald", sans-serif;
     font-optical-sizing: auto;
     font-weight: 600;
     font-style: normal;
-  }
+  } */
 
   .concert-one-regular {
+    color: '#1976d2' !important;
     font-family: "Concert One", sans-serif;
     font-weight: 600 !important;
     font-style: normal;

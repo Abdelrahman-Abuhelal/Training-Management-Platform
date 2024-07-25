@@ -17,12 +17,15 @@ import ListAltIcon from "@mui/icons-material/ListAlt";
 import CampaignIcon from '@mui/icons-material/Campaign';
 import SettingsIcon from "@mui/icons-material/Settings";
 import GroupsIcon from '@mui/icons-material/Groups';
+import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
+
 const routes = [
   { path: "/dashboard", name: "Dashboard", icon: <SpaceDashboardIcon /> },
-  { path: "/users", name: "User Management", icon: <GroupAddIcon /> },
+  { path: "/users", name: "User Management", icon: <AdminPanelSettingsIcon /> },
   { path: "/trainees", name: "Trainees", icon: <GroupsIcon /> },
   { path: "/supervisors", name: "Supervisors", icon: <GroupsIcon /> },
   { path: "/form-templates", name: "Forms", icon: <ListAltIcon /> },
+  { path: "/skills", name: "Skills", icon: <GroupsIcon /> },
   { path: "/create-announcements", name: "Create Announcements", icon: <CampaignIcon /> },
   { path: "/change-password", name: "Settings", icon: <SettingsIcon /> },
 ];

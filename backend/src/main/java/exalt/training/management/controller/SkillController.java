@@ -1,5 +1,6 @@
 package exalt.training.management.controller;
 
+import exalt.training.management.dto.SkillDto;
 import exalt.training.management.model.Skill;
 import exalt.training.management.service.SkillService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -20,8 +21,8 @@ public class SkillController {
     private final SkillService skillService;
 
     @GetMapping
-    @PreAuthorize("hasAnyRole('SUPER_ADMIN')")
-    @Operation(summary = "Get All Skills (Admin Only)" , security =  @SecurityRequirement(name = "loginAuth"))
+    @PreAuthorize("hasAnyRole('SUPER_ADMIN','SUPERVISOR')")
+    @Operation(summary = "Get All Skills (Admin And Supervisor)" , security =  @SecurityRequirement(name = "loginAuth"))
     public List<Skill> getAllSkills() {
         return skillService.getAllSkills();
     }
@@ -29,7 +30,14 @@ public class SkillController {
     @PostMapping
     @PreAuthorize("hasAnyRole('SUPER_ADMIN')")
     @Operation(summary = "Add new Skill (Admin Only)" , security =  @SecurityRequirement(name = "loginAuth"))
-    public Skill addSkill(@RequestBody Skill skill) {
-        return skillService.addSkill(skill);
+    public String addSkill(@RequestBody SkillDto skillDto) {
+        return skillService.addSkill(skillDto);
+    }
+
+    @DeleteMapping("/{skillId}")
+    @PreAuthorize("hasAnyRole('SUPER_ADMIN')")
+    @Operation(summary = "Add new Skill (Admin Only)" , security =  @SecurityRequirement(name = "loginAuth"))
+    public String deleteSkill(@PathVariable Long skillId) {
+        return skillService.deleteSkill(skillId);
     }
 }

@@ -196,6 +196,7 @@ const TraineeProfile = () => {
             onChange={(e) => setFullNameInArabic(e.target.value)}
             inputProps={{ dir: "rtl", lang: "ar" }}
             disabled={isSubmitted}
+            sx={{backgroundColor:'#fff'}}
           />
         </Box>
         <Box mb={2}>
@@ -206,7 +207,8 @@ const TraineeProfile = () => {
               value={city}
               onChange={(e) => setCity(e.target.value)}
               label="Nearest City"
-            >
+              sx={{backgroundColor:'#fff'}}
+>
               <MenuItem value=""></MenuItem>
               <MenuItem value="Ramallah">Ramallah</MenuItem>
               <MenuItem value="Tulkarm">Tulkarm</MenuItem>
@@ -234,7 +236,8 @@ const TraineeProfile = () => {
               style: { direction: getDirection(address) }
             }}
             disabled={isSubmitted}
-          />
+            sx={{backgroundColor:'#fff'}}
+/>
         </Box>
         <Box mb={2}>
           <FormControl fullWidth variant="outlined" disabled={isSubmitted}
@@ -244,7 +247,8 @@ const TraineeProfile = () => {
               value={idType}
               onChange={(e) => setIdType(e.target.value)}
               label="ID type"
-            >
+              sx={{backgroundColor:'#fff'}}
+              >
               <MenuItem value=""></MenuItem>
               <MenuItem value="Westbank">Westbank - ضفة</MenuItem>
               <MenuItem value="Jerusalem">Jerusalem - قدس</MenuItem>
@@ -263,7 +267,8 @@ const TraineeProfile = () => {
             helperText={idNumberError}
             inputProps={{ inputMode: "numeric" }}
             disabled={isSubmitted}
-          />
+            sx={{backgroundColor:'#fff'}}
+/>
         </Box>
         <Box mb={2}>
           <TextField
@@ -273,7 +278,8 @@ const TraineeProfile = () => {
             value={phoneNumber}
             onChange={(e) => setPhoneNumber(e.target.value)}
             disabled={isSubmitted}
-          />
+            sx={{backgroundColor:'#fff'}}
+/>
         </Box>
         <Box mb={2}>
           <FormControl fullWidth variant="outlined" disabled={isSubmitted}
@@ -283,7 +289,8 @@ const TraineeProfile = () => {
               value={universityName}
               onChange={(e) => setUniversityName(e.target.value)}
               label="University Name"
-            >
+              sx={{backgroundColor:'#fff'}}
+>
               <MenuItem value=""></MenuItem>
               <MenuItem value="Al-Quds University">
                 Al-Quds University
@@ -325,7 +332,8 @@ const TraineeProfile = () => {
               value={universityMajor}
               onChange={(e) => setUniversityMajor(e.target.value)}
               label="University Major"
-            >
+              sx={{backgroundColor:'#fff'}}
+>
               <MenuItem value=""></MenuItem>
               <MenuItem value="Computer_Engineering">Computer Engineering</MenuItem>
               <MenuItem value="Computer_Science">Computer Science</MenuItem>
@@ -344,7 +352,8 @@ const TraineeProfile = () => {
                 value={expectedGraduationYear}
                 onChange={handleYearChange}
                 label="Graduation Year Date (expected)"
-              >
+                sx={{backgroundColor:'#fff'}}
+>
                 <MenuItem value=""></MenuItem>
                 {[...Array(10).keys()].map((i) => (
                   <MenuItem key={i} value={new Date().getFullYear() + i}>
@@ -360,7 +369,8 @@ const TraineeProfile = () => {
                 value={expectedGraduationMonth}
                 onChange={handleMonthChange}
                 label="Graduation Month Date (expected)"
-              >
+                sx={{backgroundColor:'#fff'}}
+                >
                 <MenuItem value=""></MenuItem>
                 <MenuItem value="01">January</MenuItem>
                 <MenuItem value="02">February</MenuItem>
@@ -386,7 +396,8 @@ const TraineeProfile = () => {
               value={trainingField}
               onChange={(e) => setTrainingField(e.target.value)}
               label="Training Field"
-            >
+              sx={{backgroundColor:'#fff'}}
+>
               <MenuItem value=""></MenuItem>
               <MenuItem value="BACKEND">Backend</MenuItem>
               <MenuItem value="FRONTEND">Frontend</MenuItem>
@@ -406,7 +417,8 @@ const TraineeProfile = () => {
               value={branchLocation}
               onChange={(e) => setBranchLocation(e.target.value)}
               label="Branch Location"
-            >
+              sx={{backgroundColor:'#fff'}}
+>
               <MenuItem value=""></MenuItem>
               <MenuItem value="RAMALLAH">Ramallah</MenuItem>
               <MenuItem value="NABLUS">Nablus</MenuItem>

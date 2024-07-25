@@ -32,6 +32,8 @@ import ChangePassword from '../pages/auth/ChangePassword.jsx'
 import FormsList from '../pages/allPortals/FormsList.jsx';
 import FormSubmissions from '../pages/adminPortal/FormSubmissions.jsx';
 import FormResponse from '../pages/adminPortal/FormResponse.jsx';
+import AddSkillComponent from '../pages/adminPortal/AddSkillComponent.jsx';
+import TraineeSkills from '../pages/supervisorPortal/TraineeSkills.jsx';
 const Routes = () => {
   const { user } = useAuth();
   const isAuthenticated = user !== null && user.login_token !== null;
@@ -90,6 +92,7 @@ const Routes = () => {
             { path: '/review-form/:userId', element: <ReviewForm /> },
             { path: '/view-trainee/:userId', element: <TraineeProfileView /> },
             { path: '/add-resource', element: <Resources /> },
+            { path: '/add-skills/:userId', element: <TraineeSkills /> },
             { path: '/assign-task', element: <AssignTask /> },
             { path: '/change-password', element: <ChangePassword /> },
           ],
@@ -112,6 +115,7 @@ const Routes = () => {
             { path: '/users', element: <UserManagement /> },
             { path: '/trainees', element: <HR_Trainees_List /> },
             { path: '/forms', element: <FormsList /> },
+            { path: '/skills', element: <AddSkillComponent /> },
             { path: '/supervisors', element: <HR_Supervisors_List /> },
             { path: '/supervisors/:userId/trainees', element: <SupervisorTraineesList /> },
             { path: '/create-forms', element: <FormBuilder /> },

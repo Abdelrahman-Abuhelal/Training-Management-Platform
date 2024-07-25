@@ -15,6 +15,9 @@ import MuiAlert from '@mui/material/Alert';
 import { useTheme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
+import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
+
+
 const UserManagement = () => {
   const { user } = useAuth();
   const { login_token } = user;
@@ -53,7 +56,7 @@ const UserManagement = () => {
       setFilteredUsers(response.data);
     })
       .catch(error => console.error(error));
-  }, []);
+  }, [users]);
 
   const handleEdit = (user) => {
     setCurrentUser(user);
@@ -183,8 +186,8 @@ const UserManagement = () => {
     <div style={{ display: "flex", justifyContent: "center" }}>
       <Paper elevation={3} sx={{ p: 3, m: 3, width: "90%", maxWidth: 1800,  backgroundColor:'#F5F7F8' }}>
       <Toolbar sx={{ flexDirection: isMobile ? 'column' : 'row', alignItems: isMobile ?'center': 'normal', gap: isMobile ? 2 : 0 }}>
-      <Typography className="concert-one-regular" variant='inherit' component="div" sx={{ flex: isMobile ? '1 1 100%' : '1 2 100%', textAlign: isMobile ? 'center' : 'left' }}>
-            User Management
+      <Typography className="concert-one-regular" variant='inherit' component="div" sx={{ flex: isMobile ? '1 1 100%' : '1 2 100%', textAlign: isMobile ? 'center' : 'left'   ,  color: '#1976d2' }}>
+            User Management <AdminPanelSettingsIcon/>
           </Typography>
           <SearchComponent
             searchTerm={searchTerm} onSearchChange={handleSearch} />
