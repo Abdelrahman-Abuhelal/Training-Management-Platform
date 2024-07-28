@@ -36,8 +36,10 @@ import CheckCircleIcon from '@mui/icons-material/CheckCircle'; // Import the ico
 import { useAuth } from "../../provider/authProvider";
 import SearchComponent from "../../components/Search";
 import FactCheckIcon from '@mui/icons-material/FactCheck';
+import { useMediaQuery, useTheme } from '@mui/material';
 
 const FormTemplates = () => {
+  const theme = useTheme();
   const { user } = useAuth();
   const { login_token } = user;
   const [searchTerm, setSearchTerm] = useState("");
@@ -303,12 +305,13 @@ const FormTemplates = () => {
   return (
 
     <Box sx={{ margin: '2rem auto', maxWidth: '1200px' }}>
-      <Paper sx={{ padding: '2rem', border: '0.5px solid #ccc' ,  backgroundColor:'#F5F7F8'}}>
+      <Paper sx={{ padding: '2rem', borderRadius: '1rem',backgroundColor: '#E1EBEE' , border: '0.5px solid #ccc' }}>
         <Typography
           className="concert-one-regular" variant='inherit' 
           align="center"
           sx={{
             marginBottom: "1rem",
+            color:  theme.palette.primary.main
           }}
         >
           <FactCheckIcon fontSize="large" sx={{mr:'0.3rem'}}/> EXALT Form Templates

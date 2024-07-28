@@ -54,8 +54,8 @@ const AnnouncementForm = () => {
 
   return (
     <div style={{ display: "flex", justifyContent: "center" }}>
- <Paper elevation={3} sx={{ p: isMobile?'4%': '3%', m: isMobile?'5%':'5%' ,width:isMobile?'90%':'70%',  backgroundColor:'#F5F7F8' }}>
-      <Typography className="concert-one-regular" variant='inherit' gutterBottom>
+ <Paper elevation={3} sx={{ p: isMobile?'4%': '3%', m: isMobile?'5%':'5%' ,width:isMobile?'90%':'70%', backgroundColor:'#E1EBEE', borderRadius: '1rem'  }}>
+      <Typography className="concert-one-regular"  align="center" sx={{color:  theme.palette.primary.main}} variant='inherit' gutterBottom>
         Add Announcement <NotificationAddIcon/>
       </Typography>
       <form onSubmit={handleSubmit}>

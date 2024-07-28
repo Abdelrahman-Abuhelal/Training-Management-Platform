@@ -231,21 +231,21 @@ const HR_Supervisors_List = () => {
   };
 
   return (
-    <div style={{ padding: isMobile ? "0.5rem" : "3rem" }}>
-      <Paper  sx={{ padding: '16px' ,  backgroundColor:'#F5F7F8', alignItems:'right'}}>
+    <div style={{ padding: isMobile ? "0.5rem" : "3rem" ,margin:'1rem'}}>
+      <Paper  sx={{ padding: '3rem' ,backgroundColor: '#E1EBEE' ,  borderRadius: '1rem',alignItems:'right'}}>
         <Box sx={{ flex: '1 1 auto', maxWidth: isMobile ? '100%' : '33%' }}> 
           <SearchComponent
             searchTerm={searchTerm}
             onSearchChange={handleSearchChange}
           />
         </Box>     </Paper>
-      <Paper sx={{ p:'1rem',  backgroundColor:'#F5F7F8' }}>
+      <Paper sx={{ p:'1rem',backgroundColor: '#E1EBEE' ,  borderRadius: '1rem', marginTop:'1.5rem' }}>
         <Grid container justifyContent="center">
 
           <Grid item xs={12} sm={6}>
             <Typography
               className="concert-one-regular" variant='inherit' 
-              sx={{fontSize: "1.7rem", display: 'flex', alignItems: 'center', justifyContent: 'center', mt: 3 }}
+              sx={{fontSize: "1.7rem", display: 'flex', alignItems: 'center', justifyContent: 'center', mt: 3,  color:  theme.palette.primary.main }}
             >
               <Box >
                 <PeopleOutlineIcon fontSize="large"  />

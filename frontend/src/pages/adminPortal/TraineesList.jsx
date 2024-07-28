@@ -331,9 +331,9 @@ const TraineesList = () => {
 
 
   return (
-    <div style={{ padding: isMobile ? "0.5rem" : "3rem" }}>
+    <div style={{ padding: isMobile ? "0.5rem" : "4rem" }}>
 
-      <Paper sx={{ padding: isMobile ? '3px' : '16px' ,  backgroundColor:'#F5F7F8'}}>
+      <Paper sx={{ padding: isMobile ? '3px' : '3rem' ,backgroundColor: '#E1EBEE' ,  borderRadius: '1rem' }}>
 
         <div>
           <Grid container spacing={2} alignItems="center" >
@@ -377,12 +377,12 @@ const TraineesList = () => {
           </Grid>
         </div>
       </Paper>
-      <Paper sx={{  pt:'1rem' ,  backgroundColor:'#F5F7F8', p:'2rem'}}>
+      <Paper sx={{  pt:'1rem',backgroundColor: '#E1EBEE' , p:'2rem',  borderRadius: '1rem',marginTop:'1.5rem'}}>
         <Typography
           className="concert-one-regular" variant='inherit' 
           gutterBottom
           align="center"
-          sx={{ fontSize: "1.7rem", mt: 2, ml: 1 }}
+          sx={{ fontSize: "1.7rem", mt: 2, ml: 1 ,   color:  theme.palette.primary.main}}
         >
           <Box display="flex" alignItems="center" justifyContent="center">
             <PeopleOutlineIcon fontSize="large" />

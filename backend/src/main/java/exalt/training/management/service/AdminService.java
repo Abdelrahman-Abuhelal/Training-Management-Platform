@@ -93,7 +93,7 @@ public class AdminService {
                     + "<h2 style=\"color: #00449e;\">Complete Registration for Exalt Training Application</h2>"
                     + "<p>Dear " + user.getFirstName() +" "+user.getLastName()+ ",</p>"
                     + "<p>To confirm your account in the Exalt Training Application, please click the link below:</p>"
-                    + "<p><a href=\"http://"+local+":5173/confirm-account/" + confirmationToken + "\" "
+                    + "<p><a href=\"http://"+company_ip+":5173/confirm-account/" + confirmationToken + "\" "
                     + "style=\"background-color: #00449e; color: white; padding: 10px 20px; text-decoration: none; "
                     + "border-radius: 5px;\" target=\"_blank\">Complete Registration</a></p>"
                     + "<p>If you didn't request this, you can ignore this email.</p>"

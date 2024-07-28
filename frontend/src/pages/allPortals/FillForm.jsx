@@ -220,7 +220,7 @@ const FillForm = () => {
   };
 
   return (
-    <Paper elevation={3} style={{ margin: '3rem', padding: '1rem', backgroundColor: '#F5F7F8' }}>
+    <Paper elevation={3} style={{ margin: '3rem', padding: '1rem',backgroundColor: '#E1EBEE'  }}>
       <Button sx={{ mt: "2rem" }} onClick={() => {
         navigate(`/forms/`);
       }} startIcon={<ArrowBackIcon />}>

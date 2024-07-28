@@ -2,6 +2,7 @@ import React, { useState,useEffect } from 'react';
 import { Grid, Paper, Typography } from '@mui/material';
 import axios from 'axios';
 import { useAuth } from "../../provider/authProvider";
+import { useTheme } from '@mui/material/styles';
 
 const Overview =()=>{
 const [traineeSize,setTraineeSize] = useState([]);
@@ -9,6 +10,7 @@ const [supervisorSize,setSupervisorSize] = useState([]);
 const { user } = useAuth();
 const { login_token } = user;
 const baseUrl = import.meta.env.VITE_PORT_URL;
+const theme = useTheme();
 
 useEffect(() => {
   traineeSizeAPI();
@@ -65,14 +67,14 @@ const supervisorSizeAPI = async () => {
     <Grid container spacing={3} >
       <Grid item xs={12} sm={6} md={6}>
         <Paper style={paperStyle}>
-          <Typography variant="h6">Active Trainees</Typography>
-          <Typography variant="h4">{traineeSize}</Typography>
+          <Typography className="concert-one-regular" variant='inherit' sx={{color:  theme.palette.primary.main}} >Active Trainees</Typography>
+          <Typography variant="h4"  sx={{color:  theme.palette.primary.main}}>{traineeSize}</Typography>
         </Paper>
       </Grid>
       <Grid item xs={12} sm={6} md={6}>
         <Paper style={paperStyle}>
-          <Typography variant="h6">Active Supervisors</Typography>
-          <Typography variant="h4">{supervisorSize}</Typography>
+          <Typography className="concert-one-regular" variant='inherit' sx={{color:  theme.palette.primary.main}} >Active Supervisors</Typography>
+          <Typography variant="h4"  sx={{color:  theme.palette.primary.main}}>{supervisorSize}</Typography>
         </Paper>
       </Grid>
      

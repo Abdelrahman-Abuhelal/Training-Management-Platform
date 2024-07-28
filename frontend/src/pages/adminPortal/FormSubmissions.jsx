@@ -92,11 +92,11 @@ const FormSubmissions = () => {
 
     return (
         <div style={{ display: "flex", justifyContent: "center" }}>
-            <Paper elevation={3} sx={{ p: "3%", m: "3%", width: "75%", maxWidth: 1800 ,  backgroundColor:'#F5F7F8'}}>
+            <Paper elevation={3} sx={{ p: "3%", m: "3%", width: "75%", maxWidth: 1800 , backgroundColor:'#E1EBEE', borderRadius: '1rem'  }}>
                 <Button onClick={navigateBack} startIcon={<ArrowBackIcon />}>
                     Form Templates
                 </Button>
-                <Typography  className="concert-one-regular" variant='inherit'  component="div" sx={{ flex: isMobile ? '1 1 100%' : '1 2 100%', textAlign:  'center' , marginBottom:"1rem" }}>
+                <Typography  className="concert-one-regular" variant='inherit'  component="div" sx={{ flex: isMobile ? '1 1 100%' : '1 2 100%', textAlign:  'center' , marginBottom:"1rem", color: theme.palette.primary.main}}>
                  Form Submissions <FeedIcon fontSize='large'/>
                 </Typography>
                 <div style={{ height: 400, width: '100%',  backgroundColor:'#fff' }}>

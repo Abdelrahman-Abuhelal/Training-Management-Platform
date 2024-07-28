@@ -154,11 +154,11 @@ const FormBuilder = () => {
   return (
     <div style={{ display: "flex", justifyContent: "center" }}>
      
-      <Paper elevation={3} sx={{ p: isMobile?2:4, m:isMobile?1: 6, width: isMobile?"90%":"75%", maxWidth: 1100 ,  backgroundColor:'#e6e6fa'}}>
+      <Paper elevation={3} sx={{ p: isMobile?2:4, m:isMobile?1: 6, width: isMobile?"90%":"75%", maxWidth: 1100 , backgroundColor:'#E1EBEE', borderRadius: '1rem'  }}>
        <Button  variant="outlined" onClick={navigateBack} startIcon={<ArrowBackIcon />}>
         Form Templates
       </Button>
-        <Typography align="center" variant="h4" gutterBottom>
+        <Typography align="center" variant="h4" gutterBottom sx={{color: theme.palette.primary.main}}>
          EXALT Form Builder <DrawIcon fontSize="large"/>
         </Typography>
         <br />

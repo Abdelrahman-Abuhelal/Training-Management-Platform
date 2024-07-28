@@ -3,6 +3,7 @@ import axios from 'axios';
 import { Paper, TextField, Button, Typography, Chip, Box, MenuItem, Select, InputLabel, FormControl } from '@mui/material';
 import { useAuth } from "../../provider/authProvider";
 import DeleteIcon from '@mui/icons-material/Delete';
+import { useMediaQuery, useTheme } from '@mui/material';
 
 const SkillTopics = [
     { value: 'PROGRAMMING_LANGUAGES', label: 'Programming Languages' },
@@ -18,6 +19,7 @@ const AddSkillComponent = () => {
     const [selectedTopic, setSelectedTopic] = useState('');
     const { user } = useAuth();
     const { login_token } = user;
+    const theme = useTheme();
 
     useEffect(() => {
         fetchSkills();
@@ -70,8 +72,8 @@ const AddSkillComponent = () => {
     };
 
     return (
-        <Paper elevation={3} style={{ padding: '30px', maxWidth: '600px', margin: '40px auto' ,  backgroundColor:'#F5F7F8'}}>
-            <Typography className="concert-one-regular" variant='inherit' align='center' gutterBottom>
+        <Paper elevation={3} style={{ padding: '30px', maxWidth: '600px', margin: '40px auto' ,  backgroundColor:'#E1EBEE', borderRadius: '1rem' }}>
+            <Typography className="concert-one-regular" variant='inherit' align='center' sx={{color:  theme.palette.primary.main}} gutterBottom>
                 Add New Skill
             </Typography>
             <form onSubmit={addSkill} style={{ marginBottom: '20px', display: 'flex', flexDirection: 'column' }}>
@@ -102,7 +104,7 @@ const AddSkillComponent = () => {
                     Add
                 </Button>
             </form>
-            <Typography variant="h6" component="h3" gutterBottom>
+            <Typography variant="h6" sx={{color:theme.palette.primary.main }}  component="h3" gutterBottom>
                 Existing Skills
             </Typography>
             <Paper style={{ maxHeight: '300px', overflowY: 'auto', padding: '10px' }}>

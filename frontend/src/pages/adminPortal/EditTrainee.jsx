@@ -30,7 +30,11 @@ import autoTable from "jspdf-autotable";
 import PictureAsPdfOutlinedIcon from "@mui/icons-material/PictureAsPdfOutlined";
 import { useAuth } from "../../provider/authProvider";
 
+import { useMediaQuery, useTheme } from '@mui/material';
+
+
 const EditTrainee = () => {
+  const theme = useTheme();
   const navigate = useNavigate();
   const { userId } = useParams();
   const { user } = useAuth();
@@ -52,6 +56,7 @@ const EditTrainee = () => {
   const [expectedGraduationDate, setExpectedGraduationDate] = useState("");
   const [trainingField, setTrainingField] = useState("");
   const [branchLocation, setBranchLocation] = useState("");
+  const [bugzillaURL, setBugzillaURL] = useState("");
   const [idNumberError, setIdNumberError] = useState("");
   const [showDetailsConfirmation, setShowDetailsConfirmation] = useState(false);
   const [showGradesConfirmation, setShowGradesConfirmation] = useState(false);
@@ -127,6 +132,7 @@ const EditTrainee = () => {
         );
         setTrainingField(userData.trainingField || "");
         setBranchLocation(userData.branchLocation || "");
+        setBugzillaURL(userData.bugzillaURL || "");
       } else {
         console.error("Error:", response.data);
       }
@@ -168,6 +174,13 @@ const EditTrainee = () => {
     }
   };
 
+
+  const handleKeyDown = (e) => {
+    if (e.key === 'Enter' && bugzillaURL) {
+      window.open(bugzillaURL, '_blank');
+    }
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
     // Show confirmation dialog
@@ -205,6 +218,7 @@ const EditTrainee = () => {
       expectedGraduationDate,
       trainingField,
       branchLocation,
+      bugzillaURL
     };
 
     try {
@@ -420,7 +434,7 @@ const EditTrainee = () => {
             className="concert-one-regular" variant='inherit' gutterBottom
             align="center"
             sx={{
-              color: "#1976D2",
+              color:  theme.palette.primary.main,
               marginTop: "1.5rem"
             }}
           >
@@ -441,11 +455,12 @@ const EditTrainee = () => {
           </Box>
         </Grid>
       </Grid>
-      <Paper elevation={3} sx={{ p: 3, m: 4,  backgroundColor:'#F5F7F8' }} >
+      <Paper elevation={3} sx={{ p: 3, m: 4,backgroundColor: '#E1EBEE'  }} >
         <form onSubmit={handleSubmit}>
           <FormControl fullWidth>
             <Typography sx={{
-              marginBottom: "2rem"
+              marginBottom: "2rem",
+              color:  theme.palette.primary.main
             }} align="center" className="concert-one-regular" variant='inherit' gutterBottom>
               {userFullName}
             </Typography>
@@ -457,8 +472,8 @@ const EditTrainee = () => {
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
                 disabled
-                sx={{backgroundColor:'#fff'}}
-/>
+                sx={{ backgroundColor: '#fff' }}
+              />
             </Box>
 
             <Box mb={2}>
@@ -469,8 +484,8 @@ const EditTrainee = () => {
                 value={fullNameInArabic}
                 onChange={(e) => setFullNameInArabic(e.target.value)}
                 inputProps={{ dir: "rtl", lang: "ar" }}
-                sx={{backgroundColor:'#fff'}}
-/>
+                sx={{ backgroundColor: '#fff' }}
+              />
             </Box>
             <Box mb={2}>
               <FormControl fullWidth>
@@ -479,8 +494,8 @@ const EditTrainee = () => {
                   value={city}
                   onChange={(e) => setCity(e.target.value)}
                   label="Nearest City"
-                  sx={{backgroundColor:'#fff'}}
->
+                  sx={{ backgroundColor: '#fff' }}
+                >
                   <MenuItem value=""></MenuItem>
                   <MenuItem value="Ramallah">Ramallah</MenuItem>
                   <MenuItem value="Tulkarm">Tulkarm</MenuItem>
@@ -505,8 +520,8 @@ const EditTrainee = () => {
                 label="Address (Village / Street name)"
                 value={address}
                 onChange={(e) => setAddress(e.target.value)}
-                sx={{backgroundColor:'#fff'}}
-/>
+                sx={{ backgroundColor: '#fff' }}
+              />
             </Box>
 
             <Box mb={2}>
@@ -516,8 +531,8 @@ const EditTrainee = () => {
                   value={idType}
                   onChange={(e) => setIdType(e.target.value)}
                   label="ID type"
-                  sx={{backgroundColor:'#fff'}}
->
+                  sx={{ backgroundColor: '#fff' }}
+                >
                   <MenuItem value=""></MenuItem>
                   <MenuItem value="Westbank">Westbank - ضفة</MenuItem>
                   <MenuItem value="Jerusalem">Jerusalem - قدس</MenuItem>
@@ -536,8 +551,8 @@ const EditTrainee = () => {
                 error={!!idNumberError}
                 helperText={idNumberError}
                 inputProps={{ inputMode: "numeric" }}
-                sx={{backgroundColor:'#fff'}}
-/>
+                sx={{ backgroundColor: '#fff' }}
+              />
             </Box>
 
             <Box mb={2}>
@@ -546,8 +561,8 @@ const EditTrainee = () => {
                 label="Phone Number starts with '05'"
                 value={phoneNumber}
                 onChange={(e) => setPhoneNumber(e.target.value)}
-                sx={{backgroundColor:'#fff'}}
-/>
+                sx={{ backgroundColor: '#fff' }}
+              />
             </Box>
 
             <Box mb={2}>
@@ -557,8 +572,8 @@ const EditTrainee = () => {
                   value={universityName}
                   onChange={(e) => setUniversityName(e.target.value)}
                   label="University Name"
-                  sx={{backgroundColor:'#fff'}}
->
+                  sx={{ backgroundColor: '#fff' }}
+                >
                   <MenuItem value=""></MenuItem>
                   <MenuItem value="Al-Quds University">
                     Al-Quds University
@@ -600,8 +615,8 @@ const EditTrainee = () => {
                   value={universityMajor}
                   onChange={(e) => setUniversityMajor(e.target.value)}
                   label="University Major"
-                  sx={{backgroundColor:'#fff'}}
->
+                  sx={{ backgroundColor: '#fff' }}
+                >
                   <MenuItem value=""></MenuItem>
                   <MenuItem value="Computer_Engineering">
                     Computer Engineering
@@ -625,8 +640,8 @@ const EditTrainee = () => {
                     value={expectedGraduationYear}
                     onChange={handleYearChange}
                     label="Graduation Year Date (expected)"
-                    sx={{backgroundColor:'#fff'}}
->
+                    sx={{ backgroundColor: '#fff' }}
+                  >
                     <MenuItem value=""></MenuItem>
                     {[...Array(10).keys()].map((i) => (
                       <MenuItem key={i} value={new Date().getFullYear() + i}>
@@ -641,8 +656,8 @@ const EditTrainee = () => {
                     value={expectedGraduationMonth}
                     onChange={handleMonthChange}
                     label="Graduation Month Date (expected)"
-                    sx={{backgroundColor:'#fff'}}
->
+                    sx={{ backgroundColor: '#fff' }}
+                  >
                     <MenuItem value=""></MenuItem>
                     <MenuItem value="01">January</MenuItem>
                     <MenuItem value="02">February</MenuItem>
@@ -667,8 +682,8 @@ const EditTrainee = () => {
                   value={branchLocation}
                   onChange={(e) => setBranchLocation(e.target.value)}
                   label="Branch Location"
-                  sx={{backgroundColor:'#fff'}}
->
+                  sx={{ backgroundColor: '#fff' }}
+                >
                   <MenuItem value=""></MenuItem>
                   <MenuItem value="RAMALLAH">Ramallah</MenuItem>
                   <MenuItem value="NABLUS">Nablus</MenuItem>
@@ -684,8 +699,8 @@ const EditTrainee = () => {
                   value={trainingField}
                   onChange={(e) => setTrainingField(e.target.value)}
                   label="Training Field"
-                  sx={{backgroundColor:'#fff'}}
->
+                  sx={{ backgroundColor: '#fff' }}
+                >
                   <MenuItem value=""></MenuItem>
                   <MenuItem value="BACKEND">Backend</MenuItem>
                   <MenuItem value="FRONTEND">Frontend</MenuItem>
@@ -699,6 +714,26 @@ const EditTrainee = () => {
                 </Select>
               </FormControl>
             </Box>
+
+            <Box mb={2}>
+              <TextField
+                fullWidth
+                label="Buggzilla URL"
+                variant="outlined"
+                value={bugzillaURL}
+                onChange={(e) => setBugzillaURL(e.target.value)}
+                inputProps={{ inputMode: 'url' }}
+                sx={{
+                  backgroundColor: '#fff',
+                  '& .MuiInputBase-root': {
+                    textDecoration: 'underline',
+                    color:  theme.palette.primary.main,
+                    cursor: 'pointer'
+                  }
+                }}
+              />            
+            </Box>
+
             <Box mb={2}>
               <Button fullWidth type="submit" variant="contained" color="primary">
                 Save Details
@@ -708,14 +743,14 @@ const EditTrainee = () => {
         </form>
       </Paper>
 
-      <Paper elevation={3} sx={{ p: 4, m: 6,  backgroundColor:'#F5F7F8' }}>
+      <Paper elevation={3} sx={{ p: 4, m: 6,backgroundColor: '#E1EBEE'  }}>
         <form
           onSubmit={handleAcademicGradesSubmit}
           style={{ paddingBottom: "1rem" }}
         >
           <Grid container spacing={3}>
             <Grid item xs={12}>
-              <Typography  className="concert-one-regular" variant='inherit' align="center" gutterBottom>
+              <Typography className="concert-one-regular" variant='inherit' align="center" sx={{color:  theme.palette.primary.main}}  gutterBottom>
                 Academic Courses <SchoolIcon />
               </Typography>
             </Grid>
@@ -739,8 +774,8 @@ const EditTrainee = () => {
                         value={course.course}
                         onChange={(e) => handleCourseChange(index, e)}
                         fullWidth
-                        sx={{backgroundColor:'#fff'}}
->
+                        sx={{ backgroundColor: '#fff' }}
+                      >
                         <MenuItem value="">Select Course</MenuItem>
                         <MenuItem
                           value="TAWJEEHI"
@@ -795,8 +830,8 @@ const EditTrainee = () => {
                       label="Enter Grade"
                       value={course.grade}
                       onChange={(e) => handleGradeChange(index, e.target.value)}
-                      sx={{backgroundColor:'#fff'}}
-/>
+                      sx={{ backgroundColor: '#fff' }}
+                    />
                   </Grid>
                   <Grid item xs={2}>
                     <Button

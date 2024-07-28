@@ -113,7 +113,7 @@ const FormsList = () => {
     }
 
     return (
-        <Paper elevation={3} style={{ margin: '3rem auto', padding: '1rem', backgroundColor: '#F5F7F8' , width:'70%'}}>
+        <Paper elevation={3} style={{ margin: '3rem auto', padding: '1rem',backgroundColor: '#E1EBEE' , width:'70%'}}>
             <Typography className="concert-one-regular" variant='inherit' gutterBottom style={{ marginBottom: '1rem', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                 Forms <DescriptionIcon sx={{ marginLeft: '0.5rem' }} fontSize="medium" />
             </Typography>

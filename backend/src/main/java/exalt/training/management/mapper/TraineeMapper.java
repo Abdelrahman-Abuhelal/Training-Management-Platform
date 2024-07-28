@@ -20,6 +20,8 @@ public interface TraineeMapper {
     @Mapping(source = "traineeDataDto.expectedGraduationDate",target = "expectedGraduationDate")
     @Mapping(source = "traineeDataDto.trainingField",target = "trainingField")
     @Mapping(source = "traineeDataDto.branchLocation",target = "branchLocation")
+    @Mapping(source = "traineeDataDto.bugzillaURL",target = "bugzillaURL")
+
 //    @Mapping(source = "traineeDataDto.academicGradesDto", target = "academicGrades", ignore = true)
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     Trainee traineeDataDtoToTrainee(TraineeDataDto traineeDataDto);
@@ -35,6 +37,7 @@ public interface TraineeMapper {
     @Mapping(source = "traineeDataDto.expectedGraduationDate",target = "expectedGraduationDate")
     @Mapping(source = "traineeDataDto.trainingField",target = "trainingField")
     @Mapping(source = "traineeDataDto.branchLocation",target = "branchLocation")
+    @Mapping(source = "traineeDataDto.bugzillaURL",target = "bugzillaURL")
 //    @Mapping(source = "traineeDataDto.academicGradesDto", target = "academicGrades", ignore = true)
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     Trainee traineeDataDtoToTrainee(TraineeDataDto traineeDataDto, @MappingTarget Trainee trainee);

@@ -28,6 +28,8 @@ public class TraineeDataDto {
     private String expectedGraduationDate;
     private String trainingField;
     private String branchLocation;
+    private String bugzillaURL;
+
 //    private Map<String, Double> academicGradesDto;
 
 }

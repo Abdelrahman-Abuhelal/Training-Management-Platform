@@ -27,6 +27,7 @@ import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import SearchIcon from "@mui/icons-material/Search";
 import SearchComponent from "../../components/Search";
 import GroupIcon from "@mui/icons-material/Group";
+import { useMediaQuery, useTheme } from '@mui/material';
 
 const Supervisor_Trainees_List = () => {
   const { userId } = useParams();
@@ -41,6 +42,7 @@ const Supervisor_Trainees_List = () => {
   const [username, setUsername] = useState("");
   const [userFullName, setUserFullName] = useState("");
   const navigate = useNavigate();
+  const theme = useTheme();
 
   const filteredTrainees = trainees.filter((trainee) =>
     trainee.userUsername.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -135,7 +137,7 @@ const Supervisor_Trainees_List = () => {
 
   return (
     <div style={{ padding: "3rem" }}>
-      <Paper sx={{ p:'1rem',  backgroundColor:'#F5F7F8' }}>
+      <Paper sx={{ p:'1rem',  backgroundColor:'#E1EBEE', borderRadius: '1rem' }}>
 
       <Grid
         container
@@ -154,7 +156,8 @@ const Supervisor_Trainees_List = () => {
           </IconButton>
         </Grid>
         <Grid item>
-          <Typography className="concert-one-regular" variant='inherit' component="h2" gutterBottom>
+          <Typography className="concert-one-regular" variant='inherit' component="h2"  gutterBottom
+          sx={{color:  theme.palette.primary.main}}>
             {userFullName}'s Trainees <GroupIcon fontSize="large"/>
           </Typography>
         </Grid>

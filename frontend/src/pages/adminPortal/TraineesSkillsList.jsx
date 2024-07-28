@@ -15,13 +15,14 @@ import {
 } from "@mui/material";
 import { useAuth } from "../../provider/authProvider";
 import { Link } from "react-router-dom";
-
+import { useMediaQuery, useTheme } from '@mui/material';
+import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
 // Define proficiency levels and their background colors
 const proficiencyLevels = {
   GOOD: "#d4edda", // light green
-  VERY_GOOD: "#c3e6cb", // green
-  EXCELLENT: "#f8d7da", // light red
-  EXPERT: "#f5c6cb" // dark red
+  VERY_GOOD: "#a9dfbf", // slightly darker green
+  EXCELLENT: "#81c784", // medium green
+  EXPERT: "#4caf50" // darker green
 };
 
 const TraineesSkillsList = () => {
@@ -35,6 +36,7 @@ const TraineesSkillsList = () => {
   const [topicFilter, setTopicFilter] = useState('');
   const [proficiencyFilter, setProficiencyFilter] = useState([]);
   const [allSkills, setAllSkills] = useState([]);
+  const theme = useTheme();
 
   useEffect(() => {
     fetchTraineesWithSkills();
@@ -106,9 +108,9 @@ const TraineesSkillsList = () => {
 
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', minHeight: '100vh', p: 2 }}>
-      <Paper elevation={3} sx={{ p: 3, width: "80%", maxWidth: 1200, backgroundColor: '#F5F7F8' }}>
-        <Typography className="concert-one-regular" variant='inherit' align="center" component="h2" sx={{mb:'2rem'}} gutterBottom>
-          Trainee Skills List
+      <Paper elevation={3} sx={{ p: 3, width: "80%", maxWidth: 1200, backgroundColor:'#E1EBEE', borderRadius: '1rem'  }}>
+        <Typography className="concert-one-regular" variant='inherit' align="center" component="h2" sx={{mb:'2rem',   color:  theme.palette.primary.main}} gutterBottom>
+          Trainee Skills List <AutoAwesomeIcon/>
         </Typography>
 
         {/* Filters */}
@@ -174,10 +176,9 @@ const TraineesSkillsList = () => {
         {/* Trainees List */}
         <Grid container spacing={2} sx={{marginTop:'2rem'}}>
           {filteredTrainees.map((trainee, index) => (
-            <Grid item xs={12} key={index} sx={{ backgroundColor: '#F7F9FC ', mb: '2rem'}}>
+            <Grid item xs={12} key={index} sx={{ backgroundColor: '#B0C4DE ', mb: '2rem', borderRadius: '1rem'}}>
               <Typography className="concert-one-regular" variant='inherit' align="center" component="h3" gutterBottom sx={{mb:'1rem'}}>
-                <strong>Name: </strong> 
-                <Link to={`/edit-trainee/${trainee.userId}`} style={{ textDecoration: 'none', color: '#1976d2' }}>
+                <Link to={`/edit-trainee/${trainee.userId}`} style={{ textDecoration: 'none',  color:  '#000' }}>
                   {trainee.traineeName}
                 </Link>
               </Typography>

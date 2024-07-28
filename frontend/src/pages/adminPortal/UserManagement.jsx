@@ -56,7 +56,7 @@ const UserManagement = () => {
       setFilteredUsers(response.data);
     })
       .catch(error => console.error(error));
-  }, [users]);
+  }, []);
 
   const handleEdit = (user) => {
     setCurrentUser(user);
@@ -151,12 +151,10 @@ const UserManagement = () => {
   const handleSearch = (e) => {
     setSearchTerm(e.target.value);
     const term = e.target.value.toLowerCase();
-    setFilteredUsers(users.filter(user =>
-      user.userEmail.toLowerCase().includes(term) ||
-      user.userFirstName.toLowerCase().includes(term) ||
-      user.userLastName.toLowerCase().includes(term) ||
-      user.userUsername.toLowerCase().includes(term) ||
-      String(user.userEnabled).toLowerCase().includes(term)
+    setFilteredUsers(users.filter(user => 
+      Object.keys(user).some(key => 
+        String(user[key]).toLowerCase().includes(term)
+      )
     ));
   };
 
@@ -184,9 +182,9 @@ const UserManagement = () => {
 
   return (
     <div style={{ display: "flex", justifyContent: "center" }}>
-      <Paper elevation={3} sx={{ p: 3, m: 3, width: "90%", maxWidth: 1800,  backgroundColor:'#F5F7F8' }}>
+      <Paper elevation={3} sx={{ p: 3, m: 3, width: "90%",  borderRadius: '1rem',maxWidth: 1800,backgroundColor: '#E1EBEE' }}>
       <Toolbar sx={{ flexDirection: isMobile ? 'column' : 'row', alignItems: isMobile ?'center': 'normal', gap: isMobile ? 2 : 0 }}>
-      <Typography className="concert-one-regular" variant='inherit' component="div" sx={{ flex: isMobile ? '1 1 100%' : '1 2 100%', textAlign: isMobile ? 'center' : 'left'   ,  color: '#1976d2' }}>
+      <Typography className="concert-one-regular" variant='inherit' component="div" sx={{ flex: isMobile ? '1 1 100%' : '1 2 100%', textAlign: isMobile ? 'center' : 'left'   ,  color:  theme.palette.primary.main }}>
             User Management <AdminPanelSettingsIcon/>
           </Typography>
           <SearchComponent
