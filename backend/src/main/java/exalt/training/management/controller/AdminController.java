@@ -148,7 +148,12 @@ public class AdminController {
         return new ResponseEntity<>(trainees, HttpStatus.OK);
     }
 
-
+    @Operation(summary = "Get the number of active superAdmins", security =  @SecurityRequirement(name = "loginAuth"))
+    @PreAuthorize("hasAnyRole('SUPER_ADMIN')")
+    @GetMapping ("/super-admins/size")
+    public ResponseEntity<Integer> getNumberOfActiveSuperAdmins() {
+        return ResponseEntity.ok(adminService.getNumberOfActiveSuperAdmins());
+    }
 
 
     @Operation(summary = "Get the number of active supervisors", security =  @SecurityRequirement(name = "loginAuth"))

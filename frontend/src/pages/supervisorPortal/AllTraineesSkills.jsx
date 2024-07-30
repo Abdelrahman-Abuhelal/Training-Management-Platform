@@ -15,16 +15,18 @@ import {
 } from "@mui/material";
 import { useAuth } from "../../provider/authProvider";
 import { Link } from "react-router-dom";
-
+import { useMediaQuery, useTheme } from '@mui/material';
+import PersonIcon from '@mui/icons-material/Person';
 // Define proficiency levels and their background colors
 const proficiencyLevels = {
   GOOD: "#d4edda", // light green
-  VERY_GOOD: "#c3e6cb", // green
-  EXCELLENT: "#f8d7da", // light red
-  EXPERT: "#f5c6cb" // dark red
+  VERY_GOOD: "#a9dfbf", // slightly darker green
+  EXCELLENT: "#81c784", // medium green
+  EXPERT: "#4caf50" // darker green
 };
 
 const AllTraineesSkills = () => {
+  const theme = useTheme();
   const baseUrl = import.meta.env.VITE_PORT_URL;
   const { user } = useAuth();
   const { login_token } = user;
@@ -107,8 +109,11 @@ const AllTraineesSkills = () => {
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', minHeight: '100vh', p: 2 }}>
       <Paper elevation={3} sx={{ p: 3, width: "80%", maxWidth: 1200, backgroundColor: '#F5F7F8' }}>
-        <Typography className="concert-one-regular" variant='inherit' align="center" component="h2" sx={{mb:'2rem'}} gutterBottom>
-          Trainee Skills List
+        <Typography className="concert-one-regular" variant='inherit' align="center" component="h2" sx={{
+          marginBottom: "2rem",
+          color: theme.palette.primary.main
+        }} gutterBottom>
+          My Trainees Skills
         </Typography>
 
         {/* Filters */}
@@ -172,18 +177,17 @@ const AllTraineesSkills = () => {
         </Box>
 
         {/* Trainees List */}
-        <Grid container spacing={2} sx={{marginTop:'2rem'}}>
+        <Grid container spacing={2} sx={{ marginTop: '2rem' }}>
           {filteredTrainees.map((trainee, index) => (
-            <Grid item xs={12} key={index} sx={{ backgroundColor: '#F7F9FC ', mb: '2rem'}}>
-              <Typography className="concert-one-regular" variant='inherit' align="center" component="h3" gutterBottom sx={{mb:'1rem'}}>
-                <strong>Name: </strong> 
-                <Link to={`/edit-trainee/${trainee.userId}`} style={{ textDecoration: 'none', color: '#1976d2' }}>
-                  {trainee.traineeName}
+            <Grid item xs={12} key={index} sx={{ backgroundColor: '#F7F9FC ', mb: '2rem' }}>
+              <Typography className="concert-one-regular" variant='inherit' align="center" component="h3" gutterBottom sx={{marginBottom: "1rem"}}>
+                <Link to={`/view-trainee/${trainee.userId}`} style={{ textDecoration: 'none',color: theme.palette.primary.main }}>
+                <PersonIcon/>  {trainee.traineeName} 
                 </Link>
               </Typography>
               <Grid container spacing={1}>
                 {trainee.skills.map((skill, idx) => (
-                  <Grid item xs={6} sm={3} md={2} key={idx}>
+                  <Grid item xs={6} sm={3} md={2} key={idx} >
                     <Box
                       sx={{
                         display: 'flex',
@@ -196,7 +200,8 @@ const AllTraineesSkills = () => {
                         minWidth: 100,
                         overflow: 'hidden', // Hide overflowing content
                         textOverflow: 'ellipsis', // Show ellipsis for overflowing text
-                        whiteSpace: 'nowrap' // Prevent wrapping of text
+                        whiteSpace: 'nowrap',
+                         // Prevent wrapping of text
                       }}
                     >
                       <Typography

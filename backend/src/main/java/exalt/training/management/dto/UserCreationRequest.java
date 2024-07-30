@@ -27,6 +27,9 @@ public class UserCreationRequest {
     @NotEmpty(message = "Last name should not be empty")
     private String userLastName;
 
+    @NotEmpty(message = "User Branch should not be empty")
+    private String userBranch;
+
     @Enumerated(EnumType.STRING)
     @NotNull(message = "Role should not be empty")
     private AppUserRole userRole;

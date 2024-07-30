@@ -1,5 +1,4 @@
-import  {Typography } from '@mui/material';
-import { useTheme } from '@mui/material/styles';
+import { Box, useTheme, useMediaQuery, Typography } from '@mui/material';
 const NavTitle = () => {
   const theme = useTheme();
 
@@ -8,15 +7,15 @@ return(
 <div className="container-fluid">
   <div className="row mb-2">
     <div className="col-sm-6">
-    <Typography  className="concert-one-regular" variant='inherit' sx={{color:  theme.palette.primary.main}}>Admin Dashboard:</Typography>
+    <Typography  className="concert-one-regular" variant='inherit' sx={{color:  theme.palette.primary.main}}>Admin Home:</Typography>
     </div>
     {/* /.col */}
     <div className="col-sm-6">
       <ol className="breadcrumb float-sm-right">
-        <li className="breadcrumb-item">
-          <a href="#">Home</a>
+        <li className="breadcrumb-item" style={{color: theme.palette.primary.main}}>
+          Training Management System
         </li>
-        <li className="breadcrumb-item active">Dashboard</li>
+        <li className="breadcrumb-item active">Home</li>
       </ol>
     </div>
     {/* /.col */}

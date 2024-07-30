@@ -54,12 +54,20 @@ public class AppUser implements UserDetails {
     private String imageUrl;
 
 
+    private String userBranch;
+
+
     @Column(nullable=false)
     private Boolean enabled = false;
 
     @Column(nullable=false)
     private Boolean verified = false;
 
+    @Nullable
+    @ManyToOne
+    @JsonIgnore
+    @JoinColumn(name = "branch_id")
+    private Branch branch;
 
     @Nullable
     @JsonIgnore

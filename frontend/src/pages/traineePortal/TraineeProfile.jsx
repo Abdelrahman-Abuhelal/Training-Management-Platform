@@ -39,6 +39,9 @@ const TraineeProfile = () => {
   const [trainingField, setTrainingField] = useState("");
   const [branchLocation, setBranchLocation] = useState("");
   const [idNumberError, setIdNumberError] = useState("");
+  const [practiceYear, setPracticeYear] = useState("");
+  const [practiceSeason, setPracticeSeason] = useState("");
+
   const [showDetailsConfirmation, setShowDetailsConfirmation] = useState(false);
   const [traineeDetailsSnackbarSuccess, setTraineeDetailsSnackbarSuccess] =
     useState(false);
@@ -79,7 +82,8 @@ const TraineeProfile = () => {
         setExpectedGraduationMonth(userData.expectedGraduationDate.slice(-2) || "");
         setTrainingField(userData.trainingField || "");
         setBranchLocation(userData.branchLocation || "");
-
+        setPracticeYear(userData.practiceYear || "");
+        setPracticeSeason(userData.practiceSeason || "");
         if (userData.fullNameInArabic) {
           setIsSubmitted(true);
         }
@@ -130,6 +134,8 @@ const TraineeProfile = () => {
       expectedGraduationDate,
       trainingField,
       branchLocation,
+      practiceYear,
+      practiceSeason
     };
     try {
       const response = await axios.put(
@@ -353,7 +359,7 @@ const TraineeProfile = () => {
                 onChange={handleYearChange}
                 label="Graduation Year Date (expected)"
                 sx={{backgroundColor:'#fff'}}
->
+              >
                 <MenuItem value=""></MenuItem>
                 {[...Array(10).keys()].map((i) => (
                   <MenuItem key={i} value={new Date().getFullYear() + i}>
@@ -426,6 +432,43 @@ const TraineeProfile = () => {
               <MenuItem value="OTHER">Other</MenuItem>
             </Select>
           </FormControl>
+        </Box>
+        <Box mb={2}>
+          <Box display="flex" justifyContent="space-between">
+            <FormControl variant="outlined" style={{ width: "48%" }} disabled={isSubmitted}
+            >
+              <InputLabel>Practice Year</InputLabel>
+              <Select
+                value={practiceYear}
+                onChange={setPracticeYear}
+                label="Practice Year"
+                sx={{backgroundColor:'#fff'}}
+              >
+                <MenuItem value=""></MenuItem>
+                {[...Array(10).keys()].map((i) => (
+                  <MenuItem key={i} value={new Date().getFullYear() + i}>
+                    {new Date().getFullYear() + i}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+            <FormControl variant="outlined" style={{ width: "48%" }} disabled={isSubmitted}
+            >
+              <InputLabel>Practice Season</InputLabel>
+              <Select
+                value={practiceSeason}
+                onChange={setPracticeSeason}
+                label="Practice Season"
+                sx={{backgroundColor:'#fff'}}
+                >
+                <MenuItem value=""></MenuItem>
+                <MenuItem value="Winter">Winter</MenuItem>
+                <MenuItem value="Summer">Summer</MenuItem>
+                <MenuItem value="Autumn">Autumn</MenuItem>
+                <MenuItem value="Spring">Spring</MenuItem>
+              </Select>
+            </FormControl>
+          </Box>
         </Box>
         <Box mb={2}>
           <Button variant="contained" color="primary" type="submit" disabled={isSubmitted}

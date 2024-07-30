@@ -28,8 +28,11 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import TaskIcon from '@mui/icons-material/Task';
 import { useAuth } from "../../provider/authProvider";
+import { useMediaQuery, useTheme } from '@mui/material';
 
 const AssignTask = () => {
+  const theme = useTheme();
+
   const baseUrl = import.meta.env.VITE_PORT_URL;
   const APIkey = import.meta.env.VITE_GOOGLE_AI_KEY;
   const [taskName, setTaskName] = useState("");
@@ -174,7 +177,7 @@ const AssignTask = () => {
     <div style={{ display: "flex", justifyContent: "center"}}>
 <Paper elevation={3} sx={{ p: 3, m: 6 , width: "70%", maxWidth: 1000, backgroundColor: '#F5F7F8'}} >
 
-      <Typography   className="concert-one-regular" variant='inherit'  sx={{ marginBottom: '2rem' }} align="center">&nbsp;Assign Task&nbsp;<TaskIcon fontSize="medium"/></Typography>
+      <Typography   className="concert-one-regular" variant='inherit'  sx={{ marginBottom: '2rem',color:  theme.palette.primary.main }} align="center">&nbsp;Assign Task&nbsp;<TaskIcon fontSize="medium"/></Typography>
       <Box sx={{ display: "flex", flexWrap: "wrap", gap: 2 }}>
         <TextField
           label="Task Name"

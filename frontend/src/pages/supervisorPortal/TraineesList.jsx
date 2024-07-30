@@ -120,7 +120,7 @@ const Supervisor_Trainees_List = () => {
             <SearchComponent searchTerm={searchTerm} onSearchChange={setSearchTerm} />
           </Grid>
           <Grid item xs={6}>
-            <Typography className="concert-one-regular"  align="center">
+            <Typography className="concert-one-regular" sx={{color:  theme.palette.primary.main}} align="center">
               My Trainees  &nbsp; <GroupIcon fontSize="large" />
             </Typography>
           </Grid>

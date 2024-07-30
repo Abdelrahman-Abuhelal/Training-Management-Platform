@@ -4,17 +4,17 @@ import { createTheme } from '@mui/material/styles';
 const theme = createTheme({
   palette: {
     primary: {
-      main: '#00538C', // Default primary color for buttons and other components
+      main: '#00538C', 
     },
     secondary: {
-      main: '#ff4081', // Example secondary color
+      main: '#ff4081',
     },
   },
   components: {
     MuiButton: {
       styleOverrides: {
         root: {
-          borderRadius: '0.5rem', // Example to customize button border radius
+          borderRadius: '0.5rem', 
         },
       },
     },
@@ -24,7 +24,7 @@ const theme = createTheme({
     h1: {
       fontSize: '2rem', // Example to customize the default h1 font size
     },
-  },
+  }, 
 });
 
 export default theme;

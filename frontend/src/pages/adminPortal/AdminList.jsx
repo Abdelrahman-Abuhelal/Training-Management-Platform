@@ -37,12 +37,12 @@ import PeopleOutlineIcon from '@mui/icons-material/PeopleOutline';
 import { useAuth } from "../../provider/authProvider";
 import { useMediaQuery, useTheme } from '@mui/material';
 
-const HR_Supervisors_List = () => {
+const HR_Superadmin_List = () => {
   const baseUrl = import.meta.env.VITE_PORT_URL;
   const { user } = useAuth();
   const { login_token } = user;
-  const [supervisors, setSupervisors] = useState([]);
-  const [allSupervisors, setAllSupervisors] = useState([]);
+  const [superadmins, setSuperAdmins] = useState([]);
+  const [allSuperadmins, setAllSuperadmin] = useState([]);
   const navigate = useNavigate();
   const [usernameToDelete, setUsernameToDelete] = useState("");
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
@@ -52,18 +52,18 @@ const HR_Supervisors_List = () => {
   const [sortDirection, setSortDirection] = useState("asc");
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
-  const [selectedSupervisor, setSelectedSupervisor] = useState(null);
-  const [availableTrainees, setAvailableTrainees] = useState([]);
-  const [selectedTrainees, setSelectedTrainees] = useState([]);
+  const [selectedSuperadmin, setSelectedSuperadmin] = useState(null);
+
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
-  const filteredSupervisors = supervisors.filter((supervisor) =>
-    supervisor.userUsername.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    supervisor.userFirstName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    supervisor.userLastName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    supervisor.userEmail.toLowerCase().includes(searchTerm.toLowerCase()));
 
-  const paginatedSupervisors = filteredSupervisors.slice(
+  const filteredSuperadmins = superadmins.filter((superadmin) =>
+    superadmin.userUsername.toLowerCase().includes(searchTerm.toLowerCase()) ||
+  superadmin.userFirstName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+  superadmin.userLastName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+  superadmin.userEmail.toLowerCase().includes(searchTerm.toLowerCase()));
+
+  const paginatedSupervisors = filteredSuperadmins.slice(
     page * rowsPerPage,
     page * rowsPerPage + rowsPerPage
   );
@@ -98,15 +98,15 @@ const HR_Supervisors_List = () => {
       }
       );
       if (response.status === 200) {
-        console.log("Supervisor deleted successfully");
-        setSupervisors(supervisors.filter((user) => user.userId !== userId));
+        console.log("Super Admin deleted successfully");
+        setSuperAdmins(superadmins.filter((user) => user.userId !== userId));
       }
     } catch (error) {
       console.log(error);
     }
   };
 
-  const fetchSupervisors = async () => {
+  const fetchAdmins = async () => {
     try {
       const response = await axios.get(`${baseUrl}/api/v1/admin/users`, {
         headers: {
@@ -114,10 +114,10 @@ const HR_Supervisors_List = () => {
         }
       });
       if (response.status === 200) {
-        const supervisorUsers = response.data.filter(
-          (item) => item.userRole === "SUPERVISOR"
+        const superadminUsers = response.data.filter(
+          (item) => item.userRole === "SUPER_ADMIN"
         );
-        const sortedSupervisors = supervisorUsers.sort((a, b) => {
+        const sortedSuperadmins = superadminUsers.sort((a, b) => {
           const isAsc = sortDirection === "asc";
           if (orderBy === "userUsername") {
             return isAsc
@@ -126,8 +126,8 @@ const HR_Supervisors_List = () => {
           }
           return 0;
         });
-        setAllSupervisors(sortedSupervisors);
-        setSupervisors(sortedSupervisors);
+        setAllSuperadmin(sortedSuperadmins);
+        setSuperAdmins(sortedSuperadmins);
       }
     } catch (error) {
       console.log(error);
@@ -135,31 +135,10 @@ const HR_Supervisors_List = () => {
   };
 
   useEffect(() => {
-    fetchSupervisors();
+    fetchAdmins();
   }, [userIdToDelete, sortDirection, orderBy]);
 
-  useEffect(
-    () => {
-      const fetchTrainees = async () => {
-        try {
-          const response = await axios.get(`${baseUrl}/api/v1/admin/users`, {
-            headers: {
-              Authorization: `Bearer ${login_token}`
-            }
-          });
-          if (response.status === 200) {
-            const traineeUsers = response.data.filter(
-              (item) => item.userRole === "TRAINEE"
-            );
-            setAvailableTrainees(traineeUsers);
-          }
-        } catch (error) {
-          console.log(error);
-        }
-      };
-      fetchTrainees();
-    }, []
-  );
+
 
   const handleDelete = (user) => {
     setUserIdToDelete(user.userId);
@@ -184,59 +163,15 @@ const HR_Supervisors_List = () => {
     }
   };
 
-  const handleTraineeSelect = (event) => {
-    setSelectedTrainees(event.target.value);
-  };
 
-  const handleAssignConfirm = async () => {
-    try {
-      const response = await axios.post(
-        `${baseUrl}/api/v1/supervisor/${selectedSupervisor.userId}/assign`,
-        {
-          trainees: selectedTrainees,
-        }, {
-        headers: {
-          Authorization: `Bearer ${login_token}`
-        }
-      }
-      );
-      if (response.status === 200) {
-        console.log("Trainees assigned successfully");
-        fetchSupervisors();
-        setSelectedSupervisor(null);
-        setSelectedTrainees([]);
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
 
-  const exportToExcel = () => {
-    const fileType =
-      "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8";
-    const fileExtension = ".xlsx";
-    const ws = XLSX.utils.json_to_sheet(allSupervisors);
-    const wb = { Sheets: { data: ws }, SheetNames: ["data"] };
-    const excelBuffer = XLSX.write(wb, { bookType: "xlsx", type: "array" });
-    const data = new Blob([excelBuffer], { type: fileType });
-    const url = URL.createObjectURL(data);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = "supervisorList" + fileExtension;
-    document.body.appendChild(a);
-    a.click();
-    setTimeout(() => {
-      document.body.removeChild(a);
-      window.URL.revokeObjectURL(url);
-    }, 100);
-  };
 
   return (
     <div style={{ padding: isMobile ? "0.5rem" : "3rem"}}>
       <Paper sx={{ paddingTop: '1.5rem', backgroundColor: '#E1EBEE', borderRadius: '1rem', alignItems: 'right' }}>
         <Toolbar sx={{ flexDirection: isMobile ? 'column' : 'row', alignItems: isMobile ? 'center' : 'normal', gap: isMobile ? 2 : 0 }}>
           <Typography className="concert-one-regular" variant='inherit' component="div" sx={{ flex: isMobile ? '1 1 100%' : '1 2 100%', textAlign: isMobile ? 'center' : 'left', color: theme.palette.primary.main }}>
-          &nbsp; Active Supervisors <PeopleOutlineIcon />
+          &nbsp; Active Super Admins <PeopleOutlineIcon />
           </Typography>
           <SearchComponent
             searchTerm={searchTerm} onSearchChange={handleSearchChange} />
@@ -279,11 +214,6 @@ const HR_Supervisors_List = () => {
                 </TableCell>
                 <TableCell>
                   <Typography align="center" variant="subtitle1" fontWeight="bold">
-                    Related Trainees
-                  </Typography>
-                </TableCell>
-                <TableCell>
-                  <Typography align="center" variant="subtitle1" fontWeight="bold">
                     Actions
                   </Typography>
                 </TableCell>
@@ -300,17 +230,7 @@ const HR_Supervisors_List = () => {
                     {item.userRole.charAt(0).toUpperCase() +
                       item.userRole.slice(1).toLowerCase()}
                   </TableCell>
-                  <TableCell align="center">
-                    <IconButton
-                      onClick={() =>
-                        navigate(`/supervisors/${item.userId}/trainees`)
-                      }
-                      color="primary"
-                    >
-                      View <GroupIcon fontSize="large"
-                      />
-                    </IconButton>
-                  </TableCell>
+            
                   <TableCell align="center"
                   >
 
@@ -330,7 +250,7 @@ const HR_Supervisors_List = () => {
 
       <TablePagination
         component="div"
-        count={filteredSupervisors.length}
+        count={filteredSuperadmins.length}
         rowsPerPage={rowsPerPage}
         page={page}
         onPageChange={handleChangePage}
@@ -356,49 +276,9 @@ const HR_Supervisors_List = () => {
         </DialogActions>
       </Dialog>
 
-      <Dialog
-        open={!!selectedSupervisor}
-        onClose={() => setSelectedSupervisor(null)}
-      >
-        <DialogTitle>Assign Trainees</DialogTitle>
-        <DialogContent>
-          <FormControl fullWidth>
-            <InputLabel id="trainee-select-label">Select Trainees</InputLabel>
-            <Select
-              labelId="trainee-select-label"
-              id="trainee-select"
-              multiple
-              value={selectedTrainees}
-              onChange={handleTraineeSelect}
-              renderValue={(selected) => (
-                <div>
-                  {selected.map((trainee) => (
-                    <Chip key={trainee.userId} label={trainee.userUsername} />
-                  ))}
-                </div>
-              )}
-            >
-              {availableTrainees.map((trainee) => (
-                <MenuItem key={trainee.userId} value={trainee}>
-                  {trainee.userUsername}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={() => setSelectedSupervisor(null)}>Cancel</Button>
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={handleAssignConfirm}
-          >
-            Confirm
-          </Button>
-        </DialogActions>
-      </Dialog>
+
     </div>
   );
 };
 
-export default HR_Supervisors_List;
+export default HR_Superadmin_List;

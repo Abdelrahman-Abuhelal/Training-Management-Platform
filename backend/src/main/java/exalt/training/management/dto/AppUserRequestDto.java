@@ -29,6 +29,9 @@ public class AppUserRequestDto {
 
     private Boolean userEnabled;
 
+    private String userBranch;
+
+
 
 
 

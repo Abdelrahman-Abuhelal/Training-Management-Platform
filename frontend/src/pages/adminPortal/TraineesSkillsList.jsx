@@ -108,9 +108,9 @@ const TraineesSkillsList = () => {
 
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', minHeight: '100vh', p: 2 }}>
-      <Paper elevation={3} sx={{ p: 3, width: "80%", maxWidth: 1200, backgroundColor:'#E1EBEE', borderRadius: '1rem'  }}>
-        <Typography className="concert-one-regular" variant='inherit' align="center" component="h2" sx={{mb:'2rem',   color:  theme.palette.primary.main}} gutterBottom>
-          Trainee Skills List <AutoAwesomeIcon/>
+      <Paper elevation={3} sx={{ p: 3, width: "80%", maxWidth: 1200, backgroundColor: '#E1EBEE', borderRadius: '1rem' }}>
+        <Typography className="concert-one-regular" variant='inherit' align="center" component="h2" sx={{ mb: '2rem', color: theme.palette.primary.main }} gutterBottom>
+          Trainee Skills List <AutoAwesomeIcon />
         </Typography>
 
         {/* Filters */}
@@ -174,17 +174,17 @@ const TraineesSkillsList = () => {
         </Box>
 
         {/* Trainees List */}
-        <Grid container spacing={2} sx={{marginTop:'2rem'}}>
+        <Grid container spacing={2} sx={{ marginTop: '2rem' }}>
           {filteredTrainees.map((trainee, index) => (
-            <Grid item xs={12} key={index} sx={{ backgroundColor: '#B0C4DE ', mb: '2rem', borderRadius: '1rem'}}>
-              <Typography className="concert-one-regular" variant='inherit' align="center" component="h3" gutterBottom sx={{mb:'1rem'}}>
-                <Link to={`/edit-trainee/${trainee.userId}`} style={{ textDecoration: 'none',  color:  '#000' }}>
+            <Grid item xs={12} key={index} sx={{ backgroundColor: '#fff ', mb: '2rem', borderRadius: '1rem' }}>
+              <Typography className="concert-one-regular" variant='inherit' align="center" component="h3" gutterBottom sx={{ mb: '1rem' }}>
+                <Link to={`/edit-trainee/${trainee.userId}`} style={{ textDecoration: 'none', color: '#000' }}>
                   {trainee.traineeName}
                 </Link>
               </Typography>
-              <Grid container spacing={1}>
+              <Grid container spacing={1} >
                 {trainee.skills.map((skill, idx) => (
-                  <Grid item xs={6} sm={3} md={2} key={idx}>
+                  <Grid item xs={6} sm={3} md={2} key={idx} >
                     <Box
                       sx={{
                         display: 'flex',

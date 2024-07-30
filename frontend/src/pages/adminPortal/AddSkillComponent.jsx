@@ -107,7 +107,7 @@ const AddSkillComponent = () => {
             <Typography variant="h6" sx={{color:theme.palette.primary.main }}  component="h3" gutterBottom>
                 Existing Skills
             </Typography>
-            <Paper style={{ maxHeight: '300px', overflowY: 'auto', padding: '10px' }}>
+            <Paper style={{ maxHeight: '300px', overflowY: 'auto', padding: '10px', borderRadius:'0.5rem' }}>
                 <Box display="flex" flexWrap="wrap" gap={1}>
                     {skills.map((skill) => (
                         <Chip

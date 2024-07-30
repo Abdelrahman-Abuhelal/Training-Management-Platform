@@ -34,7 +34,8 @@ const UserManagement = () => {
     userFirstName: '',
     userLastName: '',
     userUsername: '',
-    userRole: ''
+    userRole: '',
+    userBranch:''
   });
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
@@ -253,6 +254,15 @@ const UserManagement = () => {
                   </TableCell>
                   <TableCell>
                     <TableSortLabel
+                      active={orderBy === 'userBranch'}
+                      direction={orderBy === 'userBranch' ? order : 'asc'}
+                      onClick={() => handleSort('userBranch')}
+                    >
+                      Branch
+                    </TableSortLabel>
+                  </TableCell>
+                  <TableCell>
+                    <TableSortLabel
                       active={orderBy === 'userEnabled'}
                       direction={orderBy === 'userEnabled' ? order : 'asc'}
                       onClick={() => handleSort('userEnabled')}
@@ -280,6 +290,7 @@ const UserManagement = () => {
                     <TableCell>{user.userLastName}</TableCell>
                     <TableCell>{user.userUsername}</TableCell>
                     <TableCell>{user.userRole}</TableCell>
+                    <TableCell>{user.userBranch}</TableCell>
                     <TableCell>
                       <Checkbox checked={user.userEnabled} disabled />
                     </TableCell>
@@ -313,6 +324,7 @@ const UserManagement = () => {
             fullWidth
             value={currentUser ? currentUser.userEmail : newUser.userEmail}
             onChange={handleChange}
+            disabled={!!currentUser}
           />
           <TextField
             margin="dense"
@@ -356,6 +368,21 @@ const UserManagement = () => {
               <MenuItem value="SUPERVISOR">Supervisor</MenuItem>
               <MenuItem value="SUPER_ADMIN">Admin</MenuItem>
             </Select>
+          </FormControl>
+          <FormControl fullWidth margin="dense">
+            <Select
+              name="userBranch"
+              value={currentUser ? currentUser.userBranch : newUser.userBranch}
+              onChange={handleChange}
+              displayEmpty
+            >
+              <MenuItem value="" disabled>
+                Select Branch
+              </MenuItem>
+              <MenuItem value="RAMALLAH">Ramallah</MenuItem>
+              <MenuItem value="NABLUS">Nablus</MenuItem>
+              <MenuItem value="BETHLEHEM">Bethlehem</MenuItem>
+              </Select>
           </FormControl>
           {currentUser && currentUser.userVerified===true && (
             <FormControlLabel

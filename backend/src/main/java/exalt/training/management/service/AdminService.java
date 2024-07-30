@@ -38,8 +38,9 @@ public class AdminService {
 
     private final SupervisorRepository supervisorRepository;
     private final TraineeMapper traineeMapper;
+    private final BranchService branchService;
 
-    public AdminService(TraineeRepository traineeRepository, AppUserRepository appUserRepository, AppUserService appUserService, TokenService tokenService, AuthenticationService authenticationService, EmailService emailService, AppUserMapper userMapper, SupervisorRepository supervisorRepository, TraineeMapper traineeMapper) {
+    public AdminService(TraineeRepository traineeRepository, AppUserRepository appUserRepository, AppUserService appUserService, TokenService tokenService, AuthenticationService authenticationService, EmailService emailService, AppUserMapper userMapper, SupervisorRepository supervisorRepository, TraineeMapper traineeMapper, BranchService branchService) {
         this.traineeRepository = traineeRepository;
         this.appUserRepository = appUserRepository;
         this.appUserService = appUserService;
@@ -49,6 +50,7 @@ public class AdminService {
         this.userMapper = userMapper;
         this.supervisorRepository = supervisorRepository;
         this.traineeMapper = traineeMapper;
+        this.branchService = branchService;
     }
 
 
@@ -66,6 +68,8 @@ public class AdminService {
                 .lastName(request.getUserLastName())
                 .username(request.getUserUsername())
                 .role(request.getUserRole())
+                .userBranch(String.valueOf(branchService.getBranchByBranchName(BranchName.valueOf(request.getUserBranch())).getName()))
+                .branch(branchService.getBranchByBranchName(BranchName.valueOf(request.getUserBranch())))
                 .enabled(false)
                 .verified(false)
                 .build();
@@ -144,7 +148,9 @@ public class AdminService {
                 throw new UserAlreadyExistsException(username + " : this username already reserved before!");
             }
         }
-        appUserRepository.save(userMapper.userRequestDtoToUser(appUserRequestDto,appUser));
+        AppUser appUser1 = userMapper.userRequestDtoToUser(appUserRequestDto,appUser);
+        appUser1.setBranch(branchService.getBranchByBranchName(BranchName.valueOf(appUserRequestDto.getUserBranch())));
+        appUserRepository.save(appUser1);
         return "User with ID : " + appUser.getId() +" have been updated";
     }
 
@@ -256,6 +262,11 @@ public class AdminService {
         }
         return supervisors;
     }
+
+
+    public Integer getNumberOfActiveSuperAdmins(){
+        List < AppUser> appUsers = appUserRepository.findByRole(AppUserRole.SUPER_ADMIN).orElseThrow(()->new AppUserNotFoundException("No SuperAdmin Users"));
+        return Math.toIntExact(appUsers.stream().filter(AppUser::getVerified).count());    }
 
     public Integer getNumberOfActiveSupervisors(){
         List < AppUser> appUsers = appUserRepository.findByRole(AppUserRole.SUPERVISOR).orElseThrow(()->new AppUserNotFoundException("No Supervisors Users"));

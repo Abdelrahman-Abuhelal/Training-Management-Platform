@@ -57,6 +57,8 @@ const EditTrainee = () => {
   const [trainingField, setTrainingField] = useState("");
   const [branchLocation, setBranchLocation] = useState("");
   const [bugzillaURL, setBugzillaURL] = useState("");
+  const [practiceYear, setPracticeYear] = useState("");
+  const [practiceSeason, setPracticeSeason] = useState("");
   const [idNumberError, setIdNumberError] = useState("");
   const [showDetailsConfirmation, setShowDetailsConfirmation] = useState(false);
   const [showGradesConfirmation, setShowGradesConfirmation] = useState(false);
@@ -133,6 +135,8 @@ const EditTrainee = () => {
         setTrainingField(userData.trainingField || "");
         setBranchLocation(userData.branchLocation || "");
         setBugzillaURL(userData.bugzillaURL || "");
+        setPracticeYear(userData.practiceYear || "");
+        setPracticeSeason(userData.practiceSeason || "");
       } else {
         console.error("Error:", response.data);
       }
@@ -218,7 +222,9 @@ const EditTrainee = () => {
       expectedGraduationDate,
       trainingField,
       branchLocation,
-      bugzillaURL
+      bugzillaURL,
+      practiceYear,
+      practiceSeason
     };
 
     try {
@@ -434,7 +440,7 @@ const EditTrainee = () => {
             className="concert-one-regular" variant='inherit' gutterBottom
             align="center"
             sx={{
-              color:  theme.palette.primary.main,
+              color: theme.palette.primary.main,
               marginTop: "1.5rem"
             }}
           >
@@ -455,12 +461,13 @@ const EditTrainee = () => {
           </Box>
         </Grid>
       </Grid>
-      <Paper elevation={3} sx={{ p: 3, m: 4,backgroundColor: '#E1EBEE'  }} >
+      
+      <Paper elevation={3} sx={{ p: 3, m: 4, backgroundColor: '#E1EBEE' }} >
         <form onSubmit={handleSubmit}>
           <FormControl fullWidth>
             <Typography sx={{
               marginBottom: "2rem",
-              color:  theme.palette.primary.main
+              color: theme.palette.primary.main
             }} align="center" className="concert-one-regular" variant='inherit' gutterBottom>
               {userFullName}
             </Typography>
@@ -716,6 +723,43 @@ const EditTrainee = () => {
             </Box>
 
             <Box mb={2}>
+              <Box display="flex" justifyContent="space-between">
+                <FormControl variant="outlined" style={{ width: "48%" }}
+                >
+                  <InputLabel>Practice Year</InputLabel>
+                  <Select
+                    value={practiceYear}
+                    onChange={(e) => setPracticeYear(e.target.value)}
+                    label="Practice Year"
+                    sx={{ backgroundColor: '#fff' }}
+                  >
+                    <MenuItem value=""></MenuItem>
+                    {[...Array(10).keys()].map((i) => (
+                      <MenuItem key={i} value={new Date().getFullYear() + i}>
+                        {new Date().getFullYear() + i}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+                <FormControl variant="outlined" style={{ width: "48%" }}
+                >
+                  <InputLabel>Practice Season</InputLabel>
+                  <Select
+                    value={practiceSeason}
+                    onChange={(e) => setPracticeSeason(e.target.value)}
+                    label="Practice Season"
+                    sx={{ backgroundColor: '#fff' }}
+                  >
+                    <MenuItem value=""></MenuItem>
+                    <MenuItem value="Winter">Winter</MenuItem>
+                    <MenuItem value="Summer">Summer</MenuItem>
+                    <MenuItem value="Autumn">Autumn</MenuItem>
+                    <MenuItem value="Spring">Spring</MenuItem>
+                  </Select>
+                </FormControl>
+              </Box>
+            </Box>
+            <Box mb={2}>
               <TextField
                 fullWidth
                 label="Buggzilla URL"
@@ -727,13 +771,12 @@ const EditTrainee = () => {
                   backgroundColor: '#fff',
                   '& .MuiInputBase-root': {
                     textDecoration: 'underline',
-                    color:  theme.palette.primary.main,
+                    color: theme.palette.primary.main,
                     cursor: 'pointer'
                   }
                 }}
-              />            
+              />
             </Box>
-
             <Box mb={2}>
               <Button fullWidth type="submit" variant="contained" color="primary">
                 Save Details
@@ -743,14 +786,14 @@ const EditTrainee = () => {
         </form>
       </Paper>
 
-      <Paper elevation={3} sx={{ p: 4, m: 6,backgroundColor: '#E1EBEE'  }}>
+      <Paper elevation={3} sx={{ p: 3, m: 4, backgroundColor: '#E1EBEE' }}>
         <form
           onSubmit={handleAcademicGradesSubmit}
           style={{ paddingBottom: "1rem" }}
         >
           <Grid container spacing={3}>
             <Grid item xs={12}>
-              <Typography className="concert-one-regular" variant='inherit' align="center" sx={{color:  theme.palette.primary.main}}  gutterBottom>
+              <Typography className="concert-one-regular" variant='inherit' align="center" sx={{ color: theme.palette.primary.main }} gutterBottom>
                 Academic Courses <SchoolIcon />
               </Typography>
             </Grid>

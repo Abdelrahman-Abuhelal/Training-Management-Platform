@@ -16,7 +16,11 @@ import {
   Delete as DeleteIcon,
 } from "@mui/icons-material";
 import TopicIcon from '@mui/icons-material/Topic';
+import { useMediaQuery, useTheme } from '@mui/material';
+
 const ResourceUploader = () => {
+  const theme = useTheme();
+
   const [resource, setResource] = useState({
     name: "",
     description: "",
@@ -52,7 +56,7 @@ const ResourceUploader = () => {
   return (<div style={{ display: "flex", justifyContent: "center" }}>
 
     <Paper elevation={3} sx={{ p: 3, m: 6, width: "70%", maxWidth: 1000, backgroundColor: '#F5F7F8' }} >
-      <Typography className="concert-one-regular" variant='inherit'  gutterBottom style={{ marginBottom: "1rem" }}>
+      <Typography className="concert-one-regular" variant='inherit'  gutterBottom style={{ marginBottom: "1rem",color:  theme.palette.primary.main }}>
         Add New Resource <TopicIcon fontSize="medium"/>
       </Typography>
       <form onSubmit={handleSubmit}>
@@ -64,7 +68,8 @@ const ResourceUploader = () => {
           value={resource.name}
           onChange={handleInputChange}
           required
-        />
+          sx={{backgroundColor:'#fff'}}
+/>
         <TextField
           fullWidth
           margin="normal"
@@ -75,7 +80,8 @@ const ResourceUploader = () => {
           multiline
           rows={4}
           required
-        />
+          sx={{backgroundColor:'#fff'}}
+/>
         <Box display="flex" alignItems="center" mt={2}>
           <input
             accept=".pdf,.doc,.docx,.xls,.xlsx"

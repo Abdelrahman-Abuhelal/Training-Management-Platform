@@ -29,7 +29,8 @@ public class TraineeDataDto {
     private String trainingField;
     private String branchLocation;
     private String bugzillaURL;
-
+    private String practiceYear;
+    private String practiceSeason;
 //    private Map<String, Double> academicGradesDto;
 
 }

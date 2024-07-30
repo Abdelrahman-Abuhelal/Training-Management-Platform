@@ -22,6 +22,7 @@ public interface AppUserMapper {
     @Mapping(source = "appUser.firstName",target = "userFirstName")
     @Mapping(source = "appUser.lastName",target = "userLastName")
     @Mapping(source = "appUser.username",target = "userUsername")
+    @Mapping(source = "appUser.userBranch",target = "userBranch")
     @Mapping(source = "appUser.enabled",target = "userEnabled")
     @Mapping(source = "appUser.verified",target = "userVerified")
     AppUserDto userToUserDto(AppUser appUser);
@@ -32,6 +33,7 @@ public interface AppUserMapper {
     @Mapping(source = "appUser.firstName",target = "userFirstName")
     @Mapping(source = "appUser.lastName",target = "userLastName")
     @Mapping(source = "appUser.username",target = "userUsername")
+    @Mapping(source = "appUser.userBranch",target = "userBranch")
     @Mapping(source = "appUser.enabled",target = "userEnabled")
     @Mapping(source = "appUser.verified",target = "userVerified")
     List<AppUserDto> userToUserDto(List<AppUser> appUser);
@@ -42,6 +44,7 @@ public interface AppUserMapper {
     @Mapping(source = "appUserDto.userFirstName",target = "firstName")
     @Mapping(source = "appUserDto.userLastName",target = "lastName")
     @Mapping(source = "appUserDto.userUsername",target = "username")
+    @Mapping(source = "appUserDto.userBranch",target = "userBranch")
     @Mapping(source = "appUserDto.userEnabled",target = "enabled")
     @Mapping(source = "appUserDto.userVerified",target = "verified")
     AppUser userDtoToUser(AppUserDto appUserDto);
@@ -52,6 +55,7 @@ public interface AppUserMapper {
     @Mapping(source = "appUserDto.userLastName",target = "lastName")
     @Mapping(source = "appUserDto.userRole",target = "role")
     @Mapping(source = "appUserDto.userUsername",target = "username")
+    @Mapping(source = "appUserDto.userBranch",target = "userBranch")
     @Mapping(source = "appUserDto.userEnabled",target = "enabled")
     @Mapping(source = "appUserDto.userVerified",target = "verified")
     AppUser userDtoToUser(AppUserDto appUserDto, @MappingTarget AppUser appUser);

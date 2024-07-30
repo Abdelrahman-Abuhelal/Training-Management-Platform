@@ -20,6 +20,7 @@ import { useAuth } from "../../provider/authProvider";
 import { useParams } from "react-router-dom";
 import StarsIcon from '@mui/icons-material/Stars';
 import StarRateIcon from '@mui/icons-material/StarRate';
+import { useMediaQuery, useTheme } from '@mui/material';
 
 
 const skillCategories = [
@@ -37,11 +38,12 @@ const proficiencyLevels = {
   EXPERT: "#f5c6cb" // dark red
 };
 
-const TraineeSkills = ({ traineeId }) => {
+const TraineeSkills = () => {
   const baseUrl = import.meta.env.VITE_PORT_URL;
   const { user } = useAuth();
   const { login_token } = user;
   const { userId } = useParams();
+  const theme = useTheme();
 
   const [skills, setSkills] = useState([]);
   const [selectedSkills, setSelectedSkills] = useState({
@@ -170,13 +172,13 @@ const TraineeSkills = ({ traineeId }) => {
   return (
     <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '100vh', marginTop:'2rem',marginBottom:'4rem' }}>
       <Paper elevation={3} sx={{ p: 3, width: "80%", maxWidth: 1200, backgroundColor: '#F5F7F8', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-        <Typography className="concert-one-regular" variant='inherit' gutterBottom>
+        <Typography className="concert-one-regular" variant='inherit' sx={{color:  theme.palette.primary.main, mb:'1.5rem'}} gutterBottom>
           Manage Trainee Skills <StarRateIcon/>
         </Typography>
         <Grid container spacing={2}>
           {skillCategories.map(category => (
             <Grid item xs={12} key={category}>
-              <Typography variant="h6" component="h3" sx={{marginTop:'2rem'}} gutterBottom>
+              <Typography variant="h6" component="h3" sx={{marginTop:'2rem'}} align="center" gutterBottom>
                 {category.replace(/_/g, ' ')}
               </Typography>
               <FormControl fullWidth variant="outlined" sx={{ mb: '1rem' ,mt:'1rem'}}>

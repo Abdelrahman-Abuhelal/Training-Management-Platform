@@ -23,6 +23,8 @@ public class AppUserDto {
 
     private AppUserRole userRole;
 
+    private String userBranch;
+
     private Boolean userEnabled;
 
     private Boolean userVerified;

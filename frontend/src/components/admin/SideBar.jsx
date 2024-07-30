@@ -21,14 +21,15 @@ import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
 import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
 import AddIcon from '@mui/icons-material/Add';
 const routes = [
-  { path: "/dashboard", name: "Dashboard", icon: <SpaceDashboardIcon sx={{ color: 'primary.main' }}/> },
+  { path: "/home", name: "Home", icon: <SpaceDashboardIcon sx={{ color: 'primary.main' }}/> },
   { path: "/users", name: "User Management", icon: <AdminPanelSettingsIcon sx={{ color: 'primary.main' }}/> },
   { path: "/trainees", name: "Trainees", icon: <GroupsIcon sx={{ color: 'primary.main' }}/> },
   { path: "/supervisors", name: "Supervisors", icon: <GroupsIcon sx={{ color: 'primary.main' }}/> },
+  { path: "/superadmins", name: "Super Admins", icon: <GroupsIcon sx={{ color: 'primary.main' }}/> },
   { path: "/form-templates", name: "Forms", icon: <ListAltIcon sx={{ color: 'primary.main' }}/> },
   { path: "/skills", name: "Skills", icon: <AutoAwesomeIcon sx={{ color: 'primary.main' }}/> },
   { path: "/add-skills", name: "Add Skills", icon: <AddIcon sx={{ color: 'primary.main' }}/> },
-  { path: "/create-announcements", name: "Create Announcements", icon: <CampaignIcon sx={{ color: 'primary.main' }}/> },
+  { path: "/create-announcements", name: "Announcements", icon: <CampaignIcon sx={{ color: 'primary.main' }}/> },
   { path: "/change-password", name: "Settings", icon: <SettingsIcon sx={{ color: 'primary.main' }}/> },
 ];
 
@@ -42,7 +43,7 @@ export default function TemporaryDrawer({ state, setState, toggleDrawer }) {
     >
       <List>
         {routes.map((route, index) => (
-          <ListItem key={route.name} disablePadding>
+        <ListItem  key={route.name} disablePadding>
             <ListItemButton href={route.path}>
               <ListItemIcon>{route.icon}</ListItemIcon>
               <ListItemText primary={route.name} />

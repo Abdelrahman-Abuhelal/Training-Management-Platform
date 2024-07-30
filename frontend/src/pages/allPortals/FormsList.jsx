@@ -8,11 +8,14 @@ import DescriptionIcon from '@mui/icons-material/Description'; // Example icon
 import CheckCircleIcon from '@mui/icons-material/CheckCircle'; // Icon for FILLED status
 import HighlightOffIcon from '@mui/icons-material/HighlightOff'; // Icon for NOT FILLED status
 import AssignmentIcon from '@mui/icons-material/Assignment';
+import { useMediaQuery, useTheme } from '@mui/material';
+
 const FormsList = () => {
     const [forms, setForms] = useState([]);
     const baseUrl = import.meta.env.VITE_PORT_URL;
     const { user } = useAuth();
     const { login_token } = user;
+    const theme = useTheme();
 
     const handleViewClick = (row) => {
         localStorage.setItem('selectedForm', JSON.stringify({
@@ -114,7 +117,7 @@ const FormsList = () => {
 
     return (
         <Paper elevation={3} style={{ margin: '3rem auto', padding: '1rem',backgroundColor: '#E1EBEE' , width:'70%'}}>
-            <Typography className="concert-one-regular" variant='inherit' gutterBottom style={{ marginBottom: '1rem', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+            <Typography className="concert-one-regular" variant='inherit' gutterBottom style={{ color:  theme.palette.primary.main,marginBottom: '1rem', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                 Forms <DescriptionIcon sx={{ marginLeft: '0.5rem' }} fontSize="medium" />
             </Typography>
             <div style={{ height: 340, width: '100%', backgroundColor: '#ffffff', borderRadius: '5px', overflow: 'hidden' }}>

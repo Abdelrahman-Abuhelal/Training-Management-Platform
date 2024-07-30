@@ -17,32 +17,41 @@ import java.util.Map;
 @RestController
 @RequiredArgsConstructor
 public class AcademicGradesController {
-    
+
     private final AcademicGradesService academicGradesService;
 
-
     // Should add authorization to this endpoint for only SUPER_ADMIN
-    @Operation(summary = "Get All Academic Grades", security =  @SecurityRequirement(name = "loginAuth"))
+    @Operation(summary = "Get All Academic Grades", security = @SecurityRequirement(name = "loginAuth"))
     @PreAuthorize("hasAnyRole('SUPER_ADMIN','SUPERVISOR')")
     @GetMapping("/all")
     public ResponseEntity<List<AcademicGrades>> getAllAcademicGrades() {
-        List <AcademicGrades> academicGrades =  academicGradesService.getAllAcademicGrades();
-        return new ResponseEntity<>(academicGrades, HttpStatus.OK);
+        try {
+            List<AcademicGrades> academicGrades = academicGradesService.getAllAcademicGrades();
+            return new ResponseEntity<>(academicGrades, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @PreAuthorize("hasAnyRole('SUPER_ADMIN','SUPERVISOR')")
     @GetMapping("/trainees/{userId}")
     public ResponseEntity<List<AcademicGrades>> getAcademicGradesForTrainee(@PathVariable Long userId) {
-        List<AcademicGrades> academicGrades =  academicGradesService.getAcademicGradesForTrainee(userId);
-        return new ResponseEntity<>(academicGrades, HttpStatus.OK);
+        try {
+            List<AcademicGrades> academicGrades = academicGradesService.getAcademicGradesForTrainee(userId);
+            return new ResponseEntity<>(academicGrades, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
-
-    @Operation(summary = "Save Academic Grades for a trainee using UserId", security =  @SecurityRequirement(name = "loginAuth"))
+    @Operation(summary = "Save Academic Grades for a trainee using UserId", security = @SecurityRequirement(name = "loginAuth"))
     @PreAuthorize("hasAnyRole('SUPER_ADMIN','SUPERVISOR')")
     @PutMapping("/trainees/{userId}")
     public ResponseEntity<String> saveAcademicGradesToTrainee(@RequestBody Map<String, Double> grades, @PathVariable Long userId) {
-        return ResponseEntity.ok(academicGradesService.saveAcademicGradesToTrainee(grades, userId));
+        try {
+            return ResponseEntity.ok(academicGradesService.saveAcademicGradesToTrainee(grades, userId));
+        } catch (Exception e) {
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
-
 }

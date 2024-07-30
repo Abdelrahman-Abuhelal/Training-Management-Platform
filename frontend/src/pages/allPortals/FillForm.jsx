@@ -26,6 +26,7 @@ import { useParams, useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from '../../provider/authProvider';
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import { useMediaQuery, useTheme } from '@mui/material';
 
 const FillForm = () => {
   const { formId } = useParams();
@@ -38,6 +39,7 @@ const FillForm = () => {
   const [answers, setAnswers] = useState([]);
   const [formDisabled, setFormDisabled] = useState(false);
   const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const theme = useTheme();
 
   useEffect(() => {
     const storedFormData = localStorage.getItem('selectedForm');
@@ -234,7 +236,7 @@ const FillForm = () => {
           </Typography>
         </Box>
       )}<Paper elevation={3} sx={{ p: 3, m: "2rem" , backgroundColor: '#FFF' }}>
-        <Typography className="concert-one-regular" variant='inherit' align="center" gutterBottom sx={{ mb: "2rem" }}>
+        <Typography className="concert-one-regular" variant='inherit' align="center" gutterBottom sx={{color:  theme.palette.primary.main, mb: "2rem" }}>
           <strong>{formData.formTitle}</strong>
         </Typography>
         <Typography variant="subtitle1" gutterBottom sx={{ m: "1rem" }}>

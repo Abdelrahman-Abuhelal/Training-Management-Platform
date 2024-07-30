@@ -36,6 +36,7 @@ import AddSkillComponent from '../pages/adminPortal/AddSkillComponent.jsx';
 import TraineeSkills from '../pages/supervisorPortal/TraineeSkills.jsx';
 import TraineesSkillsList from '../pages/adminPortal/TraineesSkillsList.jsx';
 import AllTraineesSkills from '../pages/supervisorPortal/AllTraineesSkills.jsx';
+import HR_Superadmin_List from '../pages/adminPortal/AdminList.jsx';
 
 const Routes = () => {
   const { user } = useAuth();
@@ -115,14 +116,16 @@ const Routes = () => {
           element: <AdminLayout />,
           children: [
             { path: '/', element: <AdminHome /> },
-            { path: '/dashboard', element: <AdminHome /> },
+            { path: '/home', element: <AdminHome /> },
             { path: '/users', element: <UserManagement /> },
+            { path: '/trainees', element: <HR_Trainees_List /> },
             { path: '/trainees', element: <HR_Trainees_List /> },
             { path: '/forms', element: <FormsList /> },
             { path: '/skills', element: <TraineesSkillsList /> },
             { path: '/add-skills', element: <AddSkillComponent /> },
             { path: '/supervisors', element: <HR_Supervisors_List /> },
             { path: '/supervisors/:userId/trainees', element: <SupervisorTraineesList /> },
+            { path: '/superadmins', element: <HR_Superadmin_List /> },
             { path: '/create-forms', element: <FormBuilder /> },
             { path: '/form-templates', element: <FormTemplates /> },
             { path: '/form-templates/:formId/submissions', element: <FormSubmissions /> },

@@ -18,8 +18,9 @@ import SettingsIcon from '@mui/icons-material/Settings';
 import AddTaskIcon from '@mui/icons-material/AddTask';
 import NoteAddIcon from '@mui/icons-material/NoteAdd';
 import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
+
 const routes = [
-  { path: '/dashboard', name: 'Dashboard', icon: <SpaceDashboardIcon sx={{ color: 'primary.main' }}/> },
+  { path: '/home', name: 'Home', icon: <SpaceDashboardIcon sx={{ color: 'primary.main' }}/> },
   { path: '/my-trainees', name: 'My Trainees', icon: <AccountCircleIcon sx={{ color: 'primary.main' }}/> },
   { path: '/skills', name: 'Trainees Skills', icon: <AutoAwesomeIcon sx={{ color: 'primary.main' }}/> },
   { path: '/assign-task', name: 'Assign Task', icon: <AddTaskIcon sx={{ color: 'primary.main' }}/> },
@@ -40,7 +41,7 @@ export default function TemporaryDrawer({state, setState, toggleDrawer}) {
     >
             <List>      
           {routes.map((route, index) => (
-        <ListItem key={route.name} disablePadding>
+        <ListItem  key={route.name} disablePadding>
         <ListItemButton href={route.path}>
               <ListItemIcon>
               {route.icon}
