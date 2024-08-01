@@ -65,15 +65,15 @@ public class AdminController {
         return new ResponseEntity<>(message, HttpStatus.OK);
     }
 
-    @Operation(summary = "Get All Enabled Users", security =  @SecurityRequirement(name = "loginAuth"))
+    @Operation(summary = "Get All Activated Users", security =  @SecurityRequirement(name = "loginAuth"))
     @PreAuthorize("hasAnyRole('SUPER_ADMIN','SUPERVISOR')")
     @GetMapping("/users")
-    public ResponseEntity<List<AppUserDto>> getAllEnabledUsers(){
-        List<AppUserDto> userList= adminService.getAllEnabledUsers();
+    public ResponseEntity<List<AppUserDto>> getAllActivatedUsers(){
+        List<AppUserDto> userList= adminService.getAllActivatedUsers();
         return new ResponseEntity<>(userList, HttpStatus.OK);
     }
 
-    @Operation(summary = "Get All Users (enabled and not enabled)", security =  @SecurityRequirement(name = "loginAuth"))
+    @Operation(summary = "Get All Users (activated and not activated)", security =  @SecurityRequirement(name = "loginAuth"))
     @PreAuthorize("hasAnyRole('SUPER_ADMIN','SUPERVISOR')")
     @GetMapping("/all-users")
     public ResponseEntity<List<AppUserDto>> getAllUsers(){

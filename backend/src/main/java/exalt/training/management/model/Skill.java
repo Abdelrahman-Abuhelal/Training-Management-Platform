@@ -1,7 +1,11 @@
 package exalt.training.management.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "skills")
@@ -22,5 +26,7 @@ public class Skill {
     @Column(nullable = false)
     private SkillTopic topic;
 
-
+    @OneToMany(mappedBy = "skill", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
+    private List<TraineeSkill> traineeSkills = new ArrayList<>();
 }

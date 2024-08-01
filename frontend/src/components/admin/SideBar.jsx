@@ -28,9 +28,8 @@ const routes = [
   { path: "/superadmins", name: "Super Admins", icon: <GroupsIcon sx={{ color: 'primary.main' }}/> },
   { path: "/form-templates", name: "Forms", icon: <ListAltIcon sx={{ color: 'primary.main' }}/> },
   { path: "/skills", name: "Skills", icon: <AutoAwesomeIcon sx={{ color: 'primary.main' }}/> },
-  { path: "/add-skills", name: "Add Skills", icon: <AddIcon sx={{ color: 'primary.main' }}/> },
   { path: "/create-announcements", name: "Announcements", icon: <CampaignIcon sx={{ color: 'primary.main' }}/> },
-  { path: "/change-password", name: "Settings", icon: <SettingsIcon sx={{ color: 'primary.main' }}/> },
+  { path: "/settings", name: "Settings", icon: <SettingsIcon sx={{ color: 'primary.main' }}/> },
 ];
 
 export default function TemporaryDrawer({ state, setState, toggleDrawer }) {

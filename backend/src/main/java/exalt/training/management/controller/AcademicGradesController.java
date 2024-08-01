@@ -34,6 +34,7 @@ public class AcademicGradesController {
     }
 
     @PreAuthorize("hasAnyRole('SUPER_ADMIN','SUPERVISOR')")
+    @Operation(summary = "Get Academic Grades for a trainee using UserId", security = @SecurityRequirement(name = "loginAuth"))
     @GetMapping("/trainees/{userId}")
     public ResponseEntity<List<AcademicGrades>> getAcademicGradesForTrainee(@PathVariable Long userId) {
         try {

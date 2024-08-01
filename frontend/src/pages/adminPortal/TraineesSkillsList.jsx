@@ -17,6 +17,7 @@ import { useAuth } from "../../provider/authProvider";
 import { Link } from "react-router-dom";
 import { useMediaQuery, useTheme } from '@mui/material';
 import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 // Define proficiency levels and their background colors
 const proficiencyLevels = {
   GOOD: "#d4edda", // light green
@@ -107,8 +108,8 @@ const TraineesSkillsList = () => {
   };
 
   return (
-    <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', minHeight: '100vh', p: 2 }}>
-      <Paper elevation={3} sx={{ p: 3, width: "80%", maxWidth: 1200, backgroundColor: '#E1EBEE', borderRadius: '1rem' }}>
+    <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', minHeight: '100vh', p: '3rem' }}>
+      <Paper elevation={3} sx={{ p: 3, width: "80%", maxWidth: 1800, backgroundColor: '#E1EBEE', borderRadius: '1rem', p: '2rem' }}>
         <Typography className="concert-one-regular" variant='inherit' align="center" component="h2" sx={{ mb: '2rem', color: theme.palette.primary.main }} gutterBottom>
           Trainee Skills List <AutoAwesomeIcon />
         </Typography>
@@ -176,12 +177,16 @@ const TraineesSkillsList = () => {
         {/* Trainees List */}
         <Grid container spacing={2} sx={{ marginTop: '2rem' }}>
           {filteredTrainees.map((trainee, index) => (
-            <Grid item xs={12} key={index} sx={{ backgroundColor: '#fff ', mb: '2rem', borderRadius: '1rem' }}>
-              <Typography className="concert-one-regular" variant='inherit' align="center" component="h3" gutterBottom sx={{ mb: '1rem' }}>
-                <Link to={`/edit-trainee/${trainee.userId}`} style={{ textDecoration: 'none', color: '#000' }}>
-                  {trainee.traineeName}
+            <Grid item xs={12} key={index} sx={{ backgroundColor: '#F5FFFA', mb: '2rem', borderRadius: '1rem' }}>
+              <Typography  variant='h5' align="center" component="h3" gutterBottom  >
+                <Link to={`/edit-trainee/${trainee.userId}`} style={{ textDecoration: 'none', color:  theme.palette.primary.main}}>
+                 <AccountCircleIcon sx={{mb:'0.4rem'}} fontSize="large"/> {trainee.traineeName}
                 </Link>
               </Typography>
+              <Typography  variant='h6'  component="h3" gutterBottom  sx={{ml:'0.5rem', color:  theme.palette.primary.main}}>
+              Skills:
+              </Typography>
+
               <Grid container spacing={1} >
                 {trainee.skills.map((skill, idx) => (
                   <Grid item xs={6} sm={3} md={2} key={idx} >

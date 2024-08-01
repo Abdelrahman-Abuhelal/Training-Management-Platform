@@ -3,16 +3,8 @@ import axios from 'axios';
 import { Paper, TextField, Button, Typography, Chip, Box, MenuItem, Select, InputLabel, FormControl } from '@mui/material';
 import { useAuth } from "../../provider/authProvider";
 import DeleteIcon from '@mui/icons-material/Delete';
-import { useTheme } from '@mui/material';
-import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import { useNavigate } from 'react-router-dom';
+import { useMediaQuery, useTheme } from '@mui/material';
 
-const SkillTopics = [
-    { value: 'PROGRAMMING_LANGUAGES', label: 'Programming Languages' },
-    { value: 'TECHNOLOGIES', label: 'Technologies' },
-    { value: 'CONCEPTS', label: 'Concepts' },
-    { value: 'SOFT_SKILLS', label: 'Soft Skills' },
-];
 
 const AddSkillComponent = () => {
     const baseUrl = import.meta.env.VITE_PORT_URL;
@@ -22,7 +14,6 @@ const AddSkillComponent = () => {
     const { user } = useAuth();
     const { login_token } = user;
     const theme = useTheme();
-    const navigate  = useNavigate();
 
     useEffect(() => {
         fetchSkills();
@@ -51,14 +42,14 @@ const AddSkillComponent = () => {
                 'Content-Type': 'application/json'
             }
         })
-            .then(response => {
-                setSkills([...skills, response.data]);
-                setNewSkill('');
-                setSelectedTopic('');
-            })
-            .catch(error => {
-                console.error('Error adding skill', error);
-            });
+        .then(response => {
+            setSkills([...skills, response.data]);
+            setNewSkill('');
+            setSelectedTopic('');
+        })
+        .catch(error => {
+            console.error('Error adding skill', error);
+        });
     };
 
     const deleteSkill = async (id) => {
@@ -74,15 +65,9 @@ const AddSkillComponent = () => {
         }
     };
 
-    const navigateBack = () => {
-        navigate(`/settings`);
-      };
     return (
-        <Paper elevation={3} style={{ padding: '30px', maxWidth: '600px', margin: '40px auto', backgroundColor: '#E1EBEE', borderRadius: '1rem' }}>
-            <Button sx={{ backgroundColor: '#fff' }} variant="outlined" onClick={navigateBack} startIcon={<ArrowBackIcon />}>
-                Settings
-            </Button>
-            <Typography className="concert-one-regular" variant='inherit' align='center' sx={{ color: theme.palette.primary.main }} gutterBottom>
+        <Paper elevation={3} style={{ padding: '30px', maxWidth: '600px', margin: '40px auto' ,  backgroundColor:'#E1EBEE', borderRadius: '1rem' }}>
+            <Typography className="concert-one-regular" variant='inherit' align='center' sx={{color:  theme.palette.primary.main}} gutterBottom>
                 Add New Skill
             </Typography>
             <form onSubmit={addSkill} style={{ marginBottom: '20px', display: 'flex', flexDirection: 'column' }}>
@@ -92,8 +77,8 @@ const AddSkillComponent = () => {
                         value={selectedTopic}
                         onChange={(e) => setSelectedTopic(e.target.value)}
                         label="Skill Topic"
-                        sx={{ backgroundColor: '#fff' }}
-                    >
+                        sx={{backgroundColor:'#fff'}}
+>
                         {SkillTopics.map((topic) => (
                             <MenuItem key={topic.value} value={topic.value}>
                                 {topic.label}
@@ -107,16 +92,16 @@ const AddSkillComponent = () => {
                     onChange={(e) => setNewSkill(e.target.value)}
                     variant="outlined"
                     style={{ marginBottom: '10px' }}
-                    sx={{ backgroundColor: '#fff' }}
-                />
+                    sx={{backgroundColor:'#fff'}}
+/>
                 <Button type="submit" variant="contained" color="primary">
                     Add
                 </Button>
             </form>
-            <Typography variant="h6" sx={{ color: theme.palette.primary.main }} component="h3" gutterBottom>
+            <Typography variant="h6" sx={{color:theme.palette.primary.main }}  component="h3" gutterBottom>
                 Existing Skills
             </Typography>
-            <Paper style={{ maxHeight: '300px', overflowY: 'auto', padding: '10px', borderRadius: '0.5rem' }}>
+            <Paper style={{ maxHeight: '300px', overflowY: 'auto', padding: '10px', borderRadius:'0.5rem' }}>
                 <Box display="flex" flexWrap="wrap" gap={1}>
                     {skills.map((skill) => (
                         <Chip

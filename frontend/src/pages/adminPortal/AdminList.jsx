@@ -42,6 +42,7 @@ const HR_Superadmin_List = () => {
   const { user } = useAuth();
   const { login_token } = user;
   const [superadmins, setSuperAdmins] = useState([]);
+  const [branchFilter, setBranchFilter] = useState("");
   const [allSuperadmins, setAllSuperadmin] = useState([]);
   const navigate = useNavigate();
   const [usernameToDelete, setUsernameToDelete] = useState("");
@@ -58,10 +59,13 @@ const HR_Superadmin_List = () => {
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
   const filteredSuperadmins = superadmins.filter((superadmin) =>
-    superadmin.userUsername.toLowerCase().includes(searchTerm.toLowerCase()) ||
-  superadmin.userFirstName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-  superadmin.userLastName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-  superadmin.userEmail.toLowerCase().includes(searchTerm.toLowerCase()));
+    (superadmin.userUsername.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    superadmin.userFirstName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    superadmin.userLastName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    superadmin.userEmail.toLowerCase().includes(searchTerm.toLowerCase()))&&
+    (branchFilter === "" || superadmin.userBranch === branchFilter)
+  );
+
 
   const paginatedSupervisors = filteredSuperadmins.slice(
     page * rowsPerPage,
@@ -87,6 +91,12 @@ const HR_Superadmin_List = () => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
   };
+
+  const handleBranchFilterChange = (event) => {
+    setBranchFilter(event.target.value);
+    setPage(0); 
+  };
+
 
   const deleteUser = async (userId) => {
     try {
@@ -167,18 +177,52 @@ const HR_Superadmin_List = () => {
 
 
   return (
-    <div style={{ padding: isMobile ? "0.5rem" : "3rem"}}>
-      <Paper sx={{ paddingTop: '1.5rem', backgroundColor: '#E1EBEE', borderRadius: '1rem', alignItems: 'right' }}>
-        <Toolbar sx={{ flexDirection: isMobile ? 'column' : 'row', alignItems: isMobile ? 'center' : 'normal', gap: isMobile ? 2 : 0 }}>
-          <Typography className="concert-one-regular" variant='inherit' component="div" sx={{ flex: isMobile ? '1 1 100%' : '1 2 100%', textAlign: isMobile ? 'center' : 'left', color: theme.palette.primary.main }}>
-          &nbsp; Active Super Admins <PeopleOutlineIcon />
-          </Typography>
-          <SearchComponent
-            searchTerm={searchTerm} onSearchChange={handleSearchChange} />
+    <div style={{ padding: isMobile ? "0.5rem" : "3rem" }}>
+      <Paper sx={{ padding: '2rem', backgroundColor: '#E1EBEE', borderRadius: '1rem', alignItems: 'right' }}>
+      <Toolbar sx={{ flexDirection: isMobile ? 'column' : 'row', alignItems: isMobile ? 'center' : 'normal', gap: isMobile ? 2 : 0 }}>
+        <Grid container spacing={2} alignItems="center">
+        <Grid item xs={12} md={6}>
+            <SearchComponent
+              searchTerm={searchTerm} onSearchChange={handleSearchChange} />
+          </Grid>
+          <Grid item xs={12} md={2}>
+          <FormControl variant="outlined" fullWidth sx={{
+            '& .MuiOutlinedInput-root': {
+              borderRadius: '24px', backgroundColor: '#fff'
+            }
+          }}>
+            <Select
+              value={branchFilter}
+              onChange={handleBranchFilterChange}
+              displayEmpty
+              inputProps={{ 'aria-label': 'Branch Filter' }}
+            >
+              <MenuItem value="">
+                <em>All Branches</em>
+              </MenuItem>
+              {/* Add other branches as needed */}
+              <MenuItem value="RAMALLAH">Ramallah</MenuItem>
+              <MenuItem value="NABLUS">Nablus</MenuItem>
+              <MenuItem value="BETHLEHEM">Bethlehem</MenuItem>
+            </Select>
+          </FormControl>
+          </Grid>
+          </Grid>
+
         </Toolbar>
       </Paper>
       <Paper sx={{ p: '1rem', backgroundColor: '#E1EBEE', borderRadius: '1rem', marginTop: '1.5rem' }}>
-
+      <Typography
+          className="concert-one-regular" variant='inherit'
+          gutterBottom
+          align="center"
+          sx={{ fontSize: "1.7rem", mt: 2, ml: 1, color: theme.palette.primary.main }}
+        >
+          <Box display="flex" alignItems="center" justifyContent="center">
+            <PeopleOutlineIcon fontSize="large" />
+            &nbsp; Active Admins
+          </Box>
+        </Typography>
         <TableContainer component={Paper} sx={{ mt: '1rem', p: '1rem' }}>
           <Table aria-label="supervisor table" >
             <TableHead>
@@ -195,26 +239,13 @@ const HR_Superadmin_List = () => {
                   </Typography>
                 </TableCell>
                 <TableCell>
-                  <TableSortLabel
-                    active={orderBy === "userUsername"}
-                    direction={sortDirection}
-                    onClick={(event) =>
-                      handleRequestSort(event, "userUsername")
-                    }
-                  >
-                    <Typography variant="subtitle1" fontWeight="bold">
-                      Username
-                    </Typography>
-                  </TableSortLabel>
-                </TableCell>
-                <TableCell>
                   <Typography variant="subtitle1" fontWeight="bold">
-                    Role
+                    Username
                   </Typography>
                 </TableCell>
                 <TableCell>
-                  <Typography align="center" variant="subtitle1" fontWeight="bold">
-                    Actions
+                  <Typography variant="subtitle1" fontWeight="bold">
+                    Branch
                   </Typography>
                 </TableCell>
               </TableRow>
@@ -225,22 +256,7 @@ const HR_Superadmin_List = () => {
                   <TableCell>{item.userFirstName + " " + item.userLastName}</TableCell>
                   <TableCell>{item.userEmail}</TableCell>
                   <TableCell>{item.userUsername}</TableCell>
-
-                  <TableCell>
-                    {item.userRole.charAt(0).toUpperCase() +
-                      item.userRole.slice(1).toLowerCase()}
-                  </TableCell>
-            
-                  <TableCell align="center"
-                  >
-
-                    <IconButton
-                      onClick={() => handleDelete(item)}
-                      color="secondary"
-                    >
-                      <DeleteIcon fontSize="medium" />
-                    </IconButton>
-                  </TableCell>
+                  <TableCell>{item.userBranch}</TableCell>
                 </TableRow>
               ))}
             </TableBody>

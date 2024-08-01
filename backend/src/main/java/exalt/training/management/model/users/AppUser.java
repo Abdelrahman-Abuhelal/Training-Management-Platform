@@ -58,7 +58,7 @@ public class AppUser implements UserDetails {
 
 
     @Column(nullable=false)
-    private Boolean enabled = false;
+    private Boolean activated = false;
 
     @Column(nullable=false)
     private Boolean verified = false;
@@ -112,7 +112,7 @@ public class AppUser implements UserDetails {
                 ", lastName='" + lastName + '\'' +
                 ", fullName='" + fullName + '\'' +
                 ", imageUrl='" + imageUrl + '\'' +
-                ", enabled=" + enabled +
+                ", activated=" + activated +
                 '}';
     }
 
@@ -142,6 +142,6 @@ public class AppUser implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return enabled;
+        return activated;
     }
 }

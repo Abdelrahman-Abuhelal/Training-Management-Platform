@@ -25,7 +25,7 @@ public class AppUserDto {
 
     private String userBranch;
 
-    private Boolean userEnabled;
+    private Boolean userActivated;
 
     private Boolean userVerified;
 

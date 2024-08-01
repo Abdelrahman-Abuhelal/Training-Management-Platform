@@ -15,8 +15,10 @@ import {
   InputAdornment
 } from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
-
+import { useTheme } from '@mui/material/styles';
+import LoginIcon from '@mui/icons-material/Login';
 const Login = () => {
+  const theme = useTheme();
   const navigate = useNavigate();
   const { setUserData } = useAuth();
   const [email, setEmail] = useState("");
@@ -66,10 +68,11 @@ const Login = () => {
   };
 
   return (
-    <Container maxWidth="xs">
+    <div style={{backgroundColor:'#E1EBEE'}} >
+    <Container maxWidth="xs" sx={{backgroundColor:'#E1EBEE'}}>
       <Box display="flex" flexDirection="column" justifyContent="center" alignItems="center" minHeight="100vh">
         <Box textAlign="center" mb={4}>
-          <Box display="flex" justifyContent="center" mb={2}>
+          <Box display="flex" justifyContent="center" mb={1}>
             <img
               src="/EXALT_LOGO2.png"
               alt="Exalt Logo"
@@ -84,8 +87,8 @@ const Login = () => {
             />
           </Box>
 
-          <Typography className="concert-one-regular" variant='inherit' component="h1" mt={2}>
-            Login Page
+          <Typography className="concert-one-regular" variant='inherit' sx={{color: theme.palette.primary.main}} component="h1" mt={2}>
+            Login  <LoginIcon fontSize="large"/>
           </Typography>
         </Box>
         <Box component="form" onSubmit={handleSubmit} width="100%">
@@ -106,20 +109,7 @@ const Login = () => {
             type={showPassword ? "text" : "password"}
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            InputProps={{
-              endAdornment: (
-                <InputAdornment position="end">
-                  <IconButton
-                    aria-label="toggle password visibility"
-                    onClick={handleClickShowPassword}
-                    onMouseDown={handleMouseDownPassword}
-                    edge="end"
-                    >
-                    {showPassword ? <VisibilityOff  /> : <Visibility />}
-                  </IconButton>
-                </InputAdornment>
-              ),
-            }}
+            
           />
           <Box textAlign="right" my={1}>
             <Link component={NavLink} to="/forgot-password-email">
@@ -142,6 +132,7 @@ const Login = () => {
         </Box>
       </Box>
     </Container>
+    </div>
   );
 };
 

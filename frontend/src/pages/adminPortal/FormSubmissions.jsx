@@ -65,17 +65,9 @@ const FormSubmissions = () => {
     const rows = submissions.map(submission => {
         let submittedAtDate;
         if (submission.submittedAt) {
-            submittedAtDate = new Date(
-                submission.submittedAt[0], // year
-                submission.submittedAt[1] - 1, // month (0-indexed)
-                submission.submittedAt[2], // day
-                submission.submittedAt[3], // hour
-                submission.submittedAt[4], // minute
-                submission.submittedAt[5], // second
-                submission.submittedAt[6] / 1000000 // nanosecond to millisecond
-            );
+            submittedAtDate = new Date(submission.submittedAt); // Pass the full string directly
         }
-
+    
         return {
             id: submission.id,
             name: `${submission.firstName} ${submission.lastName}`,
@@ -83,6 +75,7 @@ const FormSubmissions = () => {
             submittedAt: submittedAtDate ? dayjs(submittedAtDate).fromNow() : 'N/A',
         };
     });
+    
 
     const viewFormResponse = (id) => {
         // Implement the logic to view the form response for the submission with the given ID

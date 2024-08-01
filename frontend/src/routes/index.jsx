@@ -37,6 +37,7 @@ import TraineeSkills from '../pages/supervisorPortal/TraineeSkills.jsx';
 import TraineesSkillsList from '../pages/adminPortal/TraineesSkillsList.jsx';
 import AllTraineesSkills from '../pages/supervisorPortal/AllTraineesSkills.jsx';
 import HR_Superadmin_List from '../pages/adminPortal/AdminList.jsx';
+import  AdminSettings from '../pages/adminPortal/AdminSettings.jsx';
 
 const Routes = () => {
   const { user } = useAuth();
@@ -133,7 +134,9 @@ const Routes = () => {
             { path: '/form-templates/:templateId', element: <FormTemplatePage /> },
             { path: '/edit-trainee/:userId', element: <EditTrainee /> },
             { path: '/create-announcements', element: <AnnouncementForm /> },
+            { path: '/settings', element: <AdminSettings /> },
             { path: '/change-password', element: <ChangePassword /> },
+
           ],
         },
       ],

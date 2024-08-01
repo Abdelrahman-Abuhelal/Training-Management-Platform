@@ -12,6 +12,7 @@ import Select from "@mui/material/Select";
 import Typography from "@mui/material/Typography";
 import Paper from "@mui/material/Paper";
 import InputLabel from "@mui/material/InputLabel";
+import { useAuth } from "../../provider/authProvider";
 import {
   Dialog,
   DialogActions,
@@ -30,6 +31,8 @@ const FormBuilder = () => {
   const [showConfirmation, setShowConfirmation] = useState(false);
   const [showSnackbar, setShowSnackbar] = useState(false);
   const navigate  = useNavigate();
+  const { user } = useAuth();
+  const { login_token } = user;
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const {
@@ -92,7 +95,12 @@ const FormBuilder = () => {
     try {
       const response = await axios.post(
         `${baseUrl}/api/v1/forms/create-form`,
-        formData
+        formData,
+        {
+          headers: {
+            Authorization: `Bearer ${login_token}`,
+          },
+        }
       );
       if (response.status === 200) {
         const formMessage = response.data;
@@ -155,7 +163,7 @@ const FormBuilder = () => {
     <div style={{ display: "flex", justifyContent: "center" }}>
      
       <Paper elevation={3} sx={{ p: isMobile?2:4, m:isMobile?1: 6, width: isMobile?"90%":"75%", maxWidth: 1100 , backgroundColor:'#E1EBEE', borderRadius: '1rem'  }}>
-       <Button  variant="outlined" onClick={navigateBack} startIcon={<ArrowBackIcon />}>
+       <Button sx={{backgroundColor:'#fff'}} variant="outlined" onClick={navigateBack} startIcon={<ArrowBackIcon />}>
         Form Templates
       </Button>
         <Typography align="center" variant="h4" gutterBottom sx={{color: theme.palette.primary.main}}>

@@ -70,7 +70,7 @@ public class AdminService {
                 .role(request.getUserRole())
                 .userBranch(String.valueOf(branchService.getBranchByBranchName(BranchName.valueOf(request.getUserBranch())).getName()))
                 .branch(branchService.getBranchByBranchName(BranchName.valueOf(request.getUserBranch())))
-                .enabled(false)
+                .activated(false)
                 .verified(false)
                 .build();
         log.info("User Created: " + user.toString());
@@ -119,7 +119,7 @@ public class AdminService {
             throw new AppUserNotFoundException("There is no user with this ID: " + id);
         }
         AppUser appUser = getFullUserById(id);
-        appUser.setEnabled(false);
+        appUser.setActivated(false);
         appUserService.saveUser(appUser);
 
         return "User with the ID: "+id+" has been deactivated";
@@ -216,10 +216,10 @@ public class AdminService {
         }
         return userMapper.userToUserDto(users);
     }
-    public List<AppUserDto> getAllEnabledUsers(){
-        List<AppUser>users= appUserService.getAllEnabledUsers();
+    public List<AppUserDto> getAllActivatedUsers(){
+        List<AppUser>users= appUserService.getAllActivatedUsers();
         if (users.isEmpty()){
-            throw new AppUserNotFoundException("There are no enabled Users in the System");
+            throw new AppUserNotFoundException("There are no activated Users in the System");
         }
         return userMapper.userToUserDto(users);
     }

@@ -111,8 +111,8 @@ public class TraineeSkillService {
 
 
     public List<TraineeSkillsResponseDTO> getAllTraineesWithSkills() {
-        List<AppUser> enabledUsers  = appUserRepository.findByEnabledTrue();
-        List<Trainee> trainees = enabledUsers.stream().map(AppUser::getTrainee).filter(Objects::nonNull).toList();
+        List<AppUser> activatedUsers  = appUserRepository.findByActivatedTrue();
+        List<Trainee> trainees = activatedUsers.stream().map(AppUser::getTrainee).filter(Objects::nonNull).toList();
         return trainees.stream().map(trainee -> {
             List<TraineeSkill> traineeSkills = traineeSkillRepository.findByTrainee(trainee);
             List<SkillProficiencyDTO> skills = traineeSkills.stream()
@@ -135,7 +135,7 @@ public class TraineeSkillService {
         }
 
         List<Trainee> trainees = supervisor.getTrainees().stream()
-                .filter(trainee -> appUserRepository.findByEnabledTrueAndId(trainee.getUser().getId()).isPresent())
+                .filter(trainee -> appUserRepository.findByActivatedTrueAndId(trainee.getUser().getId()).isPresent())
                 .toList();
 
         return trainees.stream().map(trainee -> {

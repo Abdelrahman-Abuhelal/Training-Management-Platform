@@ -23,7 +23,7 @@ public interface AppUserMapper {
     @Mapping(source = "appUser.lastName",target = "userLastName")
     @Mapping(source = "appUser.username",target = "userUsername")
     @Mapping(source = "appUser.userBranch",target = "userBranch")
-    @Mapping(source = "appUser.enabled",target = "userEnabled")
+    @Mapping(source = "appUser.activated",target = "userActivated")
     @Mapping(source = "appUser.verified",target = "userVerified")
     AppUserDto userToUserDto(AppUser appUser);
 
@@ -34,7 +34,7 @@ public interface AppUserMapper {
     @Mapping(source = "appUser.lastName",target = "userLastName")
     @Mapping(source = "appUser.username",target = "userUsername")
     @Mapping(source = "appUser.userBranch",target = "userBranch")
-    @Mapping(source = "appUser.enabled",target = "userEnabled")
+    @Mapping(source = "appUser.activated",target = "userActivated")
     @Mapping(source = "appUser.verified",target = "userVerified")
     List<AppUserDto> userToUserDto(List<AppUser> appUser);
 
@@ -45,7 +45,7 @@ public interface AppUserMapper {
     @Mapping(source = "appUserDto.userLastName",target = "lastName")
     @Mapping(source = "appUserDto.userUsername",target = "username")
     @Mapping(source = "appUserDto.userBranch",target = "userBranch")
-    @Mapping(source = "appUserDto.userEnabled",target = "enabled")
+    @Mapping(source = "appUserDto.userActivated",target = "activated")
     @Mapping(source = "appUserDto.userVerified",target = "verified")
     AppUser userDtoToUser(AppUserDto appUserDto);
 
@@ -56,14 +56,14 @@ public interface AppUserMapper {
     @Mapping(source = "appUserDto.userRole",target = "role")
     @Mapping(source = "appUserDto.userUsername",target = "username")
     @Mapping(source = "appUserDto.userBranch",target = "userBranch")
-    @Mapping(source = "appUserDto.userEnabled",target = "enabled")
+    @Mapping(source = "appUserDto.userActivated",target = "activated")
     @Mapping(source = "appUserDto.userVerified",target = "verified")
     AppUser userDtoToUser(AppUserDto appUserDto, @MappingTarget AppUser appUser);
 
     @Mapping(source = "appUserRequestDto.userFirstName",target = "firstName")
     @Mapping(source = "appUserRequestDto.userLastName",target = "lastName")
     @Mapping(source = "appUserRequestDto.userUsername",target = "username")
-    @Mapping(source = "appUserRequestDto.userEnabled",target = "enabled")
+    @Mapping(source = "appUserRequestDto.userActivated",target = "activated")
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     AppUser userRequestDtoToUser(AppUserRequestDto appUserRequestDto,@MappingTarget AppUser appUser);
 

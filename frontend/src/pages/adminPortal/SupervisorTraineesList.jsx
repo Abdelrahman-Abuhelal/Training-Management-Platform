@@ -137,93 +137,66 @@ const Supervisor_Trainees_List = () => {
 
   return (
     <div style={{ padding: "3rem" }}>
-      <Paper sx={{ p:'1rem',  backgroundColor:'#E1EBEE', borderRadius: '1rem' }}>
+      <Paper sx={{ p: '1rem', backgroundColor: '#E1EBEE', borderRadius: '1rem' }}>
 
-      <Grid
-        container
-        alignItems="center"
-        justifyContent="space-between"
-        marginBottom="1rem"
-      >
-        <Grid item>
-          <IconButton
-            color="primary"
-            onClick={() => {
-              navigate(`/supervisors/`);
-            }}
-          >
-            <ArrowBackIcon />
-          </IconButton>
+        <Grid
+          container
+          alignItems="center"
+          justifyContent="space-between"
+          marginBottom="1rem"
+        >
+          <Grid item>
+            <IconButton
+              color="primary"
+              onClick={() => {
+                navigate(`/supervisors/`);
+              }}
+            >
+              <ArrowBackIcon />
+            </IconButton>
+          </Grid>
+          <Grid item>
+            <Typography className="concert-one-regular" variant='inherit' component="h2" gutterBottom
+              sx={{ color: theme.palette.primary.main }}>
+              {userFullName}'s Trainees <GroupIcon fontSize="large" />
+            </Typography>
+          </Grid>
+          <Grid item>
+            <SearchComponent searchTerm={searchTerm} onSearchChange={handleSearchChange} />
+          </Grid>
         </Grid>
-        <Grid item>
-          <Typography className="concert-one-regular" variant='inherit' component="h2"  gutterBottom
-          sx={{color:  theme.palette.primary.main}}>
-            {userFullName}'s Trainees <GroupIcon fontSize="large"/>
-          </Typography>
-        </Grid>
-        <Grid item>
-          <SearchComponent searchTerm={searchTerm} onSearchChange={handleSearchChange} />
 
-        </Grid>
-      </Grid>
-
-      <TableContainer component={Paper} sx={{mt:'2rem' , p:'1rem'}}>
-        <Table aria-label="trainee table">
-          <TableHead>
-            <TableRow>
-              <TableCell>
-                <Checkbox
-                  checked={selectedTrainees.length === paginatedTrainees.length}
-                  onChange={(e) => {
-                    if (e.target.checked) {
-                      setSelectedTrainees(paginatedTrainees);
-                    } else {
-                      setSelectedTrainees([]);
-                    }
-                  }}
-                />
-              </TableCell>
-              <TableCell>
-                <TableSortLabel
-                  active={orderBy === "userUsername"}
-                  direction={sortDirection}
-                  onClick={(e) => handleRequestSort(e, "userUsername")}
-                >
-                  <Typography variant="h6">Username</Typography>
-                </TableSortLabel>
-              </TableCell>
-              <TableCell>
-                <Typography variant="h6">First Name</Typography>
-              </TableCell>
-              <TableCell>
-                <Typography variant="h6">Last Name</Typography>
-              </TableCell>
-              <TableCell>
-                <Typography variant="h6">Email</Typography>
-              </TableCell>
-
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {paginatedTrainees.map((item) => (
-              <TableRow key={item.userId} hover>
+        <TableContainer component={Paper} sx={{ mt: '2rem', p: '1rem' }}>
+          <Table aria-label="trainee table">
+            <TableHead>
+              <TableRow>
                 <TableCell>
-                  <Checkbox
-                    checked={selectedTrainees.some(
-                      (trainee) => trainee.userId === item.userId
-                    )}
-                    onChange={(e) => handleCheckboxChange(e, item)}
-                  />
+                    <Typography variant="h6">Username</Typography>
                 </TableCell>
-                <TableCell>{item.userUsername}</TableCell>
-                <TableCell>{item.userFirstName}</TableCell>
-                <TableCell>{item.userLastName}</TableCell>
-                <TableCell>{item.userEmail}</TableCell>
+                <TableCell>
+                  <Typography variant="h6" >Full Name</Typography>
+                </TableCell>
+                <TableCell>
+                  <Typography variant="h6">Email</Typography>
+                </TableCell>
+                <TableCell>
+                  <Typography variant="h6">Branch</Typography>
+                </TableCell>
+
               </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
+            </TableHead>
+            <TableBody>
+              {paginatedTrainees.map((item) => (
+                <TableRow key={item.userId} hover>
+                  <TableCell>{item.userUsername}</TableCell>
+                  <TableCell>{item.userFirstName + " " + item.userLastName}</TableCell>
+                  <TableCell>{item.userEmail}</TableCell>
+                  <TableCell>{item.userBranch}</TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
       </Paper>
       <TablePagination
         rowsPerPageOptions={[5, 10, 25]}

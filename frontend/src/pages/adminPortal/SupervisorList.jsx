@@ -38,14 +38,13 @@ import { useAuth } from "../../provider/authProvider";
 import { useMediaQuery, useTheme } from '@mui/material';
 
 const HR_Supervisors_List = () => {
+  const navigate = useNavigate();
   const baseUrl = import.meta.env.VITE_PORT_URL;
   const { user } = useAuth();
   const { login_token } = user;
   const [supervisors, setSupervisors] = useState([]);
   const [allSupervisors, setAllSupervisors] = useState([]);
-  const navigate = useNavigate();
-  const [usernameToDelete, setUsernameToDelete] = useState("");
-  const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
+  const [branchFilter, setBranchFilter] = useState("");
   const [userIdToDelete, setUserIdToDelete] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [orderBy, setOrderBy] = useState("userUsername");
@@ -53,16 +52,18 @@ const HR_Supervisors_List = () => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [selectedSupervisor, setSelectedSupervisor] = useState(null);
-  const [availableTrainees, setAvailableTrainees] = useState([]);
   const [selectedTrainees, setSelectedTrainees] = useState([]);
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+
   const filteredSupervisors = supervisors.filter((supervisor) =>
-    supervisor.userUsername.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    (supervisor.userUsername.toLowerCase().includes(searchTerm.toLowerCase()) ||
     supervisor.userFirstName.toLowerCase().includes(searchTerm.toLowerCase()) ||
     supervisor.userLastName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    supervisor.userEmail.toLowerCase().includes(searchTerm.toLowerCase()));
-
+    supervisor.userEmail.toLowerCase().includes(searchTerm.toLowerCase())) &&
+    (branchFilter === "" || supervisor.userBranch === branchFilter)
+  );
+  
   const paginatedSupervisors = filteredSupervisors.slice(
     page * rowsPerPage,
     page * rowsPerPage + rowsPerPage
@@ -79,32 +80,28 @@ const HR_Supervisors_List = () => {
     setSortDirection(isAsc ? "desc" : "asc");
   };
 
-  const handleChangePage = (event, newPage) => {
-    setPage(newPage);
-  };
-
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
   };
 
-  const deleteUser = async (userId) => {
-    try {
-      const response = await axios.delete(
-        `${baseUrl}/api/v1/admin/users/${userId}`, {
-        headers: {
-          Authorization: `Bearer ${login_token}`
-        }
-      }
-      );
-      if (response.status === 200) {
-        console.log("Supervisor deleted successfully");
-        setSupervisors(supervisors.filter((user) => user.userId !== userId));
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  // const deleteUser = async (userId) => {
+  //   try {
+  //     const response = await axios.delete(
+  //       `${baseUrl}/api/v1/admin/users/${userId}`, {
+  //       headers: {
+  //         Authorization: `Bearer ${login_token}`
+  //       }
+  //     }
+  //     );
+  //     if (response.status === 200) {
+  //       console.log("Supervisor deleted successfully");
+  //       setSupervisors(supervisors.filter((user) => user.userId !== userId));
+  //     }
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
 
   const fetchSupervisors = async () => {
     try {
@@ -138,78 +135,12 @@ const HR_Supervisors_List = () => {
     fetchSupervisors();
   }, [userIdToDelete, sortDirection, orderBy]);
 
-  useEffect(
-    () => {
-      const fetchTrainees = async () => {
-        try {
-          const response = await axios.get(`${baseUrl}/api/v1/admin/users`, {
-            headers: {
-              Authorization: `Bearer ${login_token}`
-            }
-          });
-          if (response.status === 200) {
-            const traineeUsers = response.data.filter(
-              (item) => item.userRole === "TRAINEE"
-            );
-            setAvailableTrainees(traineeUsers);
-          }
-        } catch (error) {
-          console.log(error);
-        }
-      };
-      fetchTrainees();
-    }, []
-  );
 
-  const handleDelete = (user) => {
-    setUserIdToDelete(user.userId);
-    setUsernameToDelete(user.userUsername);
-    setOpenDeleteDialog(true);
+  const handleBranchFilterChange = (event) => {
+    setBranchFilter(event.target.value);
+    setPage(0); // Reset page when branch filter changes
   };
 
-  const handleCloseDeleteDialog = () => {
-    setOpenDeleteDialog(false);
-    setUserIdToDelete(null);
-    setUsernameToDelete("");
-  };
-
-  const handleConfirmDelete = () => {
-    if (userIdToDelete) {
-      deleteUser(userIdToDelete);
-      setOpenDeleteDialog(false);
-      setUserIdToDelete(null);
-      setUsernameToDelete("");
-    } else {
-      console.error("User ID not available for deletion");
-    }
-  };
-
-  const handleTraineeSelect = (event) => {
-    setSelectedTrainees(event.target.value);
-  };
-
-  const handleAssignConfirm = async () => {
-    try {
-      const response = await axios.post(
-        `${baseUrl}/api/v1/supervisor/${selectedSupervisor.userId}/assign`,
-        {
-          trainees: selectedTrainees,
-        }, {
-        headers: {
-          Authorization: `Bearer ${login_token}`
-        }
-      }
-      );
-      if (response.status === 200) {
-        console.log("Trainees assigned successfully");
-        fetchSupervisors();
-        setSelectedSupervisor(null);
-        setSelectedTrainees([]);
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
 
   const exportToExcel = () => {
     const fileType =
@@ -232,19 +163,53 @@ const HR_Supervisors_List = () => {
   };
 
   return (
-    <div style={{ padding: isMobile ? "0.5rem" : "3rem"}}>
-      <Paper sx={{ paddingTop: '1.5rem', backgroundColor: '#E1EBEE', borderRadius: '1rem', alignItems: 'right' }}>
+    <div style={{ padding: isMobile ? "0.5rem" : "3rem" }}>
+      <Paper sx={{ padding: '2rem', backgroundColor: '#E1EBEE', borderRadius: '1rem' }}>
         <Toolbar sx={{ flexDirection: isMobile ? 'column' : 'row', alignItems: isMobile ? 'center' : 'normal', gap: isMobile ? 2 : 0 }}>
-          <Typography className="concert-one-regular" variant='inherit' component="div" sx={{ flex: isMobile ? '1 1 100%' : '1 2 100%', textAlign: isMobile ? 'center' : 'left', color: theme.palette.primary.main }}>
-          &nbsp; Active Supervisors <PeopleOutlineIcon />
-          </Typography>
-          <SearchComponent
-            searchTerm={searchTerm} onSearchChange={handleSearchChange} />
+        <Grid container spacing={2} alignItems="center">
+        <Grid item xs={12} md={6}>
+            <SearchComponent
+              searchTerm={searchTerm} onSearchChange={handleSearchChange} />
+          </Grid>
+          <Grid item xs={12} md={2}>
+          <FormControl variant="outlined" fullWidth sx={{
+            '& .MuiOutlinedInput-root': {
+              borderRadius: '24px', backgroundColor: '#fff'
+            }
+          }}>
+            <Select
+              value={branchFilter}
+              onChange={handleBranchFilterChange}
+              displayEmpty
+              inputProps={{ 'aria-label': 'Branch Filter' }}
+            >
+              <MenuItem value="">
+                <em>All Branches</em>
+              </MenuItem>
+              {/* Add other branches as needed */}
+              <MenuItem value="RAMALLAH">Ramallah</MenuItem>
+              <MenuItem value="NABLUS">Nablus</MenuItem>
+              <MenuItem value="BETHLEHEM">Bethlehem</MenuItem>
+            </Select>
+          </FormControl>
+          </Grid>
+          </Grid>
+
         </Toolbar>
       </Paper>
-      <Paper sx={{ p: '1rem', backgroundColor: '#E1EBEE', borderRadius: '1rem', marginTop: '1.5rem' }}>
-
-        <TableContainer component={Paper} sx={{ mt: '1rem', p: '1rem' }}>
+      <Paper sx={{ p: '2rem', backgroundColor: '#E1EBEE', borderRadius: '1rem', marginTop: '1.5rem' }}>
+        <Typography
+          className="concert-one-regular" variant='inherit'
+          gutterBottom
+          align="center"
+          sx={{ fontSize: "1.7rem", mt: 2, ml: 1, color: theme.palette.primary.main }}
+        >
+          <Box display="flex" alignItems="center" justifyContent="center">
+            <PeopleOutlineIcon fontSize="large" />
+            &nbsp; Active Supervisors
+          </Box>
+        </Typography>
+        <TableContainer component={Paper} sx={{ mt:'2rem', p: '1rem' }}>
           <Table aria-label="supervisor table" >
             <TableHead>
               <TableRow>
@@ -260,31 +225,13 @@ const HR_Supervisors_List = () => {
                   </Typography>
                 </TableCell>
                 <TableCell>
-                  <TableSortLabel
-                    active={orderBy === "userUsername"}
-                    direction={sortDirection}
-                    onClick={(event) =>
-                      handleRequestSort(event, "userUsername")
-                    }
-                  >
-                    <Typography variant="subtitle1" fontWeight="bold">
-                      Username
-                    </Typography>
-                  </TableSortLabel>
-                </TableCell>
-                <TableCell>
                   <Typography variant="subtitle1" fontWeight="bold">
-                    Role
+                    Branch
                   </Typography>
                 </TableCell>
                 <TableCell>
                   <Typography align="center" variant="subtitle1" fontWeight="bold">
                     Related Trainees
-                  </Typography>
-                </TableCell>
-                <TableCell>
-                  <Typography align="center" variant="subtitle1" fontWeight="bold">
-                    Actions
                   </Typography>
                 </TableCell>
               </TableRow>
@@ -294,11 +241,8 @@ const HR_Supervisors_List = () => {
                 <TableRow key={item.userId} hover>
                   <TableCell>{item.userFirstName + " " + item.userLastName}</TableCell>
                   <TableCell>{item.userEmail}</TableCell>
-                  <TableCell>{item.userUsername}</TableCell>
-
                   <TableCell>
-                    {item.userRole.charAt(0).toUpperCase() +
-                      item.userRole.slice(1).toLowerCase()}
+                    {item.userBranch}
                   </TableCell>
                   <TableCell align="center">
                     <IconButton
@@ -311,16 +255,7 @@ const HR_Supervisors_List = () => {
                       />
                     </IconButton>
                   </TableCell>
-                  <TableCell align="center"
-                  >
 
-                    <IconButton
-                      onClick={() => handleDelete(item)}
-                      color="secondary"
-                    >
-                      <DeleteIcon fontSize="medium" />
-                    </IconButton>
-                  </TableCell>
                 </TableRow>
               ))}
             </TableBody>
@@ -328,75 +263,8 @@ const HR_Supervisors_List = () => {
         </TableContainer>
       </Paper>
 
-      <TablePagination
-        component="div"
-        count={filteredSupervisors.length}
-        rowsPerPage={rowsPerPage}
-        page={page}
-        onPageChange={handleChangePage}
-        onRowsPerPageChange={handleChangeRowsPerPage}
-        sx={{ mt: 1 }}
-      />
-      <Dialog open={openDeleteDialog} onClose={handleCloseDeleteDialog}>
-        <DialogTitle>Delete Confirmation</DialogTitle>
-        <DialogContent>
-          <Typography variant="body1">
-            Are you sure you want to delete '{usernameToDelete}'?
-          </Typography>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleCloseDeleteDialog}>Cancel</Button>
-          <Button
-            variant="contained"
-            color="error"
-            onClick={handleConfirmDelete}
-          >
-            Delete
-          </Button>
-        </DialogActions>
-      </Dialog>
 
-      <Dialog
-        open={!!selectedSupervisor}
-        onClose={() => setSelectedSupervisor(null)}
-      >
-        <DialogTitle>Assign Trainees</DialogTitle>
-        <DialogContent>
-          <FormControl fullWidth>
-            <InputLabel id="trainee-select-label">Select Trainees</InputLabel>
-            <Select
-              labelId="trainee-select-label"
-              id="trainee-select"
-              multiple
-              value={selectedTrainees}
-              onChange={handleTraineeSelect}
-              renderValue={(selected) => (
-                <div>
-                  {selected.map((trainee) => (
-                    <Chip key={trainee.userId} label={trainee.userUsername} />
-                  ))}
-                </div>
-              )}
-            >
-              {availableTrainees.map((trainee) => (
-                <MenuItem key={trainee.userId} value={trainee}>
-                  {trainee.userUsername}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={() => setSelectedSupervisor(null)}>Cancel</Button>
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={handleAssignConfirm}
-          >
-            Confirm
-          </Button>
-        </DialogActions>
-      </Dialog>
+
     </div>
   );
 };

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import {
   Table, TableBody, TableCell, TableContainer, TableHead, TableRow,
-  Paper, Button, Dialog, DialogActions, DialogContent, DialogTitle, Box, IconButton,
+  Paper, Button, Grid, Dialog, DialogActions, DialogContent, DialogTitle, Box, IconButton,
   TextField, Checkbox, TableSortLabel, Toolbar, Typography, MenuItem, FormControl, Select, Snackbar, CircularProgress
 } from '@mui/material';
 import axios from 'axios';
@@ -16,7 +16,7 @@ import { useTheme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
-
+import NavTitle from "../../components/NavTitle";
 
 const UserManagement = () => {
   const { user } = useAuth();
@@ -35,28 +35,41 @@ const UserManagement = () => {
     userLastName: '',
     userUsername: '',
     userRole: '',
-    userBranch:''
+    userBranch: ''
   });
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+  const [selectedBranch, setSelectedBranch] = useState('');
+  const [selectedRole, setSelectedRole] = useState('');
   // Snackbar states
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState('');
-  const [snackbarSeverity, setSnackbarSeverity] = useState('success'); // 'success', 'error', 'warning', 'info'
+  const [snackbarSeverity, setSnackbarSeverity] = useState('success');
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [userToDelete, setUserToDelete] = useState(null);
   const [loading, setLoading] = useState(false); // Loading state for save button
 
-  useEffect(() => {
-    axios.get(`${baseUrl}/api/v1/admin/all-users`, {
-      headers: {
-        Authorization: `Bearer ${login_token}`
-      }
-    }).then(response => {
+  const breadcrumbs = [
+    { label: 'Training Management System', href: '/' },
+    { label: 'User Management' }
+  ];
+
+  const fetchAllUsers = async () => {
+    try {
+      const response = await axios.get(`${baseUrl}/api/v1/admin/all-users`, {
+        headers: {
+          Authorization: `Bearer ${login_token}`,
+        },
+      });
       setUsers(response.data);
       setFilteredUsers(response.data);
-    })
-      .catch(error => console.error(error));
+    } catch (error) {
+      console.error("Error fetching users:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchAllUsers();
   }, []);
 
   const handleEdit = (user) => {
@@ -103,6 +116,7 @@ const UserManagement = () => {
           const updatedUser = response.data;
           setUsers(users.map(user => (user.userId === currentUser.userId ? updatedUser : user)));
           setFilteredUsers(filteredUsers.map(user => (user.userId === currentUser.userId ? updatedUser : user)));
+          fetchAllUsers();
           handleClose();
           showSnackbar('User updated successfully', 'success');
         })
@@ -121,6 +135,7 @@ const UserManagement = () => {
           if (response.status === 200) {
             setUsers([...users, response.data]);
             setFilteredUsers([...filteredUsers, response.data]);
+            fetchAllUsers();
             handleClose();
             showSnackbar('Email verification sent to the user', 'success');
           }
@@ -139,7 +154,6 @@ const UserManagement = () => {
     }
   };
 
-
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
     if (currentUser) {
@@ -152,8 +166,8 @@ const UserManagement = () => {
   const handleSearch = (e) => {
     setSearchTerm(e.target.value);
     const term = e.target.value.toLowerCase();
-    setFilteredUsers(users.filter(user => 
-      Object.keys(user).some(key => 
+    setFilteredUsers(users.filter(user =>
+      Object.keys(user).some(key =>
         String(user[key]).toLowerCase().includes(term)
       )
     ));
@@ -171,6 +185,22 @@ const UserManagement = () => {
     setFilteredUsers(sortedUsers);
   };
 
+  const handleBranchChange = (event) => {
+    setSelectedBranch(event.target.value);
+    filterUsers(event.target.value, selectedRole);
+  };
+
+  const handleRoleChange = (event) => {
+    setSelectedRole(event.target.value);
+    filterUsers(selectedBranch, event.target.value);
+  };
+
+  const filterUsers = (branch, role) => {
+    setFilteredUsers(users.filter(user => {
+      return (branch === '' || user.userBranch === branch) && (role === '' || user.userRole === role);
+    }));
+  };
+
   const showSnackbar = (message, severity) => {
     setSnackbarMessage(message);
     setSnackbarSeverity(severity);
@@ -183,24 +213,80 @@ const UserManagement = () => {
 
   return (
     <div style={{ display: "flex", justifyContent: "center" }}>
-      <Paper elevation={3} sx={{ p: 3, m: 3, width: "90%",  borderRadius: '1rem',maxWidth: 1800,backgroundColor: '#E1EBEE' }}>
-      <Toolbar sx={{ flexDirection: isMobile ? 'column' : 'row', alignItems: isMobile ?'center': 'normal', gap: isMobile ? 2 : 0 }}>
-      <Typography className="concert-one-regular" variant='inherit' component="div" sx={{ flex: isMobile ? '1 1 100%' : '1 2 100%', textAlign: isMobile ? 'center' : 'left'   ,  color:  theme.palette.primary.main }}>
-            User Management <AdminPanelSettingsIcon/>
-          </Typography>
-          <SearchComponent
-            searchTerm={searchTerm} onSearchChange={handleSearch} />
-          <Box style={{ marginLeft: isMobile ? 0 : '10px', marginBottom: isMobile ? '10px' : 0 }}>
-          <Button
-              variant="contained"
-              color="primary"
-              onClick={() => setOpen(true)}
-              startIcon={<AddIcon />}
-              sx={{ minWidth: '150px', minHeight: '40px' }}
-            >
-              New User
-            </Button>
-          </Box>
+      <Paper elevation={3} sx={{ p: 3, m: 3, width: "90%", borderRadius: '1rem', maxWidth: 1800, backgroundColor: '#E1EBEE' }}>
+        <Toolbar sx={{ flexDirection: isMobile ? 'column' : 'row', alignItems: isMobile ? 'center' : 'normal', gap: isMobile ? 2 : 0, pb: '1rem' }}>
+          <Grid container spacing={2} justifyContent="space-between">
+            <Grid item xs={12} md={3}>
+              <Typography className="concert-one-regular" variant='inherit' component="div" sx={{ textAlign: isMobile ? 'center' : 'center', color: theme.palette.primary.main }}>
+                User Management <AdminPanelSettingsIcon />
+              </Typography>
+            </Grid>
+            <Grid item xs={12} md={3}>
+              <SearchComponent searchTerm={searchTerm} onSearchChange={handleSearch} />
+            </Grid>
+            <Grid item xs={12} md={1}>
+              <FormControl sx={{
+                minWidth: 120,
+                '& .MuiOutlinedInput-root': {
+                  borderRadius: '18px', backgroundColor: '#fff'
+                }
+              }}>
+                <Select
+                  value={selectedBranch}
+                  onChange={handleBranchChange}
+                  displayEmpty
+                  inputProps={{ 'aria-label': 'Select Branch' }}
+                >
+                  <MenuItem value="">
+                    <em>All Branches</em>
+                  </MenuItem>
+                  <MenuItem value="RAMALLAH">Ramallah</MenuItem>
+                  <MenuItem value="NABLUS">Nablus</MenuItem>
+                  <MenuItem value="BETHELEHEM">Bethlehem</MenuItem>
+                </Select>
+              </FormControl>
+            </Grid>
+            <Grid item xs={12} md={1}>
+              <FormControl sx={{
+                minWidth: 120,
+                '& .MuiOutlinedInput-root': {
+                  borderRadius: '18px', backgroundColor: '#fff'
+                }
+              }}>
+                <Select
+                  value={selectedRole}
+                  onChange={handleRoleChange}
+                  displayEmpty
+                  inputProps={{ 'aria-label': 'Select Role' }}
+                >
+                  <MenuItem value="">
+                    <em>All Roles</em>
+                  </MenuItem>
+                  <MenuItem value="TRAINEE">Trainee</MenuItem>
+                  <MenuItem value="SUPERVISOR">Supervisor</MenuItem>
+                  <MenuItem value="SUPER_ADMIN">Admin</MenuItem>
+                </Select>
+              </FormControl>
+            </Grid>
+            <Grid item xs={12} md={2}>
+              <Box>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={() => setOpen(true)}
+                  startIcon={<AddIcon />}
+                  sx={{
+                    minWidth: '150px',
+                    height: '56px', // Adjust to match the Select height (typically 56px)
+                    padding: '0 16px', // Optional: Adjust padding to match Select
+                    borderRadius: '18px' // Match border radius of Select
+                  }}
+                >
+                  New User
+                </Button>
+              </Box>
+            </Grid>
+          </Grid>
         </Toolbar>
         <Paper sx={{ border: "1px solid #ccc", p: "1rem" }}>
           <TableContainer>
@@ -263,11 +349,11 @@ const UserManagement = () => {
                   </TableCell>
                   <TableCell>
                     <TableSortLabel
-                      active={orderBy === 'userEnabled'}
-                      direction={orderBy === 'userEnabled' ? order : 'asc'}
-                      onClick={() => handleSort('userEnabled')}
+                      active={orderBy === 'userActivated'}
+                      direction={orderBy === 'userActivated' ? order : 'asc'}
+                      onClick={() => handleSort('userActivated')}
                     >
-                      Enabled
+                      Activated
                     </TableSortLabel>
                   </TableCell>
                   <TableCell>
@@ -292,7 +378,7 @@ const UserManagement = () => {
                     <TableCell>{user.userRole}</TableCell>
                     <TableCell>{user.userBranch}</TableCell>
                     <TableCell>
-                      <Checkbox checked={user.userEnabled} disabled />
+                      <Checkbox checked={user.userActivated} disabled />
                     </TableCell>
                     <TableCell>
                       <Checkbox checked={user.userVerified} disabled />
@@ -314,7 +400,7 @@ const UserManagement = () => {
       </Paper>
 
       <Dialog open={open} onClose={handleClose}>
-      <DialogTitle>{currentUser ? 'Edit User' :  'Add New User' }  </DialogTitle>
+        <DialogTitle>{currentUser ? 'Edit User' : 'Add New User'}  </DialogTitle>
         <DialogContent>
           <TextField
             margin="dense"
@@ -382,18 +468,18 @@ const UserManagement = () => {
               <MenuItem value="RAMALLAH">Ramallah</MenuItem>
               <MenuItem value="NABLUS">Nablus</MenuItem>
               <MenuItem value="BETHLEHEM">Bethlehem</MenuItem>
-              </Select>
+            </Select>
           </FormControl>
-          {currentUser && currentUser.userVerified===true && (
+          {currentUser && currentUser.userVerified === true && (
             <FormControlLabel
               control={
                 <Checkbox
-                  name="userEnabled"
-                  checked={currentUser ? currentUser.userEnabled : null}
+                  name="userActivated"
+                  checked={currentUser ? currentUser.userActivated : null}
                   onChange={handleChange}
                 />
               }
-              label="Enabled"
+              label="Activated"
             />)}
         </DialogContent>
         <DialogActions>

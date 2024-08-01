@@ -16,8 +16,10 @@ import { useAuth } from "../../provider/authProvider";
 import { useTheme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
-
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import { useNavigate } from 'react-router-dom';
 const ChangePassword = () => {
+    const navigate = useNavigate();
     const { user } = useAuth();
     const { login_token } = user;
     const [currentPassword, setCurrentPassword] = useState("");
@@ -99,18 +101,29 @@ const ChangePassword = () => {
             console.error("Error changing password:", error);
         }
     };
-
+    const navigateBack = () => {
+        navigate(-1);
+    };
     return (
         <Container component="main" maxWidth="xs">
             <CssBaseline />
             <Box display="flex" flexDirection="column" justifyContent="center" alignItems="center" minHeight="100vh">
-                <Paper elevation={3} sx={{ p: isMobile ? 1:3, width: isMobile ? '70%' : '150%', backgroundColor:'#E1EBEE', borderRadius: '1rem'  }}>
+                <Paper elevation={3} sx={{ p: isMobile ? 1 : 3, width: isMobile ? '70%' : '150%', backgroundColor: '#E1EBEE', borderRadius: '1rem' }}>
                     <Box display="flex" flexDirection="column" alignItems="center">
-                        <Avatar sx={{ m: 1, bgcolor:theme.palette.primary.main }}>
+                        <Box width="100%" display="flex" justifyContent="flex-start">
+                            <Button
+                                sx={{ backgroundColor: '#fff' }}
+                                variant="outlined"
+                                onClick={navigateBack}
+                                startIcon={<ArrowBackIcon />}
+                            >
+                                Back
+                            </Button>
+                        </Box>
+                        <Avatar sx={{ m: 1, bgcolor: theme.palette.primary.main }}>
                             <LockOutlinedIcon />
                         </Avatar>
-                        <Typography component="h1" variant="h5" sx={{color:  theme.palette.primary.main}}>
-                    
+                        <Typography component="h1" variant="h5" sx={{ color: theme.palette.primary.main }}>
                             Change Your Password
                         </Typography>
                         <Box component="form" onSubmit={handleSubmit} sx={{ mt: 1 }}>
@@ -123,7 +136,7 @@ const ChangePassword = () => {
                                 id="currentPassword"
                                 value={currentPassword}
                                 onChange={(e) => setCurrentPassword(e.target.value)}
-                                sx={{backgroundColor:'#fff'}}
+                                sx={{ backgroundColor: '#fff' }}
                                 autoFocus
                             />
                             <TextField
@@ -134,7 +147,7 @@ const ChangePassword = () => {
                                 type="password"
                                 id="newPassword"
                                 value={newPassword}
-                                sx={{backgroundColor:'#fff'}}
+                                sx={{ backgroundColor: '#fff' }}
                                 onChange={(e) => setNewPassword(e.target.value)}
                             />
                             <TextField
@@ -145,7 +158,7 @@ const ChangePassword = () => {
                                 type="password"
                                 id="confirmationPassword"
                                 value={confirmationPassword}
-                                sx={{backgroundColor:'#fff'}}
+                                sx={{ backgroundColor: '#fff' }}
                                 onChange={(e) => setConfirmationPassword(e.target.value)}
                             />
                             <Button

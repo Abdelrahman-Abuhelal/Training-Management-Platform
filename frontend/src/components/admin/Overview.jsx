@@ -88,7 +88,7 @@ const Overview = () => {
   };
 
   return (
-    <Grid container spacing={3} >
+    <Grid container spacing={5} >
       <Grid item xs={12} sm={4} md={4}>
         <Paper style={paperStyle}>
           <Typography className="concert-one-regular" variant='inherit' sx={{ color: theme.palette.primary.main }} >Active Trainees</Typography>

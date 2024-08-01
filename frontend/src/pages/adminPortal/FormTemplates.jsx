@@ -4,13 +4,13 @@ import { useNavigate } from 'react-router-dom';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import AddIcon from '@mui/icons-material/Add';
-import SendIcon from '@mui/icons-material/Send';
 import {
   TableContainer,
   Table,
   TableHead,
   TableBody,
   TableRow,
+  Alert,
   TableCell,
   Paper,
   Typography,
@@ -22,13 +22,14 @@ import {
   DialogContentText,
   DialogTitle,
   Snackbar,
-  Alert,
+  Select,
   List,
+  MenuItem,
   ListItem,
   ListItemText,
   ListItemAvatar,
   Avatar,
-  Checkbox,
+  Checkbox, FormControl,
   Grid,
 } from "@mui/material";
 import QuestionAnswerIcon from '@mui/icons-material/QuestionAnswer';
@@ -36,8 +37,9 @@ import CheckCircleIcon from '@mui/icons-material/CheckCircle'; // Import the ico
 import { useAuth } from "../../provider/authProvider";
 import SearchComponent from "../../components/Search";
 import FactCheckIcon from '@mui/icons-material/FactCheck';
-import { useMediaQuery, useTheme } from '@mui/material';
-
+import { useTheme } from '@mui/material';
+import SendIcon from '@mui/icons-material/Send';
+import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 const FormTemplates = () => {
   const theme = useTheme();
   const { user } = useAuth();
@@ -51,7 +53,17 @@ const FormTemplates = () => {
   const [snackbarMessage, setSnackbarMessage] = useState("");
   const [showSendFormModal, setShowSendFormModal] = useState(false);
   const [selectedUsers, setSelectedUsers] = useState([]);
-  const [usersAlreadySent, setUsersAlreadySent] = useState([]);
+  const [sendSnackbarOpen, setSendSnackbarOpen] = useState(false);
+  const [sendSnackbarMessage, setSendSnackbarMessage] = useState("");
+  const [showDuplicationConfirmation, setShowDuplicationConfirmation] = useState(false);
+  const [formData, setFormData] = useState({
+    title: "",
+    description: "",
+    questions: [
+      { question: "", type: "text", options: [] },
+    ],
+  });
+  const [idToDuplicate, setIdToDuplicate] = useState(null);
   const [idToSend, setIdToSend] = useState(null);
   const [trainees, setTrainees] = useState([]);
   const [supervisors, setSupervisors] = useState([]);
@@ -61,6 +73,9 @@ const FormTemplates = () => {
   const [page, setPage] = useState(0);
   const [selectAllTrainees, setSelectAllTrainees] = useState(false);
   const [selectAllSupervisors, setSelectAllSupervisors] = useState(false);
+  const [selectedBranch, setSelectedBranch] = useState("");
+  const [selectedRole, setSelectedRole] = useState("");
+  const [searchFormTerm, setSearchFormTerm] = useState('');
 
   const handleViewForm = (formId) => {
     navigate(`/form-templates/${formId}`);
@@ -80,6 +95,29 @@ const FormTemplates = () => {
   const handleSearchUsers = (query) => {
     setSearchQuery(query);
   };
+  
+  const filteredForms = formTemplates.filter(form =>
+    form.title.toLowerCase().includes(searchFormTerm.toLowerCase()) ||
+    form.description.toLowerCase().includes(searchFormTerm.toLowerCase())
+  );
+
+  const filteredTrainees = trainees.filter((trainee) =>
+    (trainee.userUsername.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      trainee.userFirstName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      trainee.userLastName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      trainee.userEmail.toLowerCase().includes(searchTerm.toLowerCase())) &&
+    (selectedBranch === "" || trainee.userBranch === selectedBranch) &&
+    (selectedRole === "" || trainee.userRole === selectedRole)
+  );
+
+  const filteredSupervisors = supervisors.filter((supervisor) =>
+    (supervisor.userUsername.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      supervisor.userFirstName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      supervisor.userLastName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      supervisor.userEmail.toLowerCase().includes(searchTerm.toLowerCase())) &&
+    (selectedBranch === "" || supervisor.branch === selectedBranch) &&
+    (selectedRole === "" || supervisor.userRole === selectedRole)
+  );
 
   const handleToggleAllTrainees = () => {
     const newSelected = selectAllTrainees
@@ -117,19 +155,7 @@ const FormTemplates = () => {
     setSelectedUsers(newSelected);
   };
 
-  const filteredTrainees = trainees.filter((trainee) =>
-    trainee.userUsername.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    trainee.userFirstName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    trainee.userLastName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    trainee.userEmail.toLowerCase().includes(searchTerm.toLowerCase())
-  );
 
-  const filteredSupervisors = supervisors.filter((supervisor) =>
-    supervisor.userUsername.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    supervisor.userFirstName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    supervisor.userLastName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    supervisor.userEmail.toLowerCase().includes(searchTerm.toLowerCase())
-  );
 
   const handleDeleteForm = (formId) => {
     axios.delete(`${baseUrl}/api/v1/forms/${formId}`, {
@@ -203,18 +229,18 @@ const FormTemplates = () => {
     setSelectedUsers(newSelectedUsers);
   };
 
-  const getUsersAssignedTo = async () => {
-    try {
-      const response = await axios.get(`${baseUrl}/api/v1/forms/${idToSend}/users-assigned`, {
-        headers: {
-          Authorization: `Bearer ${login_token}`
-        }
-      });
-      setUsersAlreadySent(response.data);
-    } catch (error) {
-      console.log(error);
-    }
-  }
+  // const getUsersAssignedTo = async () => {
+  //   try {
+  //     const response = await axios.get(`${baseUrl}/api/v1/forms/${idToSend}/users-assigned`, {
+  //       headers: {
+  //         Authorization: `Bearer ${login_token}`
+  //       }
+  //     });
+  //     setUsersAlreadySent(response.data);
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // }
 
   const sendFormAPI = async () => {
     try {
@@ -227,13 +253,76 @@ const FormTemplates = () => {
         });
       setIdToSend(null)
       if (response.status === 200) {
+        setSendSnackbarMessage("Form has been sent successfully.");
+        setSendSnackbarOpen(true);
       }
+
     } catch (error) {
       console.log(error);
     }
   };
 
-  const fetchTrainees = async () => {
+  const fetchFormDetails = async () => {
+    try {
+      const response = await axios.get(`${baseUrl}/api/v1/forms/${idToDuplicate}`, {
+        headers: {
+          Authorization: `Bearer ${login_token}`
+        }
+      });
+      const form = response.data;
+      const mappedForm = {
+        title: form.title,
+        description: form.description,
+        questions: form.questions.map(question => ({
+          question: question.question,
+          type: question.type,
+          options: question.options,
+        })),
+      };
+      setFormData(mappedForm);
+    } catch (error) {
+      console.error("Error fetching form details:", error);
+    }
+  };
+
+  useEffect(() => {
+    if (idToDuplicate) {
+      fetchFormDetails();
+    }
+  }, [idToDuplicate]);
+
+  const duplicateFormAPI = async () => {
+    try {
+      if (!formData.title) {
+        throw new Error("Form data is empty.");
+      }
+
+      const response = await axios.post(
+        `${baseUrl}/api/v1/forms/create-form`,
+        formData,
+        {
+          headers: {
+            Authorization: `Bearer ${login_token}`,
+          },
+        }
+      );
+
+      if (response.status === 200) {
+        setSnackbarMessage("Form has been duplicated successfully.");
+        setSnackbarOpen(true);
+        fetchFormTemplates(); // Refresh form templates after duplication
+      }
+    } catch (error) {
+      console.error("Error duplicating form template:", error);
+      setSnackbarMessage("Error duplicating form template.");
+      setSnackbarOpen(true);
+    } finally {
+      setShowDuplicationConfirmation(false);
+      setIdToDuplicate(null);
+    }
+  };
+
+  const fetchUsers = async () => {
     try {
       const response = await axios.get(`${baseUrl}/api/v1/admin/users`, {
         headers: {
@@ -244,6 +333,10 @@ const FormTemplates = () => {
         const traineeUsers = response.data.filter(
           (item) => item.userRole === "TRAINEE"
         );
+        const supervisorUsers = response.data.filter(
+          (item) => item.userRole === "SUPERVISOR"
+        );
+        setSupervisors(supervisorUsers);
         setTrainees(traineeUsers);
       }
     } catch (error) {
@@ -251,39 +344,26 @@ const FormTemplates = () => {
     }
   };
 
-  const fetchSupervisors = async () => {
-    try {
-      const response = await axios.get(`${baseUrl}/api/v1/admin/users`, {
-        headers: {
-          Authorization: `Bearer ${login_token}`
-        }
-      });
-      if (response.status === 200) {
-        const supervisorUsers = response.data.filter(
-          (item) => item.userRole === "SUPERVISOR"
-        );
-        setSupervisors(supervisorUsers);
-      }
-    } catch (error) {
-      console.log(error);
-    }
+
+  const handleSearchFormChange = (event) => {
+    setSearchFormTerm(event.target.value);
   };
 
   const openSendFormModal = (formId) => {
-    setIdToSend(formId);
     setShowSendFormModal(true);
+    setIdToSend(formId);
+    fetchUsers();
   };
 
-  useEffect(() => {
-    if (idToSend !== null) {
-      getUsersAssignedTo();
-    }
-  }, [idToSend]);
+  // useEffect(() => {
+  //   if (idToSend !== null) {
+  //     getUsersAssignedTo();
+  //   }
+  // }, [idToSend]);
 
   useEffect(() => {
     if (showSendFormModal) {
-      fetchTrainees();
-      fetchSupervisors();
+      fetchUsers();
     }
   }, [showSendFormModal]);
 
@@ -292,103 +372,138 @@ const FormTemplates = () => {
     setPage(0); // Reset page when search term changes
   };
 
-  const handleCancelSendForm = () => {
-    setIdToSend(null)
-    setSelectedUsers([]);
-    setShowSendFormModal(false);
-  }
 
+  const handleSendFormCancel = () => {
+    setIdToSend(null)
+    setShowSendFormModal(false);
+    setSelectedUsers([]);
+  };
   if (loading) {
     return <Typography>Loading...</Typography>;
   }
 
+  const viewDuplicationConfirmation = (formId) => {
+    setIdToDuplicate(formId);
+    setShowDuplicationConfirmation(true);
+  };
+
+  const handleDuplicationCancel = () => {
+    setShowDuplicationConfirmation(false);
+    setIdToDuplicate(null);
+  };
+
   return (
 
     <Box sx={{ margin: '2rem auto', maxWidth: '1200px' }}>
-      <Paper sx={{ padding: '2rem', borderRadius: '1rem',backgroundColor: '#E1EBEE' , border: '0.5px solid #ccc' }}>
+      <Paper sx={{ padding: '2rem', borderRadius: '1rem', backgroundColor: '#E1EBEE', border: '0.5px solid #ccc' }}>
         <Typography
-          className="concert-one-regular" variant='inherit' 
+          className="concert-one-regular" variant='inherit'
           align="center"
           sx={{
-            marginBottom: "1rem",
-            color:  theme.palette.primary.main
+            marginBottom: "2rem",
+            color: theme.palette.primary.main
           }}
         >
-          <FactCheckIcon fontSize="large" sx={{mr:'0.3rem'}}/> EXALT Form Templates
+          <FactCheckIcon fontSize="large" sx={{ mr: '0.3rem' }} /> EXALT Form Templates
         </Typography>
         <Box sx={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '1rem' }}>
-          <Button variant="primary" sx={{backgroundColor:'#fff',border: '2px solid #ccc'}} onClick={formBuilderPage} startIcon={<AddIcon />}>
-            Create new Form
+          <Button variant="contained" sx={{ border: '1x solid #ccc' }} onClick={formBuilderPage} startIcon={<AddIcon />}>
+             New Form
           </Button>
-        </Box>                
-
-        <TableContainer component={Paper} sx={{ border: '1px solid #ddd',minHeight: 450, width: '100%' }}>
+        </Box>
+        <Grid item xs={12} md={6} sx={{marginBottom:'0.5rem'}}>
+            <SearchComponent
+              searchTerm={searchFormTerm} onSearchChange={handleSearchFormChange} />
+          </Grid>
+        <TableContainer component={Paper} sx={{ border: '1px solid #ddd', minHeight: 450, width: '100%',borderRadius:'1rem' }}>
           <Table>
-            <TableHead >
+            <TableHead>
               <TableRow>
-                <TableCell sx={{ fontWeight: 'bold', borderBottom: '1px solid #ddd' }}>
-                  <Typography variant="subtitle1" fontWeight="bold">
+                <TableCell sx={{ borderBottom: '1px solid #ddd', width: '20%' }}>
+                  <Typography variant="subtitle1">
                     Title
                   </Typography>
                 </TableCell>
-                <TableCell sx={{ fontWeight: 'bold', borderBottom: '1px solid #ddd' }}>
-                  <Typography variant="subtitle1" fontWeight="bold">
+                <TableCell sx={{ fontWeight: 'bold', borderBottom: '1px solid #ddd', width: '20%' }}>
+                  <Typography variant="subtitle1" >
                     Description
                   </Typography>
                 </TableCell>
-                <TableCell sx={{ fontWeight: 'bold', borderBottom: '1px solid #ddd' }}>
-                  <Typography variant="subtitle1" fontWeight="bold">
-
+                <TableCell sx={{ fontWeight: 'bold', borderBottom: '1px solid #ddd', width: '40%' }} colSpan={2} align="center">
+                  <Typography variant="subtitle1" >
+                    Actions
                   </Typography>
                 </TableCell>
-                <TableCell sx={{ fontWeight: 'bold', borderBottom: '1px solid #ddd' }}>
-                  <Typography variant="subtitle1" fontWeight="bold">
-                    Actions</Typography>
-                </TableCell>
-                <TableCell sx={{ fontWeight: 'bold', borderBottom: '1px solid #ddd' }}>
-                  <Typography variant="subtitle1" fontWeight="bold">
-                  </Typography>
-                </TableCell>
-                <TableCell sx={{ fontWeight: 'bold', borderBottom: '1px solid #ddd' }}>
-                  <Typography variant="subtitle1" fontWeight="bold">
+                <TableCell sx={{ fontWeight: 'bold', borderBottom: '1px solid #ddd', width: '20%' }} align="center">
+                  <Typography variant="subtitle1" >
                     Submissions
                   </Typography>
                 </TableCell>
               </TableRow>
             </TableHead>
-            <TableBody>
-              {formTemplates.map((form) => (
-                <TableRow key={form.id}>
-                  <TableCell>{form.title}</TableCell>
-                  <TableCell>{form.description}</TableCell>
 
-                  <TableCell>
-                    <Button variant="outlined" color="primary" onClick={() => handleViewForm(form.id)}
-                      startIcon={<EditIcon />}>
-                      Edit
-                    </Button>
+            <TableBody>
+              {filteredForms.map((form) => (
+                <TableRow key={form.id}>
+                  <TableCell sx={{ width: '20%' }}>{form.title.length > 50 ? `${form.title.substring(0, 50)}...` : form.title}
                   </TableCell>
-                  <TableCell>
-                    <Button variant="outlined" color="secondary"
-                      onClick={() => viewConfirmation(form.id)} startIcon={<DeleteIcon />}>
-                      Delete
-                    </Button>
+                  <TableCell sx={{ width: '20%' }}>
+                    {form.description.length > 50 ? `${form.description.substring(0, 50)}...` : form.description}
                   </TableCell>
-                  <TableCell>
-                    <Button
-                      variant="outlined"
-                      color="primary"
-                      onClick={() => openSendFormModal(form.id)}
-                      startIcon={<SendIcon />}>
-                      Send
-                    </Button>
+                  <TableCell colSpan={2} sx={{ width: '40%' }}>
+                    <Grid container spacing={2}>
+                      <Grid item xs={6}>
+                        <Button
+                          variant="outlined"
+                          color="primary"
+                          onClick={() => handleViewForm(form.id)}
+                          startIcon={<EditIcon />}
+                          fullWidth
+                        >
+                          Edit
+                        </Button>
+                      </Grid>
+                      <Grid item xs={6}>
+                        <Button
+                          variant="outlined"
+                          color="primary"
+                          onClick={() => openSendFormModal(form.id)}
+                          startIcon={<SendIcon />}
+                          fullWidth
+                        >
+                          Send
+                        </Button>
+                      </Grid>
+                      <Grid item xs={6}>
+                        <Button
+                          variant="outlined"
+                          color="secondary"
+                          onClick={() => viewConfirmation(form.id)}
+                          startIcon={<DeleteIcon />}
+                          fullWidth
+                        >
+                          Delete
+                        </Button>
+                      </Grid>
+                      <Grid item xs={6}>
+                        <Button
+                          variant="outlined"
+                          startIcon={<ContentCopyIcon />}
+                          onClick={() => viewDuplicationConfirmation(form.id)}
+                          fullWidth
+                        >
+                          Duplicate
+                        </Button>
+                      </Grid>
+                    </Grid>
                   </TableCell>
-                  <TableCell>
+                  <TableCell sx={{ width: '20%' }}>
                     <Button
                       variant="contained"
                       color="primary"
                       onClick={() => openSubmissonsPage(form.id)}
-                      startIcon={<QuestionAnswerIcon />}>
+                      startIcon={<QuestionAnswerIcon />}
+                    >
                       View Submissions
                     </Button>
                   </TableCell>
@@ -397,6 +512,14 @@ const FormTemplates = () => {
             </TableBody>
           </Table>
         </TableContainer>
+
+
+
+
+
+
+
+
       </Paper>
 
       {/* Confirmation Dialog */}
@@ -425,80 +548,161 @@ const FormTemplates = () => {
       </Dialog>
 
       {/* Send Form Modal */}
-      <Dialog open={showSendFormModal} onClose={handleCancelSendForm} maxWidth="lg" fullWidth>
-        <DialogTitle>Select Users to Send Form</DialogTitle>
+      <Dialog open={showSendFormModal} onClose={handleSendFormCancel}>
+        <DialogTitle>Send Form <SendIcon /> </DialogTitle>
         <DialogContent>
-          <SearchComponent
-            placeholder="Search users..."
-            searchQuery={searchTerm}
-            onSearch={handleSearchChange}
-          />
-          <Box sx={{ mt: 2 }}>
-            <Typography variant="h6">Trainees</Typography>
-            <Button
-              onClick={handleToggleAllTrainees}
-              variant="contained"
-              color="primary"
-              size="small"
-              sx={{ mb: 1 }}
-            >
-              {selectAllTrainees ? "Deselect All Trainees" : "Select All Trainees"}
-            </Button>
-            <List>
-              {filteredTrainees.map((trainee) => (
-                <ListItem key={trainee.userId} button onClick={handleUserToggle(trainee.userId)}>
-                  <ListItemAvatar>
-                    <Avatar alt={trainee.userUsername} src={trainee.userAvatar} />
-                  </ListItemAvatar>
-                  <ListItemText primary={`${trainee.userFirstName} ${trainee.userLastName}`} secondary={trainee.userEmail} />
-                  <Checkbox
-                    edge="end"
-                    checked={selectedUsers.includes(trainee.userId)}
-                    tabIndex={-1}
-                    disableRipple
-                  />
-                </ListItem>
-              ))}
-            </List>
+          <DialogContentText>
+            Select users to send the form to:
+          </DialogContentText>
+          <Box mt={2}>
+            <SearchComponent searchTerm={searchTerm} onSearchChange={handleSearchChange} />
           </Box>
-          <Box sx={{ mt: 2 }}>
-            <Typography variant="h6">Supervisors</Typography>
-            <Button
-              onClick={handleToggleAllSupervisors}
-              variant="contained"
-              color="primary"
-              size="small"
-              sx={{ mb: 1 }}
+          <FormControl fullWidth>
+            <Select
+              value={selectedBranch}
+              onChange={(e) => setSelectedBranch(e.target.value)}
+              displayEmpty
+              sx={{ marginTop: theme.spacing(2), backgroundColor: '#E1EBEE' }}
             >
-              {selectAllSupervisors ? "Deselect All Supervisors" : "Select All Supervisors"}
-            </Button>
-            <List>
-              {filteredSupervisors.map((supervisor) => (
-                <ListItem key={supervisor.userId} button onClick={handleUserToggle(supervisor.userId)}>
+              <MenuItem value="">
+                <em>All Branches</em>
+              </MenuItem>
+              <MenuItem value="RAMALLAH">Ramallah</MenuItem>
+              <MenuItem value="NABLUS">Nablus</MenuItem>
+              <MenuItem value="BETHELEHEM">Bethlehem</MenuItem>
+            </Select>
+          </FormControl>
+          <FormControl fullWidth>
+            <Select
+              value={selectedRole}
+              onChange={(e) => setSelectedRole(e.target.value)}
+              displayEmpty
+              sx={{ marginTop: theme.spacing(2), backgroundColor: '#E1EBEE' }}
+            >
+              <MenuItem value="">
+                <em>All Roles</em>
+              </MenuItem>
+              <MenuItem value="TRAINEE">Trainee</MenuItem>
+              <MenuItem value="SUPERVISOR">Supervisor</MenuItem>
+            </Select>
+          </FormControl>
+          <Grid container spacing={2} mt={2}>
+            <Grid item xs={12} md={6}>
+              <Typography variant="h6">Trainees</Typography>
+              <List>
+                <ListItem>
                   <ListItemAvatar>
-                    <Avatar alt={supervisor.userUsername} src={supervisor.userAvatar} />
+                    <Checkbox
+                      edge="start"
+                      checked={selectAllTrainees}
+                      tabIndex={-1}
+                      disableRipple
+                      onChange={handleToggleAllTrainees}
+                    />
                   </ListItemAvatar>
-                  <ListItemText primary={`${supervisor.userFirstName} ${supervisor.userLastName}`} secondary={supervisor.userEmail} />
-                  <Checkbox
-                    edge="end"
-                    checked={selectedUsers.includes(supervisor.userId)}
-                    tabIndex={-1}
-                    disableRipple
-                  />
+                  <ListItemText primary="Select All" />
                 </ListItem>
-              ))}
-            </List>
-          </Box>
+                {filteredTrainees.map((trainee) => (
+                  <ListItem key={trainee.userId}>
+                    <ListItemAvatar>
+                      <Checkbox
+                        edge="start"
+                        checked={selectedUsers.indexOf(trainee.userId) !== -1}
+                        tabIndex={-1}
+                        disableRipple
+                        onChange={handleUserToggle(trainee.userId)}
+                      />
+                    </ListItemAvatar>
+                    <ListItemAvatar>
+                      <Avatar />
+                    </ListItemAvatar>
+                    <ListItemText
+                      primary={`${trainee.userFirstName} ${trainee.userLastName}`}
+                      secondary={trainee.userBranch}
+                    />
+                  </ListItem>
+                ))}
+              </List>
+            </Grid>
+            <Grid item xs={12} md={6}>
+              <Typography variant="h6">Supervisors</Typography>
+              <List>
+                <ListItem>
+                  <ListItemAvatar>
+                    <Checkbox
+                      edge="start"
+                      checked={selectAllSupervisors}
+                      tabIndex={-1}
+                      disableRipple
+                      onChange={handleToggleAllSupervisors}
+                    />
+                  </ListItemAvatar>
+                  <ListItemText primary="Select All" />
+                </ListItem>
+                {filteredSupervisors.map((supervisor) => (
+                  <ListItem key={supervisor.userId}>
+                    <ListItemAvatar>
+                      <Checkbox
+                        edge="start"
+                        checked={selectedUsers.indexOf(supervisor.userId) !== -1}
+                        tabIndex={-1}
+                        disableRipple
+                        onChange={handleUserToggle(supervisor.userId)}
+                      />
+                    </ListItemAvatar>
+                    <ListItemAvatar>
+                      <Avatar />
+                    </ListItemAvatar>
+                    <ListItemText
+                      primary={`${supervisor.userFirstName} ${supervisor.userLastName}`}
+                      secondary={supervisor.userBranch}
+                    />
+                  </ListItem>
+                ))}
+              </List>
+            </Grid>
+          </Grid>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleCancelSendForm} color="primary">
-            Cancel
-          </Button>
+          <Button onClick={handleSendFormCancel}>Cancel</Button>
           <Button onClick={handleSendForm} color="primary">
             Send
           </Button>
         </DialogActions>
       </Dialog>
+
+      <Dialog
+        open={showDuplicationConfirmation}
+        onClose={handleDuplicationCancel}
+      >
+        <DialogTitle>Confirm Duplication</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            Are you sure you want to duplicate this form?
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleDuplicationCancel} color="primary">
+            Cancel
+          </Button>
+          <Button onClick={duplicateFormAPI} color="primary">
+            Duplicate
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+      <Snackbar
+        open={sendSnackbarOpen}
+        autoHideDuration={5000}
+        onClose={() => setSendSnackbarOpen(false)}
+        message={sendSnackbarMessage}
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+      >
+        <Alert onClose={() => setSendSnackbarOpen(false)} severity="success">
+          Form has been Sent successfully!
+        </Alert>
+      </Snackbar>
+
     </Box>
   );
 };

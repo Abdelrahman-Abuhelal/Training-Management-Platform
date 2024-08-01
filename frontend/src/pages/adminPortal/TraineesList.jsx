@@ -13,6 +13,7 @@ import {
   TableSortLabel,
   TablePagination,
   Paper,
+  Select,
   IconButton,
   Dialog,
   ListItemText,
@@ -30,7 +31,7 @@ import {
   ListItemAvatar,
   Avatar,
   MenuItem,
-  InputAdornment,
+   DialogContentText 
 } from "@mui/material";
 import SearchComponent from "../../components/Search";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -47,29 +48,29 @@ const TraineesList = () => {
   const { login_token } = user;
   const [trainees, setTrainees] = useState([]);
   const [traineesDetails, setTraineesDetails] = useState([]);
-  const [searchTerm, setSearchTerm] = useState(""); // Search state
-  const [orderBy, setOrderBy] = useState("userUsername"); // Default sort order
-  const [sortDirection, setSortDirection] = useState("asc"); // Default sort direction
-  const [page, setPage] = useState(0); // Current page for pagination
-  const [rowsPerPage, setRowsPerPage] = useState(10); // Rows per page
+  const [branchFilter, setBranchFilter] = useState("");
+  const [searchTerm, setSearchTerm] = useState("");
+  const [orderBy, setOrderBy] = useState("userUsername");
+  const [sortDirection, setSortDirection] = useState("asc");
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
   const [userIdToDelete, setUserIdToDelete] = useState(null);
-  const [usernameToDelete, setUsernameToDelete] = useState("");
-  const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
-  const [selectedTrainees, setSelectedTrainees] = useState([]); // State to hold selected trainees
-  const [selectedSupervisors, setSelectedSupervisors] = useState([]); // State to hold selected supervisors
-  const [supervisors, setSupervisors] = useState([]); // State to hold all supervisors
-  const [openAssignDialog, setOpenAssignDialog] = useState(false); // Dialog state
+  const [selectedTrainees, setSelectedTrainees] = useState([]);
+  const [selectedSupervisors, setSelectedSupervisors] = useState([]);
+  const [supervisors, setSupervisors] = useState([]);
+  const [openAssignDialog, setOpenAssignDialog] = useState(false);
   const navigate = useNavigate();
-  const headerTextStyle = { fontSize: '1.1rem', fontWeight: 'bold' }; // Header text style
-  const bodyTextStyle = { fontSize: '0.9rem' }; // Body text style
+  const headerTextStyle = { fontSize: '1.1rem', fontWeight: 'bold' };
+  const bodyTextStyle = { fontSize: '0.9rem' };
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
   const filteredTrainees = trainees.filter((trainee) =>
-    trainee.userUsername.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    trainee.userFirstName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    trainee.userLastName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    trainee.userEmail.toLowerCase().includes(searchTerm.toLowerCase())
+    (trainee.userUsername.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      trainee.userFirstName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      trainee.userLastName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      trainee.userEmail.toLowerCase().includes(searchTerm.toLowerCase())) &&
+    (branchFilter === "" || trainee.userBranch === branchFilter)
   );
 
   const paginatedTrainees = filteredTrainees.slice(
@@ -112,27 +113,11 @@ const TraineesList = () => {
     setPage(0); // Reset page to 1 when rows per page changes
   };
 
-  const handleDelete = (user) => {
-    setUserIdToDelete(user.userId);
-    setUsernameToDelete(user.userUsername);
-    setOpenDeleteDialog(true);
-  };
 
-  const handleCloseDeleteDialog = () => {
-    setOpenDeleteDialog(false);
-    setUserIdToDelete(null);
-    setUsernameToDelete("");
-  };
 
-  const handleConfirmDelete = () => {
-    if (userIdToDelete) {
-      deleteUser(userIdToDelete);
-      setOpenDeleteDialog(false);
-      setUserIdToDelete(null);
-      setUsernameToDelete("");
-    } else {
-      console.error("User ID not available for deletion");
-    }
+  const handleBranchFilterChange = (event) => {
+    setBranchFilter(event.target.value);
+    setPage(0); // Reset page when branch filter changes
   };
 
   const handleSearchChange = (event) => {
@@ -238,11 +223,9 @@ const TraineesList = () => {
 
   const handleSupervisorCheckboxChange = (event, supervisor) => {
     if (event.target.checked) {
-      setSelectedSupervisors((prevSelected) => [...prevSelected, supervisor]);
+      setSelectedSupervisors([supervisor]);
     } else {
-      setSelectedSupervisors((prevSelected) =>
-        prevSelected.filter((item) => item.userId !== supervisor.userId)
-      );
+      setSelectedSupervisors([]);
     }
   };
 
@@ -333,11 +316,10 @@ const TraineesList = () => {
   return (
     <div style={{ padding: isMobile ? "0.5rem" : "4rem" }}>
 
-      <Paper sx={{ padding: isMobile ? '3px' : '3rem' ,backgroundColor: '#E1EBEE' ,  borderRadius: '1rem' }}>
-
+      <Paper sx={{ padding: isMobile ? '3px' : '2rem', backgroundColor: '#E1EBEE', borderRadius: '1rem' }}>
         <div>
-          <Grid container spacing={2} alignItems="center" >
-            <Grid item xs={12} md={6}>
+          <Grid container spacing={2} alignItems="center">
+            <Grid item xs={12} md={4}>
               <Box sx={{ width: '100%' }}>
                 <SearchComponent
                   searchTerm={searchTerm}
@@ -345,7 +327,29 @@ const TraineesList = () => {
                 />
               </Box>
             </Grid>
-            <Grid item xs={12} md={3} textAlign="right">
+            <Grid item xs={12} md={2}>
+              <FormControl variant="outlined" fullWidth sx={{
+                '& .MuiOutlinedInput-root': {
+                  borderRadius: '24px', backgroundColor: '#fff'
+                }
+              }}>
+                <Select
+                  value={branchFilter}
+                  onChange={handleBranchFilterChange}
+                  displayEmpty
+                  inputProps={{ 'aria-label': 'Branch Filter' }}
+                >
+                  <MenuItem value="">
+                    <em>All Branches</em>
+                  </MenuItem>
+                  {/* Add other branches as needed */}
+                  <MenuItem value="RAMALLAH">Ramallah</MenuItem>
+                  <MenuItem value="NABLUS">Nablus</MenuItem>
+                  <MenuItem value="BETHLEHEM">Bethlehem</MenuItem>
+                </Select>
+              </FormControl>
+            </Grid>
+            <Grid item xs={12} md={6} textAlign="right">
               <Button
                 variant="contained"
                 color="primary"
@@ -353,13 +357,12 @@ const TraineesList = () => {
                 onClick={exportToExcel}
                 sx={{
                   fontSize: isMobile ? "0.55rem" : "1.0rem",
-                  maxWidth: isMobile ? "8rem" : "12rem"
+                  maxWidth: isMobile ? "8rem" : "12rem",
+                  marginRight: isMobile ? '8px' : '16px'
                 }}
               >
                 Export As Excel
               </Button>
-            </Grid>
-            <Grid item xs={12} md={3} >
               <Button
                 variant="contained"
                 color="primary"
@@ -367,7 +370,6 @@ const TraineesList = () => {
                 disabled={selectedTrainees.length !== 1}
                 sx={{
                   fontSize: isMobile ? "0.55rem" : "1.0rem",
-                  marginTop: isMobile ? '8px' : '0',
                   maxWidth: isMobile ? "8rem" : "12rem"
                 }}
               >
@@ -377,19 +379,21 @@ const TraineesList = () => {
           </Grid>
         </div>
       </Paper>
-      <Paper sx={{  pt:'1rem',backgroundColor: '#E1EBEE' , p:'2rem',  borderRadius: '1rem',marginTop:'1.5rem'}}>
+
+
+      <Paper sx={{ pt: '1rem', backgroundColor: '#E1EBEE', p: '2rem', borderRadius: '1rem', marginTop: '1.5rem' }}>
         <Typography
-          className="concert-one-regular" variant='inherit' 
+          className="concert-one-regular" variant='inherit'
           gutterBottom
           align="center"
-          sx={{ fontSize: "1.7rem", mt: 2, ml: 1 ,   color:  theme.palette.primary.main}}
+          sx={{ fontSize: "1.7rem", mt: 2, ml: 1, color: theme.palette.primary.main }}
         >
           <Box display="flex" alignItems="center" justifyContent="center">
             <PeopleOutlineIcon fontSize="large" />
             &nbsp; Active Trainees
           </Box>
         </Typography>
-        <TableContainer component={Paper} sx={{mt:'2rem'}}>
+        <TableContainer component={Paper} sx={{ mt: '2rem' }}>
           <Table aria-label="trainee table">
             <TableHead sx={{ borderBottom: "1px solid #ccc" }}>
               <TableRow>
@@ -405,7 +409,9 @@ const TraineesList = () => {
                     }}
                   />
                 </TableCell>
-
+                <TableCell>
+                  <Typography sx={headerTextStyle}>Profile</Typography>
+                </TableCell>
                 <TableCell>
                   <Typography sx={headerTextStyle}>Full Name
                   </Typography>
@@ -413,23 +419,9 @@ const TraineesList = () => {
                 <TableCell>
                   <Typography sx={headerTextStyle}>Email</Typography>
                 </TableCell>
+
                 <TableCell>
-                  <TableSortLabel
-                    active={orderBy === "userUsername"}
-                    direction={sortDirection}
-                    onClick={(event) => handleRequestSort(event, "userUsername")}
-                  >
-                    <Typography sx={headerTextStyle}>Username</Typography>
-                  </TableSortLabel>
-                </TableCell>
-                <TableCell>
-                  <Typography sx={headerTextStyle}>Role</Typography>
-                </TableCell>
-                <TableCell align="center">
-                  <Typography sx={headerTextStyle}>Profile</Typography>
-                </TableCell>
-                <TableCell align="center">
-                  <Typography sx={headerTextStyle}>Actions</Typography>
+                  <Typography sx={headerTextStyle}>Branch</Typography>
                 </TableCell>
               </TableRow>
             </TableHead>
@@ -444,6 +436,14 @@ const TraineesList = () => {
                       onChange={(e) => handleCheckboxChange(e, item)}
                     />
                   </TableCell>
+                  <TableCell >
+                    <IconButton
+                      onClick={() => navigate(`/edit-trainee/${item.userId}`)}
+                      color="primary"
+                    >
+                      <ManageAccountsIcon fontSize="large" /><Typography sx={bodyTextStyle}>{item.userUsername}</Typography>
+                    </IconButton>
+                  </TableCell>
                   <TableCell>
                     <Typography sx={bodyTextStyle}>{item.userFirstName + " " + item.userLastName}</Typography>
                   </TableCell>
@@ -451,29 +451,11 @@ const TraineesList = () => {
                     <Typography sx={bodyTextStyle}>{item.userEmail}</Typography>
                   </TableCell>
                   <TableCell>
-                    <Typography sx={bodyTextStyle}>{item.userUsername}</Typography>
-                  </TableCell>
-                  <TableCell>
                     <Typography sx={bodyTextStyle}>
-                      {item.userRole.charAt(0).toUpperCase() + item.userRole.slice(1).toLowerCase()}
+                      {item.userBranch}
                     </Typography>
                   </TableCell>
-                  <TableCell align="center">
-                    <IconButton
-                      onClick={() => navigate(`/edit-trainee/${item.userId}`)}
-                      color="primary"
-                    >
-                      <ManageAccountsIcon fontSize="large" />
-                    </IconButton>
-                  </TableCell>
-                  <TableCell align="center">
-                    <IconButton
-                      onClick={() => handleDelete(item)}
-                      color="secondary"
-                    >
-                      <DeleteIcon fontSize="medium" />
-                    </IconButton>
-                  </TableCell>
+
                 </TableRow>
               ))}
             </TableBody>
@@ -491,10 +473,18 @@ const TraineesList = () => {
 
 
 
-      {/* Delete Dialog */}
-      <Dialog open={openAssignDialog} onClose={handleCloseAssignDialog}>
-        <DialogTitle>Assign Supervisors</DialogTitle>
+      <Dialog
+        open={openAssignDialog}
+        onClose={handleCloseAssignDialog}
+        PaperProps={{
+          style: { width: '600px' }, // Adjust width as needed
+        }}
+      >
+        <DialogTitle>Assign Supervisor</DialogTitle>
         <DialogContent dividers>
+          <DialogContentText>
+            Please select a supervisor for the selected trainee.
+          </DialogContentText>
           <Grid container direction="column" alignItems="center">
             <Grid item xs={12}>
               <FormControl component="fieldset">
@@ -506,7 +496,8 @@ const TraineesList = () => {
                       dense
                       button
                       onClick={(e) =>
-                        handleSupervisorCheckboxChange(e, supervisor)}
+                        handleSupervisorCheckboxChange(e, supervisor)
+                      }
                     >
                       <ListItemAvatar>
                         <Avatar>{supervisor.userUsername.charAt(0)}</Avatar>
@@ -535,6 +526,7 @@ const TraineesList = () => {
               variant="contained"
               color="primary"
               onClick={handleAssignConfirm}
+              disabled={selectedSupervisors.length === 0} // Ensure a supervisor is selected
             >
               Assign
             </Button>

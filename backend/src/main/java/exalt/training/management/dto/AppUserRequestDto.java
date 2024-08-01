@@ -27,7 +27,7 @@ public class AppUserRequestDto {
     @Size(max = 50)
     private String userLastName;
 
-    private Boolean userEnabled;
+    private Boolean userActivated;
 
     private String userBranch;
 

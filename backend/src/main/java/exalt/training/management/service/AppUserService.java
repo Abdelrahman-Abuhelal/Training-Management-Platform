@@ -62,21 +62,21 @@ public class AppUserService {
         if (!(tokenService.isTokenValid(confirmAccountJwt, user) && isTokenValid)){
             throw new InvalidTokenException("token is not valid");
         }
-        if(user.getEnabled()){
+        if(user.getActivated()){
             throw new AccountAlreadyActivatedException("Account is already activated before");
         }
         String newPass =passwordRequest.getNewPassword();
         String confirmationPass=passwordRequest.getConfirmationPassword();
         authenticationService.checkValidPasswordMatch(newPass,confirmationPass);
         user.setPassword(passwordEncoder.encode(newPass));
-        user.setEnabled(true);
+        user.setActivated(true);
         user.setVerified(true);
         saveUser(user);
         log.info(user.getFirstName()+" account has been activated (ACTIVE)");
         return "Account has been activated";
     }
-    public List<AppUser> getAllEnabledUsers() {
-        return appUserRepository.findByEnabledTrue();
+    public List<AppUser> getAllActivatedUsers() {
+        return appUserRepository.findByActivatedTrue();
     }
     public boolean userAlreadyExists(String username){
         return appUserRepository.findByEmail(username).isPresent();
