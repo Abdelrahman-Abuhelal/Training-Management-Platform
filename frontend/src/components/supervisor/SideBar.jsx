@@ -26,7 +26,7 @@ const routes = [
   { path: '/assign-task', name: 'Assign Task', icon: <AddTaskIcon sx={{ color: 'primary.main' }}/> },
   { path: '/add-resource', name: 'Add Resource', icon: <NoteAddIcon sx={{ color: 'primary.main' }}/> },
   { path: '/forms', name: 'Forms', icon: <ListAltIcon sx={{ color: 'primary.main' }}/> },
-  { path: '/change-password', name: 'Settings', icon: <SettingsIcon sx={{ color: 'primary.main' }}/> }
+  { path: '/settings', name: 'Settings', icon: <SettingsIcon sx={{ color: 'primary.main' }}/> }
 
 ];
 

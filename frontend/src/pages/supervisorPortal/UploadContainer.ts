@@ -16,7 +16,7 @@
 //         case disabled:
 //           return grey[600];
 //         default:
-//           return theme.palette.primary.main;
+//           return theme.palette.primary.dark;
 //       }
 //     };
 

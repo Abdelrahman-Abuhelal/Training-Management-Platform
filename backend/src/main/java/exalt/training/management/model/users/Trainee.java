@@ -43,8 +43,10 @@ public class Trainee {
     private String trainingField;
     @Enumerated(EnumType.STRING)
     private BranchLocation branchLocation;
-    private String practiceYear;
-    private String practiceSeason;
+    private String trainingYear;
+    private String trainingSeason;
+    private String startTrainingDate;
+    private String endTrainingDate;
     private String bugzillaURL;
 
 

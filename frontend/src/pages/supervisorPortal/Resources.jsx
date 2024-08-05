@@ -55,8 +55,8 @@ const ResourceUploader = () => {
 
   return (<div style={{ display: "flex", justifyContent: "center" }}>
 
-    <Paper elevation={3} sx={{ p: 3, m: 6, width: "70%", maxWidth: 1000, backgroundColor: '#F5F7F8' }} >
-      <Typography className="concert-one-regular" variant='inherit'  gutterBottom style={{ marginBottom: "1rem",color:  theme.palette.primary.main }}>
+    <Paper elevation={3} sx={{ p: 3, m: 6, width: "70%", maxWidth: 1000, backgroundColor: theme.palette.background.paper }} >
+      <Typography className="concert-one-regular" variant='inherit'  gutterBottom style={{ marginBottom: "1rem",color:  theme.palette.primary.dark }}>
         Add New Resource <TopicIcon fontSize="medium"/>
       </Typography>
       <form onSubmit={handleSubmit}>

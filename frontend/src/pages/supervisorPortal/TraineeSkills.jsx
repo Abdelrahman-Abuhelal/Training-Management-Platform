@@ -17,10 +17,11 @@ import {
 } from "@mui/material";
 import DeleteIcon from '@mui/icons-material/Delete';
 import { useAuth } from "../../provider/authProvider";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import StarsIcon from '@mui/icons-material/Stars';
 import StarRateIcon from '@mui/icons-material/StarRate';
 import { useMediaQuery, useTheme } from '@mui/material';
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 
 
 const skillCategories = [
@@ -44,6 +45,7 @@ const TraineeSkills = () => {
   const { login_token } = user;
   const { userId } = useParams();
   const theme = useTheme();
+  const navigate = useNavigate();
 
   const [skills, setSkills] = useState([]);
   const [selectedSkills, setSelectedSkills] = useState({
@@ -169,12 +171,21 @@ const TraineeSkills = () => {
   const handleSnackbarClose = () => {
     setSnackbarOpen(false);
   };
+
+  const navigateBack = () => {
+    navigate(`/my-trainees`);
+  };
+
+
   return (
-    <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '100vh', marginTop:'2rem',marginBottom:'4rem' }}>
-      <Paper elevation={3} sx={{ p: 3, width: "80%", maxWidth: 1200, backgroundColor: '#F5F7F8', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-        <Typography className="concert-one-regular" variant='inherit' sx={{color:  theme.palette.primary.main, mb:'1.5rem'}} gutterBottom>
-          Manage Trainee Skills <StarRateIcon/>
-        </Typography>
+<Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', minHeight: '100vh', marginTop: '2rem', marginBottom: '4rem' }}>
+  <Paper elevation={3} sx={{ p: 3, width: "80%", maxWidth: 1200, backgroundColor: theme.palette.background.paper, display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
+    <Button onClick={navigateBack} startIcon={<ArrowBackIcon />} variant='contained' sx={{ alignSelf: 'flex-start', mb: '1rem' }}>
+      Back to Trainees
+    </Button>
+    <Typography className="concert-one-regular" variant='inherit' sx={{ color: theme.palette.primary.dark, mb: '1.5rem', alignSelf: 'center ' }} gutterBottom>
+      Manage Trainee Skills <StarRateIcon />
+    </Typography>
         <Grid container spacing={2}>
           {skillCategories.map(category => (
             <Grid item xs={12} key={category}>

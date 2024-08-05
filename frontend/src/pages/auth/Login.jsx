@@ -10,13 +10,17 @@ import {
   TextField,
   Button,
   Link,
+  Paper,
   Alert,
   IconButton,
-  InputAdornment
+  InputAdornment,
+  Grid,
 } from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
-import { useTheme } from '@mui/material/styles';
-import LoginIcon from '@mui/icons-material/Login';
+import { useTheme } from "@mui/material/styles";
+import LoginIcon from "@mui/icons-material/Login";
+import Navbar from "./Navbar";
+
 const Login = () => {
   const theme = useTheme();
   const navigate = useNavigate();
@@ -39,20 +43,22 @@ const Login = () => {
       return;
     }
 
-    await axios.post(`${baseUrl}/api/v1/auth/login`, {
-      email,
-      password,
-    }).then((response) => {
-      if (response.status === 200) {
-        setError("");
-        setUserData(response.data);
-        navigate("/", { replace: true });
-      } else if (response.status === 401) {
-        setError("Invalid email or password");
-      } else {
-        setError(response.data.message || "Login failed");
-      }
-    })
+    await axios
+      .post(`${baseUrl}/api/v1/auth/login`, {
+        email,
+        password,
+      })
+      .then((response) => {
+        if (response.status === 200) {
+          setError("");
+          setUserData(response.data);
+          navigate("/", { replace: true });
+        } else if (response.status === 401) {
+          setError("Invalid email or password");
+        } else {
+          setError(response.data.message || "Login failed");
+        }
+      })
       .catch((error) => {
         setError("Login failed");
         console.error("Login failed:", error);
@@ -68,71 +74,100 @@ const Login = () => {
   };
 
   return (
-    <div style={{backgroundColor:'#E1EBEE'}} >
-    <Container maxWidth="xs" sx={{backgroundColor:'#E1EBEE'}}>
-      <Box display="flex" flexDirection="column" justifyContent="center" alignItems="center" minHeight="100vh">
-        <Box textAlign="center" mb={4}>
-          <Box display="flex" justifyContent="center" mb={1}>
-            <img
-              src="/EXALT_LOGO2.png"
-              alt="Exalt Logo"
-              style={{ height: "50px", marginBottom: "20px" }}
-            />
-          </Box>
-          <Box display="flex" justifyContent="center" mb={2}>
-            <img
-              src="TMS_LOGO.jpg"
-              alt="TMS Logo"
-              style={{ height: "180px", borderRadius: "10px" }}
-            />
-          </Box>
-
-          <Typography className="concert-one-regular" variant='inherit' sx={{color: theme.palette.primary.main}} component="h1" mt={2}>
-            Login  <LoginIcon fontSize="large"/>
-          </Typography>
-        </Box>
-        <Box component="form" onSubmit={handleSubmit} width="100%">
-          <TextField
-            fullWidth
-            margin="normal"
-            id="email"
-            label="Email address"
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
-          <TextField
-            fullWidth
-            margin="normal"
-            id="password"
-            label="Password"
-            type={showPassword ? "text" : "password"}
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            
-          />
-          <Box textAlign="right" my={1}>
-            <Link component={NavLink} to="/forgot-password-email">
-              Forgot Password?
-            </Link>
-          </Box>
-          <Button
-            fullWidth
-            variant="contained"
-            color="primary"
-            type="submit"
+    <Paper sx={{backgroundColor:theme.palette.background.paper}}>
+      <Navbar />
+      <Paper  style={{ height: "91.5vh" }}>
+        <Grid container style={{ height: "100%" }}>
+          <Grid
+            item
+            xs={12}
+            md={6}
+            display="flex"
+            flexDirection="column"
+            justifyContent="center"
+            alignItems="center"
+            style={{
+              backgroundImage: 'url("/background.jpg")',
+              backgroundSize: "cover",
+              color: "white",
+            }}
           >
-            Login
-          </Button>
-          {error && (
-            <Alert severity="warning" style={{ marginTop: "20px" }}>
-              {error}
-            </Alert>
-          )}
-        </Box>
-      </Box>
-    </Container>
-    </div>
+            <Typography variant="h3">Welcome to Our Training Platform</Typography>
+            <img
+              src="/TMS_LOGO.jpg"
+              alt="Exalt Logo"
+              style={{ height: "200px", marginBottom: "20px" }}
+            />
+          </Grid>
+          <Grid
+            item
+            xs={12}
+            md={6}
+            display="flex"
+            justifyContent="center"
+            alignItems="center"
+          >
+            <Box component="form" onSubmit={handleSubmit} width="100%" maxWidth={400}>
+            <Box display="flex" justifyContent="center" mb={1}>
+                        <img
+                            src="./EXALT_LOGO2.png"
+                            alt="EXALT_LOGO"
+                            style={{ height: "100px", marginBottom: "20px" }}
+                        />
+                    </Box>
+              <Typography variant="h5" component="h1" textAlign="center" mb={2}>
+                Login <LoginIcon fontSize="large" />
+              </Typography>
+              <TextField
+                fullWidth
+                margin="normal"
+                id="email"
+                label="Email address"
+                type="email"
+                value={email}
+                sx={{ backgroundColor: "#fff" }}
+                onChange={(e) => setEmail(e.target.value)}
+              />
+              <TextField
+                fullWidth
+                margin="normal"
+                id="password"
+                label="Password"
+                type={showPassword ? "text" : "password"}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                sx={{ backgroundColor: "#fff" }}
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton
+                        onClick={handleClickShowPassword}
+                        onMouseDown={handleMouseDownPassword}
+                      >
+                        {showPassword ? <Visibility /> : <VisibilityOff />}
+                      </IconButton>
+                    </InputAdornment>
+                  ),
+                }}
+              />
+              <Box textAlign="right" my={1}>
+                <Link component={NavLink} to="/forgot-password-email">
+                  Forgot Password?
+                </Link>
+              </Box>
+              <Button fullWidth variant="contained" color="primary" type="submit">
+                Login
+              </Button>
+              {error && (
+                <Alert severity="warning" style={{ marginTop: "20px" }}>
+                  {error}
+                </Alert>
+              )}
+            </Box>
+          </Grid>
+        </Grid>
+      </Paper>
+    </Paper>
   );
 };
 

@@ -118,6 +118,7 @@ const ForgotPasswordReset = () => {
             id="newPassword"
             value={newPassword}
             onChange={(e) => setNewPassword(e.target.value)}
+            sx={{backgroundColor:"#fff"}}
             autoFocus
           />
           <TextField
@@ -128,6 +129,7 @@ const ForgotPasswordReset = () => {
             type="password"
             id="confirmationPassword"
             value={confirmationPassword}
+            sx={{backgroundColor:"#fff"}}
             onChange={(e) => setConfirmationPassword(e.target.value)}
           />
           <NavLink style={{ float: "right", paddingBottom: 10, paddingTop: 5 }} to="../">Back to Login?</NavLink>

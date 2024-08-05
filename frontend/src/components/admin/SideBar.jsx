@@ -26,9 +26,9 @@ const routes = [
   { path: "/trainees", name: "Trainees", icon: <GroupsIcon sx={{ color: 'primary.main' }}/> },
   { path: "/supervisors", name: "Supervisors", icon: <GroupsIcon sx={{ color: 'primary.main' }}/> },
   { path: "/superadmins", name: "Super Admins", icon: <GroupsIcon sx={{ color: 'primary.main' }}/> },
-  { path: "/form-templates", name: "Forms", icon: <ListAltIcon sx={{ color: 'primary.main' }}/> },
   { path: "/skills", name: "Skills", icon: <AutoAwesomeIcon sx={{ color: 'primary.main' }}/> },
-  { path: "/create-announcements", name: "Announcements", icon: <CampaignIcon sx={{ color: 'primary.main' }}/> },
+  { path: "/form-templates", name: "Forms", icon: <ListAltIcon sx={{ color: 'primary.main' }}/> },
+  { path: "/announcements", name: "Announcements", icon: <CampaignIcon sx={{ color: 'primary.main' }}/> },
   { path: "/settings", name: "Settings", icon: <SettingsIcon sx={{ color: 'primary.main' }}/> },
 ];
 

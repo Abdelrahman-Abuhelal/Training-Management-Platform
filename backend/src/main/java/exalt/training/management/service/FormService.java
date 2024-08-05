@@ -236,6 +236,7 @@ public class FormService {
         dto.setUserId(submission.getUser().getId());
         dto.setFirstName(submission.getUser().getFirstName());
         dto.setLastName(submission.getUser().getLastName());
+        dto.setBranch(submission.getUser().getUserBranch());
         dto.setEmail(submission.getUser().getEmail());
         dto.setSubmittedAt(submission.getSubmittedAt());
         return dto;

@@ -175,9 +175,9 @@ const AssignTask = () => {
 
   return (
     <div style={{ display: "flex", justifyContent: "center"}}>
-<Paper elevation={3} sx={{ p: 3, m: 6 , width: "70%", maxWidth: 1000, backgroundColor: '#F5F7F8'}} >
+<Paper elevation={3} sx={{ p: 3, m: 6 , width: "70%", maxWidth: 1000, backgroundColor: theme.palette.background.paper}} >
 
-      <Typography   className="concert-one-regular" variant='inherit'  sx={{ marginBottom: '2rem',color:  theme.palette.primary.main }} align="center">&nbsp;Assign Task&nbsp;<TaskIcon fontSize="medium"/></Typography>
+      <Typography   className="concert-one-regular" variant='inherit'  sx={{ marginBottom: '2rem',color:  theme.palette.primary.dark }} align="center">&nbsp;Assign Task&nbsp;<TaskIcon fontSize="medium"/></Typography>
       <Box sx={{ display: "flex", flexWrap: "wrap", gap: 2 }}>
         <TextField
           label="Task Name"
@@ -233,7 +233,7 @@ const AssignTask = () => {
       <Typography variant="h6" sx={{ mt: 2 }}>
         Trainee Selection
       </Typography>
-      <TableContainer component={Paper}>
+      <TableContainer component={Paper} sx={{backgroundColor:'#fff'}}>
         <Table aria-label="trainee table">
           <TableHead>
             <TableRow>

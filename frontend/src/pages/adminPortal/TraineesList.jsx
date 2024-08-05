@@ -60,7 +60,6 @@ const TraineesList = () => {
   const [supervisors, setSupervisors] = useState([]);
   const [openAssignDialog, setOpenAssignDialog] = useState(false);
   const navigate = useNavigate();
-  const headerTextStyle = { fontSize: '1.1rem', fontWeight: 'bold' };
   const bodyTextStyle = { fontSize: '0.9rem' };
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
@@ -316,7 +315,7 @@ const TraineesList = () => {
   return (
     <div style={{ padding: isMobile ? "0.5rem" : "4rem" }}>
 
-      <Paper sx={{ padding: isMobile ? '3px' : '2rem', backgroundColor: '#E1EBEE', borderRadius: '1rem' }}>
+      <Paper elevation={3} sx={{ padding: isMobile ? '3px' : '2rem', backgroundColor: theme.palette.background.paper, borderRadius: '1rem' }}>
         <div>
           <Grid container spacing={2} alignItems="center">
             <Grid item xs={12} md={4}>
@@ -381,19 +380,19 @@ const TraineesList = () => {
       </Paper>
 
 
-      <Paper sx={{ pt: '1rem', backgroundColor: '#E1EBEE', p: '2rem', borderRadius: '1rem', marginTop: '1.5rem' }}>
+      <Paper elevation={3} sx={{ pt: '1rem', backgroundColor: theme.palette.background.paper, p: '2rem', borderRadius: '1rem', marginTop: '1.5rem' }}>
         <Typography
           className="concert-one-regular" variant='inherit'
           gutterBottom
           align="center"
-          sx={{ fontSize: "1.7rem", mt: 2, ml: 1, color: theme.palette.primary.main }}
+          sx={{color: theme.palette.primary.dark }}
         >
           <Box display="flex" alignItems="center" justifyContent="center">
             <PeopleOutlineIcon fontSize="large" />
             &nbsp; Active Trainees
           </Box>
         </Typography>
-        <TableContainer component={Paper} sx={{ mt: '2rem' }}>
+        <TableContainer component={Paper} sx={{ mt: '2rem' ,backgroundColor:'#fff'}}>
           <Table aria-label="trainee table">
             <TableHead sx={{ borderBottom: "1px solid #ccc" }}>
               <TableRow>
@@ -410,18 +409,18 @@ const TraineesList = () => {
                   />
                 </TableCell>
                 <TableCell>
-                  <Typography sx={headerTextStyle}>Profile</Typography>
+                  <Typography variant="subtitle2">Profile</Typography>
                 </TableCell>
                 <TableCell>
-                  <Typography sx={headerTextStyle}>Full Name
+                  <Typography variant="subtitle2">Full Name
                   </Typography>
                 </TableCell>
                 <TableCell>
-                  <Typography sx={headerTextStyle}>Email</Typography>
+                  <Typography variant="subtitle2">Email</Typography>
                 </TableCell>
 
                 <TableCell>
-                  <Typography sx={headerTextStyle}>Branch</Typography>
+                  <Typography variant="subtitle2">Branch</Typography>
                 </TableCell>
               </TableRow>
             </TableHead>

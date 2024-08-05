@@ -37,7 +37,7 @@ const ForgotPasswordEmail = () => {
     }
   };
   return (
-    <Container maxWidth="xs">
+    <Container maxWidth="xs" >
       <Box display="flex" flexDirection="column" justifyContent="center" alignItems="center" minHeight="100vh">
         <Box textAlign="center" mb={1}>
           <Box display="flex" justifyContent="center" mb={2}>

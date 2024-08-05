@@ -3,7 +3,9 @@ package exalt.training.management.controller;
 
 import exalt.training.management.dto.FormDataDto;
 import exalt.training.management.dto.TraineeDataDto;
+import exalt.training.management.model.AcademicGrades;
 import exalt.training.management.model.users.Trainee;
+import exalt.training.management.service.AcademicGradesService;
 import exalt.training.management.service.FormService;
 import exalt.training.management.service.TraineeService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -23,6 +25,7 @@ public class TraineeController {
 
 
     private final TraineeService traineeService;
+    private final AcademicGradesService academicGradesService;
 
     private final FormService reviewService;
 
@@ -41,6 +44,18 @@ public class TraineeController {
     public ResponseEntity<Trainee> getTraineeProfile(){
         Trainee trainee = traineeService.getMyProfileInfo();
         return new ResponseEntity<>(trainee, HttpStatus.OK);
+    }
+
+    @PreAuthorize("hasAnyRole('TRAINEE')")
+    @Operation(summary = "Get My Academic Grades", security = @SecurityRequirement(name = "loginAuth"))
+    @GetMapping("/my-grades")
+    public ResponseEntity<List<AcademicGrades>> getAcademicGradesForTrainee() {
+        try {
+            List<AcademicGrades> academicGrades = academicGradesService.getMyAcademicGrades();
+            return new ResponseEntity<>(academicGrades, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
 

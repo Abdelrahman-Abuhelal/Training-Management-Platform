@@ -4,6 +4,10 @@ import axios from 'axios';
 import { useAuth } from "../../provider/authProvider";
 import { useTheme } from '@mui/material/styles';
 import { useNavigate } from "react-router-dom";
+import PeopleIcon from '@mui/icons-material/People';
+import DynamicFormIcon from '@mui/icons-material/DynamicForm';
+import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
+import NotificationImportantIcon from '@mui/icons-material/NotificationImportant';
 
 const Overview = () => {
   const [traineeSize, setTraineeSize] = useState([]);
@@ -83,41 +87,74 @@ const Overview = () => {
 
   const paperStyle = {
     padding: 20,
-    backgroundColor: '#D1E4F3',
+    backgroundColor: theme.palette.background.paper,
     color: '#333',
   };
 
   return (
     <Grid container spacing={5} >
       <Grid item xs={12} sm={4} md={4}>
-        <Paper style={paperStyle}>
-          <Typography className="concert-one-regular" variant='inherit' sx={{ color: theme.palette.primary.main }} >Active Trainees</Typography>
-          <Typography variant="h4" sx={{ color: theme.palette.primary.main }}>{traineeSize}</Typography>
+        <Paper elevation={3} style={paperStyle}>
+          <Typography className="concert-one-regular" variant='inherit' sx={{ color: theme.palette.primary.dark }} >Active Trainees</Typography>
+          <Typography variant="h4" sx={{ color: theme.palette.primary.dark }}>{traineeSize}</Typography>
           <Box mt={2}>
             <Button variant="contained" color="primary" onClick={() => navigate('/trainees')}>
-              View
+            <PeopleIcon fontSize='small'/> View 
             </Button>
           </Box>
         </Paper>
       </Grid>
       <Grid item xs={12} sm={4} md={4}>
-        <Paper style={paperStyle}>
-          <Typography className="concert-one-regular" variant='inherit' sx={{ color: theme.palette.primary.main }} >Active Supervisors</Typography>
-          <Typography variant="h4" sx={{ color: theme.palette.primary.main }}>{supervisorSize}</Typography>
+        <Paper elevation={3} style={paperStyle}>
+          <Typography className="concert-one-regular" variant='inherit' sx={{ color: theme.palette.primary.dark }} >Active Supervisors</Typography>
+          <Typography variant="h4" sx={{ color: theme.palette.primary.dark }}>{supervisorSize}</Typography>
           <Box mt={2}>
             <Button variant="contained" color="primary" onClick={() => navigate('/supervisors')}>
-              View
+            <PeopleIcon fontSize='small'/> View 
             </Button>
           </Box>
         </Paper>
       </Grid>
       <Grid item xs={12} sm={4} md={4}>
-        <Paper style={paperStyle}>
-          <Typography className="concert-one-regular" variant='inherit' sx={{ color: theme.palette.primary.main }} >Active Admin Managers</Typography>
-          <Typography variant="h4" sx={{ color: theme.palette.primary.main }}>{superadminSize}</Typography>
+        <Paper elevation={3} style={paperStyle}>
+          <Typography className="concert-one-regular" variant='inherit' sx={{ color: theme.palette.primary.dark }} >Active Admin Managers</Typography>
+          <Typography variant="h4" sx={{ color: theme.palette.primary.dark }}>{superadminSize}</Typography>
           <Box mt={2}>
             <Button variant="contained" color="primary" onClick={() => navigate('/superadmins')}>
-              View
+            <PeopleIcon fontSize='small'/> View 
+            </Button>
+          </Box>
+        </Paper>
+      </Grid>
+      <Grid item xs={12} sm={4} md={4}>
+        <Paper elevation={3} style={paperStyle}>
+          <Typography className="concert-one-regular" variant='inherit' sx={{ color: theme.palette.primary.dark }} >Forms</Typography>
+          <Typography variant="h4" sx={{ color: theme.palette.primary.dark }}>{}</Typography>
+          <Box mt={2}>
+            <Button variant="contained" color="primary" onClick={() => navigate('/form-templates')}>
+            <DynamicFormIcon fontSize='small'/>   View
+            </Button>
+          </Box>
+        </Paper>
+      </Grid>
+      <Grid item xs={12} sm={4} md={4}>
+        <Paper elevation={3} style={paperStyle}>
+          <Typography className="concert-one-regular" variant='inherit' sx={{ color: theme.palette.primary.dark }} >Skills</Typography>
+          <Typography variant="h4" sx={{ color: theme.palette.primary.dark }}>{}</Typography>
+          <Box mt={2}>
+            <Button variant="contained" color="primary" onClick={() => navigate('/skills')}>
+            <AutoAwesomeIcon fontSize='small'/>  View
+            </Button>
+          </Box>
+        </Paper>
+      </Grid>
+      <Grid item xs={12} sm={4} md={4}>
+        <Paper elevation={3} style={paperStyle}>
+          <Typography className="concert-one-regular" variant='inherit' sx={{ color: theme.palette.primary.dark }} >Announcements</Typography>
+          <Typography variant="h4" sx={{ color: theme.palette.primary.dark }}>{}</Typography>
+          <Box mt={2}>
+            <Button variant="contained" color="primary" onClick={() => navigate('/announcements')}>
+            <NotificationImportantIcon fontSize='small'/> View
             </Button>
           </Box>
         </Paper>

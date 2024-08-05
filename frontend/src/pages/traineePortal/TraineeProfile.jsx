@@ -20,8 +20,10 @@ import {
 import axios from "axios";
 import "../style/traineeProfile.css";
 import { useAuth } from "../../provider/authProvider";
+import { useMediaQuery, useTheme } from '@mui/material';
 
 const TraineeProfile = () => {
+  const theme = useTheme();
   const baseUrl = import.meta.env.VITE_PORT_URL;
   const { user } = useAuth();
   const { login_token } = user;
@@ -183,7 +185,7 @@ const TraineeProfile = () => {
 
   return (
     <div style={{ padding:  "3rem", margin:'1rem' }}>
-      <Paper  sx={{ padding: '2rem' , backgroundColor: '#E1EBEE', alignItems:'right'}}>
+      <Paper  elevation={3} sx={{ padding: '2rem' , backgroundColor: theme.palette.background.paper, alignItems:'right'}}>
       <Box mt={1}>
         <Typography variant="h5" gutterBottom>
           Your Inforamtion

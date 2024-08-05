@@ -178,7 +178,7 @@ const HR_Superadmin_List = () => {
 
   return (
     <div style={{ padding: isMobile ? "0.5rem" : "3rem" }}>
-      <Paper sx={{ padding: '2rem', backgroundColor: '#E1EBEE', borderRadius: '1rem', alignItems: 'right' }}>
+      <Paper elevation={3} sx={{ padding: '2rem', backgroundColor: theme.palette.background.paper, borderRadius: '1rem', alignItems: 'right' }}>
       <Toolbar sx={{ flexDirection: isMobile ? 'column' : 'row', alignItems: isMobile ? 'center' : 'normal', gap: isMobile ? 2 : 0 }}>
         <Grid container spacing={2} alignItems="center">
         <Grid item xs={12} md={6}>
@@ -211,40 +211,40 @@ const HR_Superadmin_List = () => {
 
         </Toolbar>
       </Paper>
-      <Paper sx={{ p: '1rem', backgroundColor: '#E1EBEE', borderRadius: '1rem', marginTop: '1.5rem' }}>
+      <Paper elevation={3} sx={{ p: '1rem', backgroundColor: theme.palette.background.paper, borderRadius: '1rem', marginTop: '1.5rem' }}>
       <Typography
           className="concert-one-regular" variant='inherit'
           gutterBottom
           align="center"
-          sx={{ fontSize: "1.7rem", mt: 2, ml: 1, color: theme.palette.primary.main }}
+          sx={{ fontSize: "1.7rem", mt: 2, ml: 1, color: theme.palette.primary.dark }}
         >
           <Box display="flex" alignItems="center" justifyContent="center">
             <PeopleOutlineIcon fontSize="large" />
             &nbsp; Active Admins
           </Box>
         </Typography>
-        <TableContainer component={Paper} sx={{ mt: '1rem', p: '1rem' }}>
+        <TableContainer component={Paper} sx={{ mt: '1rem', p: '1rem',backgroundColor:'#fff',borderRadius:'0.5rem' }}>
           <Table aria-label="supervisor table" >
             <TableHead>
               <TableRow>
 
                 <TableCell>
-                  <Typography variant="subtitle1" fontWeight="bold">
+                  <Typography variant="subtitle2">
                     Full Name
                   </Typography>
                 </TableCell>
                 <TableCell>
-                  <Typography variant="subtitle1" fontWeight="bold">
+                  <Typography variant="subtitle2">
                     Email
                   </Typography>
                 </TableCell>
                 <TableCell>
-                  <Typography variant="subtitle1" fontWeight="bold">
+                  <Typography variant="subtitle2" >
                     Username
                   </Typography>
                 </TableCell>
                 <TableCell>
-                  <Typography variant="subtitle1" fontWeight="bold">
+                  <Typography variant="subtitle2" >
                     Branch
                   </Typography>
                 </TableCell>

@@ -5,10 +5,10 @@ const NavTitle = ({ title, breadcrumbs }) => {
 
   return (
     <Box sx={{ padding: theme.spacing(2), display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-      <Typography variant="h6" sx={{ color: theme.palette.primary.main }}>
+      <Typography variant="h6" sx={{ color: theme.palette.primary.dark }}>
         {title}
       </Typography>
-      <Breadcrumbs aria-label="breadcrumb" sx={{ color: theme.palette.primary.main }}>
+      <Breadcrumbs aria-label="breadcrumb" sx={{ color: theme.palette.primary.dark }}>
         {breadcrumbs.map((breadcrumb, index) =>
           breadcrumb.href ? (
             <Link
@@ -16,7 +16,7 @@ const NavTitle = ({ title, breadcrumbs }) => {
               underline="hover"
               color="inherit"
               href={breadcrumb.href}
-              sx={{ color: theme.palette.primary.main }}
+              sx={{ color: theme.palette.primary.dark }}
             >
               {breadcrumb.label}
             </Link>

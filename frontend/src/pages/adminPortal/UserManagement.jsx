@@ -213,11 +213,11 @@ const UserManagement = () => {
 
   return (
     <div style={{ display: "flex", justifyContent: "center" }}>
-      <Paper elevation={3} sx={{ p: 3, m: 3, width: "90%", borderRadius: '1rem', maxWidth: 1800, backgroundColor: '#E1EBEE' }}>
+      <Paper elevation={3} sx={{ p: 3, m: 3, width: "90%", borderRadius: '1rem', maxWidth: 1800, backgroundColor: theme.palette.background.paper }}>
         <Toolbar sx={{ flexDirection: isMobile ? 'column' : 'row', alignItems: isMobile ? 'center' : 'normal', gap: isMobile ? 2 : 0, pb: '1rem' }}>
           <Grid container spacing={2} justifyContent="space-between">
             <Grid item xs={12} md={3}>
-              <Typography className="concert-one-regular" variant='inherit' component="div" sx={{ textAlign: isMobile ? 'center' : 'center', color: theme.palette.primary.main }}>
+              <Typography className="concert-one-regular" variant='inherit' component="div" sx={{ textAlign: isMobile ? 'center' : 'center', color: theme.palette.primary.dark }}>
                 User Management <AdminPanelSettingsIcon />
               </Typography>
             </Grid>
@@ -288,7 +288,7 @@ const UserManagement = () => {
             </Grid>
           </Grid>
         </Toolbar>
-        <Paper sx={{ border: "1px solid #ccc", p: "1rem" }}>
+        <Paper elevation={3} sx={{ border: "1px solid #ccc", p: "1rem" }}>
           <TableContainer>
             <Table>
               <TableHead>
@@ -411,7 +411,7 @@ const UserManagement = () => {
             value={currentUser ? currentUser.userEmail : newUser.userEmail}
             onChange={handleChange}
             disabled={!!currentUser}
-          />
+            sx={{backgroundColor: '#fff'}} />
           <TextField
             margin="dense"
             name="userFirstName"
@@ -420,7 +420,7 @@ const UserManagement = () => {
             fullWidth
             value={currentUser ? currentUser.userFirstName : newUser.userFirstName}
             onChange={handleChange}
-          />
+            sx={{backgroundColor: '#fff'}}/>
           <TextField
             margin="dense"
             name="userLastName"
@@ -429,7 +429,7 @@ const UserManagement = () => {
             fullWidth
             value={currentUser ? currentUser.userLastName : newUser.userLastName}
             onChange={handleChange}
-          />
+          sx={{backgroundColor: '#fff'}}/>
           <TextField
             margin="dense"
             name="userUsername"
@@ -438,7 +438,7 @@ const UserManagement = () => {
             fullWidth
             value={currentUser ? currentUser.userUsername : newUser.userUsername}
             onChange={handleChange}
-          />
+            sx={{backgroundColor: '#fff'}} />
           <FormControl fullWidth margin="dense">
             <Select
               name="userRole"
@@ -446,7 +446,7 @@ const UserManagement = () => {
               onChange={handleChange}
               displayEmpty
               disabled={!!currentUser}
-            >
+              sx={{backgroundColor: '#fff'}} >
               <MenuItem value="" disabled>
                 Select Role
               </MenuItem>
@@ -461,13 +461,13 @@ const UserManagement = () => {
               value={currentUser ? currentUser.userBranch : newUser.userBranch}
               onChange={handleChange}
               displayEmpty
-            >
-              <MenuItem value="" disabled>
+              sx={{backgroundColor: '#fff'}}>
+              <MenuItem sx={{backgroundColor: '#fff'}}  value="" disabled>
                 Select Branch
               </MenuItem>
-              <MenuItem value="RAMALLAH">Ramallah</MenuItem>
-              <MenuItem value="NABLUS">Nablus</MenuItem>
-              <MenuItem value="BETHLEHEM">Bethlehem</MenuItem>
+              <MenuItem sx={{backgroundColor: '#fff'}} value="RAMALLAH">Ramallah</MenuItem>
+              <MenuItem sx={{backgroundColor: '#fff'}} value="NABLUS">Nablus</MenuItem>
+              <MenuItem sx={{backgroundColor: '#fff'}} value="BETHLEHEM">Bethlehem</MenuItem>
             </Select>
           </FormControl>
           {currentUser && currentUser.userVerified === true && (
@@ -477,7 +477,7 @@ const UserManagement = () => {
                   name="userActivated"
                   checked={currentUser ? currentUser.userActivated : null}
                   onChange={handleChange}
-                />
+               />
               }
               label="Activated"
             />)}

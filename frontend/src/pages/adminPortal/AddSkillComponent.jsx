@@ -78,11 +78,11 @@ const AddSkillComponent = () => {
         navigate(`/settings`);
       };
     return (
-        <Paper elevation={3} style={{ padding: '30px', maxWidth: '600px', margin: '40px auto', backgroundColor: '#E1EBEE', borderRadius: '1rem' }}>
+        <Paper elevation={3} style={{ padding: '30px', maxWidth: '600px', margin: '40px auto', backgroundColor: theme.palette.background.paper, borderRadius: '1rem' }}>
             <Button sx={{ backgroundColor: '#fff' }} variant="outlined" onClick={navigateBack} startIcon={<ArrowBackIcon />}>
                 Settings
             </Button>
-            <Typography className="concert-one-regular" variant='inherit' align='center' sx={{ color: theme.palette.primary.main }} gutterBottom>
+            <Typography className="concert-one-regular" variant='inherit' align='center' sx={{ color: theme.palette.primary.dark }} gutterBottom>
                 Add New Skill
             </Typography>
             <form onSubmit={addSkill} style={{ marginBottom: '20px', display: 'flex', flexDirection: 'column' }}>
@@ -113,10 +113,10 @@ const AddSkillComponent = () => {
                     Add
                 </Button>
             </form>
-            <Typography variant="h6" sx={{ color: theme.palette.primary.main }} component="h3" gutterBottom>
+            <Typography variant="h6" sx={{ color: theme.palette.primary.dark }} component="h3" gutterBottom>
                 Existing Skills
             </Typography>
-            <Paper style={{ maxHeight: '300px', overflowY: 'auto', padding: '10px', borderRadius: '0.5rem' }}>
+            <Paper elevation={3} style={{ maxHeight: '300px', overflowY: 'auto', padding: '10px', borderRadius: '0.5rem' }}>
                 <Box display="flex" flexWrap="wrap" gap={1}>
                     {skills.map((skill) => (
                         <Chip

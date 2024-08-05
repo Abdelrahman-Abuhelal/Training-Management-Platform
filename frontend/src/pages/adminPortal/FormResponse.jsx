@@ -61,12 +61,12 @@ const FormResponse = () => {
 
     return (
         <div style={{ display: "flex", justifyContent: "center" }}>
-            <Paper sx={{ p: "3%", m: "3%", width: "75%", maxWidth: 1800, backgroundColor:'#E1EBEE', borderRadius: '1rem'  }}>
-                <Button sx={{  }} onClick={() => navigate(`/form-templates/${formId}/submissions`)} startIcon={<ArrowBackIcon />}>
+            <Paper elevation={3} sx={{ p: "3%", m: "3%", width: "75%", maxWidth: 1800, backgroundColor:theme.palette.background.paper, borderRadius: '1rem'  }}>
+                <Button variant='contained' sx={{  }} onClick={() => navigate(`/form-templates/${formId}/submissions`)} startIcon={<ArrowBackIcon />}>
                     Back to Forms
                 </Button>
 
-                <Typography variant="h4" component="h1" gutterBottom sx={{ mt: '3%', color:theme.palette.primary.main }}>
+                <Typography variant="h4" component="h1" gutterBottom sx={{ mt: '3%', color:theme.palette.primary.dark }}>
                     {formData.formTitle} Form
                 </Typography>
                 <Typography variant="subtitle2" gutterBottom>
@@ -78,8 +78,8 @@ const FormResponse = () => {
                     const selectedOptions = answer ? answer.selectedOptionsContent : [];
 
                     return (
-                        <Paper key={question.id} sx={{ mb: 5, mt: 5, p: 2, backgroundColor: '#FFF' }}>
-                            <Typography variant="h6" component="div" sx={{ mb: 1 }}>
+                        <Paper key={question.id} sx={{ mb: 5, mt: 5, p: 2, backgroundColor: '#FFF',borderRadius:'0.5rem' }}>
+                            <Typography variant="h7" component="div" sx={{ mb: 1 }}>
                                 {index + 1}. {question.question}
                             </Typography>
 

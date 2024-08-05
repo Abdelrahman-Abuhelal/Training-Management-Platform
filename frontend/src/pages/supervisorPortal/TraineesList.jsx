@@ -73,7 +73,7 @@ const Supervisor_Trainees_List = () => {
       field: "fullName",
       headerName: "Full Name",
       flex: 1,
-      minWidth: 200, // Decrease the width of the Full Name column
+      minWidth: 150, // Decrease the width of the Full Name column
     },
     { field: "userEmail", headerName: "Email", flex: 1 },
     {
@@ -87,7 +87,7 @@ const Supervisor_Trainees_List = () => {
           flexDirection="row" alignItems="center"
           justifyContent="center"
           gap={1}
-          sx={{ textAlign: "center" }}
+          sx={{ alignItems: "center" }}
         >
           <Button
             color="primary"
@@ -114,13 +114,13 @@ const Supervisor_Trainees_List = () => {
 
   return (
     <div style={{ display: "flex", justifyContent: "center" }}>
-      <Paper elevation={3} sx={{ p: "3%", m: "3%", width: "75%", maxWidth: 1800, backgroundColor: '#F5F7F8' }}>
+      <Paper elevation={3} sx={{ p: "3%", m: "3%", width: "75%", maxWidth: 1800, backgroundColor: theme.palette.background.paper,borderRadius:'0.5rem' }}>
         <Grid container alignItems="center">
-          <Grid item xs={isMobile ? 6 : 3} style={{ textAlign: "left" }}>
+          <Grid item xs={isMobile ? 6 : 3}  style={{ textAlign: "left" }}>
             <SearchComponent searchTerm={searchTerm} onSearchChange={setSearchTerm} />
           </Grid>
           <Grid item xs={6}>
-            <Typography className="concert-one-regular" sx={{color:  theme.palette.primary.main}} align="center">
+            <Typography className="concert-one-regular" sx={{color:  theme.palette.primary.dark}} align="center">
               My Trainees  &nbsp; <GroupIcon fontSize="large" />
             </Typography>
           </Grid>
@@ -138,6 +138,7 @@ const Supervisor_Trainees_List = () => {
                 sort: sortDirection,
               },
             ]}
+            sx={{borderRadius:'1rem'}}
             onSelectionModelChange={(selection) => {
               const selectedRows = selection.selectionModel.map(
                 (index) => trainees[index]

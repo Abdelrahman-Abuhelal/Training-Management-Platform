@@ -19,12 +19,21 @@ import { useMediaQuery, useTheme } from '@mui/material';
 import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 // Define proficiency levels and their background colors
+
+ // const proficiencyLevels = {
+ // GOOD: "#d0ebff", // light blue
+  // VERY_GOOD: "#a4c8e5", // slightly darker blue
+ // EXCELLENT: "#81a7d1", // medium blue
+ // EXPERT: "#4a90e2" // darker blue
+// };
 const proficiencyLevels = {
-  GOOD: "#d4edda", // light green
-  VERY_GOOD: "#a9dfbf", // slightly darker green
-  EXCELLENT: "#81c784", // medium green
-  EXPERT: "#4caf50" // darker green
+  GOOD: "#cce7ff", // light blue
+  VERY_GOOD: "#99d0ff", // slightly darker blue
+  EXCELLENT: "#66b8ff", // medium blue
+  EXPERT: "#339fff" // darker blue
 };
+
+
 
 const TraineesSkillsList = () => {
   const baseUrl = import.meta.env.VITE_PORT_URL;
@@ -109,8 +118,8 @@ const TraineesSkillsList = () => {
 
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', minHeight: '100vh', p: '3rem' }}>
-      <Paper elevation={3} sx={{ p: 3, width: "80%", maxWidth: 1800, backgroundColor: '#E1EBEE', borderRadius: '1rem', p: '2rem' }}>
-        <Typography className="concert-one-regular" variant='inherit' align="center" component="h2" sx={{ mb: '2rem', color: theme.palette.primary.main }} gutterBottom>
+      <Paper elevation={3} sx={{ p: 3, width: "80%", maxWidth: 1800, backgroundColor: theme.palette.background.paper, borderRadius: '1rem', p: '2rem' }}>
+        <Typography className="concert-one-regular" variant='inherit' align="center" component="h2" sx={{ mb: '2rem', color: theme.palette.primary.dark }} gutterBottom>
           Trainee Skills List <AutoAwesomeIcon />
         </Typography>
 
@@ -179,11 +188,11 @@ const TraineesSkillsList = () => {
           {filteredTrainees.map((trainee, index) => (
             <Grid item xs={12} key={index} sx={{ backgroundColor: '#F5FFFA', mb: '2rem', borderRadius: '1rem' }}>
               <Typography  variant='h5' align="center" component="h3" gutterBottom  >
-                <Link to={`/edit-trainee/${trainee.userId}`} style={{ textDecoration: 'none', color:  theme.palette.primary.main}}>
+                <Link to={`/edit-trainee/${trainee.userId}`} style={{ textDecoration: 'none', color:  theme.palette.primary.dark}}>
                  <AccountCircleIcon sx={{mb:'0.4rem'}} fontSize="large"/> {trainee.traineeName}
                 </Link>
               </Typography>
-              <Typography  variant='h6'  component="h3" gutterBottom  sx={{ml:'0.5rem', color:  theme.palette.primary.main}}>
+              <Typography  variant='h6'  component="h3" gutterBottom  sx={{ml:'0.5rem', color:  theme.palette.primary.dark}}>
               Skills:
               </Typography>
 

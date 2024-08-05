@@ -92,14 +92,14 @@ const TraineeProfileView = () => {
   };
 
   return (
-    <Container sx={{backgroundColor:'#F5F7F8' , margin:'auto auto' , marginBottom:'5rem', borderRadius:'0.5rem' }}>
+    <Container sx={{backgroundColor:theme.palette.background.paper , margin:'auto auto' , marginBottom:'5rem', borderRadius:'0.5rem' }}>
       <Box mt={4} pt={4}>
         <Button onClick={navigateBack} startIcon={<ArrowBackIcon />}  variant='contained'>
           Back to Trainees
         </Button>
       </Box>
       <Box mt={4}>
-        <Typography className="concert-one-regular" variant='inherit' sx={{color:  theme.palette.primary.main}} gutterBottom align="center" mb={2}>
+        <Typography className="concert-one-regular" variant='inherit' sx={{color:  theme.palette.primary.dark}} gutterBottom align="center" mb={2}>
           {userFullName}
         </Typography>
       </Box>

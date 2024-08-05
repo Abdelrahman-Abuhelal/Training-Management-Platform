@@ -17,14 +17,15 @@ import ListAltIcon from '@mui/icons-material/ListAlt';
 import CampaignIcon from '@mui/icons-material/Campaign';
 import SettingsIcon from '@mui/icons-material/Settings';
 import TaskAltIcon from '@mui/icons-material/TaskAlt';
-
+import SchoolIcon from '@mui/icons-material/School';
 const routes = [
   { path: '/home', name: 'Home', icon: <SpaceDashboardIcon sx={{ color: 'primary.main' }}/> },
   { path: '/profile', name: 'Profile', icon: <AccountCircleIcon sx={{ color: 'primary.main' }}/> },
-  { path: '/forms', name: 'Forms', icon: <ListAltIcon sx={{ color: 'primary.main' }}/> },
-  { path: '/tasks', name: 'Tasks', icon: <TaskAltIcon sx={{ color: 'primary.main' }}/> },
+  { path: '/grades', name: 'My Grades', icon: <SchoolIcon sx={{ color: 'primary.main' }}/> },
+  { path: '/tasks', name: 'My Tasks', icon: <TaskAltIcon sx={{ color: 'primary.main' }}/> },
+  { path: '/forms', name: 'Forms Recieved', icon: <ListAltIcon sx={{ color: 'primary.main' }}/> },
   { path: '/announcements', name: 'Announcements', icon: <CampaignIcon sx={{ color: 'primary.main' }}/> },
-  { path: '/change-password', name: 'Settings', icon: <SettingsIcon sx={{ color: 'primary.main' }}/> }
+  { path: '/settings', name: 'Settings', icon: <SettingsIcon sx={{ color: 'primary.main' }}/> }
 
 ];
 

@@ -107,11 +107,11 @@ const AllTraineesSkills = () => {
   };
 
   return (
-    <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', minHeight: '100vh', p: 2 }}>
-      <Paper elevation={3} sx={{ p: 3, width: "80%", maxWidth: 1200, backgroundColor: '#F5F7F8' }}>
+    <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', minHeight: '100vh', p: '2rem' }}>
+      <Paper elevation={3} sx={{ p: 3, width: "80%", maxWidth: 1200, backgroundColor: theme.palette.background.paper }}>
         <Typography className="concert-one-regular" variant='inherit' align="center" component="h2" sx={{
           marginBottom: "2rem",
-          color: theme.palette.primary.main
+          color: theme.palette.primary.dark
         }} gutterBottom>
           My Trainees Skills
         </Typography>
@@ -181,7 +181,7 @@ const AllTraineesSkills = () => {
           {filteredTrainees.map((trainee, index) => (
             <Grid item xs={12} key={index} sx={{ backgroundColor: '#F7F9FC ', mb: '2rem' }}>
               <Typography className="concert-one-regular" variant='inherit' align="center" component="h3" gutterBottom sx={{marginBottom: "1rem"}}>
-                <Link to={`/view-trainee/${trainee.userId}`} style={{ textDecoration: 'none',color: theme.palette.primary.main }}>
+                <Link to={`/view-trainee/${trainee.userId}`} style={{ textDecoration: 'none',color: theme.palette.primary.dark }}>
                 <PersonIcon/>  {trainee.traineeName} 
                 </Link>
               </Typography>

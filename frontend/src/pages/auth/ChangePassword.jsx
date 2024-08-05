@@ -108,7 +108,7 @@ const ChangePassword = () => {
         <Container component="main" maxWidth="xs">
             <CssBaseline />
             <Box display="flex" flexDirection="column" justifyContent="center" alignItems="center" minHeight="100vh">
-                <Paper elevation={3} sx={{ p: isMobile ? 1 : 3, width: isMobile ? '70%' : '150%', backgroundColor: '#E1EBEE', borderRadius: '1rem' }}>
+                <Paper elevation={3} sx={{ p: isMobile ? 1 : 3, width: isMobile ? '70%' : '150%', backgroundColor: theme.palette.background.paper, borderRadius: '1rem' }}>
                     <Box display="flex" flexDirection="column" alignItems="center">
                         <Box width="100%" display="flex" justifyContent="flex-start">
                             <Button
@@ -120,10 +120,10 @@ const ChangePassword = () => {
                                 Back
                             </Button>
                         </Box>
-                        <Avatar sx={{ m: 1, bgcolor: theme.palette.primary.main }}>
+                        <Avatar sx={{ m: 1, bgcolor: theme.palette.primary.dark }}>
                             <LockOutlinedIcon />
                         </Avatar>
-                        <Typography component="h1" variant="h5" sx={{ color: theme.palette.primary.main }}>
+                        <Typography component="h1" variant="h5" sx={{ color: theme.palette.primary.dark }}>
                             Change Your Password
                         </Typography>
                         <Box component="form" onSubmit={handleSubmit} sx={{ mt: 1 }}>

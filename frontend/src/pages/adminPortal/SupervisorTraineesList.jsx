@@ -137,7 +137,7 @@ const Supervisor_Trainees_List = () => {
 
   return (
     <div style={{ padding: "3rem" }}>
-      <Paper sx={{ p: '1rem', backgroundColor: '#E1EBEE', borderRadius: '1rem' }}>
+      <Paper elevation={3} sx={{ p: '1rem', backgroundColor: theme.palette.background.paper, borderRadius: '1rem',minHeight:'300px' }}>
 
         <Grid
           container
@@ -157,7 +157,7 @@ const Supervisor_Trainees_List = () => {
           </Grid>
           <Grid item>
             <Typography className="concert-one-regular" variant='inherit' component="h2" gutterBottom
-              sx={{ color: theme.palette.primary.main }}>
+              sx={{ color: theme.palette.primary.dark }}>
               {userFullName}'s Trainees <GroupIcon fontSize="large" />
             </Typography>
           </Grid>
@@ -166,21 +166,21 @@ const Supervisor_Trainees_List = () => {
           </Grid>
         </Grid>
 
-        <TableContainer component={Paper} sx={{ mt: '2rem', p: '1rem' }}>
+        <TableContainer component={Paper} sx={{ mt: '2rem', p: '1rem' ,backgroundColor:'#fff'}}>
           <Table aria-label="trainee table">
             <TableHead>
               <TableRow>
                 <TableCell>
-                    <Typography variant="h6">Username</Typography>
+                    <Typography variant="subtitle2">Username</Typography>
                 </TableCell>
                 <TableCell>
-                  <Typography variant="h6" >Full Name</Typography>
+                  <Typography variant="subtitle2" >Full Name</Typography>
                 </TableCell>
                 <TableCell>
-                  <Typography variant="h6">Email</Typography>
+                  <Typography variant="subtitle2">Email</Typography>
                 </TableCell>
                 <TableCell>
-                  <Typography variant="h6">Branch</Typography>
+                  <Typography variant="subtitle2">Branch</Typography>
                 </TableCell>
 
               </TableRow>

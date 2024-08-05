@@ -163,13 +163,13 @@ const FormTemplatePage = () => {
 
   return (
     <div style={{ display: "flex", justifyContent: "center" }}>
-      <Paper elevation={3} sx={{ p: isMobile ? 2 : 4, m: isMobile ? 1 : 6, width: isMobile ? "90%" : "75%", maxWidth: 1100,backgroundColor: '#E1EBEE' , borderRadius: '1rem' }}>
-        <Button sx={{ mb: 4 }} onClick={() => {
+      <Paper elevation={3} sx={{ p: isMobile ? 2 : 4, m: isMobile ? 1 : 6, width: isMobile ? "90%" : "75%", maxWidth: 1100,backgroundColor: theme.palette.background.paper , borderRadius: '1rem' }}>
+        <Button variant="contained" sx={{ mb: 4 }} onClick={() => {
           navigate(`/form-templates/`);
         }} startIcon={<ArrowBackIcon />}>
           Back to Forms
         </Button>
-        <Typography align="center" variant="h4" gutterBottom mb={'2.5rem'} sx={{color: theme.palette.primary.main}}>
+        <Typography align="center" variant="h4" gutterBottom mb={'2.5rem'} sx={{color: theme.palette.primary.dark}}>
           <AutoFixHighIcon fontSize="large" sx={{mb:'0.5rem'}} />     Edit Template
         </Typography>
         <form onSubmit={handleSubmit(onSubmit)}>

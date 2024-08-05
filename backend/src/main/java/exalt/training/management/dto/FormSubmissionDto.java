@@ -18,6 +18,7 @@ public class FormSubmissionDto {
     private Long userId;
     private String firstName;
     private String lastName;
+    private String branch;
     private String email;
     private LocalDateTime submittedAt;
 

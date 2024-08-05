@@ -38,7 +38,10 @@ import TraineesSkillsList from '../pages/adminPortal/TraineesSkillsList.jsx';
 import AllTraineesSkills from '../pages/supervisorPortal/AllTraineesSkills.jsx';
 import HR_Superadmin_List from '../pages/adminPortal/AdminList.jsx';
 import  AdminSettings from '../pages/adminPortal/AdminSettings.jsx';
-
+import JobDescriptionRanking from '../pages/adminPortal/JobDescriptionRanking.jsx'
+import SupervisorSettings from '../pages/supervisorPortal/SupervisorSettings.jsx';
+import TraineeSettings from '../pages/traineePortal/TraineeSettings.jsx';
+import MyGrades from '../pages/traineePortal/MyGrades.jsx';
 const Routes = () => {
   const { user } = useAuth();
   const isAuthenticated = user !== null && user.login_token !== null;
@@ -69,10 +72,12 @@ const Routes = () => {
           element: <TraineeLayout />,
           children: [
             { path: '/', element: <TraineeHome /> },
-            { path: '/dashboard', element: <TraineeHome /> },
+            { path: '/home', element: <TraineeHome /> },
             { path: '/profile', element: <TraineeProfile /> },
+            { path: '/grades', element: <MyGrades /> },
             { path: '/forms', element: <FormsList /> },
             { path: '/forms/:formId', element: <FillForm /> },
+            { path: '/settings', element: <TraineeSettings /> },
             { path: '/change-password', element: <ChangePassword /> },
           ],
         },
@@ -90,7 +95,7 @@ const Routes = () => {
           element: <SupervisorLayout />,
           children: [
             { path: '/', element: <SupervisorHome /> },
-            { path: '/dashboard', element: <SupervisorHome /> },
+            { path: '/home', element: <SupervisorHome /> },
             { path: '/my-trainees', element: <Supervisor_Trainees_List /> },
             { path: '/forms', element: <FormsList /> },
             { path: '/forms/:formId', element: <FillForm /> },
@@ -100,6 +105,7 @@ const Routes = () => {
             { path: '/add-skills/:userId', element: <TraineeSkills /> },
             { path: '/skills', element: <AllTraineesSkills /> },
             { path: '/assign-task', element: <AssignTask /> },
+            { path: '/settings', element: <SupervisorSettings /> },
             { path: '/change-password', element: <ChangePassword /> },
           ],
         },
@@ -133,7 +139,8 @@ const Routes = () => {
             { path: '/form-templates/:formId/submissions/:submissionId', element: <FormResponse /> },            
             { path: '/form-templates/:templateId', element: <FormTemplatePage /> },
             { path: '/edit-trainee/:userId', element: <EditTrainee /> },
-            { path: '/create-announcements', element: <AnnouncementForm /> },
+            { path: '/job-description-ranking', element: <JobDescriptionRanking /> },
+            { path: '/announcements', element: <AnnouncementForm /> },
             { path: '/settings', element: <AdminSettings /> },
             { path: '/change-password', element: <ChangePassword /> },
 

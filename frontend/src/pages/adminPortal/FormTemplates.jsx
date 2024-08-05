@@ -395,13 +395,13 @@ const FormTemplates = () => {
   return (
 
     <Box sx={{ margin: '2rem auto', maxWidth: '1200px' }}>
-      <Paper sx={{ padding: '2rem', borderRadius: '1rem', backgroundColor: '#E1EBEE', border: '0.5px solid #ccc' }}>
+      <Paper elevation={3} sx={{ padding: '2rem', borderRadius: '1rem', backgroundColor: theme.palette.background.paper, border: '0.5px solid #ccc' }}>
         <Typography
           className="concert-one-regular" variant='inherit'
           align="center"
           sx={{
             marginBottom: "2rem",
-            color: theme.palette.primary.main
+            color: theme.palette.primary.dark
           }}
         >
           <FactCheckIcon fontSize="large" sx={{ mr: '0.3rem' }} /> EXALT Form Templates
@@ -415,27 +415,27 @@ const FormTemplates = () => {
             <SearchComponent
               searchTerm={searchFormTerm} onSearchChange={handleSearchFormChange} />
           </Grid>
-        <TableContainer component={Paper} sx={{ border: '1px solid #ddd', minHeight: 450, width: '100%',borderRadius:'1rem' }}>
+        <TableContainer component={Paper} sx={{ border: '1px solid #ddd', minHeight: 450, width: '100%',borderRadius:'1rem' ,backgroundColor:'#fff'}}>
           <Table>
             <TableHead>
               <TableRow>
                 <TableCell sx={{ borderBottom: '1px solid #ddd', width: '20%' }}>
-                  <Typography variant="subtitle1">
+                  <Typography variant="subtitle2">
                     Title
                   </Typography>
                 </TableCell>
-                <TableCell sx={{ fontWeight: 'bold', borderBottom: '1px solid #ddd', width: '20%' }}>
-                  <Typography variant="subtitle1" >
+                <TableCell sx={{  borderBottom: '1px solid #ddd', width: '20%' }}>
+                  <Typography variant="subtitle2" >
                     Description
                   </Typography>
                 </TableCell>
-                <TableCell sx={{ fontWeight: 'bold', borderBottom: '1px solid #ddd', width: '40%' }} colSpan={2} align="center">
-                  <Typography variant="subtitle1" >
+                <TableCell sx={{  borderBottom: '1px solid #ddd', width: '40%' }} colSpan={2} align="center">
+                  <Typography variant="subtitle2" >
                     Actions
                   </Typography>
                 </TableCell>
-                <TableCell sx={{ fontWeight: 'bold', borderBottom: '1px solid #ddd', width: '20%' }} align="center">
-                  <Typography variant="subtitle1" >
+                <TableCell sx={{ borderBottom: '1px solid #ddd', width: '20%' }} align="center">
+                  <Typography variant="subtitle2" >
                     Submissions
                   </Typography>
                 </TableCell>
@@ -562,7 +562,7 @@ const FormTemplates = () => {
               value={selectedBranch}
               onChange={(e) => setSelectedBranch(e.target.value)}
               displayEmpty
-              sx={{ marginTop: theme.spacing(2), backgroundColor: '#E1EBEE' }}
+              sx={{ marginTop: theme.spacing(2), backgroundColor:'#fff' }}
             >
               <MenuItem value="">
                 <em>All Branches</em>
@@ -577,7 +577,7 @@ const FormTemplates = () => {
               value={selectedRole}
               onChange={(e) => setSelectedRole(e.target.value)}
               displayEmpty
-              sx={{ marginTop: theme.spacing(2), backgroundColor: '#E1EBEE' }}
+              sx={{ marginTop: theme.spacing(2),backgroundColor:'#fff' }}
             >
               <MenuItem value="">
                 <em>All Roles</em>

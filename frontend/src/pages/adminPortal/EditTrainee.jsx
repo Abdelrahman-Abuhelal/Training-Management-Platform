@@ -57,14 +57,25 @@ const EditTrainee = () => {
   const [trainingField, setTrainingField] = useState("");
   const [branchLocation, setBranchLocation] = useState("");
   const [bugzillaURL, setBugzillaURL] = useState("");
-  const [practiceYear, setPracticeYear] = useState("");
-  const [practiceSeason, setPracticeSeason] = useState("");
+  const [trainingYear, setTrainingYear] = useState("");
+  const [trainingSeason, setTrainingSeason] = useState("");
   const [idNumberError, setIdNumberError] = useState("");
+
+  const [trainingStartMonthDate, setTrainingStartMonthDate] = useState('');
+  const [trainingStartDayDate, setTrainingStartDayDate] = useState('');
+  const [startTrainingDate, setStartTrainingDate] = useState('');
+
+  const [trainingEndMonthDate, setTrainingEndMonthDate] = useState('');
+  const [trainingEndDayDate, setTrainingEndDayDate] = useState('');
+  const [endTrainingDate, setEndTrainingDate] = useState('');
+
   const [showDetailsConfirmation, setShowDetailsConfirmation] = useState(false);
   const [showGradesConfirmation, setShowGradesConfirmation] = useState(false);
   // courses and grades
   const [courses, setCourses] = useState([]);
   const [selectedCourses, setSelectedCourses] = useState([]);
+
+
   const [traineeDetailsSnackbarSuccess, setTraineeDetailsSnackbarSuccess] =
     useState(false);
   const [traineeDetailsSnackbarError, setTraineeDetailsSnackbarError] =
@@ -126,17 +137,19 @@ const EditTrainee = () => {
         setUniversityName(userData.universityName || "");
         setUniversityMajor(userData.universityMajor || "");
         setExpectedGraduationDate(userData.expectedGraduationDate || "");
-        setExpectedGraduationYear(
-          userData.expectedGraduationDate ? userData.expectedGraduationDate.slice(0, 4) : ""
-        );
-        setExpectedGraduationMonth(
-          userData.expectedGraduationDate ? userData.expectedGraduationDate.slice(-2) : ""
-        );
+        setExpectedGraduationYear(userData.expectedGraduationDate ? userData.expectedGraduationDate.slice(0, 4) : "");
+        setExpectedGraduationMonth(userData.expectedGraduationDate ? userData.expectedGraduationDate.slice(-2) : "");
         setTrainingField(userData.trainingField || "");
         setBranchLocation(userData.branchLocation || "");
+        setTrainingYear(userData.trainingYear || "");
+        setTrainingSeason(userData.trainingSeason || "");
         setBugzillaURL(userData.bugzillaURL || "");
-        setPracticeYear(userData.practiceYear || "");
-        setPracticeSeason(userData.practiceSeason || "");
+        const startTrainingDate = userData.startTrainingDate || "";
+        setTrainingStartMonthDate(startTrainingDate ? startTrainingDate.slice(0, 2) : "");
+        setTrainingStartDayDate(startTrainingDate ? startTrainingDate.slice(-2) : "");
+        const endTrainingDate = userData.endTrainingDate || "";
+        setTrainingEndMonthDate(endTrainingDate ? endTrainingDate.slice(0, 2) : "");
+        setTrainingEndDayDate(endTrainingDate ? endTrainingDate.slice(-2) : "");
       } else {
         console.error("Error:", response.data);
       }
@@ -201,6 +214,18 @@ const EditTrainee = () => {
       );
       return;
     }
+    const startDate = new Date(`${trainingYear}-${trainingStartMonthDate}-${trainingStartDayDate}`);
+    const endDate = new Date(`${trainingYear}-${trainingEndMonthDate}-${trainingEndDayDate}`);
+    console.log(startDate);
+    console.log(endDate);
+
+    // Validate that start date is before end date
+    if (startDate >= endDate) {
+      setTraineeDetailsSnackbarError(true);
+      setTraineeDetailsSnackbarErrorMessage("Start Training Date must be before End Training Date");
+      return;
+    }
+
 
     setShowDetailsConfirmation(true);
   };
@@ -222,9 +247,11 @@ const EditTrainee = () => {
       expectedGraduationDate,
       trainingField,
       branchLocation,
-      bugzillaURL,
-      practiceYear,
-      practiceSeason
+      trainingYear,
+      trainingSeason,
+      startTrainingDate,
+      endTrainingDate,
+      bugzillaURL
     };
 
     try {
@@ -272,12 +299,12 @@ const EditTrainee = () => {
     setShowGradesConfirmation(true);
   };
 
-  const handleMonthChange = (e) => {
+  const handleGraduationMonthChange = (e) => {
     setExpectedGraduationMonth(e.target.value);
     updateExpectedGraduationDate(e.target.value, expectedGraduationYear);
   };
 
-  const handleYearChange = (e) => {
+  const handleGraduationYearChange = (e) => {
     setExpectedGraduationYear(e.target.value);
     updateExpectedGraduationDate(expectedGraduationMonth, e.target.value);
   };
@@ -288,6 +315,44 @@ const EditTrainee = () => {
       setExpectedGraduationDate(`${year}-${formattedMonth}`);
     }
   };
+
+
+  const handleTrainingStartMonthChange = (e) => {
+    setTrainingStartMonthDate(e.target.value);
+    updateTrainingStartDate(e.target.value, trainingStartDayDate);
+  };
+
+  const handleTrainingStartDayChange = (e) => {
+    setTrainingStartDayDate(e.target.value);
+    updateTrainingStartDate(trainingStartMonthDate, e.target.value);
+  };
+
+  const updateTrainingStartDate = (month, day) => {
+    if (month && day) {
+      const formattedMonth = month.length === 1 ? `0${month}` : month;
+      const formattedDay = day.length === 1 ? `0${day}` : day;
+      setStartTrainingDate(`${formattedMonth}-${formattedDay}`);
+    }
+  };
+
+  const handleTrainingEndMonthChange = (e) => {
+    setTrainingEndMonthDate(e.target.value);
+    updateTrainingEndDate(e.target.value, trainingEndDayDate);
+  };
+
+  const handleTrainingEndDayChange = (e) => {
+    setTrainingEndDayDate(e.target.value);
+    updateTrainingEndDate(trainingEndMonthDate, e.target.value);
+  };
+
+  const updateTrainingEndDate = (month, day) => {
+    if (month && day) {
+      const formattedMonth = month.length === 1 ? `0${month}` : month;
+      const formattedDay = day.length === 1 ? `0${day}` : day;
+      setEndTrainingDate(`${formattedMonth}-${formattedDay}`);
+    }
+  };
+
 
   const navigateBack = () => {
     navigate(`/trainees`);
@@ -440,7 +505,7 @@ const EditTrainee = () => {
             className="concert-one-regular" variant='inherit' gutterBottom
             align="center"
             sx={{
-              color: theme.palette.primary.main,
+              color: theme.palette.primary.dark,
               marginTop: "1.5rem"
             }}
           >
@@ -461,13 +526,13 @@ const EditTrainee = () => {
           </Box>
         </Grid>
       </Grid>
-      
-      <Paper elevation={3} sx={{ p: 3, m: 4, backgroundColor: '#E1EBEE' }} >
+
+      <Paper elevation={3} sx={{ p: 3, m: 4, backgroundColor: theme.palette.background.paper }} >
         <form onSubmit={handleSubmit}>
           <FormControl fullWidth>
             <Typography sx={{
               marginBottom: "2rem",
-              color: theme.palette.primary.main
+              color: theme.palette.primary.dark
             }} align="center" className="concert-one-regular" variant='inherit' gutterBottom>
               {userFullName}
             </Typography>
@@ -645,7 +710,7 @@ const EditTrainee = () => {
                   <InputLabel>Graduation Year Date (expected)</InputLabel>
                   <Select
                     value={expectedGraduationYear}
-                    onChange={handleYearChange}
+                    onChange={handleGraduationYearChange}
                     label="Graduation Year Date (expected)"
                     sx={{ backgroundColor: '#fff' }}
                   >
@@ -661,7 +726,7 @@ const EditTrainee = () => {
                   <InputLabel>Graduation Month Date (expected)</InputLabel>
                   <Select
                     value={expectedGraduationMonth}
-                    onChange={handleMonthChange}
+                    onChange={handleGraduationMonthChange}
                     label="Graduation Month Date (expected)"
                     sx={{ backgroundColor: '#fff' }}
                   >
@@ -726,28 +791,28 @@ const EditTrainee = () => {
               <Box display="flex" justifyContent="space-between">
                 <FormControl variant="outlined" style={{ width: "48%" }}
                 >
-                  <InputLabel>Practice Year</InputLabel>
+                  <InputLabel>Training Year</InputLabel>
                   <Select
-                    value={practiceYear}
-                    onChange={(e) => setPracticeYear(e.target.value)}
-                    label="Practice Year"
+                    value={trainingYear}
+                    onChange={(e) => setTrainingYear(e.target.value)}
+                    label="Training Year"
                     sx={{ backgroundColor: '#fff' }}
                   >
                     <MenuItem value=""></MenuItem>
-                    {[...Array(10).keys()].map((i) => (
-                      <MenuItem key={i} value={new Date().getFullYear() + i}>
-                        {new Date().getFullYear() + i}
+                    {[...Array(15).keys()].map((i) => (
+                      <MenuItem key={i} value={new Date().getFullYear() + i - 3}>
+                        {new Date().getFullYear() + i - 3}
                       </MenuItem>
                     ))}
                   </Select>
                 </FormControl>
                 <FormControl variant="outlined" style={{ width: "48%" }}
                 >
-                  <InputLabel>Practice Season</InputLabel>
+                  <InputLabel>Training Season</InputLabel>
                   <Select
-                    value={practiceSeason}
-                    onChange={(e) => setPracticeSeason(e.target.value)}
-                    label="Practice Season"
+                    value={trainingSeason}
+                    onChange={(e) => setTrainingSeason(e.target.value)}
+                    label="Training Season"
                     sx={{ backgroundColor: '#fff' }}
                   >
                     <MenuItem value=""></MenuItem>
@@ -759,6 +824,97 @@ const EditTrainee = () => {
                 </FormControl>
               </Box>
             </Box>
+
+            <Box mb={2}>
+              <Box display="flex" justifyContent="space-between" gap={2}>
+                <Box display="flex" gap={2} style={{ width: "50%" }}>
+
+                  <FormControl variant="outlined" style={{ width: "40%" }}>
+                    <InputLabel>Start Training Month</InputLabel>
+                    <Select
+                      value={trainingStartMonthDate}
+                      onChange={handleTrainingStartMonthChange}
+                      label="Training Start Month"
+                      sx={{ backgroundColor: '#fff' }}
+                    >
+                      <MenuItem value=""></MenuItem>
+                      <MenuItem value="01">January</MenuItem>
+                      <MenuItem value="02">February</MenuItem>
+                      <MenuItem value="03">March</MenuItem>
+                      <MenuItem value="04">April</MenuItem>
+                      <MenuItem value="05">May</MenuItem>
+                      <MenuItem value="06">June</MenuItem>
+                      <MenuItem value="07">July</MenuItem>
+                      <MenuItem value="08">August</MenuItem>
+                      <MenuItem value="09">September</MenuItem>
+                      <MenuItem value="10">October</MenuItem>
+                      <MenuItem value="11">November</MenuItem>
+                      <MenuItem value="12">December</MenuItem>
+                    </Select>
+                  </FormControl>
+                  <FormControl variant="outlined" style={{ width: "40%" }}>
+                    <InputLabel>Start Training Day</InputLabel>
+                    <Select
+                      value={trainingStartDayDate}
+                      onChange={handleTrainingStartDayChange}
+                      label="Training Start Day"
+                      sx={{ backgroundColor: '#fff' }}
+                    >
+                      <MenuItem value=""></MenuItem>
+                      {[...Array(31)].map((_, index) => (
+                        <MenuItem key={index + 1} value={String(index + 1).padStart(2, '0')}>
+                          {index + 1}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  </FormControl>
+                </Box>
+                <Box display="flex" gap={2} style={{ width: "50%" }}>
+
+                  <FormControl variant="outlined" style={{ width: "40%" }}>
+                    <InputLabel>End Training Month</InputLabel>
+                    <Select
+                      value={trainingEndMonthDate}
+                      onChange={handleTrainingEndMonthChange}
+                      label="End Training Month"
+                      sx={{ backgroundColor: '#fff' }}
+                    >
+                      <MenuItem value=""></MenuItem>
+                      <MenuItem value="01">January</MenuItem>
+                      <MenuItem value="02">February</MenuItem>
+                      <MenuItem value="03">March</MenuItem>
+                      <MenuItem value="04">April</MenuItem>
+                      <MenuItem value="05">May</MenuItem>
+                      <MenuItem value="06">June</MenuItem>
+                      <MenuItem value="07">July</MenuItem>
+                      <MenuItem value="08">August</MenuItem>
+                      <MenuItem value="09">September</MenuItem>
+                      <MenuItem value="10">October</MenuItem>
+                      <MenuItem value="11">November</MenuItem>
+                      <MenuItem value="12">December</MenuItem>
+                    </Select>
+                  </FormControl>
+                  <FormControl variant="outlined" style={{ width: "40%" }}>
+                    <InputLabel>End Training Day</InputLabel>
+                    <Select
+                      value={trainingEndDayDate}
+                      onChange={handleTrainingEndDayChange}
+                      label="End Training Day"
+                      sx={{ backgroundColor: '#fff' }}
+                    >
+                      <MenuItem value=""></MenuItem>
+                      {[...Array(31)].map((_, index) => (
+                        <MenuItem key={index + 1} value={String(index + 1).padStart(2, '0')}>
+                          {index + 1}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  </FormControl>
+                </Box>
+
+              </Box>
+            </Box>
+
             <Box mb={2}>
               <TextField
                 fullWidth
@@ -771,7 +927,7 @@ const EditTrainee = () => {
                   backgroundColor: '#fff',
                   '& .MuiInputBase-root': {
                     textDecoration: 'underline',
-                    color: theme.palette.primary.main,
+                    color: theme.palette.primary.dark,
                     cursor: 'pointer'
                   }
                 }}
@@ -786,15 +942,15 @@ const EditTrainee = () => {
         </form>
       </Paper>
 
-      <Paper elevation={3} sx={{ p: 3, m: 4, backgroundColor: '#E1EBEE' }}>
+      <Paper elevation={3} sx={{ p: 3, m: 4, backgroundColor: theme.palette.background.paper }}>
         <form
           onSubmit={handleAcademicGradesSubmit}
           style={{ paddingBottom: "1rem" }}
         >
           <Grid container spacing={3}>
             <Grid item xs={12}>
-              <Typography className="concert-one-regular" variant='inherit' align="center" sx={{ color: theme.palette.primary.main }} gutterBottom>
-                Academic Courses <SchoolIcon />
+              <Typography className="concert-one-regular" variant='inherit' align="center" sx={{ color: theme.palette.primary.dark }} gutterBottom>
+                Academic Courses <SchoolIcon fontSize="large" />
               </Typography>
             </Grid>
             {courses.map((course, index) => (

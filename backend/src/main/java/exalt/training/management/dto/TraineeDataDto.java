@@ -28,9 +28,12 @@ public class TraineeDataDto {
     private String expectedGraduationDate;
     private String trainingField;
     private String branchLocation;
+    private String trainingYear;
+    private String trainingSeason;
+    private String startTrainingDate;
+    private String endTrainingDate;
     private String bugzillaURL;
-    private String practiceYear;
-    private String practiceSeason;
+
 //    private Map<String, Double> academicGradesDto;
 
 }

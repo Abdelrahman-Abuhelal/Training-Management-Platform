@@ -51,7 +51,7 @@ const FormsList = () => {
         {
             field: 'formTitle',
             headerName: 'Name',
-            width: 300,
+            width: 280,
             renderCell: (params) => (
                 <div >{params.value.length > 40 ? `${params.value.substring(0, 40)}...` : params.value}</div>
             )
@@ -59,15 +59,15 @@ const FormsList = () => {
         {
             field: 'formDescription',
             headerName: 'Description',
-            width: 300,
+            width: 400,
             renderCell: (params) => (
-                <div >{params.value.length > 40 ? `${params.value.substring(0, 40)}...` : params.value}</div>
+                <div >{params.value.length > 40 ? `${params.value.substring(0,60)}...` : params.value}</div>
             )
         },
         {
             field: 'numberOfQuestions',
             headerName: 'No. Questions',
-            width: 150,
+            width: 120,
             renderCell: (params) => (
                 <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>{params.value}</div>
             )
@@ -116,16 +116,17 @@ const FormsList = () => {
     }
 
     return (
-        <Paper elevation={3} style={{ margin: '3rem auto', padding: '1rem',backgroundColor: '#E1EBEE' , width:'70%'}}>
-            <Typography className="concert-one-regular" variant='inherit' gutterBottom style={{ color:  theme.palette.primary.main,marginBottom: '1rem', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+        <Paper elevation={3} style={{ margin: '3rem auto', padding: '1rem',backgroundColor: theme.palette.background.paper , width:'80%'}}>
+            <Typography className="concert-one-regular" variant='inherit' gutterBottom style={{ color:  theme.palette.primary.dark,marginBottom: '0.5rem',marginTop:'1rem', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                 Forms <DescriptionIcon sx={{ marginLeft: '0.5rem' }} fontSize="medium" />
             </Typography>
-            <div style={{ height: 340, width: '100%', backgroundColor: '#ffffff', borderRadius: '5px', overflow: 'hidden' }}>
+            <div style={{ width: '100%', borderRadius: '5px', overflow: 'hidden' ,p:'1rem'}}>
                 <DataGrid
                     rows={forms}
                     columns={columns}
                     pageSize={5}
                     getRowId={getRowId}
+                    sx={{backgroundColor: '#ffffff', m:'2rem'}}
                 />
             </div>
         </Paper>

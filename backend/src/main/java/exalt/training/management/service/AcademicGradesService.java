@@ -3,6 +3,7 @@ package exalt.training.management.service;
 import exalt.training.management.exception.AcademicGradesNotFoundException;
 import exalt.training.management.exception.AppUserNotFoundException;
 import exalt.training.management.exception.InvalidAcademicCourseException;
+import exalt.training.management.exception.InvalidUserException;
 import exalt.training.management.model.AcademicGrades;
 import exalt.training.management.model.CourseType;
 import exalt.training.management.model.users.AppUser;
@@ -12,6 +13,8 @@ import exalt.training.management.repository.AppUserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -89,6 +92,15 @@ public class AcademicGradesService {
         }
         return academicGradesRepository.findByTraineeId(trainee.getId()).orElseThrow(()-> new AcademicGradesNotFoundException("There are no academic grades for this trainee"));
 
+    }
+    public List<AcademicGrades> getMyAcademicGrades() {
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    var user = (AppUser) authentication.getPrincipal();
+    var trainee = user.getTrainee();
+        if(trainee == null){
+        throw new InvalidUserException("User is not a Trainee" );
+    }
+        return academicGradesRepository.findByTraineeId(trainee.getId()).orElseThrow(()-> new AcademicGradesNotFoundException("There are no academic grades for this trainee"));
     }
 
 }
