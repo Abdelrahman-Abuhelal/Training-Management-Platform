@@ -22,7 +22,7 @@ import StarsIcon from '@mui/icons-material/Stars';
 import StarRateIcon from '@mui/icons-material/StarRate';
 import { useMediaQuery, useTheme } from '@mui/material';
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-
+import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
 
 const skillCategories = [
   "PROGRAMMING_LANGUAGES",
@@ -46,6 +46,7 @@ const TraineeSkills = () => {
   const { userId } = useParams();
   const theme = useTheme();
   const navigate = useNavigate();
+  const [userFullName, setUserFullName] = useState("");
 
   const [skills, setSkills] = useState([]);
   const [selectedSkills, setSelectedSkills] = useState({
@@ -61,6 +62,7 @@ const TraineeSkills = () => {
   useEffect(() => {
     fetchSkills();
     fetchTraineeSkills();
+    userData();
   }, []);
 
   const fetchSkills = async () => {
@@ -106,6 +108,21 @@ const TraineeSkills = () => {
     }
   };
 
+  const userData = async () => {
+    try {
+      const response = await axios.get(`${baseUrl}/api/v1/admin/users/${userId}`, {
+        headers: {
+          Authorization: `Bearer ${login_token}`
+        }
+      });
+      if (response.status === 200) {
+        const userData = response.data;
+        setUserFullName(userData.userFirstName + " " + userData.userLastName);
+      }
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
   const handleSkillChange = (category, skillId, event) => {
     const proficiency = event.target.value;
     setProficiencies(prev => ({
@@ -184,7 +201,7 @@ const TraineeSkills = () => {
       Back to Trainees
     </Button>
     <Typography className="concert-one-regular" variant='inherit' sx={{ color: theme.palette.primary.dark, mb: '1.5rem', alignSelf: 'center ' }} gutterBottom>
-      Manage Trainee Skills <StarRateIcon />
+     {userFullName} Skills <AutoAwesomeIcon fontSize="large" sx={{mb:'0.5rem'}} />
     </Typography>
         <Grid container spacing={2}>
           {skillCategories.map(category => (

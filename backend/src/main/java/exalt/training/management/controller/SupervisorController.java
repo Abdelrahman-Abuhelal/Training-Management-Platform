@@ -1,8 +1,10 @@
 package exalt.training.management.controller;
 
 import exalt.training.management.dto.*;
+import exalt.training.management.model.TraineeTask;
 import exalt.training.management.model.users.Trainee;
 import exalt.training.management.service.SupervisorService;
+import exalt.training.management.service.TaskService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
@@ -22,6 +24,7 @@ public class SupervisorController {
 
 
     private final SupervisorService supervisorService;
+    private final TaskService taskService;
 
 
     @GetMapping( "/my-trainees")
@@ -45,6 +48,22 @@ public class SupervisorController {
     }
 
 }
+
+    @GetMapping( "/assigned-tasks")
+    @PreAuthorize("hasAnyRole('SUPERVISOR')")
+    @Operation(summary = "Get Supervisor's Assigned Tasks " , security =  @SecurityRequirement(name = "loginAuth"))
+    public ResponseEntity<List<TaskDto>> getTasksAssignedBySupervisor() {
+        List<TaskDto> tasks = taskService.getTasksAssignedBySupervisor();
+        return ResponseEntity.ok(tasks);
+    }
+
+    @PostMapping("/assignTask")
+    @PreAuthorize("hasAnyRole('SUPERVISOR')")
+    @Operation(summary = "Assign a task " , security =  @SecurityRequirement(name = "loginAuth"))
+    public String assignTask(@RequestBody AssignTaskRequest assignTaskRequest) {
+        return taskService.assignTask(assignTaskRequest);
+    }
+
 
 
 }

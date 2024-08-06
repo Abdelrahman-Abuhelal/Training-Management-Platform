@@ -288,7 +288,7 @@ const UserManagement = () => {
             </Grid>
           </Grid>
         </Toolbar>
-        <Paper elevation={3} sx={{ border: "1px solid #ccc", p: "1rem" }}>
+        <Paper elevation={3} sx={{ border: "1px solid #ccc", p: "1rem"  ,backgroundColor:'#fff'}}>
           <TableContainer>
             <Table>
               <TableHead>

@@ -1,5 +1,6 @@
 package exalt.training.management.controller;
 
+
 import exalt.training.management.dto.SkillDto;
 import exalt.training.management.model.Skill;
 import exalt.training.management.service.SkillService;

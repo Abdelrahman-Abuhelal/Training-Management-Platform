@@ -59,9 +59,9 @@ const FormsList = () => {
         {
             field: 'formDescription',
             headerName: 'Description',
-            width: 400,
+            width: 250,
             renderCell: (params) => (
-                <div >{params.value.length > 40 ? `${params.value.substring(0,60)}...` : params.value}</div>
+                <div >{params.value.length > 40 ? `${params.value.substring(0,40)}...` : params.value}</div>
             )
         },
         {
@@ -104,7 +104,7 @@ const FormsList = () => {
                     component={Link}
                     onClick={() => handleViewClick(params.row)}
                 >
-                    View
+                    Fill / View
                 </Button>
             }
 

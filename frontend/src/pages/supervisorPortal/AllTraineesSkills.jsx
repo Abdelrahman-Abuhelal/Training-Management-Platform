@@ -7,6 +7,7 @@ import {
   Grid,
   Chip,
   FormControl,
+  Divider,
   InputLabel,
   Select,
   MenuItem,
@@ -107,8 +108,8 @@ const AllTraineesSkills = () => {
   };
 
   return (
-    <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', minHeight: '100vh', p: '2rem' }}>
-      <Paper elevation={3} sx={{ p: 3, width: "80%", maxWidth: 1200, backgroundColor: theme.palette.background.paper }}>
+    <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', minHeight: '100vh' }}>
+      <Paper elevation={3} sx={{ p: 3, m: 6, width: "80%", maxWidth: 1200, backgroundColor: theme.palette.background.paper }}>
         <Typography className="concert-one-regular" variant='inherit' align="center" component="h2" sx={{
           marginBottom: "2rem",
           color: theme.palette.primary.dark
@@ -116,9 +117,8 @@ const AllTraineesSkills = () => {
           My Trainees Skills
         </Typography>
 
-        {/* Filters */}
+
         <Box sx={{ mb: 2 }}>
-          {/* Skill Name Filter */}
           <FormControl fullWidth variant="outlined" sx={{ mb: 2 }}>
             <InputLabel>Filter by Skill Name</InputLabel>
             <Select
@@ -180,9 +180,9 @@ const AllTraineesSkills = () => {
         <Grid container spacing={2} sx={{ marginTop: '2rem' }}>
           {filteredTrainees.map((trainee, index) => (
             <Grid item xs={12} key={index} sx={{ backgroundColor: '#F7F9FC ', mb: '2rem' }}>
-              <Typography className="concert-one-regular" variant='inherit' align="center" component="h3" gutterBottom sx={{marginBottom: "1rem"}}>
-                <Link to={`/view-trainee/${trainee.userId}`} style={{ textDecoration: 'none',color: theme.palette.primary.dark }}>
-                <PersonIcon/>  {trainee.traineeName} 
+              <Typography className="concert-one-regular" variant='inherit' align="center" component="h3" gutterBottom sx={{ marginBottom: "1rem" }}>
+                <Link to={`/view-trainee/${trainee.userId}`} style={{ textDecoration: 'none', color: theme.palette.primary.dark }}>
+                  <PersonIcon />  {trainee.traineeName}
                 </Link>
               </Typography>
               <Grid container spacing={1}>
@@ -201,7 +201,7 @@ const AllTraineesSkills = () => {
                         overflow: 'hidden', // Hide overflowing content
                         textOverflow: 'ellipsis', // Show ellipsis for overflowing text
                         whiteSpace: 'nowrap',
-                         // Prevent wrapping of text
+                        // Prevent wrapping of text
                       }}
                     >
                       <Typography
@@ -228,7 +228,9 @@ const AllTraineesSkills = () => {
                       />
                     </Box>
                   </Grid>
+                  
                 ))}
+
               </Grid>
             </Grid>
           ))}

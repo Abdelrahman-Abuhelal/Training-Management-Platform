@@ -1,60 +1,70 @@
 package exalt.training.management.controller;
 
-
+import exalt.training.management.dto.TaskDto;
+import exalt.training.management.dto.TraineeTaskDTO;
 import exalt.training.management.model.Task;
+import exalt.training.management.model.TraineeTask;
 import exalt.training.management.service.TaskService;
+import exalt.training.management.service.TraineeTaskService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@RestController
-@RequestMapping("/api/v1/tasks")
-@RequiredArgsConstructor
 @Slf4j
+@RestController
+@RequiredArgsConstructor
+@RequestMapping("/api/v1/tasks")
 public class TaskController {
 
-    @Autowired
-    private TaskService taskService;
+    private final TaskService taskService;
+    private final TraineeTaskService traineeTaskService;
 
-    @GetMapping
-    @PreAuthorize("hasRole('SUPER_ADMIN')")
-    @Operation(summary = "Get All Tasks" , security =  @SecurityRequirement(name = "loginAuth"))
-    public List<Task> getAllTasks() {
-        return taskService.getAllTasks();
+    @GetMapping("/{taskId}/trainee-tasks")
+    @PreAuthorize("hasAnyRole('SUPER_ADMIN','SUPERVISOR')")
+    @Operation(summary = "Get All Trainee Tasks by a task id " , security =  @SecurityRequirement(name = "loginAuth"))
+    public ResponseEntity<List<TraineeTaskDTO>> getTraineeTasksByTaskId(@PathVariable Long taskId) {
+        List<TraineeTaskDTO> traineeTasks = traineeTaskService.getAllTraineeTasksByTaskId(taskId);
+        return ResponseEntity.ok(traineeTasks);
     }
 
     @GetMapping("/{id}")
-    @PreAuthorize("hasRole('SUPER_ADMIN')")
-    @Operation(summary = "Get Task By Id" , security =  @SecurityRequirement(name = "loginAuth"))
-    public Task getTaskById(@PathVariable Long id) {
+    @PreAuthorize("hasAnyRole('SUPER_ADMIN','SUPERVISOR','TRAINEE')")
+    @Operation(summary = "Get Task Details by a task id " , security =  @SecurityRequirement(name = "loginAuth"))
+    public TaskDto getTaskById(@PathVariable Long id) {
         return taskService.getTaskById(id);
     }
 
-    @PostMapping
-    @PreAuthorize("hasRole('SUPER_ADMIN')")
-    @Operation(summary = "Create Task" , security =  @SecurityRequirement(name = "loginAuth"))
-    public Task createTask(@RequestBody Task task) {
-        return taskService.saveTask(task);
-    }
 
-    @PutMapping("/{id}")
-    @PreAuthorize("hasRole('SUPER_ADMIN')")
-    @Operation(summary = "Update Task" , security =  @SecurityRequirement(name = "loginAuth"))
-    public Task updateTask(@PathVariable Long id, @RequestBody Task task) {
-        task.setId(id);
-        return taskService.saveTask(task);
-    }
+//    @GetMapping
+//    public List<Task> getAllTasks() {
+//        return taskService.get();
+//    }
 
-    @DeleteMapping("/{id}")
-    @PreAuthorize("hasRole('SUPER_ADMIN')")
-    @Operation(summary = "Delete Task" , security =  @SecurityRequirement(name = "loginAuth"))
-    public void deleteTask(@PathVariable Long id) {
-        taskService.deleteTask(id);
-    }
+//    @GetMapping("/{id}")
+//    public Task getTaskById(@PathVariable Long id) {
+//        return taskService.getTraineeTaskById(id);
+//    }
+//
+//    @PostMapping
+//    public Task createTask(@RequestBody Task task) {
+//        return taskService.saveTraineeTask(traineeTask);
+//    }
+//
+//    @PutMapping("/{id}")
+//    public Task updateTask(@PathVariable Long id, @RequestBody Task task) {
+//        task.setId(id);
+//        return taskService.saveTraineeTask(traineeTask);
+//    }
+//
+//    @DeleteMapping("/{id}")
+//    public void deleteTraineeTask(@PathVariable Long id) {
+//        taskService.deleteTraineeTask(id);
+//    }
 }

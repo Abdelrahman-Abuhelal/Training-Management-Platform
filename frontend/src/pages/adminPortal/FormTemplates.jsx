@@ -33,7 +33,6 @@ import {
   Grid,
 } from "@mui/material";
 import QuestionAnswerIcon from '@mui/icons-material/QuestionAnswer';
-import CheckCircleIcon from '@mui/icons-material/CheckCircle'; // Import the icon
 import { useAuth } from "../../provider/authProvider";
 import SearchComponent from "../../components/Search";
 import FactCheckIcon from '@mui/icons-material/FactCheck';

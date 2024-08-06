@@ -8,6 +8,7 @@ import {
   Typography,
   TextField,
   Select, Button,
+  Paper,
   MenuItem,
   Box,
   FormControl,
@@ -88,12 +89,13 @@ const TraineeProfileView = () => {
   };
 
   const navigateBack = () => {
-    navigate(`/my-trainees`);
+    navigate(-1);
   };
 
   return (
-    <Container sx={{backgroundColor:theme.palette.background.paper , margin:'auto auto' , marginBottom:'5rem', borderRadius:'0.5rem' }}>
-      <Box mt={4} pt={4}>
+    <div style={{ display: "flex", justifyContent: "center" }}>
+<Paper elevation={3} sx={{ p: 3, m: 6, width: "80%", maxWidth: 1200, backgroundColor: theme.palette.background.paper }}>
+      <Box mt={1}>
         <Button onClick={navigateBack} startIcon={<ArrowBackIcon />}  variant='contained'>
           Back to Trainees
         </Button>
@@ -335,7 +337,8 @@ const TraineeProfileView = () => {
           </FormControl>
         </Box>
       </form>
-    </Container>
+    </Paper>
+    </div>
   );
 };
 

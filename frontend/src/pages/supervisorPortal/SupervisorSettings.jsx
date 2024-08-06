@@ -50,10 +50,10 @@ const SupervisorSettings = () => {
                 },
                 width: '400px', // Optional: make buttons full width
               }}
-              onClick={() => navigate("/users")}
+              onClick={() => navigate("/my-trainees")}
             >
               <Typography variant="h6" color="white">
-                Manage Users
+                Manage Trainees
               </Typography>
             </Button>
           </Grid>

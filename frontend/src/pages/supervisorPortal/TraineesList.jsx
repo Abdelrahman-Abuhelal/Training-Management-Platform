@@ -16,6 +16,7 @@ import GroupIcon from '@mui/icons-material/Group';
 import { DataGrid } from "@mui/x-data-grid"; // Import DataGrid component
 import StarRateIcon from '@mui/icons-material/StarRate';
 import AccountBoxIcon from '@mui/icons-material/AccountBox';
+import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
 
 const Supervisor_Trainees_List = () => {
   const baseUrl = import.meta.env.VITE_PORT_URL;
@@ -91,18 +92,20 @@ const Supervisor_Trainees_List = () => {
         >
           <Button
             color="primary"
-            variant="contained"
+            variant="outlined"
             startIcon={<AccountBoxIcon />}
             onClick={() => handleViewProfile(params.row)}
+            sx={{mt:'0.5rem'}}
           >
-            View Profile
+             Profile
           </Button>
           <Button
             color="primary"
-            variant="contained"
-            startIcon={<StarRateIcon />}
+            variant="outlined"
+            startIcon={<AutoAwesomeIcon />}
             onClick={() => handleAddSkills(params.row)}
-          >
+            sx={{mt:'0.5rem'}}
+            >
             Add Skills
           </Button>
         </Box>

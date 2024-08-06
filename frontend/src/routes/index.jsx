@@ -42,6 +42,8 @@ import JobDescriptionRanking from '../pages/adminPortal/JobDescriptionRanking.js
 import SupervisorSettings from '../pages/supervisorPortal/SupervisorSettings.jsx';
 import TraineeSettings from '../pages/traineePortal/TraineeSettings.jsx';
 import MyGrades from '../pages/traineePortal/MyGrades.jsx';
+import TasksList from '../pages/supervisorPortal/TasksList.jsx';
+import TaskDetails from '../pages/supervisorPortal/TaskDetails.jsx';
 const Routes = () => {
   const { user } = useAuth();
   const isAuthenticated = user !== null && user.login_token !== null;
@@ -105,6 +107,8 @@ const Routes = () => {
             { path: '/add-skills/:userId', element: <TraineeSkills /> },
             { path: '/skills', element: <AllTraineesSkills /> },
             { path: '/assign-task', element: <AssignTask /> },
+            { path: '/tasks', element: <TasksList /> },
+            { path: '/tasks/:taskId', element: <TaskDetails /> },
             { path: '/settings', element: <SupervisorSettings /> },
             { path: '/change-password', element: <ChangePassword /> },
           ],

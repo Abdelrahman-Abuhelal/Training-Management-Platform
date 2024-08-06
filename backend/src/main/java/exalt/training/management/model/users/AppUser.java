@@ -85,7 +85,7 @@ public class AppUser implements UserDetails {
     private SuperAdmin superAdmin;
 
     @Nullable
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.EAGER,mappedBy = "user", cascade = CascadeType.ALL)
     @JsonManagedReference(value = "token-user")
     private List<Token> tokens;
 
