@@ -14,14 +14,14 @@ import ListAltIcon from '@mui/icons-material/ListAlt';
 import SettingsIcon from '@mui/icons-material/Settings';
 import AddTaskIcon from '@mui/icons-material/AddTask';
 import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
-
+import TipsAndUpdatesIcon from '@mui/icons-material/TipsAndUpdates';
 const routes = [
   { path: '/home', name: 'Home', icon: <SpaceDashboardIcon sx={{ color: 'primary.main' }}/> },
   { path: '/my-trainees', name: 'My Trainees', icon: <AccountCircleIcon sx={{ color: 'primary.main' }}/> },
-  { path: '/skills', name: 'Skills', icon: <AutoAwesomeIcon sx={{ color: 'primary.main' }}/> },
   { path: '/tasks', name: 'Tasks', icon: <AddTaskIcon sx={{ color: 'primary.main' }}/> },
-  { path: '/assign-task', name: 'Assign Task', icon: <AddTaskIcon sx={{ color: 'primary.main' }}/> },
+  { path: '/skills', name: 'Skills', icon: <AutoAwesomeIcon sx={{ color: 'primary.main' }}/> },
   { path: '/forms', name: 'Forms', icon: <ListAltIcon sx={{ color: 'primary.main' }}/> },
+  { path: '/training-plan', name: 'Training Plan', icon: <TipsAndUpdatesIcon sx={{ color: 'primary.main' }}/> },
   { path: '/settings', name: 'Settings', icon: <SettingsIcon sx={{ color: 'primary.main' }}/> }
 
 ];

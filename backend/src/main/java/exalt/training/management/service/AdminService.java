@@ -29,6 +29,7 @@ import java.util.stream.Collectors;
 public class AdminService {
 
     private final TraineeRepository traineeRepository;
+    private final TraineeService traineeService;
     private final AppUserRepository appUserRepository;
     private final AppUserService appUserService;
     private final TokenService tokenService;
@@ -40,8 +41,9 @@ public class AdminService {
     private final TraineeMapper traineeMapper;
     private final BranchService branchService;
 
-    public AdminService(TraineeRepository traineeRepository, AppUserRepository appUserRepository, AppUserService appUserService, TokenService tokenService, AuthenticationService authenticationService, EmailService emailService, AppUserMapper userMapper, SupervisorRepository supervisorRepository, TraineeMapper traineeMapper, BranchService branchService) {
+    public AdminService(TraineeRepository traineeRepository,TraineeService traineeService, AppUserRepository appUserRepository, AppUserService appUserService, TokenService tokenService, AuthenticationService authenticationService, EmailService emailService, AppUserMapper userMapper, SupervisorRepository supervisorRepository, TraineeMapper traineeMapper, BranchService branchService) {
         this.traineeRepository = traineeRepository;
+        this.traineeService = traineeService;
         this.appUserRepository = appUserRepository;
         this.appUserService = appUserService;
         this.tokenService = tokenService;
@@ -233,13 +235,22 @@ public class AdminService {
         }
         return trainee.get();
     }
+    public TraineeDataDto getTraineeInfoByUserId(Long id){
+        Optional<AppUser> appUserOptional = appUserRepository.findById(id);
+
+        if (appUserOptional.isEmpty()) {
+            throw new AppUserNotFoundException("There is no user with this ID: " + id);
+        }
+        return traineeService.convertToDto(Objects.requireNonNull(appUserOptional.get().getTrainee()));
+    }
+
     public Trainee getTraineeByUserId(Long id){
         Optional<AppUser> appUserOptional = appUserRepository.findById(id);
 
         if (appUserOptional.isEmpty()) {
             throw new AppUserNotFoundException("There is no user with this ID: " + id);
         }
-        return getTraineeById(Objects.requireNonNull(appUserOptional.get().getTrainee()).getId());
+        return appUserOptional.get().getTrainee();
     }
 
 

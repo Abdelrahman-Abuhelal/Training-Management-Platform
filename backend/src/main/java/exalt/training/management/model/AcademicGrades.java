@@ -1,7 +1,6 @@
 package exalt.training.management.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import exalt.training.management.model.users.Trainee;
 import jakarta.persistence.*;
 import lombok.*;
@@ -19,8 +18,10 @@ public class AcademicGrades {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Enumerated(EnumType.STRING)
-    private CourseType type;
+
+    @ManyToOne
+    @JoinColumn(name = "course_id")
+    private Course course; // Reference to Course entity
 
     private Double mark;
 
@@ -28,10 +29,9 @@ public class AcademicGrades {
     @JsonBackReference
     private Trainee trainee;
 
-    public AcademicGrades(CourseType courseType, Double mark, Trainee trainee) {
-        this.type = courseType;
+    public AcademicGrades(Course course, Double mark, Trainee trainee) {
+        this.course = course;
         this.mark = mark;
         this.trainee = trainee;
     }
-
 }

@@ -37,7 +37,7 @@ public class SkillController {
 
     @DeleteMapping("/{skillId}")
     @PreAuthorize("hasAnyRole('SUPER_ADMIN')")
-    @Operation(summary = "Add new Skill (Admin Only)" , security =  @SecurityRequirement(name = "loginAuth"))
+    @Operation(summary = "Delete Skill (Admin Only)" , security =  @SecurityRequirement(name = "loginAuth"))
     public String deleteSkill(@PathVariable Long skillId) {
         return skillService.deleteSkill(skillId);
     }

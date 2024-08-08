@@ -84,7 +84,7 @@ const ForgotPasswordReset = () => {
   };
 
   return (
-    <Container component="main" maxWidth="xs">
+    <Container component="main" maxWidth="xs" >
       <Box display="flex" flexDirection="column" justifyContent="center" alignItems="center" minHeight="100vh">
 
         <Box textAlign="center" mb={1}>

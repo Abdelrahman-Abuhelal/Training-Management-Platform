@@ -9,6 +9,7 @@ import CheckCircleIcon from '@mui/icons-material/CheckCircle'; // Icon for FILLE
 import HighlightOffIcon from '@mui/icons-material/HighlightOff'; // Icon for NOT FILLED status
 import AssignmentIcon from '@mui/icons-material/Assignment';
 import { useMediaQuery, useTheme } from '@mui/material';
+import ListAltIcon from '@mui/icons-material/ListAlt';
 
 const FormsList = () => {
     const [forms, setForms] = useState([]);
@@ -118,7 +119,7 @@ const FormsList = () => {
     return (
         <Paper elevation={3} style={{ margin: '3rem auto', padding: '1rem',backgroundColor: theme.palette.background.paper , width:'80%'}}>
             <Typography className="concert-one-regular" variant='inherit' gutterBottom style={{ color:  theme.palette.primary.dark,marginBottom: '0.5rem',marginTop:'1rem', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                Forms <DescriptionIcon sx={{ marginLeft: '0.5rem' }} fontSize="medium" />
+            <ListAltIcon sx={{ marginRight: '0.5rem' ,mt:'0.3rem',fontSize:'2rem'}}  /> Forms 
             </Typography>
             <div style={{ width: '100%', borderRadius: '5px', overflow: 'hidden' ,p:'1rem'}}>
                 <DataGrid

@@ -49,8 +49,8 @@ public class TraineeTaskService {
         return traineeTaskRepository.save(traineeTask);
     }
 
-    public void deleteTraineeTask(Long id) {
-        traineeTaskRepository.deleteById(id);
+    public void deleteTraineeTask(Long traineeTaskId) {
+        traineeTaskRepository.deleteById(traineeTaskId);
     }
 
 

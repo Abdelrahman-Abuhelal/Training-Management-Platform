@@ -44,6 +44,8 @@ import TraineeSettings from '../pages/traineePortal/TraineeSettings.jsx';
 import MyGrades from '../pages/traineePortal/MyGrades.jsx';
 import TasksList from '../pages/supervisorPortal/TasksList.jsx';
 import TaskDetails from '../pages/supervisorPortal/TaskDetails.jsx';
+import AddCourseComponent from '../pages/adminPortal/AddCourseComponent.jsx';
+import TrainingPlan from '../pages/supervisorPortal/TrainingPlan.jsx';
 const Routes = () => {
   const { user } = useAuth();
   const isAuthenticated = user !== null && user.login_token !== null;
@@ -107,6 +109,7 @@ const Routes = () => {
             { path: '/add-skills/:userId', element: <TraineeSkills /> },
             { path: '/skills', element: <AllTraineesSkills /> },
             { path: '/assign-task', element: <AssignTask /> },
+            { path: '/training-plan', element: <TrainingPlan /> },
             { path: '/tasks', element: <TasksList /> },
             { path: '/tasks/:taskId', element: <TaskDetails /> },
             { path: '/settings', element: <SupervisorSettings /> },
@@ -134,6 +137,7 @@ const Routes = () => {
             { path: '/forms', element: <FormsList /> },
             { path: '/skills', element: <TraineesSkillsList /> },
             { path: '/add-skills', element: <AddSkillComponent /> },
+            { path: '/add-courses', element: <AddCourseComponent /> },
             { path: '/supervisors', element: <HR_Supervisors_List /> },
             { path: '/supervisors/:userId/trainees', element: <SupervisorTraineesList /> },
             { path: '/superadmins', element: <HR_Superadmin_List /> },

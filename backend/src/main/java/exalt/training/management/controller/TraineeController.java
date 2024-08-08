@@ -41,8 +41,8 @@ public class TraineeController {
     @Operation(summary = "Get Trainee By Id", security =  @SecurityRequirement(name = "loginAuth"))
     @PreAuthorize("hasAnyRole('TRAINEE')")
     @GetMapping("/my-profile")
-    public ResponseEntity<Trainee> getTraineeProfile(){
-        Trainee trainee = traineeService.getMyProfileInfo();
+    public ResponseEntity<TraineeDataDto> getTraineeProfile(){
+        TraineeDataDto trainee = traineeService.getMyProfileInfo();
         return new ResponseEntity<>(trainee, HttpStatus.OK);
     }
 

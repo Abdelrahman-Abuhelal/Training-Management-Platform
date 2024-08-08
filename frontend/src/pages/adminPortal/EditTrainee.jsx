@@ -30,7 +30,7 @@ import autoTable from "jspdf-autotable";
 import PictureAsPdfOutlinedIcon from "@mui/icons-material/PictureAsPdfOutlined";
 import { useAuth } from "../../provider/authProvider";
 
-import { useMediaQuery, useTheme } from '@mui/material';
+import { useTheme } from '@mui/material';
 
 
 const EditTrainee = () => {
@@ -73,6 +73,7 @@ const EditTrainee = () => {
   const [showGradesConfirmation, setShowGradesConfirmation] = useState(false);
   // courses and grades
   const [courses, setCourses] = useState([]);
+  const [academicGrades, setAcademicGrades] = useState([]);
   const [selectedCourses, setSelectedCourses] = useState([]);
 
 
@@ -111,10 +112,30 @@ const EditTrainee = () => {
     }
   };
 
+
+  const fetchCoursesList = async () => {
+    try {
+      const response = await axios.get(
+        `${baseUrl}/api/v1/courses`, {
+        headers: {
+          Authorization: `Bearer ${login_token}`
+        }
+      }
+      );
+      if (response.status === 200) {
+        setCourses(response.data);
+        console.log(response.data)
+      }
+    } catch (error) {
+      console.error("Error:", error.message);
+    }
+  };
+
   useEffect(() => {
+    fetchCoursesList();
     userData();
     fetchUserData();
-    fetchUserCourses();
+    fetchUserAcademicGrades();
   }, []);
 
   const fetchUserData = async () => {
@@ -158,7 +179,7 @@ const EditTrainee = () => {
     }
   };
 
-  const fetchUserCourses = async () => {
+  const fetchUserAcademicGrades = async () => {
     try {
       const response = await axios.get(
         `${baseUrl}/api/v1/academic-courses/trainees/${userId}`, {
@@ -168,26 +189,28 @@ const EditTrainee = () => {
       }
       );
       if (response.status === 200) {
-        const fetchedCourses = response.data;
-        console.log("Fetched Courses:", fetchedCourses); //  debugging
+        const fetchedGrades = response.data;
+        console.log("Before mapping Grades:", fetchedGrades);
 
-        // Ensure fetchedCourses is an array before mapping
-        if (Array.isArray(fetchedCourses)) {
-          setCourses(
-            fetchedCourses.map((course) => ({
-              course: course.type,
-              grade: course.mark,
+        if (Array.isArray(fetchedGrades)) {
+          setAcademicGrades(
+            fetchedGrades.map((academicGrade) => ({
+              course: academicGrade.course.name,
+              grade: academicGrade.mark
             }))
           );
-          setSelectedCourses(fetchedCourses.map((course) => course.type));
+          console.log("after mapping Grades:", academicGrades);
+
+          const selectedCourses = fetchedGrades.map((academicGrade) => academicGrade.course.name);
+          setSelectedCourses(selectedCourses);
         } else {
           console.error("Error: Response data is not an array");
         }
       } else {
-        console.error("Fetch Courses Failed:", response.statusText);
+        console.error("Fetch Academic Grades Failed:", response.statusText);
       }
     } catch (error) {
-      console.error("Error fetching courses:", error);
+      console.error("Error fetching Academic Grades:", error);
     }
   };
 
@@ -283,21 +306,7 @@ const EditTrainee = () => {
     setShowGradesConfirmation(false);
   };
 
-  const handleAcademicGradesSubmit = (e) => {
-    e.preventDefault();
 
-    //  if any course has an invalid grade
-    const invalidGrade = courses.some((course) => {
-      return course.grade === "" || course.grade < 60 || course.grade > 100;
-    });
-
-    if (invalidGrade) {
-      setGradesSnackbarError(true);
-      return;
-    }
-
-    setShowGradesConfirmation(true);
-  };
 
   const handleGraduationMonthChange = (e) => {
     setExpectedGraduationMonth(e.target.value);
@@ -358,16 +367,86 @@ const EditTrainee = () => {
     navigate(`/trainees`);
   };
 
+
+
+
+  const handleCourseChange = (index, e) => {
+    const value = e.target.value;
+    if (value === "") {
+      return;
+    }
+    const updatedGrades = [...academicGrades];
+    updatedGrades[index].course = value;
+
+    const updatedSelectedCourses = [...selectedCourses];
+    if (academicGrades[index].course) {
+      const oldCourseIndex = updatedSelectedCourses.indexOf(academicGrades[index].course);
+      if (oldCourseIndex > -1) {
+        updatedSelectedCourses.splice(oldCourseIndex, 1);
+      }
+    }
+    updatedSelectedCourses.push(value);
+
+    setAcademicGrades(updatedGrades);
+    setSelectedCourses(updatedSelectedCourses);
+  };
+
+  const handleGradeChange = (index, e) => {
+    const value = e.target.value;
+    if (value === "") {
+      return;
+    }
+    const updatedGrades = [...academicGrades];
+    updatedGrades[index].grade = Number(value);
+    setAcademicGrades(updatedGrades);
+  };
+
+  const addCourse = () => {
+    setAcademicGrades([...academicGrades, { course: "", grade: "" }]);
+  };
+
+  const removeCourse = (index) => {
+    const updatedAcademicGrades = [...academicGrades];
+    const removedAcademicGrades = updatedAcademicGrades.splice(index, 1)[0];
+    const filteredSelectedCourses = selectedCourses.filter(
+      (course) => course !== removedAcademicGrades.course
+    );
+    setSelectedCourses(updatedSelectedCourses);
+    setAcademicGrades(updatedAcademicGrades);
+  };
+
+  const handleAcademicGradesSubmit = (e) => {
+    e.preventDefault();
+    console.log(academicGrades);
+
+    const valid = academicGrades.every((academicGrade) => {
+      const grade = Number(academicGrade.grade);
+      if (isNaN(grade) || grade < 60 || grade > 100) {
+        setGradesSnackbarError(true);
+        return false;
+      }
+      academicGrade.grade = grade;
+      return true;
+    });
+
+    if (!valid) {
+      return;
+    }
+
+    setShowGradesConfirmation(true);
+  };
+
   const academicGradesAPI = async () => {
     try {
-      const finalCoursesObject = courses.reduce((acc, course) => {
-        acc[course.course] = course.grade;
+      const finalAcademicGradeObject = academicGrades.reduce((acc, academicGrade) => {
+        acc[academicGrade.course] = Number(academicGrade.grade);
         return acc;
       }, {});
+      console.log("Final Academic Grade Object: ", finalAcademicGradeObject);
 
       await axios.put(
         `${baseUrl}/api/v1/academic-courses/trainees/${userId}`,
-        finalCoursesObject, {
+        finalAcademicGradeObject, {
         headers: {
           Authorization: `Bearer ${login_token}`
         }
@@ -379,75 +458,15 @@ const EditTrainee = () => {
       console.error("Error:", error);
     }
   };
-
-  const handleCourseChange = (index, e) => {
-    const value = e.target.value;
-    if (value === "") {
-      return;
-    }
-    const updatedCourses = [...courses];
-    updatedCourses[index].course = value;
-
-    // Remove the course type from selectedCourses if it exists
-    const filteredSelectedCourses = selectedCourses.filter(
-      (course) => course !== value
-    );
-    setSelectedCourses(filteredSelectedCourses);
-
-    // Add the new selected course type
-    if (!filteredSelectedCourses.includes(value)) {
-      setSelectedCourses([...filteredSelectedCourses, value]);
-    }
-
-    setCourses(updatedCourses);
-  };
-
-  const handleGradeChange = (index, value) => {
-    if (value === "") {
-      return;
-    }
-    const updatedCourses = [...courses];
-    updatedCourses[index].grade = value;
-    setCourses(updatedCourses);
-  };
-
-  const addCourse = () => {
-    setCourses([...courses, { course: "", grade: "" }]);
-  };
-
-  const removeCourse = (index) => {
-    const updatedCourses = [...courses];
-    const removedCourse = updatedCourses.splice(index, 1)[0];
-    const filteredSelectedCourses = selectedCourses.filter(
-      (course) => course !== removedCourse.course
-    );
-    setSelectedCourses(filteredSelectedCourses);
-    setCourses(updatedCourses);
-  };
-
   const handleConfrimGrades = async (e) => {
     e.preventDefault();
     setShowGradesConfirmation(false);
 
-    if (courses.length === 0) {
-      console.error("No courses to submit");
-      return;
-    }
-    courses.map((course) => {
-      if (course.course === "" || course.grade === "") {
-        setGradesSnackbarError(true); // Display error Snackbar
-        return;
-      }
-      if (course.grade < 60 || course.grade > 100) {
-        setGradesSnackbarError(true); // Display error Snackbar
-        return;
-      }
-    });
 
     try {
       await academicGradesAPI();
       setGradesSnackbarSuccess(true); // Display success Snackbar
-      console.log("Courses and Grades:", courses);
+      console.log("Courses and Grades:", academicGrades);
     } catch (error) {
       console.error("Error:", error);
       setGradesSnackbarError(true); // Display error Snackbar
@@ -483,7 +502,7 @@ const EditTrainee = () => {
     autoTable(doc, {
       startY: 25,
       head: [["Course", "Grade"]],
-      body: courses.map((course) => [course.course, course.grade]),
+      body: academicGrades.map((academicGrade) => [academicGrade.course, academicGrade.grade]),
     });
 
     doc.save(username + "_Details.pdf");
@@ -953,7 +972,7 @@ const EditTrainee = () => {
                 Academic Courses <SchoolIcon fontSize="large" />
               </Typography>
             </Grid>
-            {courses.map((course, index) => (
+            {academicGrades.map((academicGrade, index) => (
               <Grid item xs={12} key={index}>
                 <Grid
                   container
@@ -963,62 +982,19 @@ const EditTrainee = () => {
                 >
                   <Grid item xs={5}>
                     <FormControl fullWidth>
-                      <InputLabel id={`course-label-${index}`}>
-                        Select Course
-                      </InputLabel>
+                      <InputLabel>Select Course</InputLabel>
                       <Select
-                        labelId={`course-label-${index}`}
-                        id={`course-select-${index}`}
-                        label={`course-label-${index}`}
-                        value={course.course}
+                        value={academicGrade.course}
                         onChange={(e) => handleCourseChange(index, e)}
-                        fullWidth
+                        label="Select Course"
                         sx={{ backgroundColor: '#fff' }}
                       >
                         <MenuItem value="">Select Course</MenuItem>
-                        <MenuItem
-                          value="TAWJEEHI"
-                          disabled={selectedCourses.includes("TAWJEEHI")}
-                        >
-                          Tawjeehi
-                        </MenuItem>
-                        <MenuItem
-                          value="UNIVERSITY_GPA"
-                          disabled={selectedCourses.includes("UNIVERSITY_GPA")}
-                        >
-                          University GPA
-                        </MenuItem>
-                        <MenuItem
-                          value="PROGRAMMING_ONE"
-                          disabled={selectedCourses.includes("PROGRAMMING_ONE")}
-                        >
-                          Programming
-                        </MenuItem>
-                        <MenuItem
-                          value="OBJECT_ORIENTED"
-                          disabled={selectedCourses.includes("OBJECT_ORIENTED")}
-                        >
-                          Object Oriented
-                        </MenuItem>
-                        <MenuItem
-                          value="DATA_STRUCTURE"
-                          disabled={selectedCourses.includes("DATA_STRUCTURE")}
-                        >
-                          Data Structure
-                        </MenuItem>
-                        <MenuItem
-                          value="DATABASE_ONE"
-                          disabled={selectedCourses.includes("DATABASE_ONE")}
-                        >
-                          Database One
-                        </MenuItem>
-                        <MenuItem
-                          value="DATABASE_TWO"
-                          disabled={selectedCourses.includes("DATABASE_TWO")}
-                        >
-                          Database Two
-                        </MenuItem>
-                        {/* Add other options here */}
+                        {courses.map((c) => (
+                          <MenuItem key={c.id} value={c.name} disabled={selectedCourses.includes(c.name)}>
+                            {c.name}
+                          </MenuItem>
+                        ))}
                       </Select>
                     </FormControl>
                   </Grid>
@@ -1027,8 +1003,8 @@ const EditTrainee = () => {
                       fullWidth
                       id={`grade-input-${index}`}
                       label="Enter Grade"
-                      value={course.grade}
-                      onChange={(e) => handleGradeChange(index, e.target.value)}
+                      value={academicGrade.grade}
+                      onChange={(e) => handleGradeChange(index, e)}
                       sx={{ backgroundColor: '#fff' }}
                     />
                   </Grid>

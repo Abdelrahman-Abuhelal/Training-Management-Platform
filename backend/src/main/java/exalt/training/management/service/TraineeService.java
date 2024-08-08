@@ -37,7 +37,7 @@ public class TraineeService {
         traineeRepository.save(trainee);
     }
 
-    public Trainee getMyProfileInfo(){
+    public TraineeDataDto getMyProfileInfo(){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         var user = (AppUser) authentication.getPrincipal();
         var trainee = user.getTrainee();
@@ -50,10 +50,29 @@ public class TraineeService {
             log.info(message);
             throw new AppUserNotFoundException(message);
         }
-        return traineeInfo.get();
+        return convertToDto(traineeInfo.get());
     }
 
-
+    public TraineeDataDto convertToDto(Trainee trainee) {
+        return TraineeDataDto.builder()
+                .fullNameInArabic(trainee.getFullNameInArabic())
+                .phoneNumber(trainee.getPhoneNumber())
+                .idType(trainee.getIdType())
+                .idNumber(trainee.getIdNumber())
+                .city(trainee.getCity())
+                .address(trainee.getAddress())
+                .universityName(trainee.getUniversityName())
+                .universityMajor(trainee.getUniversityMajor())
+                .expectedGraduationDate(trainee.getExpectedGraduationDate())
+                .trainingField(trainee.getTrainingField())
+                .branchLocation(String.valueOf(trainee.getBranchLocation()))
+                .trainingYear(trainee.getTrainingYear())
+                .trainingSeason(trainee.getTrainingSeason())
+                .startTrainingDate(trainee.getStartTrainingDate())
+                .endTrainingDate(trainee.getEndTrainingDate())
+                .bugzillaURL(trainee.getBugzillaURL())
+                .build();
+    }
 
     public String registerTraineeData(TraineeDataDto traineeDataDTO)  {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();

@@ -67,18 +67,10 @@ public class TaskService {
             throw new RuntimeException("Task not found");
         }
     }
-
-    private TaskDto convertToDTO(Task task) {
-        return TaskDto.builder()
-                .id(task.getId())
-                .name(task.getName())
-                .description(task.getDescription())
-                .deadline(task.getDeadline())
-                .resources(task.getResources())
-                .priority(task.getPriority())
-                .assignedBy(task.getAssignedBy().getId())
-                .build();
+    public void deleteTask(Long taskId) {
+        taskRepository.deleteById(taskId);
     }
+
 
     public String assignTask(AssignTaskRequest assignTaskRequest) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -112,5 +104,18 @@ public class TaskService {
 
         traineeTaskRepository.saveAll(traineeTasks);
         return "task has been assigned";
+    }
+
+
+    private TaskDto convertToDTO(Task task) {
+        return TaskDto.builder()
+                .id(task.getId())
+                .name(task.getName())
+                .description(task.getDescription())
+                .deadline(task.getDeadline())
+                .resources(task.getResources())
+                .priority(task.getPriority())
+                .assignedBy(task.getAssignedBy().getId())
+                .build();
     }
 }

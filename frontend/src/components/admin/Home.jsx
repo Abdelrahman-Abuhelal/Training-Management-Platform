@@ -2,7 +2,7 @@ import AdminButtonAppBar from "./NavBar";
 import Overview from "./Overview.jsx";
 // import PieChartForAdmin from "../charts/PieChart/index.jsx"
 import NavTitle from "../NavTitle.jsx";
-import { Box, useTheme, useMediaQuery, Typography } from '@mui/material';
+import { Box, useTheme, useMediaQuery } from '@mui/material';
 
 const AdminHome = () => {
   const theme = useTheme();

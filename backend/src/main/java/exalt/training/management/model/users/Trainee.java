@@ -1,10 +1,7 @@
 package exalt.training.management.model.users;
 
 import com.fasterxml.jackson.annotation.*;
-import exalt.training.management.model.AcademicGrades;
-import exalt.training.management.model.BranchLocation;
-import exalt.training.management.model.TraineeSkill;
-import exalt.training.management.model.TraineeTask;
+import exalt.training.management.model.*;
 import exalt.training.management.model.forms.Form;
 import exalt.training.management.model.forms.FormSubmission;
 import exalt.training.management.model.users.AppUser;
@@ -23,7 +20,7 @@ import java.util.Set;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(exclude = {"academicGrades","supervisors"  ,"user"})
+@EqualsAndHashCode(exclude = {"academicGrades","supervisors"  ,"user","traineeSkills","tasks"})
 public class Trainee {
 
 
@@ -71,10 +68,17 @@ public class Trainee {
     private Set<TraineeSkill> traineeSkills;
 
     @OneToMany(mappedBy = "trainee", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
     private List<TraineeTask> tasks;
+
+    @OneToMany(mappedBy = "trainee", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
+    private List<TrainingPlan> trainingPlans; // List of training plans associated with the trainee
+
 
     @OneToOne
     @ToString.Exclude
+    @JsonBackReference
     private AppUser user;
 
     @Override

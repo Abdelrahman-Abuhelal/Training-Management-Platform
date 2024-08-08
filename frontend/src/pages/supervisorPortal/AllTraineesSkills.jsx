@@ -20,10 +20,10 @@ import { useMediaQuery, useTheme } from '@mui/material';
 import PersonIcon from '@mui/icons-material/Person';
 // Define proficiency levels and their background colors
 const proficiencyLevels = {
-  GOOD: "#d4edda", // light green
-  VERY_GOOD: "#a9dfbf", // slightly darker green
-  EXCELLENT: "#81c784", // medium green
-  EXPERT: "#4caf50" // darker green
+  GOOD: "#cce7ff", // light blue
+  VERY_GOOD: "#99d0ff", // slightly darker blue
+  EXCELLENT: "#66b8ff", // medium blue
+  EXPERT: "#339fff" // darker blue
 };
 
 const AllTraineesSkills = () => {

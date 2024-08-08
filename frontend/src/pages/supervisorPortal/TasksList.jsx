@@ -18,7 +18,8 @@ import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { useAuth } from "../../provider/authProvider";
 import AddIcon from '@mui/icons-material/Add';
-
+import IconButton from '@mui/material/IconButton';
+import DeleteIcon from '@mui/icons-material/Delete';
 const TasksList = () => {
   const baseUrl = import.meta.env.VITE_PORT_URL;
   const { user } = useAuth();
@@ -29,9 +30,10 @@ const TasksList = () => {
   const [assignedTasks, setAssignedTasks] = useState([]);
   const [open, setOpen] = useState(false);
   const [selectedTask, setSelectedTask] = useState(null);
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
 
   const handleDetailsClick = (taskId) => {
-      navigate(`/tasks/${taskId}`); 
+    navigate(`/tasks/${taskId}`);
   };
 
   const fetchAssignedTasks = async () => {
@@ -62,7 +64,29 @@ const TasksList = () => {
     setOpen(false);
     setSelectedTask(null);
   };
+  const handleDeleteClick = (task) => {
+    setSelectedTask(task);
+    setDeleteDialogOpen(true);
+  };
 
+  const handleDeleteDialogClose = () => {
+    setDeleteDialogOpen(false);
+    setSelectedTask(null);
+  };
+
+  const handleConfirmDelete = async () => {
+    try {
+      await axios.delete(`${baseUrl}/api/v1/tasks/${selectedTask.id}`, {
+        headers: {
+          Authorization: `Bearer ${login_token}`,
+        },
+      });
+      setAssignedTasks((prevTasks) => prevTasks.filter(task => task.id !== selectedTask.id));
+      handleDeleteDialogClose();
+    } catch (error) {
+      console.log(error);
+    }
+  };
   const renderResources = (resources) => {
     const urlRegex = /(https?:\/\/[^\s]+)/g;
     return resources.split('\n').map((resource, index) => {
@@ -94,24 +118,36 @@ const TasksList = () => {
         </Button>
       ),
     },
-    { field: 'deadline', headerName: 'Deadline', width: 180,
+    {
+      field: 'deadline', headerName: 'Deadline', width: 180,
       valueFormatter: (params) => {
         return params.value; // Directly return the raw date string
-      }},
+      }
+    },
     { field: 'priority', headerName: 'Priority', width: 130 },
     {
-        field: 'Trainees Task',
-        headerName: 'Trainees Task',
-        width: 150,
-        renderCell: (params) => (
-            <Button
-                variant="outlined"
-                color="primary"
-                onClick={() => handleDetailsClick(params.row.id)}
-            >
-                View Progress
-            </Button>
-        ),
+      field: 'Trainees Task',
+      headerName: 'Trainees Task',
+      width: 150,
+      renderCell: (params) => (
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={() => handleDetailsClick(params.row.id)}
+        >
+          View Progress
+        </Button>
+      ),
+    },
+    {
+      field: 'delete',
+      headerName: 'Delete',
+      width: 150,
+      renderCell: (params) => (
+        <IconButton color="error" onClick={() => handleDeleteClick(params.row)}>
+            <DeleteIcon />
+        </IconButton>
+    ),
     }
   ];
 
@@ -124,50 +160,67 @@ const TasksList = () => {
     priority: task.priority,
   }));
 
-  const assignTaskPage= ()=>{
+  const assignTaskPage = () => {
     navigate("/assign-task");
   }
   return (
     <div style={{ display: "flex", justifyContent: "center" }}>
       <Paper elevation={3} sx={{ p: 3, m: 6, width: "80%", maxWidth: 1200, backgroundColor: theme.palette.background.paper }}>
-      <Typography variant="h4" component="h2" align="center" gutterBottom>
-        Assigned Tasks
-      </Typography>
-      <Box sx={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '1rem' }}>
+        <Typography className="concert-one-regular" sx={{ color: theme.palette.primary.dark }} align="center" gutterBottom>
+          Assigned Tasks
+        </Typography>
+        <Box sx={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '1rem' }}>
           <Button variant="contained" sx={{ border: '1x solid #ccc' }} onClick={assignTaskPage} startIcon={<AddIcon />}>
-             New Task
+            New Task
           </Button>
         </Box>
-      <div style={{ height: 400, width: '100%' }}>
-        <DataGrid
-          rows={rows}
-          columns={columns}
-          pageSize={5}
-          rowsPerPageOptions={[5, 10, 20]}
-          autoHeight
-        />
-      </div>
+        <div style={{ height: 400, width: '100%' }}>
+          <DataGrid
+            rows={rows}
+            columns={columns}
+            pageSize={5}
+            rowsPerPageOptions={[5, 10, 20]}
+            autoHeight
+          />
+        </div>
 
-      <Dialog open={open} onClose={handleClose}>
-        <DialogTitle>Task Details</DialogTitle>
+        <Dialog open={open} onClose={handleClose}>
+          <DialogTitle>Task Details</DialogTitle>
+          <DialogContent>
+            <DialogContentText>
+              <strong>Description:</strong> {selectedTask?.description}
+            </DialogContentText>
+            <DialogContentText>
+              <strong>Resources:</strong>
+              <ul>
+                {selectedTask && renderResources(selectedTask.resources)}
+              </ul>
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleClose} color="primary">
+              Close
+            </Button>
+          </DialogActions>
+        </Dialog>
+
+        <Dialog open={deleteDialogOpen} onClose={handleDeleteDialogClose}>
+        <DialogTitle>Confirm Delete</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            <strong>Description:</strong> {selectedTask?.description}
-          </DialogContentText>
-          <DialogContentText>
-            <strong>Resources:</strong>
-            <ul>
-              {selectedTask && renderResources(selectedTask.resources)}
-            </ul>
+            Are you sure you want to delete this task?
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose} color="primary">
-            Close
+          <Button onClick={handleDeleteDialogClose} color="primary">
+            Cancel
+          </Button>
+          <Button onClick={handleConfirmDelete} color="primary">
+            Confirm
           </Button>
         </DialogActions>
       </Dialog>
-    </Paper>
+      </Paper>
     </div>
   );
 };

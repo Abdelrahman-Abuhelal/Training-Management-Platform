@@ -9,6 +9,7 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -45,9 +46,16 @@ public class TraineeTaskController {
 //        return traineeTaskService.saveTraineeTask(traineeTask);
 //    }
 
-    @DeleteMapping("/{id}")
-    public void deleteTraineeTask(@PathVariable Long id) {
-        traineeTaskService.deleteTraineeTask(id);
+    @DeleteMapping("/{traineeTaskId}")
+    @PreAuthorize("hasAnyRole('SUPER_ADMIN','SUPERVISOR')")
+    @Operation(summary = "Delete a trainee task " , security =  @SecurityRequirement(name = "loginAuth"))
+    public ResponseEntity<?> deleteTraineeTask(@PathVariable Long traineeTaskId) {
+        try {
+            traineeTaskService.deleteTraineeTask(traineeTaskId);
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
     }
 
 

@@ -1,6 +1,7 @@
 package exalt.training.management.model;
 
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import exalt.training.management.model.users.Trainee;
 import jakarta.persistence.*;
 import lombok.*;
@@ -27,6 +28,7 @@ public class TraineeTask {
 
     @ManyToOne
     @JoinColumn(name = "trainee_id", nullable = false)
+    @JsonBackReference
     private Trainee trainee;
 
     @Column(nullable = false)

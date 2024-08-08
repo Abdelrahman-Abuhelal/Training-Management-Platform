@@ -2,12 +2,14 @@ import React, { useState } from "react";
 import axios from "axios";
 import Header from "../../components/Header.jsx";
 import { NavLink } from "react-router-dom";
-import { Container, Box, Typography, TextField, Button, Link, Alert } from "@mui/material";
+import { Container, Paper, Box, Typography, TextField, Button, Link, Alert } from "@mui/material";
+import { useTheme } from "@mui/material/styles";
 
 const ForgotPasswordEmail = () => {
   const [email, setEmail] = useState("");
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
+  const theme = useTheme();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -37,67 +39,69 @@ const ForgotPasswordEmail = () => {
     }
   };
   return (
-    <Container maxWidth="xs" >
-      <Box display="flex" flexDirection="column" justifyContent="center" alignItems="center" minHeight="100vh">
-        <Box textAlign="center" mb={1}>
-          <Box display="flex" justifyContent="center" mb={2}>
-            <img
-              src="/EXALT_LOGO2.png"
-              alt="Exalt Logo"
-              style={{ height: "50px", marginBottom: "20px" }}
-            />
-          </Box>
-          <Box display="flex" justifyContent="center" mb={2}>
+    <Paper sx={{ backgroundColor: theme.palette.background.paper }}>
+      <Container component="main" maxWidth="xs">
+        <Box display="flex" flexDirection="column" justifyContent="center" alignItems="center" minHeight="100vh">
+          <Box textAlign="center" mb={1}>
+            <Box display="flex" justifyContent="center" mb={2}>
+              <img
+                src="/EXALT_LOGO2.png"
+                alt="Exalt Logo"
+                style={{ height: "50px", marginBottom: "20px" }}
+              />
+            </Box>
+            <Box display="flex" justifyContent="center" mb={2}>
 
-            <img
-              src="/TMS_LOGO.jpg"
-              alt="TMS Logo"
-              style={{ height: "180px", borderRadius: "10px" }}
+              <img
+                src="/TMS_LOGO.jpg"
+                alt="TMS Logo"
+                style={{ height: "180px", borderRadius: "10px" }}
+              />
+            </Box>
+            <Typography variant="h4" component="h1" mt={2}>
+              Forgot your password?
+            </Typography>
+            <Typography variant="body2" color="textSecondary" mt={1}>
+              Enter your email address to receive a password reset link.
+            </Typography>
+          </Box>
+          <Box component="form" onSubmit={handleSubmit} width="100%">
+            <TextField
+              fullWidth
+              margin="normal"
+              id="email"
+              label="Email address"
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
             />
+            <Box textAlign="right" my={1}>
+              <Link component={NavLink} to="../">
+                Go to Login?
+              </Link>
+            </Box>
+            <Button
+              fullWidth
+              variant="contained"
+              color="primary"
+              type="submit"
+            >
+              Send Reset Link
+            </Button>
+            {error && (
+              <Alert severity="warning" style={{ marginTop: "20px" }}>
+                {error}
+              </Alert>
+            )}
+            {success && (
+              <Alert severity="success" style={{ marginTop: "20px" }}>
+                Check your email for instructions on resetting your password.
+              </Alert>
+            )}
           </Box>
-          <Typography variant="h4" component="h1" mt={2}>
-            Forgot your password?
-          </Typography>
-          <Typography variant="body2" color="textSecondary" mt={1}>
-            Enter your email address to receive a password reset link.
-          </Typography>
         </Box>
-        <Box component="form" onSubmit={handleSubmit} width="100%">
-          <TextField
-            fullWidth
-            margin="normal"
-            id="email"
-            label="Email address"
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
-          <Box textAlign="right" my={1}>
-            <Link component={NavLink} to="../">
-              Go to Login?
-            </Link>
-          </Box>
-          <Button
-            fullWidth
-            variant="contained"
-            color="primary"
-            type="submit"
-          >
-            Send Reset Link
-          </Button>
-          {error && (
-            <Alert severity="warning" style={{ marginTop: "20px" }}>
-              {error}
-            </Alert>
-          )}
-          {success && (
-            <Alert severity="success" style={{ marginTop: "20px" }}>
-              Check your email for instructions on resetting your password.
-            </Alert>
-          )}
-        </Box>
-      </Box>
-    </Container>
+      </Container>
+    </Paper>
   );
 };
 

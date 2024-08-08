@@ -16,7 +16,7 @@ import { useTheme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
-import NavTitle from "../../components/NavTitle";
+import { DataGrid } from '@mui/x-data-grid';
 
 const UserManagement = () => {
   const { user } = useAuth();
@@ -211,6 +211,49 @@ const UserManagement = () => {
     setSnackbarOpen(false);
   };
 
+
+  const columns = [
+    { field: 'userEmail', headerName: 'Email', width: 200 },
+    { field: 'userFirstName', headerName: 'First Name', width: 150 },
+    { field: 'userLastName', headerName: 'Last Name', width: 150 },
+    { field: 'userUsername', headerName: 'Username', width: 150 },
+    { field: 'userRole', headerName: 'Role', width: 150 },
+    { field: 'userBranch', headerName: 'Branch', width: 130 },
+    {
+      field: 'userActivated',
+      headerName: 'Activated',
+      width: 80,
+      headerAlign: 'center',
+      align: 'center',
+       renderCell: (params) => <Checkbox checked={params.value} disabled />
+    },
+    {
+      field: 'userVerified',
+      headerName: 'Verified',
+      width: 80,
+      headerAlign: 'center',
+      align: 'center',
+       renderCell: (params) => <Checkbox checked={params.value} disabled />
+    },
+    {
+      field: 'actions',
+      headerName: 'Actions',
+      width: 150,
+      sortable: false,
+      headerAlign: 'center',
+      align: 'center',
+      renderCell: (params) => (
+        <>
+          <IconButton color="primary" onClick={() => handleEdit(params.row)}>
+            <EditIcon />
+          </IconButton>
+          <IconButton color="secondary" onClick={() => handleDelete(params.row.userId)}>
+            <DeleteIcon />
+          </IconButton>
+        </>
+      )
+    }
+  ];
   return (
     <div style={{ display: "flex", justifyContent: "center" }}>
       <Paper elevation={3} sx={{ p: 3, m: 3, width: "90%", borderRadius: '1rem', maxWidth: 1800, backgroundColor: theme.palette.background.paper }}>
@@ -288,114 +331,16 @@ const UserManagement = () => {
             </Grid>
           </Grid>
         </Toolbar>
-        <Paper elevation={3} sx={{ border: "1px solid #ccc", p: "1rem"  ,backgroundColor:'#fff'}}>
-          <TableContainer>
-            <Table>
-              <TableHead>
-                <TableRow>
-                  <TableCell>
-                    <TableSortLabel
-                      active={orderBy === 'userEmail'}
-                      direction={orderBy === 'userEmail' ? order : 'asc'}
-                      onClick={() => handleSort('userEmail')}
-                    >
-                      Email
-                    </TableSortLabel>
-                  </TableCell>
-                  <TableCell>
-                    <TableSortLabel
-                      active={orderBy === 'userFirstName'}
-                      direction={orderBy === 'userFirstName' ? order : 'asc'}
-                      onClick={() => handleSort('userFirstName')}
-                    >
-                      First Name
-                    </TableSortLabel>
-                  </TableCell>
-                  <TableCell>
-                    <TableSortLabel
-                      active={orderBy === 'userLastName'}
-                      direction={orderBy === 'userLastName' ? order : 'asc'}
-                      onClick={() => handleSort('userLastName')}
-                    >
-                      Last Name
-                    </TableSortLabel>
-                  </TableCell>
-                  <TableCell>
-                    <TableSortLabel
-                      active={orderBy === 'userUsername'}
-                      direction={orderBy === 'userUsername' ? order : 'asc'}
-                      onClick={() => handleSort('userUsername')}
-                    >
-                      Username
-                    </TableSortLabel>
-                  </TableCell>
-                  <TableCell>
-                    <TableSortLabel
-                      active={orderBy === 'userRole'}
-                      direction={orderBy === 'userRole' ? order : 'asc'}
-                      onClick={() => handleSort('userRole')}
-                    >
-                      Role
-                    </TableSortLabel>
-                  </TableCell>
-                  <TableCell>
-                    <TableSortLabel
-                      active={orderBy === 'userBranch'}
-                      direction={orderBy === 'userBranch' ? order : 'asc'}
-                      onClick={() => handleSort('userBranch')}
-                    >
-                      Branch
-                    </TableSortLabel>
-                  </TableCell>
-                  <TableCell>
-                    <TableSortLabel
-                      active={orderBy === 'userActivated'}
-                      direction={orderBy === 'userActivated' ? order : 'asc'}
-                      onClick={() => handleSort('userActivated')}
-                    >
-                      Activated
-                    </TableSortLabel>
-                  </TableCell>
-                  <TableCell>
-                    <TableSortLabel
-                      active={orderBy === 'userVerified'}
-                      direction={orderBy === 'userVerified' ? order : 'asc'}
-                      onClick={() => handleSort('userVerified')}
-                    >
-                      Verified
-                    </TableSortLabel>
-                  </TableCell>
-                  <TableCell>Actions</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {filteredUsers.map((user) => (
-                  <TableRow key={user.userId}>
-                    <TableCell>{user.userEmail}</TableCell>
-                    <TableCell>{user.userFirstName}</TableCell>
-                    <TableCell>{user.userLastName}</TableCell>
-                    <TableCell>{user.userUsername}</TableCell>
-                    <TableCell>{user.userRole}</TableCell>
-                    <TableCell>{user.userBranch}</TableCell>
-                    <TableCell>
-                      <Checkbox checked={user.userActivated} disabled />
-                    </TableCell>
-                    <TableCell>
-                      <Checkbox checked={user.userVerified} disabled />
-                    </TableCell>
-                    <TableCell>
-                      <IconButton color="primary" onClick={() => handleEdit(user)}>
-                        <EditIcon />
-                      </IconButton>
-                      <IconButton color="secondary" onClick={() => handleDelete(user.userId)}>
-                        <DeleteIcon />
-                      </IconButton>
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </TableContainer>
+        <Paper elevation={3} sx={{ border: "1px solid #ccc", p: "1rem", backgroundColor: '#fff' }}>
+          <DataGrid
+            rows={filteredUsers}
+            columns={columns}
+            pageSize={5}
+            rowsPerPageOptions={[5]}
+            autoHeight
+            disableSelectionOnClick
+            getRowId={(row) => row.userId}
+          />
         </Paper>
       </Paper>
 
@@ -411,7 +356,7 @@ const UserManagement = () => {
             value={currentUser ? currentUser.userEmail : newUser.userEmail}
             onChange={handleChange}
             disabled={!!currentUser}
-            sx={{backgroundColor: '#fff'}} />
+            sx={{ backgroundColor: '#fff' }} />
           <TextField
             margin="dense"
             name="userFirstName"
@@ -420,7 +365,7 @@ const UserManagement = () => {
             fullWidth
             value={currentUser ? currentUser.userFirstName : newUser.userFirstName}
             onChange={handleChange}
-            sx={{backgroundColor: '#fff'}}/>
+            sx={{ backgroundColor: '#fff' }} />
           <TextField
             margin="dense"
             name="userLastName"
@@ -429,7 +374,7 @@ const UserManagement = () => {
             fullWidth
             value={currentUser ? currentUser.userLastName : newUser.userLastName}
             onChange={handleChange}
-          sx={{backgroundColor: '#fff'}}/>
+            sx={{ backgroundColor: '#fff' }} />
           <TextField
             margin="dense"
             name="userUsername"
@@ -438,7 +383,7 @@ const UserManagement = () => {
             fullWidth
             value={currentUser ? currentUser.userUsername : newUser.userUsername}
             onChange={handleChange}
-            sx={{backgroundColor: '#fff'}} />
+            sx={{ backgroundColor: '#fff' }} />
           <FormControl fullWidth margin="dense">
             <Select
               name="userRole"
@@ -446,7 +391,7 @@ const UserManagement = () => {
               onChange={handleChange}
               displayEmpty
               disabled={!!currentUser}
-              sx={{backgroundColor: '#fff'}} >
+              sx={{ backgroundColor: '#fff' }} >
               <MenuItem value="" disabled>
                 Select Role
               </MenuItem>
@@ -461,13 +406,13 @@ const UserManagement = () => {
               value={currentUser ? currentUser.userBranch : newUser.userBranch}
               onChange={handleChange}
               displayEmpty
-              sx={{backgroundColor: '#fff'}}>
-              <MenuItem sx={{backgroundColor: '#fff'}}  value="" disabled>
+              sx={{ backgroundColor: '#fff' }}>
+              <MenuItem sx={{ backgroundColor: '#fff' }} value="" disabled>
                 Select Branch
               </MenuItem>
-              <MenuItem sx={{backgroundColor: '#fff'}} value="RAMALLAH">Ramallah</MenuItem>
-              <MenuItem sx={{backgroundColor: '#fff'}} value="NABLUS">Nablus</MenuItem>
-              <MenuItem sx={{backgroundColor: '#fff'}} value="BETHLEHEM">Bethlehem</MenuItem>
+              <MenuItem sx={{ backgroundColor: '#fff' }} value="RAMALLAH">Ramallah</MenuItem>
+              <MenuItem sx={{ backgroundColor: '#fff' }} value="NABLUS">Nablus</MenuItem>
+              <MenuItem sx={{ backgroundColor: '#fff' }} value="BETHLEHEM">Bethlehem</MenuItem>
             </Select>
           </FormControl>
           {currentUser && currentUser.userVerified === true && (
@@ -477,7 +422,7 @@ const UserManagement = () => {
                   name="userActivated"
                   checked={currentUser ? currentUser.userActivated : null}
                   onChange={handleChange}
-               />
+                />
               }
               label="Activated"
             />)}

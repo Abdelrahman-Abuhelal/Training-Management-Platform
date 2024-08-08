@@ -403,7 +403,7 @@ const FormTemplates = () => {
             color: theme.palette.primary.dark
           }}
         >
-          <FactCheckIcon fontSize="large" sx={{ mr: '0.3rem' }} /> EXALT Form Templates
+          <FactCheckIcon  sx={{ mr: '0.3rem',fontSize:'2.3rem' }} /> EXALT Form Templates
         </Typography>
         <Box sx={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '1rem' }}>
           <Button variant="contained" sx={{ border: '1x solid #ccc' }} onClick={formBuilderPage} startIcon={<AddIcon />}>

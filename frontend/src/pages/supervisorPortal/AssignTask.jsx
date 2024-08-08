@@ -3,7 +3,6 @@ import axios from "axios";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { useNavigate } from 'react-router-dom';
-
 import {
   TextField,
   FormControl,

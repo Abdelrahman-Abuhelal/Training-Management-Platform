@@ -21,10 +21,9 @@ return (
     <Grid container spacing={5} >
       <Grid item xs={12} sm={4} md={4}>
         <Paper elevation={3} style={paperStyle}>
-          <Typography className="concert-one-regular" variant='inherit' sx={{ color: theme.palette.primary.dark }} >Active Trainees</Typography>
-          <Typography variant="h4" sx={{ color: theme.palette.primary.dark }}>{15}</Typography>
+          <Typography className="concert-one-regular" variant='inherit' sx={{ color: theme.palette.primary.dark }} >Profile</Typography>
           <Box mt={2}>
-            <Button variant="contained" color="primary" onClick={() => navigate('/trainees')}>
+            <Button variant="contained" color="primary" onClick={() => navigate('/profile')}>
               View
             </Button>
           </Box>
@@ -32,10 +31,9 @@ return (
       </Grid>
       <Grid item xs={12} sm={4} md={4}>
         <Paper elevation={3} style={paperStyle}>
-          <Typography className="concert-one-regular" variant='inherit' sx={{ color: theme.palette.primary.dark }} >Active Supervisors</Typography>
-          <Typography variant="h4" sx={{ color: theme.palette.primary.dark }}>{32}</Typography>
+          <Typography className="concert-one-regular" variant='inherit' sx={{ color: theme.palette.primary.dark }} >My Grades</Typography>
           <Box mt={2}>
-            <Button variant="contained" color="primary" onClick={() => navigate('/supervisors')}>
+            <Button variant="contained" color="primary" onClick={() => navigate('/grades')}>
               View
             </Button>
           </Box>
@@ -43,16 +41,46 @@ return (
       </Grid>
       <Grid item xs={12} sm={4} md={4}>
         <Paper elevation={3} style={paperStyle}>
-          <Typography className="concert-one-regular" variant='inherit' sx={{ color: theme.palette.primary.dark }} >Active Admin Managers</Typography>
+          <Typography className="concert-one-regular" variant='inherit' sx={{ color: theme.palette.primary.dark }} >My Tasks</Typography>
+          <Box mt={2}>
+            <Button variant="contained" color="primary" onClick={() => navigate('/tasks')}>
+              View
+            </Button>
+          </Box>
+        </Paper>
+      </Grid>
+      <Grid item xs={12} sm={4} md={4}>
+        <Paper elevation={3} style={paperStyle}>
+          <Typography className="concert-one-regular" variant='inherit' sx={{ color: theme.palette.primary.dark }} >Forms Recieved</Typography>
           <Typography variant="h4" sx={{ color: theme.palette.primary.dark }}>{2}</Typography>
           <Box mt={2}>
-            <Button variant="contained" color="primary" onClick={() => navigate('/superadmins')}>
+            <Button variant="contained" color="primary" onClick={() => navigate('/forms')}>
               View
             </Button>
           </Box>
         </Paper>
       </Grid>
-
+      <Grid item xs={12} sm={4} md={4}>
+        <Paper elevation={3} style={paperStyle}>
+          <Typography className="concert-one-regular" variant='inherit' sx={{ color: theme.palette.primary.dark }} >Announcements</Typography>
+          <Typography variant="h4" sx={{ color: theme.palette.primary.dark }}>{2}</Typography>
+          <Box mt={2}>
+            <Button variant="contained" color="primary" onClick={() => navigate('/announcements')}>
+              View
+            </Button>
+          </Box>
+        </Paper>
+      </Grid>
+      <Grid item xs={12} sm={4} md={4}>
+        <Paper elevation={3} style={paperStyle}>
+          <Typography className="concert-one-regular" variant='inherit' sx={{ color: theme.palette.primary.dark }} >Settings</Typography>
+          <Box mt={2}>
+            <Button variant="contained" color="primary" onClick={() => navigate('/settings')}>
+              View
+            </Button>
+          </Box>
+        </Paper>
+      </Grid>
     </Grid>
   );
 }

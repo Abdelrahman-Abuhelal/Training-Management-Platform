@@ -5,6 +5,8 @@ import exalt.training.management.service.AcademicGradesService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -18,6 +20,7 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class AcademicGradesController {
 
+    private static final Logger log = LoggerFactory.getLogger(AcademicGradesController.class);
     private final AcademicGradesService academicGradesService;
 
     // Should add authorization to this endpoint for only SUPER_ADMIN
@@ -49,10 +52,8 @@ public class AcademicGradesController {
     @PreAuthorize("hasAnyRole('SUPER_ADMIN','SUPERVISOR')")
     @PutMapping("/trainees/{userId}")
     public ResponseEntity<String> saveAcademicGradesToTrainee(@RequestBody Map<String, Double> grades, @PathVariable Long userId) {
-        try {
+
             return ResponseEntity.ok(academicGradesService.saveAcademicGradesToTrainee(grades, userId));
-        } catch (Exception e) {
-            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+
     }
 }

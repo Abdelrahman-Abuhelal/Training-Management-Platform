@@ -70,7 +70,7 @@ public class AppUser implements UserDetails {
     private Branch branch;
 
     @Nullable
-    @JsonIgnore
+    @JsonManagedReference
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     private Trainee trainee;
 

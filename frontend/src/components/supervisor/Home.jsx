@@ -1,4 +1,4 @@
-import { Box, useTheme, useMediaQuery, Typography } from '@mui/material';
+import { Box, useTheme, useMediaQuery} from '@mui/material';
 import NavTitle from "../NavTitle.jsx";
 import Overview from "./Overview.jsx";
 

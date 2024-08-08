@@ -41,6 +41,12 @@ public class TaskController {
         return taskService.getTaskById(id);
     }
 
+    @DeleteMapping("/{id}")
+    @PreAuthorize("hasAnyRole('SUPER_ADMIN','SUPERVISOR')")
+    @Operation(summary = "Delete Task using task id " , security =  @SecurityRequirement(name = "loginAuth"))
+    public void deleteTask(@PathVariable Long id) {
+     taskService.deleteTask(id);
+    }
 
 //    @GetMapping
 //    public List<Task> getAllTasks() {

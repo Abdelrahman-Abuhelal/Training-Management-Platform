@@ -135,8 +135,8 @@ public class AdminController {
     @Operation(summary = "Get Trainee By User Id", security =  @SecurityRequirement(name = "loginAuth"))
     @PreAuthorize("hasAnyRole('SUPER_ADMIN','SUPERVISOR')")
     @GetMapping("/trainee-info/{userId}")
-    public ResponseEntity<Trainee> getTraineeProfileInfoByUserId(@PathVariable Long userId){
-        Trainee trainee = adminService.getTraineeByUserId(userId);
+    public ResponseEntity<TraineeDataDto> getTraineeProfileInfoByUserId(@PathVariable Long userId){
+        TraineeDataDto trainee = adminService.getTraineeInfoByUserId(userId);
         return new ResponseEntity<>(trainee, HttpStatus.OK);
     }
 

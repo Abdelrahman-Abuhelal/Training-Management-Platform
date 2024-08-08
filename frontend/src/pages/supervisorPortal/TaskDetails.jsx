@@ -1,11 +1,24 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useParams, useNavigate } from "react-router-dom";
-import { Paper, Typography, Divider, Button, useTheme, Select, MenuItem, useMediaQuery } from "@mui/material";
-import { DataGrid } from '@mui/x-data-grid';
+import {
+    Paper,
+    Typography,
+    Select,
+    MenuItem,
+    Divider,
+    Button,
+    Dialog,
+    DialogActions,
+    DialogContent,
+    DialogContentText,
+    DialogTitle, FormControl, InputLabel
+} from "@mui/material"; import { DataGrid } from '@mui/x-data-grid';
 import { useAuth } from "../../provider/authProvider";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-
+import { useTheme } from "@mui/material/styles";
+import IconButton from '@mui/material/IconButton';
+import DeleteIcon from '@mui/icons-material/Delete';
 const TaskDetails = () => {
     const baseUrl = import.meta.env.VITE_PORT_URL;
     const { user } = useAuth();
@@ -15,7 +28,8 @@ const TaskDetails = () => {
     const [traineeTasks, setTraineeTasks] = useState([]);
     const theme = useTheme();
     const navigate = useNavigate();
-
+    const [open, setOpen] = useState(false);
+    const [selectedTraineeTask, setSelectedTraineeTask] = useState(null);
 
     const handleViewProfile = (userId) => {
         navigate(`/view-trainee/${userId}`);
@@ -43,7 +57,7 @@ const TaskDetails = () => {
 
     useEffect(() => {
         fetchTaskDetails();
-    }, [taskId, baseUrl]);
+    }, [taskId, baseUrl, login_token]);
 
     const handleApprovedChange = async (traineeTaskId, newValue) => {
         try {
@@ -66,6 +80,34 @@ const TaskDetails = () => {
         }
     };
 
+
+    const handleDelete = (traineeTask) => {
+        setSelectedTraineeTask(traineeTask);
+        setOpen(true);
+    };
+
+    const handleClose = () => {
+        setOpen(false);
+        setSelectedTraineeTask(null);
+    };
+
+    const handleConfirmDelete = async () => {
+        try {
+            console.log(selectedTraineeTask.traineeTaskId);
+            await axios.delete(`${baseUrl}/api/v1/traineeTasks/${selectedTraineeTask.traineeTaskId}`, {
+                headers: {
+                    Authorization: `Bearer ${login_token}`,
+                },
+            });
+            setTraineeTasks((prevTasks) => prevTasks.filter(task => task.id !== selectedTraineeTask.traineeTaskId));
+            handleClose();
+            fetchTaskDetails();
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
+
     const columns = [
         {
             field: 'fullName',
@@ -81,19 +123,21 @@ const TaskDetails = () => {
                 </Button>
             ),
         },
-        { field: 'status', headerName: 'Status', width: 150 },
+        { field: 'status', headerName: 'Status', width: 120 },
         {
             field: 'dateAssigned',
             headerName: 'Date Assigned',
-            width: 200,
-            valueFormatter: (params) => new Date(params.value).toLocaleString(),
+            width: 150,
+            valueFormatter: (params) => {
+                return params.value; // Directly return the raw date string
+            }
         },
         {
             field: 'comments',
             headerName: 'Comments',
-            width: 150,
+            width: 200,
             renderCell: (params) => (
-                <Button variant="outlined" color="primary" onClick={() => handleCommentsClick(params.row)}>
+                <Button variant="contained" color="primary" onClick={() => handleCommentsClick(params.row)}>
                     View Comments
                 </Button>
             ),
@@ -101,17 +145,31 @@ const TaskDetails = () => {
         {
             field: 'approved',
             headerName: 'Approved',
-            width: 150,
+            width: 200,
             renderCell: (params) => (
-                <Select
-                    value={params.value ? 'Completed' : 'Uncompleted'}
-                    onChange={(event) => handleApprovedChange(params.row.traineeTaskId, event.target.value)}
-                >
-                    <MenuItem value="Completed">Completed</MenuItem>
-                    <MenuItem value="Uncompleted">Uncompleted</MenuItem>
-                </Select>
+                <FormControl variant="outlined" sx={{ minWidth: 140, mt: '0.8rem' }}>
+                    <InputLabel >Approved</InputLabel>
+                    <Select
+                        label="Approved"
+                        value={params.value ? 'Completed' : 'Uncompleted'}
+                        onChange={(event) => handleApprovedChange(params.row.traineeTaskId, event.target.value)}
+                    >
+                        <MenuItem value="Completed">Completed</MenuItem>
+                        <MenuItem value="Uncompleted">Uncompleted</MenuItem>
+                    </Select>
+                </FormControl>
             ),
         },
+        {
+            field: 'actions',
+            headerName: 'Actions',
+            width: 150,
+            renderCell: (params) => (
+                <IconButton color="error" onClick={() => handleDelete(params.row)}>
+                    <DeleteIcon />
+                </IconButton>
+            ),
+        }
     ];
 
     const handleCommentsClick = (traineeTask) => {
@@ -146,11 +204,32 @@ const TaskDetails = () => {
                                 columns={columns}
                                 pageSize={5}
                                 rowsPerPageOptions={[5]}
-                                autoHeight
+                                rowHeight={80}
                                 disableSelectionOnClick
                                 getRowId={(row) => row.traineeTaskId}
                             />
                         </div>
+                        <Dialog
+                            open={open}
+                            onClose={handleClose}
+                            aria-labelledby="alert-dialog-title"
+                            aria-describedby="alert-dialog-description"
+                        >
+                            <DialogTitle id="alert-dialog-title">{"Confirm Deletion"}</DialogTitle>
+                            <DialogContent>
+                                <DialogContentText id="alert-dialog-description">
+                                    Are you sure you want to delete this trainee task?
+                                </DialogContentText>
+                            </DialogContent>
+                            <DialogActions>
+                                <Button onClick={handleClose} color="primary">
+                                    Cancel
+                                </Button>
+                                <Button onClick={handleConfirmDelete} color="primary" autoFocus>
+                                    Confirm
+                                </Button>
+                            </DialogActions>
+                        </Dialog>
                     </>
                 )}
             </Paper>

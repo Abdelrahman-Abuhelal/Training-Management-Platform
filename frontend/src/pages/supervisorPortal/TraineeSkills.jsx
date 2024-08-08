@@ -33,12 +33,11 @@ const skillCategories = [
 
 
 const proficiencyLevels = {
-  GOOD: "#d4edda", // light green
-  VERY_GOOD: "#c3e6cb", // green
-  EXCELLENT: "#f8d7da", // light red
-  EXPERT: "#f5c6cb" // dark red
+  GOOD: "#cce7ff", // light blue
+  VERY_GOOD: "#99d0ff", // slightly darker blue
+  EXCELLENT: "#66b8ff", // medium blue
+  EXPERT: "#339fff" // darker blue
 };
-
 const TraineeSkills = () => {
   const baseUrl = import.meta.env.VITE_PORT_URL;
   const { user } = useAuth();

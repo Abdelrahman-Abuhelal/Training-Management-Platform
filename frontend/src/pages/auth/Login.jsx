@@ -93,11 +93,11 @@ const Login = () => {
             }}
           >
             <Typography variant="h3">Welcome to Our Training Platform</Typography>
-            <img
+            {/* <img
               src="/TMS_LOGO.jpg"
               alt="Exalt Logo"
               style={{ height: "200px", marginBottom: "20px" }}
-            />
+            /> */}
           </Grid>
           <Grid
             item
@@ -137,18 +137,7 @@ const Login = () => {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 sx={{ backgroundColor: "#fff" }}
-                InputProps={{
-                  endAdornment: (
-                    <InputAdornment position="end">
-                      <IconButton
-                        onClick={handleClickShowPassword}
-                        onMouseDown={handleMouseDownPassword}
-                      >
-                        {showPassword ? <Visibility /> : <VisibilityOff />}
-                      </IconButton>
-                    </InputAdornment>
-                  ),
-                }}
+      
               />
               <Box textAlign="right" my={1}>
                 <Link component={NavLink} to="/forgot-password-email">
