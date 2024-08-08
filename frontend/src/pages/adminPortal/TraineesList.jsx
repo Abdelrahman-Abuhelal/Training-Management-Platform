@@ -35,12 +35,12 @@ import {
 } from "@mui/material";
 import SearchComponent from "../../components/Search";
 import DeleteIcon from "@mui/icons-material/Delete";
-import DownloadIcon from "@mui/icons-material/Download";
 import { useNavigate } from "react-router-dom";
 import * as XLSX from "xlsx";
 import PeopleOutlineIcon from '@mui/icons-material/PeopleOutline';
 import { useAuth } from "../../provider/authProvider";
 import { useMediaQuery, useTheme } from '@mui/material';
+import DownloadIcon from "@mui/icons-material/Download";
 
 const TraineesList = () => {
   const baseUrl = import.meta.env.VITE_PORT_URL;
@@ -182,6 +182,11 @@ const TraineesList = () => {
         "Expected Graduation Date": rest.expectedGraduationDate,
         "Training Field": rest.trainingField,
         "Branch Location": rest.branchLocation,
+        "Training Year": rest.trainingYear,
+        "Training Season": rest.trainingSeason,
+        "Start Training Date": rest.startTrainingDate,
+        "End Training Date": rest.endTrainingDate,
+        "Bugzella URL": rest.bugzillaURL,
       };
     });
   };
@@ -292,7 +297,7 @@ const TraineesList = () => {
 
   const fetchTraineesDetails = async () => {
     try {
-      const response = await axios.get(`${baseUrl}/api/v1/admin/trainees`, {
+      const response = await axios.get(`${baseUrl}/api/v1/admin/trainees-info`, {
         headers: {
           Authorization: `Bearer ${login_token}`
         }

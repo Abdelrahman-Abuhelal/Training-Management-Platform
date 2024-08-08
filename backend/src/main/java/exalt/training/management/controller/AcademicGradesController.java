@@ -23,7 +23,6 @@ public class AcademicGradesController {
     private static final Logger log = LoggerFactory.getLogger(AcademicGradesController.class);
     private final AcademicGradesService academicGradesService;
 
-    // Should add authorization to this endpoint for only SUPER_ADMIN
     @Operation(summary = "Get All Academic Grades", security = @SecurityRequirement(name = "loginAuth"))
     @PreAuthorize("hasAnyRole('SUPER_ADMIN','SUPERVISOR')")
     @GetMapping("/all")

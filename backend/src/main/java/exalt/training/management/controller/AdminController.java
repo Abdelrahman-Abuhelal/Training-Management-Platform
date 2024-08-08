@@ -132,7 +132,7 @@ public class AdminController {
         return new ResponseEntity<>(trainee, HttpStatus.OK);
     }
 
-    @Operation(summary = "Get Trainee By User Id", security =  @SecurityRequirement(name = "loginAuth"))
+    @Operation(summary = "Get Trainee Information By User Id", security =  @SecurityRequirement(name = "loginAuth"))
     @PreAuthorize("hasAnyRole('SUPER_ADMIN','SUPERVISOR')")
     @GetMapping("/trainee-info/{userId}")
     public ResponseEntity<TraineeDataDto> getTraineeProfileInfoByUserId(@PathVariable Long userId){
@@ -140,11 +140,11 @@ public class AdminController {
         return new ResponseEntity<>(trainee, HttpStatus.OK);
     }
 
-    @Operation(summary = "Get All Trainees", security =  @SecurityRequirement(name = "loginAuth"))
+    @Operation(summary = "Get All Trainees Information", security =  @SecurityRequirement(name = "loginAuth"))
     @PreAuthorize("hasAnyRole('SUPER_ADMIN','SUPERVISOR')")
-    @GetMapping("/trainees")
-    public ResponseEntity <List<Trainee>> getAllTrainees(){
-        List <Trainee> trainees = adminService.getAllTrainees();
+    @GetMapping("/trainees-info")
+    public ResponseEntity <List<TraineeDataDto>> getAllTraineesInfo(){
+        List <TraineeDataDto> trainees = adminService.getAllTraineesInfo();
         return new ResponseEntity<>(trainees, HttpStatus.OK);
     }
 

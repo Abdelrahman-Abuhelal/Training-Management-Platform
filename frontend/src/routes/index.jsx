@@ -46,6 +46,7 @@ import TasksList from '../pages/supervisorPortal/TasksList.jsx';
 import TaskDetails from '../pages/supervisorPortal/TaskDetails.jsx';
 import AddCourseComponent from '../pages/adminPortal/AddCourseComponent.jsx';
 import TrainingPlan from '../pages/supervisorPortal/TrainingPlan.jsx';
+import TraineesInfoList from '../pages/adminPortal/TraineesInfoList.jsx';
 const Routes = () => {
   const { user } = useAuth();
   const isAuthenticated = user !== null && user.login_token !== null;
@@ -133,7 +134,7 @@ const Routes = () => {
             { path: '/home', element: <AdminHome /> },
             { path: '/users', element: <UserManagement /> },
             { path: '/trainees', element: <HR_Trainees_List /> },
-            { path: '/trainees', element: <HR_Trainees_List /> },
+            { path: '/trainees-info', element: <TraineesInfoList /> },
             { path: '/forms', element: <FormsList /> },
             { path: '/skills', element: <TraineesSkillsList /> },
             { path: '/add-skills', element: <AddSkillComponent /> },

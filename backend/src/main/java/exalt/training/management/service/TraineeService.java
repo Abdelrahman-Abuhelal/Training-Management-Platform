@@ -17,6 +17,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -74,7 +75,14 @@ public class TraineeService {
                 .build();
     }
 
-    public String registerTraineeData(TraineeDataDto traineeDataDTO)  {
+    public List<TraineeDataDto> convertToDtoList(List<Trainee> trainees) {
+        return trainees.stream().map(
+                this::convertToDto
+        ).collect(Collectors.toList());
+    }
+
+
+        public String registerTraineeData(TraineeDataDto traineeDataDTO)  {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         var user = (AppUser) authentication.getPrincipal();
         // Should add exception if the user is not authenticated

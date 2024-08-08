@@ -24,6 +24,7 @@ const routes = [
   { path: "/home", name: "Home", icon: <SpaceDashboardIcon sx={{ color: 'primary.main' }}/> },
   { path: "/users", name: "User Management", icon: <AdminPanelSettingsIcon sx={{ color: 'primary.main' }}/> },
   { path: "/trainees", name: "Trainees", icon: <GroupsIcon sx={{ color: 'primary.main' }}/> },
+  { path: "/trainees-info", name: "Trainees Information", icon: <GroupsIcon sx={{ color: 'primary.main' }}/> },
   { path: "/supervisors", name: "Supervisors", icon: <GroupsIcon sx={{ color: 'primary.main' }}/> },
   { path: "/superadmins", name: "Super Admins", icon: <GroupsIcon sx={{ color: 'primary.main' }}/> },
   { path: "/skills", name: "Skills", icon: <AutoAwesomeIcon sx={{ color: 'primary.main' }}/> },

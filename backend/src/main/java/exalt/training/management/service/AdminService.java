@@ -254,14 +254,14 @@ public class AdminService {
     }
 
 
-    public List<Trainee> getAllTrainees(){
+    public List<TraineeDataDto> getAllTraineesInfo(){
         List<Trainee> trainees=traineeRepository.findAll();
         if (trainees.isEmpty()){
             String message= "there are no trainees";
             log.info(message);
             throw new AppUserNotFoundException(message);
         }
-        return trainees;
+        return traineeService.convertToDtoList(trainees);
     }
 
     public List<Supervisor> getAllSupervisors(){
