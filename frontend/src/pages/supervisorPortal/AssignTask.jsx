@@ -22,6 +22,12 @@ import {
   Paper,
   TablePagination,
   TableSortLabel,
+  Snackbar,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle
 } from "@mui/material";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
@@ -37,7 +43,7 @@ const AssignTask = () => {
   const [taskName, setTaskName] = useState("");
   const [taskDescription, setTaskDescription] = useState("");
   const [deadline, setDeadline] = useState(null);
-  const [priorityStatus, setPriorityStatus] = useState(""); // New state for task status
+  const [priorityStatus, setPriorityStatus] = useState("");
   const [trainees, setTrainees] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [page, setPage] = useState(0);
@@ -49,7 +55,11 @@ const AssignTask = () => {
   const { user } = useAuth();
   const { login_token } = user;
   const genAI = new GoogleGenerativeAI(APIkey);
-  const navigate  = useNavigate();
+  const navigate = useNavigate();
+
+  // Snackbar states
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [dialogOpen, setDialogOpen] = useState(false);
 
   const fetchTrainees = async () => {
     try {
@@ -59,8 +69,7 @@ const AssignTask = () => {
           Authorization: `Bearer ${login_token}`,
           'Content-Type': 'application/json'
         }
-      }
-      );
+      });
       if (response.status === 200) {
         const traineeUsers = response.data;
         console.log(traineeUsers);
@@ -71,26 +80,25 @@ const AssignTask = () => {
     }
   };
 
-
   const assignTask = async (taskData) => {
     try {
       const response = await axios.post(
         `${baseUrl}/api/v1/supervisor/assignTask`,
         taskData,
         {
-        headers: {
-          Authorization: `Bearer ${login_token}`
+          headers: {
+            Authorization: `Bearer ${login_token}`
+          }
         }
-      }
       );
       if (response.status === 200) {
         console.log('Task assigned:', response.data);
-    }
+        setSnackbarOpen(true); // Show snackbar on successful assignment
+      }
     } catch (error) {
       console.log(error);
     }
   };
-
 
   const handleSearchResourcesAPI = async () => {
     const prompt = `Search up to 5 different resources, websites related to the task: ${taskName} - ${taskDescription}`;
@@ -102,10 +110,9 @@ const AssignTask = () => {
       if (candidates && candidates.length > 0) {
         const actualContent = candidates[0].content.parts[0].text;
         console.log("Actual Content:", actualContent);
-        // Now you can use actualContent as needed
         setResources(actualContent);
       } else {
-        console.error('Error fetching resources:', response.statusText);
+        console.error('Error fetching resources:', result.statusText);
       }
     } catch (error) {
       console.error('Error during API request:', error);
@@ -145,7 +152,7 @@ const AssignTask = () => {
 
   const handleSearchChange = (event) => {
     setSearchTerm(event.target.value);
-    setPage(0); // Reset page when search term changes
+    setPage(0);
   };
 
   const handleChangePage = (event, newPage) => {
@@ -154,7 +161,7 @@ const AssignTask = () => {
 
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(parseInt(event.target.value, 10));
-    setPage(0); // Reset page when rows per page changes
+    setPage(0);
   };
 
   const handleTraineeSelect = (event, traineeId) => {
@@ -186,7 +193,20 @@ const AssignTask = () => {
       priorityStatus,
       selectedTrainees,
     };
-  console.log("Assigning task:", taskData);
+    console.log("Assigning task:", taskData);
+
+    setDialogOpen(true); // Open confirmation dialog
+  };
+
+  const confirmAssignTask = () => {
+    const taskData = {
+      taskName,
+      taskDescription,
+      deadline,
+      resources,
+      priorityStatus,
+      selectedTrainees,
+    };
 
     assignTask(taskData);
     // Clear form after assignment
@@ -196,6 +216,11 @@ const AssignTask = () => {
     setResources("");
     setPriorityStatus("");
     setSelectedTrainees([]);
+    setDialogOpen(false); // Close dialog after confirmation
+  };
+
+  const handleCloseSnackbar = () => {
+    setSnackbarOpen(false);
   };
 
   const handleViewProfile = (user) => {
@@ -209,17 +234,17 @@ const AssignTask = () => {
         ? a.userUsername.localeCompare(b.userUsername)
         : b.userUsername.localeCompare(a.userUsername);
     }
-    // Add additional sorting logic for other properties if needed
     return 0;
   });
 
-const backPage = () =>{
-  navigate('/tasks');
-}
+  const backPage = () => {
+    navigate('/tasks');
+  }
+
   return (
     <div style={{ display: "flex", justifyContent: "center" }}>
       <Paper elevation={3} sx={{ p: 3, m: 6, width: "80%", maxWidth: 1200, backgroundColor: theme.palette.background.paper }}>
-      <Box sx={{ display: 'flex', justifyContent: 'flex-start', marginBottom: '1rem' }}>
+        <Box sx={{ display: 'flex', justifyContent: 'flex-start', marginBottom: '1rem' }}>
           <Button variant="contained" sx={{ border: '1x solid #ccc' }} onClick={backPage} startIcon={<ArrowBackIcon />}>
             Back
           </Button>
@@ -364,6 +389,32 @@ const backPage = () =>{
           Assign Task
         </Button>
       </Paper>
+
+      {/* Confirmation Dialog */}
+      <Dialog open={dialogOpen} onClose={() => setDialogOpen(false)}>
+        <DialogTitle>Confirm Assignment</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            Are you sure you want to assign this task to the selected trainees?
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setDialogOpen(false)} color="primary">
+            Cancel
+          </Button>
+          <Button onClick={confirmAssignTask} color="primary">
+            Confirm
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+      {/* Snackbar for confirmation */}
+      <Snackbar
+        open={snackbarOpen}
+        autoHideDuration={6000}
+        onClose={handleCloseSnackbar}
+        message="Task assigned successfully!"
+      />
     </div>
   );
 };

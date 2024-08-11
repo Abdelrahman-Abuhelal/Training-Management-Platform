@@ -10,5 +10,5 @@ import java.util.List;
 @Repository
 
 public interface TrainingPlanRepository  extends JpaRepository<TrainingPlan, Long> {
-    List<TrainingPlan> findByTraineeId(Long traineeId);
+    List<TrainingPlan> findBySupervisorId(Long supervisorId); // Custom query method
 }

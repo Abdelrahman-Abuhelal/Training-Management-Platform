@@ -3,15 +3,16 @@ import { DataGrid } from '@mui/x-data-grid';
 import axios from 'axios';
 import { useAuth } from "../../provider/authProvider";
 import { useNavigate } from "react-router-dom";
-import { Grid, Typography,  Button,
-    Box, Paper } from '@mui/material';
+import {
+    Grid, Typography, Button,
+    Box, Paper
+} from '@mui/material';
 import SearchComponent from '../../components/Search';
 import { useMediaQuery, useTheme } from '@mui/material';
 import DownloadIcon from "@mui/icons-material/Download";
 import * as XLSX from "xlsx";
 
 const TraineesInfoList = () => {
-    const navigate = useNavigate();
     const baseUrl = import.meta.env.VITE_PORT_URL;
     const { user } = useAuth();
     const { login_token } = user;
@@ -21,6 +22,7 @@ const TraineesInfoList = () => {
     const theme = useTheme();
     const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
     const [traineesDetails, setTraineesDetails] = useState([]);
+    const navigate = useNavigate();
 
     const handleSearch = (e) => {
         const term = e.target.value.toLowerCase();
@@ -78,6 +80,7 @@ const TraineesInfoList = () => {
         });
       };
 
+
     const columns = [
         {
             field: 'bugzillaURL', headerName: 'Bugzilla', flex: 1, renderCell: (params) => (
@@ -88,25 +91,32 @@ const TraineesInfoList = () => {
         },
         { field: 'endTrainingDate', headerName: 'End Date', flex: 1 },
         { field: 'startTrainingDate', headerName: 'Start Date', flex: 1 },
-        { field: 'trainingSeason', headerName: 'Training Season', flex: 1 },
         { field: 'trainingYear', headerName: 'Training Year', flex: 1 },
         { field: 'branchLocation', headerName: 'Branch Location', flex: 1.3 },
         { field: 'trainingField', headerName: 'Training Field', flex: 1 },
-        { field: 'expectedGraduationDate', headerName: 'Expected Graduation Date', flex: 1 },
         { field: 'universityMajor', headerName: 'Major', flex: 1.5 },
         { field: 'universityName', headerName: 'University Name', flex: 1.5 },
-        { field: 'address', headerName: 'Address', flex: 1 },
         { field: 'city', headerName: 'City', flex: 1 },
-        { field: 'idNumber', headerName: 'ID Number', flex: 1 },
-        { field: 'idType', headerName: 'ID Type', flex: 1 },
         { field: 'phoneNumber', headerName: 'Phone Number', flex: 1.2 },
-        { field: 'fullNameInArabic', headerName: 'Full Name (Arabic)', flex: 2.5 },
+        {
+            field: 'fullNameInArabic',
+            headerName: 'Full Name (Arabic)',
+            flex: 2.5,
+            renderCell: (params) => (
+                <Button
+                    variant="text"
+                    color="primary"
+                    onClick={() => navigate(`/edit-trainee/${params.row.userId}`)}
+                    >
+                    {params.value}
+                </Button>)
+        },
     ];
 
 
     const exportToExcel = () => {
         const fileType =
-          "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8";
+            "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8";
         const fileExtension = ".xlsx";
         const ws = XLSX.utils.json_to_sheet(traineesDetails);
         const wb = { Sheets: { data: ws }, SheetNames: ["data"] };
@@ -119,10 +129,10 @@ const TraineesInfoList = () => {
         document.body.appendChild(a);
         a.click();
         setTimeout(() => {
-          document.body.removeChild(a);
-          window.URL.revokeObjectURL(url);
+            document.body.removeChild(a);
+            window.URL.revokeObjectURL(url);
         }, 100);
-      };
+    };
 
     return (
         <Box sx={{ padding: 3 }}>
@@ -153,7 +163,7 @@ const TraineesInfoList = () => {
                     onClick={exportToExcel}
                     sx={{
                         fontSize: "1.0rem",
-                        maxWidth:  "12rem",
+                        maxWidth: "12rem",
                         marginRight: '16px'
                     }}
                 >

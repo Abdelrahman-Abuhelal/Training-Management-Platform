@@ -29,15 +29,15 @@ public class Form {
 
     private String description;
 
-    @OneToMany(mappedBy = "form", cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "form", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     @JsonManagedReference(value = "question-form")
     private List<Question> questions;
 
-    @OneToMany(mappedBy = "form", cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "form", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     @JsonManagedReference(value = "userFormStatus-form")
     private List<UserFormStatus> userFormStatuses;
 
-    @OneToMany(mappedBy = "form", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "form", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     @JsonManagedReference(value = "formSubmission-form")
     private List<FormSubmission> formSubmissions;
 

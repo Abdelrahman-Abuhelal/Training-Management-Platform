@@ -26,16 +26,22 @@ public class TraineeTaskController {
     private TraineeTaskService traineeTaskService;
 
     @GetMapping
+    @PreAuthorize("hasAnyRole('SUPER_ADMIN','SUPERVISOR')")
+    @Operation(summary = "Get All trainee tasks " , security =  @SecurityRequirement(name = "loginAuth"))
     public List<TraineeTask> getAllTraineeTasks() {
         return traineeTaskService.getAllTraineeTasks();
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasAnyRole('SUPER_ADMIN','SUPERVISOR')")
+    @Operation(summary = "Get All trainee task by id " , security =  @SecurityRequirement(name = "loginAuth"))
     public TraineeTask getTraineeTaskById(@PathVariable Long id) {
         return traineeTaskService.getTraineeTaskById(id);
     }
 
     @PostMapping
+    @PreAuthorize("hasAnyRole('SUPER_ADMIN','SUPERVISOR')")
+    @Operation(summary = "Create trainee task " , security =  @SecurityRequirement(name = "loginAuth"))
     public TraineeTask createTraineeTask(@RequestBody TraineeTask traineeTask) {
         return traineeTaskService.saveTraineeTask(traineeTask);
     }

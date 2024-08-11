@@ -5,6 +5,8 @@ import exalt.training.management.model.TraineeTask;
 import exalt.training.management.model.users.Trainee;
 import exalt.training.management.service.SupervisorService;
 import exalt.training.management.service.TaskService;
+import exalt.training.management.service.TraineeService;
+import exalt.training.management.service.TrainingPlanService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
@@ -25,7 +27,7 @@ public class SupervisorController {
 
     private final SupervisorService supervisorService;
     private final TaskService taskService;
-
+    private final TrainingPlanService trainingPlanService;
 
     @GetMapping( "/my-trainees")
     @PreAuthorize("hasRole('SUPERVISOR')")
@@ -62,6 +64,14 @@ public class SupervisorController {
     @Operation(summary = "Assign a task " , security =  @SecurityRequirement(name = "loginAuth"))
     public String assignTask(@RequestBody AssignTaskRequest assignTaskRequest) {
         return taskService.assignTask(assignTaskRequest);
+    }
+
+
+    @GetMapping("/my-plans")
+    @PreAuthorize("hasAnyRole('SUPER_ADMIN','SUPERVISOR')")
+    @Operation(summary = "Get  training plan for supervisor " , security =  @SecurityRequirement(name = "loginAuth"))
+    public List<TrainingPlanResponseDTO> getTrainingPlansBySupervisor() {
+        return trainingPlanService.getTrainingPlansBySupervisor();
     }
 
 

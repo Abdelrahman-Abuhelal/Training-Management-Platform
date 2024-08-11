@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import exalt.training.management.model.TrainingPlan;
 import exalt.training.management.model.forms.Form;
 import exalt.training.management.model.forms.FormSubmission;
 import jakarta.persistence.*;
@@ -11,6 +12,7 @@ import lombok.*;
 import org.springframework.lang.Nullable;
 
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "supervisor")
@@ -35,6 +37,10 @@ public class Supervisor {
 
     @ManyToMany(cascade = CascadeType.PERSIST)
     private List<SuperAdmin> superAdmins;
+
+    @OneToMany(mappedBy = "supervisor", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
+    private Set<TrainingPlan> trainingPlans;
 
 
 

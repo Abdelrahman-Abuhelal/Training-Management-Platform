@@ -364,7 +364,7 @@ const EditTrainee = () => {
 
 
   const navigateBack = () => {
-    navigate(`/trainees`);
+    navigate(-1);
   };
 
 
@@ -411,7 +411,7 @@ const EditTrainee = () => {
     const filteredSelectedCourses = selectedCourses.filter(
       (course) => course !== removedAcademicGrades.course
     );
-    setSelectedCourses(updatedSelectedCourses);
+    setSelectedCourses(filteredSelectedCourses);
     setAcademicGrades(updatedAcademicGrades);
   };
 

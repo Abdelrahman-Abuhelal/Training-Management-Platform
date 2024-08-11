@@ -9,6 +9,7 @@ import AccountCircle from "@mui/icons-material/AccountCircle"; // Import the Acc
 import TemporaryDrawer from "./SideBar";
 import Logout from "../../pages/auth/Logout";
 import { useAuth } from "../../provider/authProvider";
+import { Link } from 'react-router-dom'; 
 
 export default function SupervisorButtonAppBar() {
   const [state, setState] = React.useState({
@@ -48,9 +49,11 @@ export default function SupervisorButtonAppBar() {
           >
             <MenuIcon />
           </IconButton>
-          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-            EXALT Training Platform
-          </Typography>
+          <Link to="/" style={{ textDecoration: 'none', color: 'inherit', flexGrow: 1 }}>
+            <Typography variant="h6" component="div" sx={{ fontSize: { xs: '1.0rem', sm: '1.5rem' } }}>
+              EXALT Training Platform
+            </Typography>
+          </Link>
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
             <AccountCircle sx={{ mr: 1 }} />
             <Typography variant="body1" sx={{ mr: 2 }}>

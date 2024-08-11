@@ -56,6 +56,7 @@ public class TraineeService {
 
     public TraineeDataDto convertToDto(Trainee trainee) {
         return TraineeDataDto.builder()
+                .userId(trainee.getUser().getId())
                 .fullNameInArabic(trainee.getFullNameInArabic())
                 .phoneNumber(trainee.getPhoneNumber())
                 .idType(trainee.getIdType())

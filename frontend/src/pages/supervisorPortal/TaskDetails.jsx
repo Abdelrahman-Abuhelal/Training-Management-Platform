@@ -197,7 +197,7 @@ const TaskDetails = () => {
 
                         <Divider style={{ margin: "20px 0" }} />
 
-                        <Typography variant="h5" gutterBottom>Trainee Tasks</Typography>
+                        <Typography variant="h5" gutterBottom>Trainees Progress</Typography>
                         <div style={{ height: 400, width: '100%' }}>
                             <DataGrid
                                 rows={traineeTasks}

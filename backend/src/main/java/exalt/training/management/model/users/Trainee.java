@@ -11,6 +11,7 @@ import lombok.*;
 import org.springframework.lang.Nullable;
 
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -71,9 +72,12 @@ public class Trainee {
     @JsonManagedReference
     private List<TraineeTask> tasks;
 
-    @OneToMany(mappedBy = "trainee", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonManagedReference
-    private List<TrainingPlan> trainingPlans; // List of training plans associated with the trainee
+
+
+  //  @OneToMany(mappedBy = "trainees", cascade = CascadeType.ALL, orphanRemoval = true)
+    //    @JsonManagedReference
+    //    private List<TrainingPlan> trainingPlans;
+    //
 
 
     @OneToOne

@@ -31,6 +31,16 @@ return (
       </Grid>
       <Grid item xs={12} sm={4} md={4}>
         <Paper elevation={3} style={paperStyle}>
+          <Typography className="concert-one-regular" variant='inherit' sx={{ color: theme.palette.primary.dark }} >My Plan</Typography>
+          <Box mt={2}>
+            <Button variant="contained" color="primary" onClick={() => navigate('/training-plan')}>
+              View
+            </Button>
+          </Box>
+        </Paper>
+      </Grid>
+      <Grid item xs={12} sm={4} md={4}>
+        <Paper elevation={3} style={paperStyle}>
           <Typography className="concert-one-regular" variant='inherit' sx={{ color: theme.palette.primary.dark }} >My Grades</Typography>
           <Box mt={2}>
             <Button variant="contained" color="primary" onClick={() => navigate('/grades')}>
@@ -52,7 +62,7 @@ return (
       <Grid item xs={12} sm={4} md={4}>
         <Paper elevation={3} style={paperStyle}>
           <Typography className="concert-one-regular" variant='inherit' sx={{ color: theme.palette.primary.dark }} >Forms Recieved</Typography>
-          <Typography variant="h4" sx={{ color: theme.palette.primary.dark }}>{2}</Typography>
+          <Typography variant="h4" sx={{ color: theme.palette.primary.dark }}>{}</Typography>
           <Box mt={2}>
             <Button variant="contained" color="primary" onClick={() => navigate('/forms')}>
               View
@@ -63,7 +73,7 @@ return (
       <Grid item xs={12} sm={4} md={4}>
         <Paper elevation={3} style={paperStyle}>
           <Typography className="concert-one-regular" variant='inherit' sx={{ color: theme.palette.primary.dark }} >Announcements</Typography>
-          <Typography variant="h4" sx={{ color: theme.palette.primary.dark }}>{2}</Typography>
+          <Typography variant="h4" sx={{ color: theme.palette.primary.dark }}>{}</Typography>
           <Box mt={2}>
             <Button variant="contained" color="primary" onClick={() => navigate('/announcements')}>
               View

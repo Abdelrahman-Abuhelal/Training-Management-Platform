@@ -74,9 +74,9 @@ const Login = () => {
   };
 
   return (
-    <Paper sx={{backgroundColor:theme.palette.background.paper}}>
+    <Paper sx={{ backgroundColor: theme.palette.background.paper }}>
       <Navbar />
-      <Paper  style={{ height: "91.5vh" }}>
+      <Paper style={{ height: "91.5vh" }}>
         <Grid container style={{ height: "100%" }}>
           <Grid
             item
@@ -84,21 +84,25 @@ const Login = () => {
             md={6}
             display="flex"
             flexDirection="column"
-            justifyContent="center"
+            justifyContent="flex-end" // Change to 'flex-end' to align content at the bottom
             alignItems="center"
             style={{
               backgroundImage: 'url("/background.jpg")',
               backgroundSize: "cover",
               color: "white",
+              paddingBottom: "50px", // Optional: Add padding for better spacing
             }}
           >
-            <Typography variant="h3">Welcome to Our Training Platform</Typography>
+            <Box mb={2}> {/* Add margin bottom to the Box if needed */}
+              <Typography variant="h3" align="center" sx={{color: theme.palette.background.paper,fontFamily: '-moz-initial',fontSize:'2.7rem'}}>Welcome to EXALT Training Platform</Typography>
+            </Box>
             {/* <img
-              src="/TMS_LOGO.jpg"
-              alt="Exalt Logo"
-              style={{ height: "200px", marginBottom: "20px" }}
-            /> */}
+    src="/TMS_LOGO.jpg"
+    alt="Exalt Logo"
+    style={{ height: "200px", marginBottom: "20px" }}
+  /> */}
           </Grid>
+
           <Grid
             item
             xs={12}
@@ -108,13 +112,13 @@ const Login = () => {
             alignItems="center"
           >
             <Box component="form" onSubmit={handleSubmit} width="100%" maxWidth={400}>
-            <Box display="flex" justifyContent="center" mb={1}>
-                        <img
-                            src="./EXALT_LOGO2.png"
-                            alt="EXALT_LOGO"
-                            style={{ height: "100px", marginBottom: "20px" }}
-                        />
-                    </Box>
+              <Box display="flex" justifyContent="center" mb={1}>
+                <img
+                  src="./EXALT_LOGO2.png"
+                  alt="EXALT_LOGO"
+                  style={{ height: "100px", marginBottom: "20px" }}
+                />
+              </Box>
               <Typography variant="h5" component="h1" textAlign="center" mb={2}>
                 Login <LoginIcon fontSize="large" />
               </Typography>
@@ -137,7 +141,7 @@ const Login = () => {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 sx={{ backgroundColor: "#fff" }}
-      
+
               />
               <Box textAlign="right" my={1}>
                 <Link component={NavLink} to="/forgot-password-email">

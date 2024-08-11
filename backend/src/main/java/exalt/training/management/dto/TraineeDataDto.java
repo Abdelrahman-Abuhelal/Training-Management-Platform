@@ -16,7 +16,7 @@ import java.util.Map;
 @AllArgsConstructor
 @NoArgsConstructor
 public class TraineeDataDto {
-
+    private Long userId;
     private String fullNameInArabic;
     private String phoneNumber;
     private String idType;

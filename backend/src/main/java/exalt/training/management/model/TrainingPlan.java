@@ -1,7 +1,7 @@
 package exalt.training.management.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import exalt.training.management.model.users.Trainee;
+import exalt.training.management.model.users.Supervisor;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -18,15 +18,13 @@ public class TrainingPlan {
     private Long id;
 
     @Lob
-    private byte[] trainingFile; // For storing the file (could be a PDF, DOC, etc.)
+    @Column(name = "plan_file", columnDefinition = "LONGBLOB")
+    private byte[] planFile;
 
-    private String fileName; // To store the original file name
-
+    private String fileName;
 
     @ManyToOne
-    @JoinColumn(name = "trainee_id", nullable = false)
+    @JoinColumn(name = "supervisor_id", nullable = false)
     @JsonBackReference
-    private Trainee trainee; // Reference to the trainee
-
-    // Additional fields related to the training plan can be added here
+    private Supervisor supervisor;
 }

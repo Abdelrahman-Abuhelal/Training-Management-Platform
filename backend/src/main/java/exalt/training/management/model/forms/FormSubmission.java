@@ -28,6 +28,7 @@ public class FormSubmission {
     private AppUser user;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_form_status_id", nullable = false)
     @JsonBackReference(value = "formSubmission-userFormStatus")
     private UserFormStatus userFormStatus;
 
