@@ -2,16 +2,11 @@ package exalt.training.management.model.users;
 
 import com.fasterxml.jackson.annotation.*;
 import exalt.training.management.model.*;
-import exalt.training.management.model.forms.Form;
-import exalt.training.management.model.forms.FormSubmission;
-import exalt.training.management.model.users.AppUser;
-import exalt.training.management.model.users.Supervisor;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.lang.Nullable;
 
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -72,12 +67,6 @@ public class Trainee {
     @JsonManagedReference
     private List<TraineeTask> tasks;
 
-
-
-  //  @OneToMany(mappedBy = "trainees", cascade = CascadeType.ALL, orphanRemoval = true)
-    //    @JsonManagedReference
-    //    private List<TrainingPlan> trainingPlans;
-    //
 
 
     @OneToOne

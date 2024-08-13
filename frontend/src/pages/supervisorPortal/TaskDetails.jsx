@@ -111,7 +111,7 @@ const TaskDetails = () => {
     const columns = [
         {
             field: 'fullName',
-            headerName: 'Trainee Name',
+            headerName: 'Name',
             width: 150,
             renderCell: (params) => (
                 <Button
@@ -153,7 +153,7 @@ const TaskDetails = () => {
                         label="Approved"
                         value={params.value ? 'Completed' : 'Uncompleted'}
                         onChange={(event) => handleApprovedChange(params.row.traineeTaskId, event.target.value)}
-                    >
+                        sx={{  backgroundColor: "#fff"}}   >
                         <MenuItem value="Completed">Completed</MenuItem>
                         <MenuItem value="Uncompleted">Uncompleted</MenuItem>
                     </Select>

@@ -10,8 +10,10 @@ import exalt.training.management.model.users.Supervisor;
 import exalt.training.management.model.users.Trainee;
 import exalt.training.management.repository.AcademicGradesRepository;
 import exalt.training.management.repository.TraineeRepository;
+import exalt.training.management.repository.TrainingPlanRepository;
 import jakarta.persistence.EntityManager;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -25,13 +27,16 @@ public class TraineeService {
 
     private final TraineeRepository traineeRepository;
     private final TraineeMapper traineeMapper;
+    private final TrainingPlanRepository trainingPlanRepository;
 
 
+    @Autowired
 
     public TraineeService(TraineeRepository traineeRepository,
-                          TraineeMapper traineeMapper) {
+                          TraineeMapper traineeMapper, TrainingPlanRepository trainingPlanRepository) {
         this.traineeRepository = traineeRepository;
         this.traineeMapper = traineeMapper;
+        this.trainingPlanRepository = trainingPlanRepository;
     }
 
     public void saveTrainee(Trainee trainee){
@@ -53,6 +58,9 @@ public class TraineeService {
         }
         return convertToDto(traineeInfo.get());
     }
+
+
+
 
     public TraineeDataDto convertToDto(Trainee trainee) {
         return TraineeDataDto.builder()

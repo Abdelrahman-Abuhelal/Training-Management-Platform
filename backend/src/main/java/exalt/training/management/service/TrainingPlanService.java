@@ -1,9 +1,8 @@
 package exalt.training.management.service;
 
-import exalt.training.management.dto.TrainingPlanAssignRequestDTO;
-import exalt.training.management.dto.TrainingPlanCreateRequestDTO;
-import exalt.training.management.dto.TrainingPlanResponseDTO;
+import exalt.training.management.dto.*;
 import exalt.training.management.exception.InvalidUserException;
+import exalt.training.management.exception.TrainingPlanNotFoundException;
 import exalt.training.management.model.TrainingPlan;
 import exalt.training.management.model.TrainingPlanAssignment;
 import exalt.training.management.model.users.AppUser;
@@ -77,12 +76,38 @@ public class TrainingPlanService {
         }
     }
 
+
     public List<TrainingPlanResponseDTO> getAllTrainingPlans() {
         List<TrainingPlan> trainingPlans = trainingPlanRepository.findAll();
         return trainingPlans.stream()
                 .map(this::mapToResponseDTO)
                 .collect(Collectors.toList());
     }
+
+    public List<TrainingPlanDto> getMyTrainingPlans() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        var user = (AppUser) authentication.getPrincipal();
+        var trainee = user.getTrainee();
+
+        if (trainee == null) {
+            throw new InvalidUserException("User is not a Trainee");
+        }
+
+        List<TrainingPlanAssignment> assignments = trainingPlanAssignmentRepository.findByTraineeId(trainee.getId());
+        if (assignments.isEmpty()) {
+            throw new TrainingPlanNotFoundException("No training plans assigned to this trainee");
+        }
+
+        List<TrainingPlan> trainingPlans = assignments.stream()
+                .map(TrainingPlanAssignment::getTrainingPlan)
+                .toList();
+
+        return trainingPlans.stream()
+                .map(this::convertToDto)
+                .collect(Collectors.toList());
+    }
+
+
 
     // Get training plans by supervisor
     public List<TrainingPlanResponseDTO> getTrainingPlansBySupervisor() {
@@ -98,6 +123,8 @@ public class TrainingPlanService {
                 .collect(Collectors.toList());
     }
 
+
+
     public TrainingPlanResponseDTO getTrainingPlanById(Long planId) {
         TrainingPlan trainingPlan = trainingPlanRepository.findById(planId)
                 .orElseThrow(() -> new RuntimeException("Training Plan not found"));
@@ -112,7 +139,14 @@ public class TrainingPlanService {
 
 
 
-
+    private TrainingPlanDto convertToDto(TrainingPlan trainingPlan) {
+        return new TrainingPlanDto(
+                trainingPlan.getId(),
+                trainingPlan.getFileName(),
+                trainingPlan.getPlanFile(),
+                trainingPlan.getSupervisor().getId()
+        );
+    }
 
     private TrainingPlanResponseDTO mapToResponseDTO(TrainingPlan trainingPlan) {
         Set<Long> traineeIds = trainingPlanAssignmentRepository.findByTrainingPlan(trainingPlan)

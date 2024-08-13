@@ -116,8 +116,7 @@ const AllTraineesSkills = () => {
         }} gutterBottom>
           My Trainees Skills
         </Typography>
-
-
+  
         <Box sx={{ mb: 2 }}>
           <FormControl fullWidth variant="outlined" sx={{ mb: 2 }}>
             <InputLabel>Filter by Skill Name</InputLabel>
@@ -137,7 +136,7 @@ const AllTraineesSkills = () => {
               ))}
             </Select>
           </FormControl>
-
+  
           {/* Topic Filter */}
           <FormControl fullWidth variant="outlined" sx={{ mb: 2 }}>
             <InputLabel>Filter by Topic</InputLabel>
@@ -154,7 +153,7 @@ const AllTraineesSkills = () => {
               <MenuItem value="SOFT_SKILLS">Soft Skills</MenuItem>
             </Select>
           </FormControl>
-
+  
           {/* Proficiency Filter */}
           <FormControl fullWidth variant="outlined">
             <InputLabel>Filter by Proficiency</InputLabel>
@@ -175,19 +174,19 @@ const AllTraineesSkills = () => {
             </Select>
           </FormControl>
         </Box>
-
+  
         {/* Trainees List */}
         <Grid container spacing={2} sx={{ marginTop: '2rem' }}>
           {filteredTrainees.map((trainee, index) => (
-            <Grid item xs={12} key={index} sx={{ backgroundColor: '#F7F9FC ', mb: '2rem' }}>
+            <Grid item xs={12} key={index} sx={{ backgroundColor: '#F7F9FC', mb: '2rem' }}>
               <Typography className="concert-one-regular" variant='inherit' align="center" component="h3" gutterBottom sx={{ marginBottom: "1rem" }}>
                 <Link to={`/view-trainee/${trainee.userId}`} style={{ textDecoration: 'none', color: theme.palette.primary.dark }}>
-                  <PersonIcon />  {trainee.traineeName}
+                  <PersonIcon /> {trainee.traineeName}
                 </Link>
               </Typography>
               <Grid container spacing={1}>
                 {trainee.skills.map((skill, idx) => (
-                  <Grid item xs={6} sm={3} md={2} key={idx} >
+                  <Grid item xs={6} sm={3} md={2} key={idx}>
                     <Box
                       sx={{
                         display: 'flex',
@@ -198,10 +197,9 @@ const AllTraineesSkills = () => {
                         borderRadius: 1,
                         mb: 2,
                         minWidth: 100,
-                        overflow: 'hidden', // Hide overflowing content
-                        textOverflow: 'ellipsis', // Show ellipsis for overflowing text
+                        overflow: 'hidden',
+                        textOverflow: 'ellipsis',
                         whiteSpace: 'nowrap',
-                        // Prevent wrapping of text
                       }}
                     >
                       <Typography
@@ -223,15 +221,15 @@ const AllTraineesSkills = () => {
                           overflow: 'hidden',
                           textOverflow: 'ellipsis',
                           whiteSpace: 'nowrap',
-                          maxWidth: '100%' // Ensure Chip doesn't exceed its container
+                          maxWidth: '100%'
                         }}
                       />
                     </Box>
                   </Grid>
-                  
                 ))}
-
               </Grid>
+              {/* Add Divider here to separate trainees */}
+              {index < filteredTrainees.length - 1 && <Divider sx={{ }} />} 
             </Grid>
           ))}
         </Grid>

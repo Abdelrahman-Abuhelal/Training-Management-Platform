@@ -22,7 +22,6 @@ import ReviewForm from "../pages/supervisorPortal/ReviewForm.jsx"
 import SupervisorTraineesList from "../pages/adminPortal/SupervisorTraineesList.jsx"
 import TraineeProfileView from "../pages/supervisorPortal/TraineeProfileView.jsx";
 import AssignTask from "../pages/supervisorPortal/AssignTask.jsx";
-import Resources from "../pages/supervisorPortal/Resources.jsx";
 import AnnouncementForm from "../pages/adminPortal/CreateAnnounments.jsx";
 import FormTemplates from "../pages/adminPortal/FormTemplates.jsx"
 import FormTemplatePage from "../pages/adminPortal/FormTemplatePage.jsx"
@@ -48,6 +47,10 @@ import AddCourseComponent from '../pages/adminPortal/AddCourseComponent.jsx';
 import TrainingPlan from '../pages/supervisorPortal/TrainingPlan.jsx';
 import TraineesInfoList from '../pages/adminPortal/TraineesInfoList.jsx';
 import CreatePlan from '../pages/supervisorPortal/CreatePlan.jsx';
+import MyPlans from '../pages/traineePortal/MyPlans.jsx';
+import Resources from '../pages/supervisorPortal/Resources.jsx';
+import CreateResources from '../pages/supervisorPortal/CreateResources.jsx';
+import MyResources from '../pages/traineePortal/MyResources.jsx';
 
 const Routes = () => {
   const { user } = useAuth();
@@ -82,6 +85,8 @@ const Routes = () => {
             { path: '/home', element: <TraineeHome /> },
             { path: '/profile', element: <TraineeProfile /> },
             { path: '/grades', element: <MyGrades /> },
+            { path: '/training-plan', element: <MyPlans /> },
+            { path: '/resources', element: <MyResources /> },
             { path: '/forms', element: <FormsList /> },
             { path: '/forms/:formId', element: <FillForm /> },
             { path: '/settings', element: <TraineeSettings /> },
@@ -108,13 +113,14 @@ const Routes = () => {
             { path: '/forms/:formId', element: <FillForm /> },
             { path: '/review-form/:userId', element: <ReviewForm /> },
             { path: '/view-trainee/:userId', element: <TraineeProfileView /> },
-            { path: '/add-resource', element: <Resources /> },
-            { path: '/add-skills/:userId', element: <TraineeSkills /> },
             { path: '/skills', element: <AllTraineesSkills /> },
-            { path: '/assign-task', element: <AssignTask /> },
+            { path: '/add-skills/:userId', element: <TraineeSkills /> },
+            { path: '/resources', element: <Resources /> },
+            { path: '/create-resource', element: <CreateResources /> },
             { path: '/training-plan', element: <TrainingPlan /> },
             { path: '/create-plan', element: <CreatePlan /> },
             { path: '/tasks', element: <TasksList /> },
+            { path: '/assign-task', element: <AssignTask /> },
             { path: '/tasks/:taskId', element: <TaskDetails /> },
             { path: '/settings', element: <SupervisorSettings /> },
             { path: '/change-password', element: <ChangePassword /> },

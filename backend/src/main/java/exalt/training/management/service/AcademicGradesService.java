@@ -14,6 +14,7 @@ import exalt.training.management.repository.CourseRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -23,11 +24,17 @@ import java.util.stream.Collectors;
 
 @Service
 @Slf4j
-@RequiredArgsConstructor
 public class AcademicGradesService {
     private final AcademicGradesRepository academicGradesRepository;
     private final AppUserRepository appUserRepository;
     private final CourseRepository courseRepository;
+
+    @Autowired
+    public AcademicGradesService(AcademicGradesRepository academicGradesRepository, AppUserRepository appUserRepository, CourseRepository courseRepository) {
+        this.academicGradesRepository = academicGradesRepository;
+        this.appUserRepository = appUserRepository;
+        this.courseRepository = courseRepository;
+    }
 
     public void saveAcademicGrade(AcademicGrades academicGrades){
         academicGradesRepository.save(academicGrades);

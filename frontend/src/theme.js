@@ -5,13 +5,13 @@ const theme = createTheme({
     mode: "light",
     primary: {
       light: "#f2f8f8",
-      main: "#32c1c1",
+      main: "#32c1c1",//32c1c1
       dark: "#2ca4a4",
       contrastText: "#fff",
     },
     secondary: {
       light: "#fff",
-      main: "#ff4081",
+      main: "#ffcc99",
       dark: "#ff0051",
       contrastText: "#32c1c1",
     },

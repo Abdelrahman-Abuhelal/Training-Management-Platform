@@ -11,6 +11,7 @@ import exalt.training.management.repository.AppUserRepository;
 import exalt.training.management.repository.TokenRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -30,16 +31,15 @@ public class AppUserService {
     private final SupervisorService supervisorService;
     private final SuperAdminService superAdminService;
     private final TokenService tokenService;
-    private final TokenRepository tokenRepository;
 
+    @Autowired
     public AppUserService(AppUserRepository appUserRepository,
                           @Lazy AuthenticationService authenticationService,
                           PasswordEncoder passwordEncoder,
                           @Lazy TraineeService traineeService,
                           SupervisorService supervisorService,
                           SuperAdminService superAdminService,
-                          TokenService tokenService,
-                          TokenRepository tokenRepository, TokenRepository tokenRepository1) {
+                          TokenService tokenService) {
         this.appUserRepository = appUserRepository;
         this.authenticationService = authenticationService;
         this.passwordEncoder = passwordEncoder;
@@ -47,12 +47,10 @@ public class AppUserService {
         this.supervisorService = supervisorService;
         this.superAdminService = superAdminService;
         this.tokenService = tokenService;
-        this.tokenRepository = tokenRepository1;
     }
 
 
     public String confirmAccount(HttpServletRequest request,PasswordRequest passwordRequest) {
-        // change the authentication process to get user without using the token and request
         final String confirmAccountJwt = authenticationService.checkAuthHeader(request);
         final String userEmail;
         userEmail = tokenService.extractEmail(confirmAccountJwt);

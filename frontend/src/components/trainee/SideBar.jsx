@@ -19,12 +19,14 @@ import SettingsIcon from '@mui/icons-material/Settings';
 import TaskAltIcon from '@mui/icons-material/TaskAlt';
 import SchoolIcon from '@mui/icons-material/School';
 import TipsAndUpdatesIcon from '@mui/icons-material/TipsAndUpdates';
+import SourceIcon from '@mui/icons-material/Source';
 
 const routes = [
   { path: '/home', name: 'Home', icon: <SpaceDashboardIcon sx={{ color: 'primary.main' }}/> },
   { path: '/profile', name: 'Profile', icon: <AccountCircleIcon sx={{ color: 'primary.main' }}/> },
   { path: '/grades', name: 'My Grades', icon: <SchoolIcon sx={{ color: 'primary.main' }}/> },
-  { path: '/plan', name: 'Training Plan', icon: <TipsAndUpdatesIcon sx={{ color: 'primary.main' }}/> },
+  { path: '/training-plan', name: 'Training Plan', icon: <TipsAndUpdatesIcon sx={{ color: 'primary.main' }}/> },
+  { path: '/resources', name: 'My Resources', icon: <SourceIcon sx={{ color: 'primary.main' }}/> },
   { path: '/tasks', name: 'My Tasks', icon: <TaskAltIcon sx={{ color: 'primary.main' }}/> },
   { path: '/forms', name: 'Forms Recieved', icon: <ListAltIcon sx={{ color: 'primary.main' }}/> },
   { path: '/announcements', name: 'Announcements', icon: <CampaignIcon sx={{ color: 'primary.main' }}/> },

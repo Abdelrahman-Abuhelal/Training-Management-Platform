@@ -1,13 +1,10 @@
 package exalt.training.management.controller;
 
 
-import exalt.training.management.dto.FormDataDto;
-import exalt.training.management.dto.TraineeDataDto;
+import exalt.training.management.dto.*;
 import exalt.training.management.model.AcademicGrades;
 import exalt.training.management.model.users.Trainee;
-import exalt.training.management.service.AcademicGradesService;
-import exalt.training.management.service.FormService;
-import exalt.training.management.service.TraineeService;
+import exalt.training.management.service.*;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
@@ -27,7 +24,9 @@ public class TraineeController {
     private final TraineeService traineeService;
     private final AcademicGradesService academicGradesService;
 
-    private final FormService reviewService;
+    private final TrainingPlanService trainingPlanService;
+    private final ResourceService resourceService;
+
 
     @PutMapping("/update-me")
     @PreAuthorize("hasAnyRole('TRAINEE')")
@@ -58,6 +57,20 @@ public class TraineeController {
         }
     }
 
+
+    @GetMapping("/my-plans")
+    @PreAuthorize("hasAnyRole('TRAINEE')")
+    @Operation(summary = "Get My Training Plans" , security =  @SecurityRequirement(name = "loginAuth"))
+    public ResponseEntity <List<TrainingPlanDto>> getMyTrainingPlans() {
+        return ResponseEntity.ok(trainingPlanService.getMyTrainingPlans());
+    }
+
+    @GetMapping("/my-resources")
+    @PreAuthorize("hasAnyRole('TRAINEE')")
+    @Operation(summary = "Get My Resources" , security =  @SecurityRequirement(name = "loginAuth"))
+    public ResponseEntity <List<ResourceDto>> getMyResources() {
+        return ResponseEntity.ok(resourceService.getMyResources());
+    }
 
 //    @GetMapping("/my-forms")
 //    @PreAuthorize("hasAnyRole('TRAINEE')")

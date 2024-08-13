@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import Divider from '@mui/material/Divider'; // Make sure to import Divider
 import {
   Box,
   Button,
@@ -194,21 +195,21 @@ const TraineeSkills = () => {
 
 
   return (
-<Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', minHeight: '100vh', marginTop: '2rem', marginBottom: '4rem' }}>
-  <Paper elevation={3} sx={{ p: 3, width: "80%", maxWidth: 1200, backgroundColor: theme.palette.background.paper, display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
-    <Button onClick={navigateBack} startIcon={<ArrowBackIcon />} variant='contained' sx={{ alignSelf: 'flex-start', mb: '1rem' }}>
-      Back to Trainees
-    </Button>
-    <Typography className="concert-one-regular" variant='inherit' sx={{ color: theme.palette.primary.dark, mb: '1.5rem', alignSelf: 'center ' }} gutterBottom>
-     {userFullName} Skills <AutoAwesomeIcon fontSize="large" sx={{mb:'0.5rem'}} />
-    </Typography>
+    <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', minHeight: '100vh', marginTop: '2rem', marginBottom: '4rem' }}>
+      <Paper elevation={3} sx={{ p: 3, width: "80%", maxWidth: 1200, backgroundColor: theme.palette.background.paper, display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
+        <Button onClick={navigateBack} startIcon={<ArrowBackIcon />} variant='contained' sx={{ alignSelf: 'flex-start', mb: '1rem' }}>
+          Back to Trainees
+        </Button>
+        <Typography className="concert-one-regular" variant='inherit' sx={{ color: theme.palette.primary.dark, mb: '1.5rem', alignSelf: 'center' }} gutterBottom>
+          {userFullName} Skills <AutoAwesomeIcon fontSize="large" sx={{ mb: '0.5rem' }} />
+        </Typography>
         <Grid container spacing={2}>
-          {skillCategories.map(category => (
+          {skillCategories.map((category, index) => (
             <Grid item xs={12} key={category}>
-              <Typography variant="h6" component="h3" sx={{marginTop:'2rem'}} align="center" gutterBottom>
+              <Typography variant="h6" component="h3" sx={{ marginTop: '2rem' }} align="center" gutterBottom>
                 {category.replace(/_/g, ' ')}
               </Typography>
-              <FormControl fullWidth variant="outlined" sx={{ mb: '1rem' ,mt:'1rem'}}>
+              <FormControl fullWidth variant="outlined" sx={{ mb: '1rem', mt: '1rem' }}>
                 <InputLabel>Select Skill</InputLabel>
                 <Select
                   multiple
@@ -235,8 +236,8 @@ const TraineeSkills = () => {
                   MenuProps={{
                     PaperProps: {
                       style: {
-                        maxHeight: 200, // Fixed height for dropdown
-                        width: 250, // Width of dropdown
+                        maxHeight: 200,
+                        width: 250,
                       },
                     },
                   }}
@@ -249,7 +250,7 @@ const TraineeSkills = () => {
                 </Select>
               </FormControl>
               <Grid container spacing={2}>
-                {selectedSkills[category].filter(skillId => skillId).map((skillId, index) => (
+                {selectedSkills[category].filter(skillId => skillId).map((skillId) => (
                   <Grid item xs={12} sm={6} key={skillId}>
                     <Box sx={{ display: 'flex', alignItems: 'center', backgroundColor: proficiencyLevels[proficiencies[skillId] || "GOOD"], p: 1, borderRadius: 1 }}>
                       <Typography sx={{ flexGrow: 1, color: '#000' }}>
@@ -281,14 +282,15 @@ const TraineeSkills = () => {
                   </Grid>
                 ))}
               </Grid>
+              {index < skillCategories.length - 1 && <Divider sx={{ my: 2 }} />} {/* Add Divider between categories */}
             </Grid>
           ))}
-        </Grid> 
+        </Grid>
         <Button
           variant="contained"
           color="primary"
           onClick={handleSaveSkills}
-          sx={{ mt: '3rem'}}
+          sx={{ mt: '3rem' }}
           fullWidth
         >
           Save Skills
@@ -298,7 +300,7 @@ const TraineeSkills = () => {
           autoHideDuration={6000}
           onClose={handleSnackbarClose}
         >
-          <Alert onClose={handleSnackbarClose}   severity="success" sx={{ width: '100%' }}>
+          <Alert onClose={handleSnackbarClose} severity="success" sx={{ width: '100%' }}>
             {snackbarMessage}
           </Alert>
         </Snackbar>

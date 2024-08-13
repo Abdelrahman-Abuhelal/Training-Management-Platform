@@ -47,10 +47,10 @@ const AdminSettings = () => {
                 },
                 width: '400px', // Optional: make buttons full width
               }}
-              onClick={() => navigate("/add-skills")}
+              onClick={() => navigate("/add-courses")}
             >
               <Typography variant="h5" color="white">
-                Add Skills
+                Add Courses
               </Typography>
             </Button>
           </Grid>
@@ -65,10 +65,10 @@ const AdminSettings = () => {
                 },
                 width: '400px', // Optional: make buttons full width
               }}
-              onClick={() => navigate("/add-courses")}
+              onClick={() => navigate("/add-skills")}
             >
               <Typography variant="h5" color="white">
-                Add Courses
+                Add Skills
               </Typography>
             </Button>
           </Grid>

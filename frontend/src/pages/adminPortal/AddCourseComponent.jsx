@@ -104,7 +104,8 @@ const AddCourseComponent = () => {
                             onDelete={() => deleteCourse(course.id)}
                             deleteIcon={<DeleteIcon />}
                             variant="outlined"
-                        />
+                            sx={{ backgroundColor: '#fff' }}
+/>
                     ))}
                 </Box>
             </Paper>

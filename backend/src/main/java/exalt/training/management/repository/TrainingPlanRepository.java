@@ -11,4 +11,5 @@ import java.util.List;
 
 public interface TrainingPlanRepository  extends JpaRepository<TrainingPlan, Long> {
     List<TrainingPlan> findBySupervisorId(Long supervisorId); // Custom query method
+    List<TrainingPlan> findByIdIn(List<Long> ids);
 }

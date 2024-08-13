@@ -17,8 +17,7 @@ import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.mail.SimpleMailMessage;
-import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -41,6 +40,8 @@ public class AdminService {
     private final TraineeMapper traineeMapper;
     private final BranchService branchService;
 
+
+    @Autowired
     public AdminService(TraineeRepository traineeRepository,TraineeService traineeService, AppUserRepository appUserRepository, AppUserService appUserService, TokenService tokenService, AuthenticationService authenticationService, EmailService emailService, AppUserMapper userMapper, SupervisorRepository supervisorRepository, TraineeMapper traineeMapper, BranchService branchService) {
         this.traineeRepository = traineeRepository;
         this.traineeService = traineeService;

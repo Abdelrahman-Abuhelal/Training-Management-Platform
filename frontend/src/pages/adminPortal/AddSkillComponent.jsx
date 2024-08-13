@@ -125,7 +125,8 @@ const AddSkillComponent = () => {
                             onDelete={() => deleteSkill(skill.id)}
                             deleteIcon={<DeleteIcon />}
                             variant="outlined"
-                        />
+                            sx={{ backgroundColor: '#fff' }}
+/>
                     ))}
                 </Box>
             </Paper>

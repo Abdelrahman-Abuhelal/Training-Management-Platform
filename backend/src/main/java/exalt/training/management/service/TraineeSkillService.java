@@ -16,6 +16,7 @@ import exalt.training.management.repository.SkillRepository;
 import exalt.training.management.repository.SupervisorRepository;
 import exalt.training.management.repository.TraineeSkillRepository;
 import jakarta.transaction.Transactional;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -32,7 +33,7 @@ public class TraineeSkillService {
     private final AppUserRepository appUserRepository;
     private final SkillRepository skillRepository;
     private final SupervisorRepository supervisorRepository;
-
+    @Autowired
     public TraineeSkillService(TraineeSkillRepository traineeSkillRepository, AppUserRepository appUserRepository, SkillRepository skillRepository, SupervisorRepository supervisorRepository) {
         this.traineeSkillRepository = traineeSkillRepository;
         this.appUserRepository = appUserRepository;

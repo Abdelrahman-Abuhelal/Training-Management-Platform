@@ -113,7 +113,7 @@ const TasksList = () => {
       headerName: 'Details',
       width: 150,
       renderCell: (params) => (
-        <Button variant="outlined" color="primary" onClick={() => handleClickOpen(params.row)}>
+        <Button variant="outlined"  sx={{  backgroundColor: "#fff" }} color="primary" onClick={() => handleClickOpen(params.row)}>
           View Details
         </Button>
       ),

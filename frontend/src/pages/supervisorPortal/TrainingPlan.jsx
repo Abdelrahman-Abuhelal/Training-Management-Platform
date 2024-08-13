@@ -1,16 +1,21 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Typography, Box,Grid, Paper, List, ListItem, ListItemText } from '@mui/material';
+import { Button, Typography, Box, Grid, Paper, List, ListItem, ListItemText, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, Checkbox, Avatar } from '@mui/material';
 import axios from 'axios';
 import { useAuth } from "../../provider/authProvider";
 import { useNavigate } from 'react-router-dom';
+import TipsAndUpdatesIcon from '@mui/icons-material/TipsAndUpdates';
 
 const TrainingPlan = () => {
     const { user } = useAuth();
     const { login_token } = user;
     const baseUrl = import.meta.env.VITE_PORT_URL;
+    const [trainees, setTrainees] = useState([]);
     const [file, setFile] = useState(null);
     const [fileName, setFileName] = useState('');
-    const [trainingPlans, setTrainingPlans] = useState([]); // State for training plans
+    const [trainingPlans, setTrainingPlans] = useState([]); 
+    const [selectedTrainees, setSelectedTrainees] = useState([]);
+    const [showSendFormModal, setShowSendFormModal] = useState(false);
+    const [selectedPlanId, setSelectedPlanId] = useState(null);
     const navigate = useNavigate();
 
     const handleFileChange = (e) => {
@@ -19,6 +24,29 @@ const TrainingPlan = () => {
         setFileName(uploadedFile.name);
     };
 
+    const fetchTrainees = async () => {
+        try {
+            const response = await axios.get(`${baseUrl}/api/v1/supervisor/my-trainees`, {
+                headers: {
+                    Authorization: `Bearer ${login_token}`,
+                },
+            });
+            if (response.status === 200) {
+                const traineeUsers = response.data.map((trainee) => ({
+                    ...trainee,
+                    fullName: `${trainee.userFirstName} ${trainee.userLastName}`
+                }));
+                setTrainees(traineeUsers);
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
+    useEffect(() => {
+        fetchTrainees();
+    }, []);
+    
     const handleSubmitTrainingPlan = async () => {
         if (!file) {
             alert('Please select a file to upload.');
@@ -43,9 +71,8 @@ const TrainingPlan = () => {
                 });
 
                 if (response.status === 200) {
-                    console.log('Training plan created:', response.data);
                     alert('Training plan created successfully!');
-                    fetchTrainingPlans(); // Fetch training plans after successful upload
+                    fetchTrainingPlans();
                 }
             } catch (error) {
                 console.error('Error creating training plan:', error);
@@ -56,7 +83,6 @@ const TrainingPlan = () => {
         reader.readAsArrayBuffer(file);
     };
 
-    // Fetch training plans assigned to the supervisor
     const fetchTrainingPlans = async () => {
         try {
             const response = await axios.get(`${baseUrl}/api/v1/supervisor/my-plans`, {
@@ -64,23 +90,23 @@ const TrainingPlan = () => {
                     Authorization: `Bearer ${login_token}`,
                 },
             });
-            setTrainingPlans(response.data); // Set the training plans state
+            setTrainingPlans(response.data);
         } catch (error) {
             console.error('Error fetching training plans:', error);
         }
     };
 
     useEffect(() => {
-        fetchTrainingPlans(); // Fetch training plans on component mount
-    }, []); // Empty dependency array to run once
+        fetchTrainingPlans();
+    }, []);
 
     const downloadFile = (base64Data, fileName) => {
         const link = document.createElement('a');
-        link.href = `data:application/pdf;base64,${base64Data}`; // Adjust MIME type based on the actual file type
-        link.download = fileName; // Set the file name for download
-        document.body.appendChild(link); // Append to body to make it work in Firefox
-        link.click(); // Trigger the download
-        document.body.removeChild(link); // Clean up
+        link.href = `data:application/pdf;base64,${base64Data}`;
+        link.download = fileName;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
     };
 
     const deleteTrainingPlan = async (planId) => {
@@ -90,7 +116,6 @@ const TrainingPlan = () => {
                     Authorization: `Bearer ${login_token}`,
                 },
             });
-            // Refresh the training plans list after deletion
             setTrainingPlans(prevPlans => prevPlans.filter(plan => plan.id !== planId));
             alert('Training plan deleted successfully!');
         } catch (error) {
@@ -98,14 +123,51 @@ const TrainingPlan = () => {
             alert('Failed to delete training plan.');
         }
     };
-    const handleNavigate = () => {
-        navigate('/create-plan'); // Adjust the path as necessary
+
+    const handleOpenSendDialog = (planId) => {
+        setSelectedPlanId(planId);
+        setShowSendFormModal(true);
     };
+
+    const handleSendForm = async () => {
+        console.log(selectedTrainees);
+        console.log(selectedPlanId);
+        try {
+            await axios.put(`${baseUrl}/api/v1/trainingPlan/${selectedPlanId}/assign`, {
+                userIds: selectedTrainees
+            }, {
+                headers: {
+                    Authorization: `Bearer ${login_token}`,
+                },
+            });
+            alert('Training plan sent successfully!');
+            setShowSendFormModal(false);
+        } catch (error) {
+            console.error('Error sending training plan:', error);
+            alert('Failed to send training plan.');
+        }
+    };
+
+    const handleToggleTrainee = (traineeId) => {
+        setSelectedTrainees((prevSelected) =>
+            prevSelected.includes(traineeId)
+                ? prevSelected.filter(id => id !== traineeId)
+                : [...prevSelected, traineeId]
+        );
+    };
+
+    const handleSendFormCancel = () => {
+        setShowSendFormModal(false);
+    };
+
+    const handleNavigate = () => {
+        navigate('/create-plan');
+    };
+
     return (
         <div style={{ display: "flex", justifyContent: "center" }}>
             <Grid container spacing={2} justifyContent="center" sx={{ p: "1rem", m: "1rem", width: "90%", maxWidth: "90%" }}>
                 <Grid item xs={12}>
-                    {/* File Upload Section */}
                     <Paper elevation={3} style={{ padding: '20px' }}>
                         <Typography variant="h6" gutterBottom>
                             Upload Training Plan File
@@ -116,22 +178,20 @@ const TrainingPlan = () => {
                             onChange={handleFileChange}
                         />
                         <br />
-
                         <Box display="flex" alignItems="center" sx={{ mt: 2 }}>
                             <Typography variant="body1" sx={{ mr: 1 }}>
                                 Need help to create a training plan?
                             </Typography>
                             <Button
-                                variant="text" // Use 'outlined' style for the navigation button
+                                variant="text"
                                 onClick={handleNavigate}
                             >
                                 Create Training Plan
                             </Button>
                         </Box>
-
                         <Button
                             variant="contained"
-                            sx={{ mt: 2 }} // Add margin top for spacing
+                            sx={{ mt: 2 }}
                             onClick={handleSubmitTrainingPlan}
                             disabled={!file}
                         >
@@ -139,13 +199,10 @@ const TrainingPlan = () => {
                         </Button>
                     </Paper>
                 </Grid>
-
-
                 <Grid item xs={12}>
-                    {/* Training Plans List Section */}
                     <Paper elevation={3} style={{ padding: '20px' }}>
                         <Typography variant="h6" gutterBottom>
-                            Assigned Training Plans
+                       Training Plans   <TipsAndUpdatesIcon sx={{mb:'0.3rem'}}/>
                         </Typography>
                         <List>
                             {trainingPlans.map(plan => (
@@ -161,12 +218,19 @@ const TrainingPlan = () => {
                                     >
                                         Download
                                     </Button>
-
+                                    <Button
+                                        variant="outlined"
+                                        color="primary"
+                                        onClick={() => handleOpenSendDialog(plan.id)}
+                                        sx={{ ml: 1, backgroundColor: "#fff" }}
+                                    >
+                                        Send
+                                    </Button>
                                     <Button
                                         variant="outlined"
                                         color="error"
                                         onClick={() => deleteTrainingPlan(plan.id)}
-                                        sx={{ ml: 1 }}
+                                        sx={{ ml: 1 , backgroundColor: "#fff" }}
                                     >
                                         Delete
                                     </Button>
@@ -176,6 +240,30 @@ const TrainingPlan = () => {
                     </Paper>
                 </Grid>
             </Grid>
+
+            <Dialog open={showSendFormModal} onClose={handleSendFormCancel}>
+                <DialogTitle>Send Training Plan</DialogTitle>
+                <DialogContent>
+                    <DialogContentText>
+                        Select trainees to send the training plan to:
+                    </DialogContentText>
+                    <List>
+                        {trainees.map(trainee => (
+                            <ListItem key={trainee.userId}>
+                                <Checkbox
+                                    checked={selectedTrainees.includes(trainee.userId)}
+                                    onChange={() => handleToggleTrainee(trainee.userId)}
+                                />
+                                <ListItemText primary={trainee.fullName} />
+                            </ListItem>
+                        ))}
+                    </List>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={handleSendFormCancel}>Cancel</Button>
+                    <Button onClick={handleSendForm} variant="contained">Send</Button>
+                </DialogActions>
+            </Dialog>
         </div>
     );
 };
