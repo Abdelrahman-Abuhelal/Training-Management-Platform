@@ -4,6 +4,7 @@ package exalt.training.management.controller;
 import exalt.training.management.dto.SkillDto;
 import exalt.training.management.model.Skill;
 import exalt.training.management.service.SkillService;
+import exalt.training.management.service.TraineeSkillService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +21,7 @@ import java.util.List;
 public class SkillController {
 
     private final SkillService skillService;
+    private final TraineeSkillService traineeSkillService;
 
     @GetMapping
     @PreAuthorize("hasAnyRole('SUPER_ADMIN','SUPERVISOR')")

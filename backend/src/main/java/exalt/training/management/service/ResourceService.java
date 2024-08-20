@@ -80,6 +80,29 @@ public class ResourceService {
         }
     }
 
+    public List<ResourceDto> getResourcesForTrainee(Long userId) {
+        AppUser appUser = appUserRepository.findById(userId)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+
+        Trainee trainee = appUser.getTrainee();
+        if (trainee == null) {
+            throw new InvalidUserException("User is not a Trainee");
+        }
+
+        List<ResourceAssignment> assignments = resourceAssignmentRepository.findByTraineeId(trainee.getId());
+        if (assignments.isEmpty()) {
+            throw new ResourceNotFoundException("No resources assigned to this trainee");
+        }
+
+        List<Resource> resources = assignments.stream()
+                .map(ResourceAssignment::getResource)
+                .collect(Collectors.toList());
+
+        return resources.stream()
+                .map(this::convertToDto)
+                .collect(Collectors.toList());
+    }
+
     public List<ResourceResponseDTO> getAllResources() {
         List<Resource> resources = resourceRepository.findAll();
         return resources.stream()
@@ -124,21 +147,6 @@ public class ResourceService {
                 .collect(Collectors.toList());
     }
 
-    public List<ResourceResponseDTO> getResourcesBySupervisor() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        var user = (AppUser) authentication.getPrincipal();
-        var supervisor = user.getSupervisor();
-
-        if (supervisor == null) {
-            throw new InvalidUserException("User is not a Supervisor");
-        }
-
-        List<Resource> resources = resourceRepository.findBySupervisorId(supervisor.getId());
-
-        return resources.stream()
-                .map(this::mapToResponseDTO)
-                .collect(Collectors.toList());
-    }
 
     public ResourceResponseDTO getResourceResponseById(Long resourceId) {
         Resource resource = resourceRepository.findById(resourceId)

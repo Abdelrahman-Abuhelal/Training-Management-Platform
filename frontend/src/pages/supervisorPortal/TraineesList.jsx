@@ -72,11 +72,21 @@ const Supervisor_Trainees_List = () => {
   const columns = [
     {
       field: "fullName",
-      headerName: "Full Name",
+      headerName: "Profile Name",
       flex: 1,
-      minWidth: 150, // Decrease the width of the Full Name column
+      minWidth: 200, // Adjust this width as needed
+      renderCell: (params) => (
+          <Button
+            color="primary"
+            variant="outlined"
+            startIcon={<AccountBoxIcon />}
+            onClick={() => handleViewProfile(params.row)}
+            sx={{ ml: 1, minWidth:'150px' }} // Adds margin to the left
+          >
+          <span>{params.value}</span> {/* Display the full name */}
+          </Button>
+      )
     },
-    { field: "userEmail", headerName: "Email", flex: 1 },
     {
       field: "actions",
       headerName: "Actions",
@@ -85,32 +95,23 @@ const Supervisor_Trainees_List = () => {
       renderCell: (params) => (
         <Box
           display="flex"
-          flexDirection="row" alignItems="center"
-          justifyContent="center"
+          flexDirection="row" 
           gap={1}
-          sx={{ alignItems: "center" }}
         >
           <Button
             color="primary"
-            variant="outlined"
-            startIcon={<AccountBoxIcon />}
-            onClick={() => handleViewProfile(params.row)}
-            sx={{mt:'0.5rem'}}
-          >
-             Profile
-          </Button>
-          <Button
-            color="primary"
-            variant="outlined"
+            variant="contained"
             startIcon={<AutoAwesomeIcon />}
             onClick={() => handleAddSkills(params.row)}
             sx={{mt:'0.5rem'}}
             >
-            Add Skills
+            Add Experience
           </Button>
         </Box>
       ),
     },
+    { field: "userEmail", headerName: "Email", flex: 1 },
+
   ];
 
   const getRowId = (row) => row.id; // Function to get the id for each row
@@ -123,8 +124,8 @@ const Supervisor_Trainees_List = () => {
             <SearchComponent searchTerm={searchTerm} onSearchChange={setSearchTerm} />
           </Grid>
           <Grid item xs={6}>
-            <Typography className="concert-one-regular" sx={{color:  theme.palette.primary.dark}} align="center">
-              My Trainees  &nbsp; <GroupIcon fontSize="large" />
+            <Typography className="concert-one-regular"  align="center">
+              My Trainees  <GroupIcon fontSize="large" />
             </Typography>
           </Grid>
           <Grid item xs={isMobile ? 0 : 3} />

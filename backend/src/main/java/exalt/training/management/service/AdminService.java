@@ -254,6 +254,20 @@ public class AdminService {
         return appUserOptional.get().getTrainee();
     }
 
+    public List<TraineeInfoForJobDto> getAllTraineesInfoForJob(){
+        List<Trainee> trainees=traineeRepository.findAll();
+        if (trainees.isEmpty()){
+            String message= "there are no trainees";
+            log.info(message);
+            throw new AppUserNotFoundException(message);
+        }
+       List<TraineeInfoForJobDto>traineeInfoForJobDtos=  trainees.stream().map(trainee ->  TraineeInfoForJobDto.builder().userId(trainee.getUser().getId())
+                .expectedGraduationDate(trainee.getExpectedGraduationDate())
+                .trainingField(trainee.getTrainingField())
+                .universityName(trainee.getUniversityName())
+                .universityMajor(trainee.getUniversityMajor()).build()).collect(Collectors.toList());
+        return traineeInfoForJobDtos;
+    }
 
     public List<TraineeDataDto> getAllTraineesInfo(){
         List<Trainee> trainees=traineeRepository.findAll();

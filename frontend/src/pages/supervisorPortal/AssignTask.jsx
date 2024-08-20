@@ -35,7 +35,7 @@ import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import TaskIcon from '@mui/icons-material/Task';
 import { useAuth } from "../../provider/authProvider";
 import { useMediaQuery, useTheme } from '@mui/material';
-
+import AddTaskIcon from '@mui/icons-material/AddTask';
 const AssignTask = () => {
   const theme = useTheme();
   const baseUrl = import.meta.env.VITE_PORT_URL;
@@ -249,8 +249,8 @@ const AssignTask = () => {
             Back
           </Button>
         </Box>
-        <Typography className="concert-one-regular" variant='inherit' sx={{ marginBottom: '2rem', color: theme.palette.primary.dark }} align="center">
-          &nbsp;Assign Task&nbsp;<TaskIcon fontSize="medium" />
+        <Typography className="concert-one-regular"  sx={{ marginBottom: '2rem' }} align="center">
+          &nbsp;Create Task&nbsp;<AddTaskIcon sx={{fontSize:'30px'}} />
         </Typography>
         <Box sx={{ display: "flex", flexWrap: "wrap", gap: 2 }}>
           <TextField

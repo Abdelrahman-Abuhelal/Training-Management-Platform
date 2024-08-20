@@ -185,8 +185,8 @@ const TraineeProfile = () => {
     <div style={{ padding:  "3rem", margin:'1rem' }}>
       <Paper  elevation={3} sx={{ padding: '2rem' , backgroundColor: theme.palette.background.paper, alignItems:'right'}}>
       <Box mt={1}>
-        <Typography variant="h5" gutterBottom>
-          Your Inforamtion
+        <Typography variant="h4" gutterBottom>
+          My Profile Details
         </Typography>
         <Typography variant="body2" color="textSecondary" paragraph>
           This page will be shown for HR, remember to add all details.

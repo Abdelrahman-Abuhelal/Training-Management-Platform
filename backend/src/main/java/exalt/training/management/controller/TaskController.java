@@ -1,6 +1,7 @@
 package exalt.training.management.controller;
 
 import exalt.training.management.dto.TaskDto;
+import exalt.training.management.dto.TasksInfoDto;
 import exalt.training.management.dto.TraineeTaskDTO;
 import exalt.training.management.model.Task;
 import exalt.training.management.model.TraineeTask;
@@ -26,6 +27,15 @@ public class TaskController {
     private final TaskService taskService;
     private final TraineeTaskService traineeTaskService;
 
+
+    @GetMapping("/all")
+    @PreAuthorize("hasAnyRole('SUPER_ADMIN')")
+    @Operation(summary = "Get All Tasks" , security =  @SecurityRequirement(name = "loginAuth"))
+    public List<TasksInfoDto> getAllTasks() {
+        return taskService.getAllTasksAssigned();
+    }
+
+
     @GetMapping("/{taskId}/trainee-tasks")
     @PreAuthorize("hasAnyRole('SUPER_ADMIN','SUPERVISOR')")
     @Operation(summary = "Get All Trainee Tasks by a task id " , security =  @SecurityRequirement(name = "loginAuth"))
@@ -41,6 +51,7 @@ public class TaskController {
         return taskService.getTaskById(id);
     }
 
+
     @DeleteMapping("/{id}")
     @PreAuthorize("hasAnyRole('SUPER_ADMIN','SUPERVISOR')")
     @Operation(summary = "Delete Task using task id " , security =  @SecurityRequirement(name = "loginAuth"))
@@ -48,29 +59,4 @@ public class TaskController {
      taskService.deleteTask(id);
     }
 
-//    @GetMapping
-//    public List<Task> getAllTasks() {
-//        return taskService.get();
-//    }
-
-//    @GetMapping("/{id}")
-//    public Task getTaskById(@PathVariable Long id) {
-//        return taskService.getTraineeTaskById(id);
-//    }
-//
-//    @PostMapping
-//    public Task createTask(@RequestBody Task task) {
-//        return taskService.saveTraineeTask(traineeTask);
-//    }
-//
-//    @PutMapping("/{id}")
-//    public Task updateTask(@PathVariable Long id, @RequestBody Task task) {
-//        task.setId(id);
-//        return taskService.saveTraineeTask(traineeTask);
-//    }
-//
-//    @DeleteMapping("/{id}")
-//    public void deleteTraineeTask(@PathVariable Long id) {
-//        taskService.deleteTraineeTask(id);
-//    }
 }

@@ -1,8 +1,11 @@
 package exalt.training.management.controller;
 
 import exalt.training.management.dto.AssignTaskRequest;
+import exalt.training.management.dto.TraineeTaskDetailDto;
+import exalt.training.management.dto.UpdateTaskStatusRequest;
 import exalt.training.management.dto.UpdateTraineeTaskStatus;
 import exalt.training.management.model.TraineeTask;
+import exalt.training.management.service.TaskService;
 import exalt.training.management.service.TraineeTaskService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -24,6 +27,8 @@ public class TraineeTaskController {
 
     @Autowired
     private TraineeTaskService traineeTaskService;
+    @Autowired
+    private TaskService taskService;
 
     @GetMapping
     @PreAuthorize("hasAnyRole('SUPER_ADMIN','SUPERVISOR')")
@@ -45,6 +50,22 @@ public class TraineeTaskController {
     public TraineeTask createTraineeTask(@RequestBody TraineeTask traineeTask) {
         return traineeTaskService.saveTraineeTask(traineeTask);
     }
+
+    @PutMapping("/{traineeTaskId}/status")
+    @PreAuthorize("hasAnyRole('SUPER_ADMIN','SUPERVISOR','TRAINEE')")
+    @Operation(summary = "Update Task Status" , security =  @SecurityRequirement(name = "loginAuth"))
+    public ResponseEntity<?> updateTaskStatus(@PathVariable Long traineeTaskId, @RequestBody UpdateTaskStatusRequest request) {
+            traineeTaskService.updateTaskStatus(traineeTaskId, request.getStatus());
+            return ResponseEntity.ok("Task status updated successfully");
+    }
+
+    @PreAuthorize("hasAnyRole('SUPER_ADMIN','SUPERVISOR')")
+    @GetMapping("/trainees/{traineeId}")
+    @Operation(summary = "Get Assigned Tasks for a trainee" , security =  @SecurityRequirement(name = "loginAuth"))
+    public List<TraineeTaskDetailDto> getAssignedTasksForTrainee(@PathVariable Long traineeId) {
+        return taskService.getAssignedTasksForTrainee(traineeId);
+    }
+
 
 //    @PutMapping("/{id}")
 //    public TraineeTask updateTraineeTask(@PathVariable Long id, @RequestBody TraineeTask traineeTask) {

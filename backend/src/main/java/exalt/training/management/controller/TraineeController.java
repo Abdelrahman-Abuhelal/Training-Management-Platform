@@ -26,6 +26,7 @@ public class TraineeController {
 
     private final TrainingPlanService trainingPlanService;
     private final ResourceService resourceService;
+    private final TaskService taskService;
 
 
     @PutMapping("/update-me")
@@ -57,13 +58,20 @@ public class TraineeController {
         }
     }
 
-
     @GetMapping("/my-plans")
     @PreAuthorize("hasAnyRole('TRAINEE')")
     @Operation(summary = "Get My Training Plans" , security =  @SecurityRequirement(name = "loginAuth"))
     public ResponseEntity <List<TrainingPlanDto>> getMyTrainingPlans() {
         return ResponseEntity.ok(trainingPlanService.getMyTrainingPlans());
     }
+
+    @GetMapping("/my-tasks")
+    @PreAuthorize("hasAnyRole('TRAINEE')")
+    @Operation(summary = "Get My Tasks" , security =  @SecurityRequirement(name = "loginAuth"))
+    public ResponseEntity <List<TraineeTaskDetailDto>> getMyTasks() {
+        return ResponseEntity.ok(taskService.getTasksForAuthenticatedTrainee());
+    }
+
 
     @GetMapping("/my-resources")
     @PreAuthorize("hasAnyRole('TRAINEE')")

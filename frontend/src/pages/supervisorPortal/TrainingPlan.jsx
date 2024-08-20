@@ -4,6 +4,7 @@ import axios from 'axios';
 import { useAuth } from "../../provider/authProvider";
 import { useNavigate } from 'react-router-dom';
 import TipsAndUpdatesIcon from '@mui/icons-material/TipsAndUpdates';
+import { CalendarIcon } from '@heroicons/react/24/outline';
 
 const TrainingPlan = () => {
     const { user } = useAuth();
@@ -183,10 +184,11 @@ const TrainingPlan = () => {
                                 Need help to create a training plan?
                             </Typography>
                             <Button
-                                variant="text"
+                                variant="outlined"
                                 onClick={handleNavigate}
+                                sx={{ml:'1rem'}}
                             >
-                                Create Training Plan
+                                Create Plan
                             </Button>
                         </Box>
                         <Button
@@ -202,7 +204,8 @@ const TrainingPlan = () => {
                 <Grid item xs={12}>
                     <Paper elevation={3} style={{ padding: '20px' }}>
                         <Typography variant="h6" gutterBottom>
-                       Training Plans   <TipsAndUpdatesIcon sx={{mb:'0.3rem'}}/>
+                       Training Plans 
+                       <CalendarIcon style={{marginLeft:'0.5rem', width: '24px', height: '24px', marginBottom:'0.3rem' }}/>
                         </Typography>
                         <List>
                             {trainingPlans.map(plan => (

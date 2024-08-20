@@ -62,7 +62,7 @@ const MyGrades = () => {
   };
   return (
     <Paper elevation={3} sx={{ p: '3rem', m: '4rem auto', backgroundColor: theme.palette.background.paper,width:'75%' }}>
-      <Typography variant='h4' align="center" sx={{ color: theme.palette.primary.dark,mb:'4rem' }} gutterBottom>
+      <Typography variant='h4' align="center" sx={{ mb:'4rem' }} gutterBottom>
         My Academic Courses <SchoolIcon fontSize="large"/>
       </Typography>
       <Grid container spacing={3}>

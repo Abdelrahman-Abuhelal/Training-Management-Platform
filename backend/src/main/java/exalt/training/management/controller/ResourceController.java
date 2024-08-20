@@ -2,6 +2,7 @@ package exalt.training.management.controller;
 
 import exalt.training.management.dto.ResourceAssignRequestDTO;
 import exalt.training.management.dto.ResourceCreateRequestDTO;
+import exalt.training.management.dto.ResourceDto;
 import exalt.training.management.dto.ResourceResponseDTO;
 import exalt.training.management.model.Resource;
 import exalt.training.management.service.ResourceService;
@@ -92,5 +93,14 @@ public class ResourceController {
     public ResponseEntity<Void> deleteResource(@PathVariable Long resourceId) {
         resourceService.deleteResource(resourceId);
         return ResponseEntity.noContent().build(); // Return a 204 No Content response
+    }
+
+
+    @PreAuthorize("hasAnyRole('SUPER_ADMIN','SUPERVISOR','TRAINEE')")
+    @GetMapping("/trainees/{userId}")
+    @Operation(summary = "Get resources by Trainee Id", security = @SecurityRequirement(name = "loginAuth"))
+    public ResponseEntity<List<ResourceDto>> getResourcesByTraineeId(@PathVariable Long userId) {
+        List<ResourceDto> resources = resourceService.getResourcesForTrainee(userId);
+        return ResponseEntity.ok(resources);
     }
 }

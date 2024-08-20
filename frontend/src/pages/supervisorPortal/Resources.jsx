@@ -20,6 +20,7 @@ import axios from 'axios';
 import { useAuth } from '../../provider/authProvider';
 import { useNavigate } from 'react-router-dom'; // Assuming you're using react-router for navigation
 import { useTheme } from "@mui/material/styles";
+import SourceIcon from '@mui/icons-material/Source';
 
 const Resources = () => {
   const { user } = useAuth();
@@ -202,8 +203,8 @@ const Resources = () => {
     <div style={{ display: "flex", justifyContent: "center" }}>
       <Paper elevation={3} sx={{ p: 3, m: 6, width: "80%",minHeight:"450px", maxWidth: 1200, backgroundColor: theme.palette.background.paper }}>
        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <Typography variant="h5" gutterBottom>
-            Resource List
+          <Typography className="concert-one-regular" sx={{ml:'1rem'}} gutterBottom>
+           Resource List   <SourceIcon sx={{fontSize:'35px' , mb:'0.5rem' , ml:'0.35rem'}}/> 
           </Typography>
           <Button
             variant="contained"

@@ -2,7 +2,10 @@ package exalt.training.management.service;
 
 import exalt.training.management.dto.AssignTaskRequest;
 import exalt.training.management.dto.TraineeTaskDTO;
+import exalt.training.management.exception.InvalidStatusException;
 import exalt.training.management.exception.InvalidUserException;
+import exalt.training.management.exception.TaskNotFoundException;
+import exalt.training.management.model.Comment;
 import exalt.training.management.model.Task;
 import exalt.training.management.model.TaskStatus;
 import exalt.training.management.model.TraineeTask;
@@ -20,6 +23,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -53,12 +57,32 @@ public class TraineeTaskService {
         traineeTaskRepository.deleteById(traineeTaskId);
     }
 
+    public void updateTaskStatus(Long traineeTaskId, String status)  {
+        Optional<TraineeTask> optionalTask = traineeTaskRepository.findById(traineeTaskId);
 
+        if (optionalTask.isEmpty()) {
+            throw new TaskNotFoundException("Task with ID " + traineeTaskId + " not found.");
+        }
+
+        TraineeTask task = optionalTask.get();
+
+        // Validate status
+        if (!isValidStatus(status)) {
+            throw new InvalidStatusException("Invalid status: " + status);
+        }
+
+        task.setStatus(TaskStatus.valueOf(status));
+        traineeTaskRepository.save(task);
+    }
+
+    private boolean isValidStatus(String status) {
+        return Arrays.asList("TODO", "IN_PROGRESS", "STUCK", "IN_REVIEW", "COMPLETED").contains(status);
+    }
     public List<TraineeTaskDTO> getAllTraineeTasksByTaskId(Long taskId) {
         return traineeTaskRepository.findByTaskId(taskId).stream()
                 .map(traineeTask -> {
                     List<String> comments = traineeTask.getComments().stream()
-                            .map(comment -> comment.getCommentText())
+                            .map(Comment::getCommentText)
                             .collect(Collectors.toList());
                     AppUser appUser=traineeTask.getTrainee().getUser();
                     return TraineeTaskDTO.builder()
@@ -84,6 +108,9 @@ public class TraineeTaskService {
         if (optionalTraineeTask.isPresent()) {
             TraineeTask traineeTask = optionalTraineeTask.get();
             traineeTask.setApproved(approved);
+            if (approved){
+                traineeTask.setDateFinished(LocalDateTime.now());
+            }
             traineeTaskRepository.save(traineeTask);
             return "Trainee task status has been updated";
         } else {

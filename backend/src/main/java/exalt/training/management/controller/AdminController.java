@@ -31,7 +31,14 @@ public class AdminController {
     public ResponseEntity<String> createUserSecret(@RequestBody @Valid UserCreationRequest request) {
         return ResponseEntity.ok(adminService.createUserSecret(request));
     }
-
+    @Operation(summary = "Get needed trainee data for job hunt", security =  @SecurityRequirement(name = "loginAuth"))
+    @PreAuthorize("hasRole('SUPER_ADMIN')")
+    @GetMapping("/trainee-job-data")
+    public ResponseEntity<List<TraineeInfoForJobDto>> getAllTraineesInfoForJob(){
+        List<TraineeInfoForJobDto> traineeInfoForJobDtos= adminService.getAllTraineesInfoForJob();
+        return new ResponseEntity<>(traineeInfoForJobDtos, HttpStatus.OK);
+    }
+    
 
     @Operation(summary = "Create Any type of User for admin only", security =  @SecurityRequirement(name = "loginAuth"))
     @PreAuthorize("hasRole('SUPER_ADMIN')")

@@ -13,6 +13,7 @@ import {
   DialogTitle,
   Link
 } from '@mui/material';
+import TaskAltIcon from '@mui/icons-material/TaskAlt';
 import { useNavigate } from "react-router-dom";
 import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
@@ -20,6 +21,8 @@ import { useAuth } from "../../provider/authProvider";
 import AddIcon from '@mui/icons-material/Add';
 import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
+import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
+
 const TasksList = () => {
   const baseUrl = import.meta.env.VITE_PORT_URL;
   const { user } = useAuth();
@@ -44,8 +47,11 @@ const TasksList = () => {
         },
       });
       if (response.status === 200) {
-        setAssignedTasks(response.data);
-      }
+ const formattedTasks = response.data.map(task => ({
+                ...task,
+                deadline: new Date(task.deadline).toLocaleDateString(),
+            }));
+            setAssignedTasks(formattedTasks);      }
     } catch (error) {
       console.log(error);
     }
@@ -106,8 +112,7 @@ const TasksList = () => {
   };
 
   const columns = [
-    { field: 'id', headerName: 'ID', width: 90 },
-    { field: 'name', headerName: 'Name', width: 150 },
+    { field: 'name', headerName: 'Name', width: 200 },
     {
       field: 'details',
       headerName: 'Details',
@@ -119,23 +124,23 @@ const TasksList = () => {
       ),
     },
     {
-      field: 'deadline', headerName: 'Deadline', width: 180,
+      field: 'deadline', headerName: 'Deadline', width: 120,
       valueFormatter: (params) => {
         return params.value; // Directly return the raw date string
       }
     },
     { field: 'priority', headerName: 'Priority', width: 130 },
     {
-      field: 'Trainees Task',
-      headerName: 'Trainees Task',
-      width: 150,
+      field: 'Trainees ',
+      headerName: 'Trainees ',
+      width: 250,
       renderCell: (params) => (
         <Button
           variant="contained"
           color="primary"
           onClick={() => handleDetailsClick(params.row.id)}
         >
-          View Progress
+          <HourglassBottomIcon/> View Progress
         </Button>
       ),
     },
@@ -145,7 +150,7 @@ const TasksList = () => {
       width: 150,
       renderCell: (params) => (
         <IconButton color="error" onClick={() => handleDeleteClick(params.row)}>
-            <DeleteIcon />
+            <DeleteIcon sx={{fontSize:'30px'}}/>
         </IconButton>
     ),
     }
@@ -166,8 +171,8 @@ const TasksList = () => {
   return (
     <div style={{ display: "flex", justifyContent: "center" }}>
       <Paper elevation={3} sx={{ p: 3, m: 6, width: "80%", maxWidth: 1200, backgroundColor: theme.palette.background.paper }}>
-        <Typography className="concert-one-regular" sx={{ color: theme.palette.primary.dark }} align="center" gutterBottom>
-          Assigned Tasks
+        <Typography className="concert-one-regular" align="center" gutterBottom>
+          Assigned Tasks <TaskAltIcon sx={{fontSize:"30px"}}/>
         </Typography>
         <Box sx={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '1rem' }}>
           <Button variant="contained" sx={{ border: '1x solid #ccc' }} onClick={assignTaskPage} startIcon={<AddIcon />}>
@@ -181,6 +186,7 @@ const TasksList = () => {
             pageSize={5}
             rowsPerPageOptions={[5, 10, 20]}
             autoHeight
+            sx={{ backgroundColor: '#fff' }}
           />
         </div>
 
@@ -192,8 +198,8 @@ const TasksList = () => {
             </DialogContentText>
             <DialogContentText>
               <strong>Resources:</strong>
-              <ul>
-                {selectedTask && renderResources(selectedTask.resources)}
+              <ul style={{ listStyleType: 'none', padding: 0 }}>
+              {selectedTask && renderResources(selectedTask.resources)}
               </ul>
             </DialogContentText>
           </DialogContent>

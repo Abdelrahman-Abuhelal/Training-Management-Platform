@@ -223,7 +223,7 @@ const FillForm = () => {
 
   return (
     <Paper elevation={3} style={{ margin: '3rem', padding: '1rem',backgroundColor: theme.palette.background.paper  }}>
-      <Button sx={{ mt: "2rem" }} onClick={() => {
+      <Button  variant="contained" sx={{ mt: "2rem", ml:"2rem" }} onClick={() => {
         navigate(`/forms/`);
       }} startIcon={<ArrowBackIcon />}>
         Back to Forms
@@ -236,7 +236,7 @@ const FillForm = () => {
           </Typography>
         </Box>
       )}<Paper elevation={3} sx={{ p: 3, m: "2rem" , backgroundColor: '#FFF' }}>
-        <Typography className="concert-one-regular" variant='inherit' align="center" gutterBottom sx={{color:  theme.palette.primary.dark, mb: "2rem" }}>
+        <Typography className="concert-one-regular" variant='inherit' align="center" gutterBottom sx={{ mb: "2rem" }}>
           <strong>{formData.formTitle}</strong>
         </Typography>
         <Typography variant="subtitle1" gutterBottom sx={{ m: "1rem" }}>
@@ -257,7 +257,7 @@ const FillForm = () => {
             </Button>
             <Button
               variant="outlined"
-              color="error"
+              color="secondary" 
               onClick={() => navigate("/forms")}
               sx={{ ml: 2 }}
             >

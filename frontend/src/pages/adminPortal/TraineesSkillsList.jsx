@@ -98,12 +98,7 @@ const TraineesSkillsList = () => {
     }
 
     // Filter by topic
-    if (topicFilter) {
-      filtered = filtered.map(trainee => ({
-        ...trainee,
-        skills: trainee.skills.filter(skill => skill.topic === topicFilter)
-      })).filter(trainee => trainee.skills.length > 0);
-    }
+
 
     // Filter by proficiency levels
     if (proficiencyFilter.length > 0) {
@@ -145,22 +140,6 @@ const TraineesSkillsList = () => {
             </Select>
           </FormControl>
 
-          {/* Topic Filter */}
-          <FormControl fullWidth variant="outlined" sx={{ mb: 2 }}>
-            <InputLabel>Filter by Topic</InputLabel>
-            <Select
-              value={topicFilter}
-              onChange={(e) => setTopicFilter(e.target.value)}
-              label="Filter by Topic"
-              sx={{ backgroundColor: '#fff' }}
-            >
-              <MenuItem value="">None</MenuItem>
-              <MenuItem value="PROGRAMMING_LANGUAGES">Programming Languages</MenuItem>
-              <MenuItem value="TECHNOLOGIES">Technologies</MenuItem>
-              <MenuItem value="CONCEPTS">Concepts</MenuItem>
-              <MenuItem value="SOFT_SKILLS">Soft Skills</MenuItem>
-            </Select>
-          </FormControl>
 
           {/* Proficiency Filter */}
           <FormControl fullWidth variant="outlined">

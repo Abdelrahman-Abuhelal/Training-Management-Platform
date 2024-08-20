@@ -34,6 +34,8 @@ public class TraineeTask {
     @Column(nullable = false)
     private LocalDateTime dateAssigned;
 
+    private LocalDateTime dateFinished;
+
     @Enumerated(EnumType.STRING)
     private TaskStatus status;
 

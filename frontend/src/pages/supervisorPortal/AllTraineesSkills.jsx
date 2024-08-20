@@ -18,15 +18,11 @@ import { useAuth } from "../../provider/authProvider";
 import { Link } from "react-router-dom";
 import { useMediaQuery, useTheme } from '@mui/material';
 import PersonIcon from '@mui/icons-material/Person';
-// Define proficiency levels and their background colors
-const proficiencyLevels = {
-  GOOD: "#cce7ff", // light blue
-  VERY_GOOD: "#99d0ff", // slightly darker blue
-  EXCELLENT: "#66b8ff", // medium blue
-  EXPERT: "#339fff" // darker blue
-};
+
+import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
 
 const AllTraineesSkills = () => {
+
   const theme = useTheme();
   const baseUrl = import.meta.env.VITE_PORT_URL;
   const { user } = useAuth();
@@ -38,7 +34,12 @@ const AllTraineesSkills = () => {
   const [topicFilter, setTopicFilter] = useState('');
   const [proficiencyFilter, setProficiencyFilter] = useState([]);
   const [allSkills, setAllSkills] = useState([]);
-
+  const proficiencyLevels = {
+    GOOD: "#cce7ff", // light blue
+    VERY_GOOD: "#99d0ff", // slightly darker blue
+    EXCELLENT: "#66b8ff", // medium blue
+    EXPERT: "#339fff" // darker blue
+  };
   useEffect(() => {
     fetchTraineesWithSkills();
     fetchAllSkills();
@@ -88,13 +89,13 @@ const AllTraineesSkills = () => {
       })).filter(trainee => trainee.skills.length > 0);
     }
 
-    // Filter by topic
-    if (topicFilter) {
-      filtered = filtered.map(trainee => ({
-        ...trainee,
-        skills: trainee.skills.filter(skill => skill.topic === topicFilter)
-      })).filter(trainee => trainee.skills.length > 0);
-    }
+    // // Filter by topic
+    // if (topicFilter) {
+    //   filtered = filtered.map(trainee => ({
+    //     ...trainee,
+    //     skills: trainee.skills.filter(skill => skill.topic === topicFilter)
+    //   })).filter(trainee => trainee.skills.length > 0);
+    // }
 
     // Filter by proficiency levels
     if (proficiencyFilter.length > 0) {
@@ -110,11 +111,10 @@ const AllTraineesSkills = () => {
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', minHeight: '100vh' }}>
       <Paper elevation={3} sx={{ p: 3, m: 6, width: "80%", maxWidth: 1200, backgroundColor: theme.palette.background.paper }}>
-        <Typography className="concert-one-regular" variant='inherit' align="center" component="h2" sx={{
-          marginBottom: "2rem",
-          color: theme.palette.primary.dark
+        <Typography className="concert-one-regular" align="center"  sx={{
+          marginBottom: "2rem"
         }} gutterBottom>
-          My Trainees Skills
+           Trainees Experience and Skills <AutoAwesomeIcon sx={{fontSize:'28px'}}/>
         </Typography>
   
         <Box sx={{ mb: 2 }}>
@@ -138,7 +138,7 @@ const AllTraineesSkills = () => {
           </FormControl>
   
           {/* Topic Filter */}
-          <FormControl fullWidth variant="outlined" sx={{ mb: 2 }}>
+          {/* <FormControl fullWidth variant="outlined" sx={{ mb: 2 }}>
             <InputLabel>Filter by Topic</InputLabel>
             <Select
               value={topicFilter}
@@ -152,7 +152,7 @@ const AllTraineesSkills = () => {
               <MenuItem value="CONCEPTS">Concepts</MenuItem>
               <MenuItem value="SOFT_SKILLS">Soft Skills</MenuItem>
             </Select>
-          </FormControl>
+          </FormControl> */}
   
           {/* Proficiency Filter */}
           <FormControl fullWidth variant="outlined">
@@ -178,7 +178,7 @@ const AllTraineesSkills = () => {
         {/* Trainees List */}
         <Grid container spacing={2} sx={{ marginTop: '2rem' }}>
           {filteredTrainees.map((trainee, index) => (
-            <Grid item xs={12} key={index} sx={{ backgroundColor: '#F7F9FC', mb: '2rem' }}>
+            <Grid item xs={12} key={index} sx={{  mb: '2rem' }}>
               <Typography className="concert-one-regular" variant='inherit' align="center" component="h3" gutterBottom sx={{ marginBottom: "1rem" }}>
                 <Link to={`/view-trainee/${trainee.userId}`} style={{ textDecoration: 'none', color: theme.palette.primary.dark }}>
                   <PersonIcon /> {trainee.traineeName}

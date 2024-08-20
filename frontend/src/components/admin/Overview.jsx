@@ -8,6 +8,7 @@ import PeopleIcon from '@mui/icons-material/People';
 import DynamicFormIcon from '@mui/icons-material/DynamicForm';
 import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
 import NotificationImportantIcon from '@mui/icons-material/NotificationImportant';
+import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
 
 const Overview = () => {
   const [traineeSize, setTraineeSize] = useState([]);
@@ -154,7 +155,7 @@ const Overview = () => {
           <Typography variant="h4" sx={{ color: theme.palette.primary.dark }}>{}</Typography>
           <Box mt={2}>
             <Button variant="contained" color="primary" onClick={() => navigate('/users')}>
-            <NotificationImportantIcon fontSize='small'/> View
+            <AdminPanelSettingsIcon fontSize='small'/> View
             </Button>
           </Box>
         </Paper>

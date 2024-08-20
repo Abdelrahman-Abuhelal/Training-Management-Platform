@@ -33,12 +33,13 @@ const Logout = () => {
   return (
     <Button
       color="inherit"
+      
       onClick={handleLogout}
       sx={{
         border: "1px solid white",
         borderRadius: "8px",
         padding: "6px 12px",
-        marginLeft:isMobile?"0.2rem":"1.5rem"
+        marginLeft:isMobile?"0.2rem":"1.5rem",
       }}
       startIcon={<LogoutIcon/>}
     >

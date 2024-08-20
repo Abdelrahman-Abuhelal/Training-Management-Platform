@@ -11,6 +11,8 @@ import SearchComponent from '../../components/Search';
 import { useMediaQuery, useTheme } from '@mui/material';
 import DownloadIcon from "@mui/icons-material/Download";
 import * as XLSX from "xlsx";
+import { BookOpenIcon } from '@heroicons/react/24/outline';
+import GroupsIcon from '@mui/icons-material/Groups';
 
 const TraineesInfoList = () => {
     const baseUrl = import.meta.env.VITE_PORT_URL;
@@ -57,28 +59,28 @@ const TraineesInfoList = () => {
 
     const preprocessTraineeDetails = (data) => {
         return data.map((trainee) => {
-          const { copyOfId, ...rest } = trainee;
-          return {
-            ID: rest.id,
-            "Full Name (Arabic)": rest.fullNameInArabic,
-            "Phone Number": rest.phoneNumber,
-            "ID Type": rest.idType,
-            "ID Number": rest.idNumber,
-            City: rest.city,
-            Address: rest.address,
-            "University Name": rest.universityName,
-            "University Major": rest.universityMajor,
-            "Expected Graduation Date": rest.expectedGraduationDate,
-            "Training Field": rest.trainingField,
-            "Branch Location": rest.branchLocation,
-            "Training Year": rest.trainingYear,
-            "Training Season": rest.trainingSeason,
-            "Start Training Date": rest.startTrainingDate,
-            "End Training Date": rest.endTrainingDate,
-            "Bugzella URL": rest.bugzillaURL,
-          };
+            const { copyOfId, ...rest } = trainee;
+            return {
+                ID: rest.id,
+                "Full Name (Arabic)": rest.fullNameInArabic,
+                "Phone Number": rest.phoneNumber,
+                "ID Type": rest.idType,
+                "ID Number": rest.idNumber,
+                City: rest.city,
+                Address: rest.address,
+                "University Name": rest.universityName,
+                "University Major": rest.universityMajor,
+                "Expected Graduation Date": rest.expectedGraduationDate,
+                "Training Field": rest.trainingField,
+                "Branch Location": rest.branchLocation,
+                "Training Year": rest.trainingYear,
+                "Training Season": rest.trainingSeason,
+                "Start Training Date": rest.startTrainingDate,
+                "End Training Date": rest.endTrainingDate,
+                "Bugzella URL": rest.bugzillaURL,
+            };
         });
-      };
+    };
 
 
     const columns = [
@@ -107,7 +109,7 @@ const TraineesInfoList = () => {
                     variant="text"
                     color="primary"
                     onClick={() => navigate(`/edit-trainee/${params.row.userId}`)}
-                    >
+                >
                     {params.value}
                 </Button>)
         },
@@ -137,39 +139,43 @@ const TraineesInfoList = () => {
     return (
         <Box sx={{ padding: 3 }}>
             <Paper sx={{ padding: 2, marginBottom: 3 }}>
-                <Grid container spacing={2} justifyContent="space-between" alignItems="center">
-                    <Grid item>
+                <Grid container spacing={2} alignItems="center">
+                    <Grid item xs={12} sm={6}>
                         <Typography
-                            className="concert-one-regular" variant='inherit'
+                            className="concert-one-regular"
+                            variant='inherit'
                             gutterBottom
-                            align="center"
                             sx={{ color: theme.palette.primary.dark }}
                         >
-                            <Box display="flex" alignItems="center" justifyContent="center">
-
+                            <Box display="flex" alignItems="center">
+                                <GroupsIcon fontSize="large" sx={{ marginRight: 1, color: theme.palette.primary.dark }} />
                                 Trainees Information
                             </Box>
                         </Typography>
                     </Grid>
 
-                    <Grid item xs={12} sm={6} md={3}>
-                        <SearchComponent searchTerm={searchTerm} onSearchChange={handleSearch} />
+                    <Grid item xs={12} sm={6} container spacing={2} justifyContent="flex-end" alignItems="center">
+                        <Grid item>
+                            <SearchComponent searchTerm={searchTerm} onSearchChange={handleSearch} />
+                        </Grid>
+                        <Grid item>
+                            <Button
+                                variant="contained"
+                                color="primary"
+                                startIcon={<DownloadIcon />}
+                                onClick={exportToExcel}
+                                sx={{
+                                    fontSize: "1.0rem",
+                                    maxWidth: "12rem",
+                                }}
+                            >
+                                Export As Excel
+                            </Button>
+                        </Grid>
                     </Grid>
                 </Grid>
-                <Button
-                    variant="contained"
-                    color="primary"
-                    startIcon={<DownloadIcon />}
-                    onClick={exportToExcel}
-                    sx={{
-                        fontSize: "1.0rem",
-                        maxWidth: "12rem",
-                        marginRight: '16px'
-                    }}
-                >
-                    Export As Excel
-                </Button>
             </Paper>
+
             <Paper sx={{ height: 600, width: '100%', padding: 2 }}>
                 <DataGrid
                     rows={filteredTrainees.map((trainee, index) => ({ id: index + 1, ...trainee }))}

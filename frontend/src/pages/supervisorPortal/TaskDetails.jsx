@@ -42,18 +42,30 @@ const TaskDetails = () => {
                     Authorization: `Bearer ${login_token}`,
                 },
             });
-            setTask(taskResponse.data);
-
+    
+            const formattedTask = {
+                ...taskResponse.data,
+                deadline: new Date(taskResponse.data.deadline).toLocaleDateString(),
+            };
+            setTask(formattedTask);
+    
             const traineeTasksResponse = await axios.get(`${baseUrl}/api/v1/tasks/${taskId}/trainee-tasks`, {
                 headers: {
                     Authorization: `Bearer ${login_token}`,
                 },
             });
-            setTraineeTasks(traineeTasksResponse.data);
+    
+            const formattedTraineeTasks = traineeTasksResponse.data.map(traineeTask => ({
+                ...traineeTask,
+                dateAssigned: new Date(traineeTask.dateAssigned).toLocaleDateString(),
+            }));
+            setTraineeTasks(formattedTraineeTasks);
+            
         } catch (error) {
             console.log(error);
         }
     };
+    
 
     useEffect(() => {
         fetchTaskDetails();
@@ -129,7 +141,7 @@ const TaskDetails = () => {
             headerName: 'Date Assigned',
             width: 150,
             valueFormatter: (params) => {
-                return params.value; // Directly return the raw date string
+                return params.value; 
             }
         },
         {
@@ -192,7 +204,7 @@ const TaskDetails = () => {
                     <>
                         <Typography variant="h4" gutterBottom>{task.name}</Typography>
                         <Typography variant="body1" paragraph>{task.description}</Typography>
-                        <Typography variant="body2" paragraph><strong>Deadline:</strong> {new Date(task.deadline).toLocaleString()}</Typography>
+                        <Typography variant="body2" paragraph><strong>Deadline:</strong> {task.deadline}</Typography>
                         <Typography variant="body2" paragraph><strong>Priority:</strong> {task.priority}</Typography>
 
                         <Divider style={{ margin: "20px 0" }} />
@@ -207,6 +219,7 @@ const TaskDetails = () => {
                                 rowHeight={80}
                                 disableSelectionOnClick
                                 getRowId={(row) => row.traineeTaskId}
+                                sx={{ backgroundColor: '#fff' }}
                             />
                         </div>
                         <Dialog
