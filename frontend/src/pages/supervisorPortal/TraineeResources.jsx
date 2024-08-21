@@ -3,6 +3,7 @@ import { Card, CardContent, Typography, Grid } from '@mui/material';
 import axios from 'axios';
 import { useAuth } from '../../provider/authProvider';
 import SourceIcon from '@mui/icons-material/Source';
+import { useMediaQuery, useTheme } from '@mui/material';
 
 const TraineeResources = ({ traineeId }) => {
     const [resources, setResources] = useState([]);
@@ -10,6 +11,7 @@ const TraineeResources = ({ traineeId }) => {
     const baseUrl = import.meta.env.VITE_PORT_URL;
     const { user } = useAuth();
     const { login_token } = user;
+    const theme = useTheme();
 
     useEffect(() => {
         const fetchResources = async () => {
@@ -36,7 +38,7 @@ const TraineeResources = ({ traineeId }) => {
 
     return (
         <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
-            <Typography className="concert-one-regular" sx={{ mb: '2rem' }} gutterBottom>
+            <Typography className="concert-one-regular" sx={{color:theme.palette.primary.dark, mb: '2rem' }} gutterBottom>
                 Assigned Resources <SourceIcon/>
             </Typography>
             <Grid container spacing={3} justifyContent="center">

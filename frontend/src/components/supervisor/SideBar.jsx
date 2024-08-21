@@ -19,6 +19,8 @@ import SourceIcon from '@mui/icons-material/Source';
 import PeopleIcon from '@mui/icons-material/People';
 import { ChartBarIcon } from '@heroicons/react/24/outline';
 import { CalendarIcon } from '@heroicons/react/24/outline';
+import { useAuth } from "../../provider/authProvider";
+import Typography from "@mui/material/Typography";
 
 const routes = [
   { path: '/home', name: 'Home', icon: <SpaceDashboardIcon sx={{ color: 'primary.main' }}/> },
@@ -34,27 +36,68 @@ const routes = [
 
 
 export default function TemporaryDrawer({state, setState, toggleDrawer}) {
+  const { user } = useAuth();
+  const { appUserDto } = user;
+  const { userFirstName, userLastName } = appUserDto;
+
   const list = (anchor) => (
     <Box
-      sx={{ width: anchor === 'top' || anchor === 'bottom' ? 'auto' : 250 }}
+      sx={{ width: anchor === "top" || anchor === "bottom" ? "auto" : 250 }}
       role="presentation"
       onClick={toggleDrawer(anchor, false)}
       onKeyDown={toggleDrawer(anchor, false)}
     >
-            <List>      
-          {routes.map((route, index) => (
-        <ListItem  key={route.name} disablePadding>
-        <ListItemButton href={route.path}>
-              <ListItemIcon>
-              {route.icon}
-              </ListItemIcon>
-              <ListItemText primary={route.name} />
+      <Box sx={{ backgroundColor: "#e0f7fa"}}>
+
+        <Box
+          display="flex"
+          justifyContent="center"
+          mb={1}
+          sx={{ animation: "fadeIn 1s ease-in-out" }}
+        >
+          <img
+            src="./EXALT_LOGO2.png"
+            alt="EXALT_LOGO"
+            style={{
+              height: "60px", 
+              marginBottom: "5px", 
+              marginRight: "2px",
+              transition: "transform 0.3s ease-in-out",
+              "&:hover": {
+                transform: "scale(1.05)", // Slightly enlarge on hover
+              },
+            }}
+          />
+        </Box>
+        <Typography
+          align="center"
+          variant="body1"
+          sx={{
+            mb: "1rem",
+            fontFamily: "'Mukta', sans-serif",
+            fontSize: "1rem",
+            animation: "slideIn 1s ease-in-out",
+            display: { xs: "none", sm: "block" },
+          }}
+        >
+          Welcome {userFirstName}!
+        </Typography>
+        <Divider />
+      </Box>
+      <List>
+        {routes.map((route, index) => (
+          <ListItem key={route.name} disablePadding>
+            <ListItemButton href={route.path}>
+              <ListItemIcon>{route.icon}</ListItemIcon>
+              <ListItemText
+                sx={{ fontFamily: '"Concert One", sans-serif' }}
+                primary={route.name}
+              />
             </ListItemButton>
           </ListItem>
         ))}
       </List>
       <Divider />
-     
     </Box>
   );
 

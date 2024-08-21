@@ -164,6 +164,8 @@ const TraineesList = () => {
 
   const handleCloseAssignDialog = () => {
     setOpenAssignDialog(false);
+    setSelectedTrainees([]);
+    setSelectedSupervisors([]);
   };
 
   const preprocessTraineeDetails = (data) => {

@@ -230,7 +230,7 @@ const FillForm = () => {
       </Button>
       {formDisabled && (
         <Box display="flex" justifyContent="flex-end" alignItems="center" sx={{ mb: '1rem' , mr:'2rem'}}>
-          <CheckCircleIcon color="success" sx={{ mr: '0.5rem' }} />
+          <CheckCircleIcon color={theme.palette.primary.dark} sx={{ mr: '0.5rem' }} />
           <Typography variant="subtitle1" color="success">
             Form Submitted
           </Typography>

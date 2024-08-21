@@ -104,7 +104,7 @@ const TraineeProfileView = () => {
           </Button>
         </Box>
         <Box mt={4}>
-          <Typography className="concert-one-regular"  gutterBottom align="center" mb={3}>
+          <Typography className="concert-one-regular"  sx={{color:theme.palette.primary.dark}} gutterBottom align="center" mb={3}>
           <AccountCircleIcon sx={{fontSize:'30px',mb:'0.2rem'}}/> {userFullName}
           </Typography>
         </Box>

@@ -12,8 +12,10 @@ import {
 } from "@mui/material";
 import { useAuth } from "../../provider/authProvider";
 import { useTheme } from "@mui/material";
-import WorkIcon from "@mui/icons-material/Work";
 import FaceIcon from "@mui/icons-material/Face";
+import WorkIcon from "@mui/icons-material/Work";
+import ArrowRightIcon from '@mui/icons-material/ArrowRight';
+import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 
 function JobDescriptionRanking() {
   const [jobDescription, setJobDescription] = useState("");
@@ -125,12 +127,17 @@ function JobDescriptionRanking() {
         }}
       >
         <Typography variant="h4" align="center" gutterBottom>
-          Finding Best Candidates{" "}
-          <FaceIcon sx={{ fontSize: "40px", mb: "5px" }} />
+          Finding Best Candidates for an Entry Job{" "}
+          <WorkIcon fontSize="large" sx={{ mb: "0.2em" }} />
         </Typography>
-        <Grid container spacing={2}>
-          <Grid item xs={12} mt={4}>
-            <Paper elevation={3} sx={{ backgroundColor: "#fff", p: "20px" }}>
+        <Grid container spacing={2} sx={{p:'2rem'}}>
+          <Grid item xs={12} mt={4} >
+            <Paper elevation={3} sx={{ backgroundColor: "#f9f9f9", p: "20px" }}>
+              <Typography variant="h5" sx={{ pb: "2rem" }} gutterBottom>
+               <ArrowForwardIcon sx={{mb:'0.2rem'}}/> This feature leverages Generative AI to analyze and understand
+                text, allowing HR to quickly rank and identify the best trainees
+                and candidates for specific job descriptions.
+              </Typography>
               <Typography variant="h5" sx={{ pb: "2rem" }} gutterBottom>
                 Job Description
               </Typography>
@@ -155,11 +162,24 @@ function JobDescriptionRanking() {
               </Button>
             </Paper>
           </Grid>
+
           <Grid item xs={12} mt={4}>
             <Paper
               elevation={3}
-              style={{ padding: "20px", backgroundColor: "#fff" }}
+              style={{ padding: "20px", backgroundColor: "#f9f9f9" }}
             >
+              {/* <Typography variant="h5" sx={{ pb: "2rem" }} gutterBottom>
+                The AI evaluates candidates by some data which will retrieved from the database using three APIs,
+                such as their skills, completed tasks, and
+                relevant job-related details like location, university, major,
+                and graduation date. 
+              </Typography>
+              <Typography variant="h5" sx={{ pb: "2rem" }} gutterBottom>
+              The data is parsed and used as criteria to
+                rank the candidates according to their fit for the job
+                description, and the results are presented in a structured
+                response.
+              </Typography> */}
               <Typography variant="h5" gutterBottom>
                 Ranked Trainees
               </Typography>
@@ -171,7 +191,7 @@ function JobDescriptionRanking() {
           <Grid item xs={12} mt={4}>
             <Paper
               elevation={3}
-              style={{ padding: "20px", backgroundColor: "#fff" }}
+              style={{ padding: "20px", backgroundColor: "#f9f9f9" }}
             >
               <Typography variant="h5" gutterBottom>
                 Recommendations
@@ -184,7 +204,7 @@ function JobDescriptionRanking() {
           <Grid item xs={12} mt={4}>
             <Paper
               elevation={3}
-              style={{ padding: "20px", backgroundColor: "#fff" }}
+              style={{ padding: "20px", backgroundColor: "#f9f9f9" }}
             >
               <Typography variant="h5" gutterBottom>
                 Considerations

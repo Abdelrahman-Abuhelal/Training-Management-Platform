@@ -171,7 +171,7 @@ const TasksList = () => {
   return (
     <div style={{ display: "flex", justifyContent: "center" }}>
       <Paper elevation={3} sx={{ p: 3, m: 6, width: "80%", maxWidth: 1200, backgroundColor: theme.palette.background.paper }}>
-        <Typography className="concert-one-regular" align="center" gutterBottom>
+        <Typography className="concert-one-regular"  sx={{ color: theme.palette.primary.dark}} align="center" gutterBottom>
           Assigned Tasks <TaskAltIcon sx={{fontSize:"30px"}}/>
         </Typography>
         <Box sx={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '1rem' }}>

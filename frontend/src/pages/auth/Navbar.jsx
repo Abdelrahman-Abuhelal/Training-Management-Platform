@@ -19,14 +19,8 @@ export default function LoginButtonAppBar() {
         <Box sx={{ flexGrow: 1 }}>
             <AppBar position="static" color="primary">
                 <Toolbar>
-                    {/* <Box display="flex" justifyContent="center" mb={1}>
-                        <img
-                            // src="/EXALT_LOGO2.png"
-                            // alt="Exalt Logo"
-                            style={{ height: "50px", marginBottom: "20px" }}
-                        />
-                    </Box> */}
-                    <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+
+                    <Typography variant="h6" component="div"  sx={{ fontSize: { xs: '1.0rem', sm: '1.5rem' } }}>
                         EXALT Training Platform
                     </Typography>
 

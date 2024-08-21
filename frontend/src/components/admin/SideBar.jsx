@@ -55,6 +55,15 @@ const routes = [
     icon: <AdminPanelSettingsIcon sx={{ color: "primary.main" }} />,
   },
   {
+    path: "/superadmins",
+    name: "Super Admins",
+    icon: (
+      <ShieldCheckIcon
+        style={{ width: "24px", height: "24px", color: "#32c1c1" }}
+      />
+    ),
+  },
+  {
     path: "/trainees",
     name: "Trainees",
     icon: (
@@ -81,18 +90,15 @@ const routes = [
       />
     ),
   },
-  {
-    path: "/superadmins",
-    name: "Super Admins",
-    icon: (
-      <ShieldCheckIcon
-        style={{ width: "24px", height: "24px", color: "#32c1c1" }}
-      />
-    ),
-  },
+
   {
     path: "/skills",
     name: "Experience & Skills",
+    icon: <AutoAwesomeIcon sx={{ color: "primary.main" }} />,
+  },
+  {
+    path: "/tasks",
+    name: "Tasks",
     icon: <AutoAwesomeIcon sx={{ color: "primary.main" }} />,
   },
   {
@@ -151,9 +157,8 @@ export default function TemporaryDrawer({ state, setState, toggleDrawer }) {
           variant="body1"
           sx={{
             mb: "1rem",
-            fontFamily: 'Trebuchet MS, sans-serif	',
+            fontFamily: "'Mukta', sans-serif",
             fontSize: "1rem",
-            textShadow: "1px 1px 2px rgba(0, 0, 0, 0.2)",
             animation: "slideIn 1s ease-in-out",
             display: { xs: "none", sm: "block" },
           }}

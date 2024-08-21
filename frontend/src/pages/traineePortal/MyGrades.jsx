@@ -63,7 +63,7 @@ const MyGrades = () => {
   return (
     <Paper elevation={3} sx={{ p: '3rem', m: '4rem auto', backgroundColor: theme.palette.background.paper,width:'75%' }}>
       <Typography variant='h4' align="center" sx={{ mb:'4rem' }} gutterBottom>
-        My Academic Courses <SchoolIcon fontSize="large"/>
+        My Academic Grades <SchoolIcon fontSize="large"/>
       </Typography>
       <Grid container spacing={3}>
         {academicGrades.map((academicGrade, index) => (

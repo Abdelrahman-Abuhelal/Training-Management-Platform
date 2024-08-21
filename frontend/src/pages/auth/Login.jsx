@@ -76,7 +76,7 @@ const Login = () => {
   return (
     <Paper sx={{ backgroundColor: theme.palette.background.paper }}>
       <Navbar />
-      <Paper style={{ height: "91.5vh" }}>
+      <Paper style={{ height: "89.5vh" }}>
         <Grid container style={{ height: "100%" }}>
           <Grid
             item
@@ -84,18 +84,16 @@ const Login = () => {
             md={6}
             display="flex"
             flexDirection="column"
-            justifyContent="flex-end" // Change to 'flex-end' to align content at the bottom
+            justifyContent="flex-end" 
             alignItems="center"
             style={{
-              backgroundImage: 'url("/background.jpg")',
+              backgroundImage: 'url("/back11.jpg")',
               backgroundSize: "cover",
               color: "white",
-              paddingBottom: "50px", // Optional: Add padding for better spacing
+              paddingBottom: "50px", 
             }}
           >
-            <Box mb={2}> {/* Add margin bottom to the Box if needed */}
-              <Typography variant="h3" align="center" sx={{color: theme.palette.background.paper,fontFamily: '-moz-initial',fontSize:'2.7rem'}}>Welcome to EXALT Training Platform</Typography>
-            </Box>
+
             {/* <img
     src="/TMS_LOGO.jpg"
     alt="Exalt Logo"

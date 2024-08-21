@@ -8,7 +8,6 @@ import {
   Button,
 } from "@mui/material"; // MUI components (or your preferred library)
 import { useNavigate } from "react-router-dom";
-import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { useAuth } from "../../provider/authProvider";
 import SearchComponent from "../../components/Search";
@@ -17,8 +16,10 @@ import { DataGrid } from "@mui/x-data-grid"; // Import DataGrid component
 import StarRateIcon from '@mui/icons-material/StarRate';
 import AccountBoxIcon from '@mui/icons-material/AccountBox';
 import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
+import { useTheme } from '@mui/material';
 
 const Supervisor_Trainees_List = () => {
+  const theme = useTheme();
   const baseUrl = import.meta.env.VITE_PORT_URL;
   const { user } = useAuth();
   const { login_token } = user;
@@ -28,7 +29,6 @@ const Supervisor_Trainees_List = () => {
   const [sortDirection, setSortDirection] = useState("asc");
   const [selectedTrainees, setSelectedTrainees] = useState([]);
   const navigate = useNavigate();
-  const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
   const fetchTrainees = async () => {
@@ -124,7 +124,7 @@ const Supervisor_Trainees_List = () => {
             <SearchComponent searchTerm={searchTerm} onSearchChange={setSearchTerm} />
           </Grid>
           <Grid item xs={6}>
-            <Typography className="concert-one-regular"  align="center">
+            <Typography className="concert-one-regular" sx={{ color: theme.palette.primary.dark}} align="center">
               My Trainees  <GroupIcon fontSize="large" />
             </Typography>
           </Grid>

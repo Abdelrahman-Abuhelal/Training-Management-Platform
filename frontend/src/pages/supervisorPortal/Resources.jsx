@@ -203,7 +203,7 @@ const Resources = () => {
     <div style={{ display: "flex", justifyContent: "center" }}>
       <Paper elevation={3} sx={{ p: 3, m: 6, width: "80%",minHeight:"450px", maxWidth: 1200, backgroundColor: theme.palette.background.paper }}>
        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <Typography className="concert-one-regular" sx={{ml:'1rem'}} gutterBottom>
+          <Typography className="concert-one-regular" sx={{ color: theme.palette.primary.dark,ml:'1rem'}}  gutterBottom>
            Resource List   <SourceIcon sx={{fontSize:'35px' , mb:'0.5rem' , ml:'0.35rem'}}/> 
           </Typography>
           <Button

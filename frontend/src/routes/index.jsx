@@ -53,6 +53,8 @@ import CreateResources from '../pages/supervisorPortal/CreateResources.jsx';
 import MyResources from '../pages/traineePortal/MyResources.jsx';
 import MyTasks from '../pages/traineePortal/MyTasks.jsx';
 import CompletedTasks from '../pages/traineePortal/CompletedTasks.jsx';
+import GroupedTasks from '../pages/adminPortal/GroupedTasks.jsx';
+
 const Routes = () => {
   const { user } = useAuth();
   const isAuthenticated = user !== null && user.login_token !== null;
@@ -148,6 +150,7 @@ const Routes = () => {
             { path: '/trainees', element: <HR_Trainees_List /> },
             { path: '/trainees-info', element: <TraineesInfoList /> },
             { path: '/forms', element: <FormsList /> },
+            { path: '/tasks',element:<GroupedTasks/>},
             { path: '/skills', element: <TraineesSkillsList /> },
             { path: '/add-skills', element: <AddSkillComponent /> },
             { path: '/add-courses', element: <AddCourseComponent /> },

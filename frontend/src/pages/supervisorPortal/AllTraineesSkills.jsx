@@ -111,7 +111,7 @@ const AllTraineesSkills = () => {
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', minHeight: '100vh' }}>
       <Paper elevation={3} sx={{ p: 3, m: 6, width: "80%", maxWidth: 1200, backgroundColor: theme.palette.background.paper }}>
-        <Typography className="concert-one-regular" align="center"  sx={{
+        <Typography className="concert-one-regular" align="center" sx={{ color: theme.palette.primary.dark,
           marginBottom: "2rem"
         }} gutterBottom>
            Trainees Experience and Skills <AutoAwesomeIcon sx={{fontSize:'28px'}}/>

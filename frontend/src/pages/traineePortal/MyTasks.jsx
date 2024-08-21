@@ -193,7 +193,7 @@ const MyTasks = () => {
     return (
         <Container>
             <Typography variant="h4" align='center' sx={{ mt: '2rem' }} gutterBottom>
-                My Tasks <TaskIcon fontSize='large' />
+                My Tasks <TaskIcon sx={{mb:'0.5rem'}} fontSize='large' />
             </Typography>
             <Box sx={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '1rem' }}>
                 <Button variant="contained" sx={{ border: '1x solid #ccc' }} onClick={viewCompletedTasks} >

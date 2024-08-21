@@ -93,7 +93,6 @@ const TraineesInfoList = () => {
         },
         { field: 'endTrainingDate', headerName: 'End Date', flex: 1 },
         { field: 'startTrainingDate', headerName: 'Start Date', flex: 1 },
-        { field: 'trainingYear', headerName: 'Training Year', flex: 1 },
         { field: 'branchLocation', headerName: 'Branch Location', flex: 1.3 },
         { field: 'trainingField', headerName: 'Training Field', flex: 1 },
         { field: 'universityMajor', headerName: 'Major', flex: 1.5 },

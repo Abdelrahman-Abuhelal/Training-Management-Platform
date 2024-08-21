@@ -214,31 +214,27 @@ const UserManagement = () => {
 
   const columns = [
     { field: 'userEmail', headerName: 'Email', width: 200 },
-    { field: 'userFirstName', headerName: 'First Name', width: 150 },
-    { field: 'userLastName', headerName: 'Last Name', width: 150 },
-    { field: 'userUsername', headerName: 'Username', width: 150 },
+    { field: 'userFirstName', headerName: 'First Name', width: 120 },
+    { field: 'userLastName', headerName: 'Last Name', width: 120 },
+    { field: 'userUsername', headerName: 'Username', width: 140 },
     { field: 'userRole', headerName: 'Role', width: 150 },
-    { field: 'userBranch', headerName: 'Branch', width: 130 },
+    { field: 'userBranch', headerName: 'Branch', width: 120 },
     {
       field: 'userActivated',
       headerName: 'Activated',
       width: 80,
-      headerAlign: 'center',
-      align: 'center',
        renderCell: (params) => <Checkbox checked={params.value} disabled />
     },
     {
       field: 'userVerified',
       headerName: 'Verified',
       width: 80,
-      headerAlign: 'center',
-      align: 'center',
        renderCell: (params) => <Checkbox checked={params.value} disabled />
     },
     {
       field: 'actions',
       headerName: 'Actions',
-      width: 150,
+      width: 120,
       sortable: false,
       headerAlign: 'center',
       align: 'center',

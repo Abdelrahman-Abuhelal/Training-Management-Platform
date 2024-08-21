@@ -39,10 +39,10 @@ const ForgotPasswordEmail = () => {
     }
   };
   return (
-    <Paper sx={{ backgroundColor: theme.palette.background.paper }}>
-      <Container component="main" maxWidth="xs">
-        <Box display="flex" flexDirection="column" justifyContent="center" alignItems="center" minHeight="100vh">
-          <Box textAlign="center" mb={1}>
+    <Paper sx={{ display: "flex", justifyContent: "center",backgroundColor: theme.palette.background.paper}}>
+        <Box sx={{width:'50%', backgroundColor: theme.palette.background.paper }}  flexDirection="column" alignItems="center" minHeight="100vh">
+        <Container component="main" maxWidth="xs">
+        <Box textAlign="center" mb={1}>
             <Box display="flex" justifyContent="center" mb={2}>
               <img
                 src="/EXALT_LOGO2.png"
@@ -73,6 +73,7 @@ const ForgotPasswordEmail = () => {
               label="Email address"
               type="email"
               value={email}
+              sx={{backgroundColor:'#fff'}}
               onChange={(e) => setEmail(e.target.value)}
             />
             <Box textAlign="right" my={1}>
@@ -99,9 +100,9 @@ const ForgotPasswordEmail = () => {
               </Alert>
             )}
           </Box>
+          </Container>
         </Box>
-      </Container>
-    </Paper>
+      </Paper>
   );
 };
 

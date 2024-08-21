@@ -6,6 +6,7 @@ import axios from 'axios';
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../provider/authProvider";
 import TaskAltIcon from '@mui/icons-material/TaskAlt';
+import { useTheme } from "@mui/material/styles";
 
 const TraineeAssignedTasks = ({ traineeId }) => {
   const [tasks, setTasks] = useState([]);
@@ -14,6 +15,7 @@ const TraineeAssignedTasks = ({ traineeId }) => {
   const { user } = useAuth();
   const { login_token } = user;
   const navigate = useNavigate();
+  const theme = useTheme();
 
   useEffect(() => {
     const fetchTasks = async () => {
@@ -40,7 +42,7 @@ const TraineeAssignedTasks = ({ traineeId }) => {
 
   return (
     <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
-      <Typography className="concert-one-regular" sx={{ mb: '2rem' }} gutterBottom>
+      <Typography className="concert-one-regular" sx={{color:theme.palette.primary.dark, mb: '2rem' }} gutterBottom>
         Assigned Tasks <TaskAltIcon/>
       </Typography>
       <TableContainer component={Paper} sx={{ backgroundColor: '#fff' }}>
