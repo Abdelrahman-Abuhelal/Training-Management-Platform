@@ -29,7 +29,7 @@ public class TaskController {
 
 
     @GetMapping("/all")
-    @PreAuthorize("hasAnyRole('SUPER_ADMIN')")
+    @PreAuthorize("hasAnyRole('SUPER_ADMIN','SUPERVISOR')")
     @Operation(summary = "Get All Tasks" , security =  @SecurityRequirement(name = "loginAuth"))
     public List<TasksInfoDto> getAllTasks() {
         return taskService.getAllTasksAssigned();

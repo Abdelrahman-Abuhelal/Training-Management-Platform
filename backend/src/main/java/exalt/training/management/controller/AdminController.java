@@ -6,6 +6,7 @@ import exalt.training.management.model.users.AppUser;
 import exalt.training.management.model.users.Trainee;
 import exalt.training.management.service.AcademicGradesService;
 import exalt.training.management.service.AdminService;
+import exalt.training.management.service.TaskService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
@@ -25,6 +26,7 @@ public class AdminController {
 
 
     private final AdminService adminService;
+    private final TaskService taskService;
 
     @Operation(summary = "Create User, Using Secret Header API only ", security =  @SecurityRequirement(name = "apiKey"))
     @PostMapping("/create-user-secret")
@@ -175,6 +177,13 @@ public class AdminController {
     @GetMapping ("/trainees/size")
     public ResponseEntity<Integer> getNumberOfActiveTrainees() {
         return ResponseEntity.ok(adminService.getNumberOfActiveTrainees());
+    }
+
+    @Operation(summary = "Get All Tasks Assigned", security =  @SecurityRequirement(name = "loginAuth"))
+    @PreAuthorize("hasAnyRole('SUPER_ADMIN')")
+    @GetMapping ("/assigned-tasks")
+    public ResponseEntity<List<TaskDto>> getTasksAssignedByAllSupervisors() {
+        return ResponseEntity.ok(taskService.getTasksAssignedByAllSupervisors());
     }
 
 }

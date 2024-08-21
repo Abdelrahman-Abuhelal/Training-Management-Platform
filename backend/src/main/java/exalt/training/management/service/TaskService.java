@@ -70,6 +70,11 @@ public class TaskService {
         return tasks.stream().map(this::convertToDTO).collect(Collectors.toList());
     }
 
+    public List<TaskDto> getTasksAssignedByAllSupervisors() {
+        List<Task> tasks = taskRepository.findAll();
+        return tasks.stream().map(this::convertToDTO).collect(Collectors.toList());
+    }
+
 
     public List<TraineeTaskDetailDto> getTasksForAuthenticatedTrainee() {
         // Get the authenticated user

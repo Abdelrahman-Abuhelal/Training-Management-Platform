@@ -21,7 +21,7 @@ public class AcademicGrades {
 
     @ManyToOne
     @JoinColumn(name = "course_id")
-    private Course course; // Reference to Course entity
+    private Course course;
 
     private Double mark;
 
