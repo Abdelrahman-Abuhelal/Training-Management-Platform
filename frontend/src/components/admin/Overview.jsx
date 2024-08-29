@@ -9,6 +9,7 @@ import DynamicFormIcon from '@mui/icons-material/DynamicForm';
 import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
 import NotificationImportantIcon from '@mui/icons-material/NotificationImportant';
 import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
+import WorkIcon from "@mui/icons-material/Work";
 
 const Overview = () => {
   const [traineeSize, setTraineeSize] = useState([]);
@@ -156,6 +157,17 @@ const Overview = () => {
           <Box mt={2}>
             <Button variant="contained" color="primary" onClick={() => navigate('/users')}>
             <AdminPanelSettingsIcon fontSize='small'/> View
+            </Button>
+          </Box>
+        </Paper>
+      </Grid>
+      <Grid item xs={12} sm={4} md={4}>
+        <Paper elevation={3} style={paperStyle}>
+          <Typography className="concert-one-regular" variant='inherit' sx={{ color: theme.palette.primary.dark }} >Job Hunt</Typography>
+          <Typography variant="h4" sx={{ color: theme.palette.primary.dark }}>{}</Typography>
+          <Box mt={2}>
+            <Button variant="contained" color="primary" onClick={() => navigate('/job-description-ranking')}>
+            <WorkIcon fontSize='small'/> View
             </Button>
           </Box>
         </Paper>

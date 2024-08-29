@@ -132,7 +132,7 @@ function JobDescriptionRanking() {
         </Typography>
         <Grid container spacing={2} sx={{p:'2rem'}}>
           <Grid item xs={12} mt={4} >
-            <Paper elevation={3} sx={{ backgroundColor: "#f9f9f9", p: "20px" }}>
+            <Paper elevation={3} sx={{ backgroundColor: "#fff", p: "20px" }}>
               <Typography variant="h5" sx={{ pb: "2rem" }} gutterBottom>
                <ArrowForwardIcon sx={{mb:'0.2rem'}}/> This feature leverages Generative AI to analyze and understand
                 text, allowing HR to quickly rank and identify the best trainees
@@ -166,7 +166,7 @@ function JobDescriptionRanking() {
           <Grid item xs={12} mt={4}>
             <Paper
               elevation={3}
-              style={{ padding: "20px", backgroundColor: "#f9f9f9" }}
+              style={{ padding: "20px", backgroundColor: "#fff" }}
             >
               {/* <Typography variant="h5" sx={{ pb: "2rem" }} gutterBottom>
                 The AI evaluates candidates by some data which will retrieved from the database using three APIs,
@@ -191,7 +191,7 @@ function JobDescriptionRanking() {
           <Grid item xs={12} mt={4}>
             <Paper
               elevation={3}
-              style={{ padding: "20px", backgroundColor: "#f9f9f9" }}
+              style={{ padding: "20px", backgroundColor: "#fff" }}
             >
               <Typography variant="h5" gutterBottom>
                 Recommendations
@@ -204,7 +204,7 @@ function JobDescriptionRanking() {
           <Grid item xs={12} mt={4}>
             <Paper
               elevation={3}
-              style={{ padding: "20px", backgroundColor: "#f9f9f9" }}
+              style={{ padding: "20px", backgroundColor: "#fff" }}
             >
               <Typography variant="h5" gutterBottom>
                 Considerations

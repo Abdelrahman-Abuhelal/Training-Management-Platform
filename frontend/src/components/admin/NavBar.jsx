@@ -49,9 +49,13 @@ export default function AdminButtonAppBar() {
           >
             <MenuIcon />
           </IconButton>
+
           <Link to="/" style={{ textDecoration: 'none', color: 'inherit', flexGrow: 1 }}>
             <Typography variant="h6" component="div" sx={{ fontSize: { xs: '1.0rem', sm: '1.5rem' } }}>
-              EXALT Training Platform
+              EXALT Training Platform 
+            </Typography>
+            <Typography variant="h9"  sx={{ fontSize: '1rem' }}>
+              Admin Portal
             </Typography>
           </Link>
           <Box sx={{ display: "flex", alignItems: "center", fontSize: '0.875rem' }}>

@@ -165,12 +165,12 @@ const TraineesSkillsList = () => {
         {/* Trainees List */}
         <Grid container spacing={2} sx={{ marginTop: '2rem' }}>
           {filteredTrainees.map((trainee, index) => (
-            <Grid item xs={12} key={index} sx={{ backgroundColor: '#F5FFFA', mb: '2rem', borderRadius: '1rem' }}>
-              <Typography  variant='h5' align="center" component="h3" gutterBottom  >
+            <Grid item xs={12} key={index} sx={{ backgroundColor: '#F5FFFA', mb: '3rem', borderRadius: '1rem', border:'1px solid #2ca4a4' }}>
+              <Typography  variant='h5' align="center" component="h3" gutterBottom>
                 <Link to={`/edit-trainee/${trainee.userId}`} style={{ textDecoration: 'none', color:  theme.palette.primary.dark}}>
-                 <AccountCircleIcon sx={{mb:'0.4rem'}} fontSize="large"/> {trainee.traineeName}
+                 <AccountCircleIcon  fontSize="large"/> <Typography  > {trainee.traineeName}</Typography>
                 </Link>
-              </Typography>
+                </Typography>
               <Typography  variant='h6'  component="h3" gutterBottom  sx={{ml:'0.5rem', color:  theme.palette.primary.dark}}>
               Skills:
               </Typography>

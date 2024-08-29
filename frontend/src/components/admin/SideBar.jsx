@@ -30,6 +30,8 @@ import {
 import { useAuth } from "../../provider/authProvider";
 import Typography from "@mui/material/Typography";
 import WorkIcon from "@mui/icons-material/Work";
+import { useMediaQuery, useTheme } from "@mui/material";
+import TaskAltIcon from '@mui/icons-material/TaskAlt';
 /* const routes = [
   { path: "/home", name: "Home", icon:<AcademicCapIcon style={{ width: '24px', height: '24px' }} /> },
   { path: "/users", name: "User Management", icon: <AdminPanelSettingsIcon sx={{ color: 'primary.main' }}/> },
@@ -53,15 +55,6 @@ const routes = [
     path: "/users",
     name: "User Management",
     icon: <AdminPanelSettingsIcon sx={{ color: "primary.main" }} />,
-  },
-  {
-    path: "/superadmins",
-    name: "Super Admins",
-    icon: (
-      <ShieldCheckIcon
-        style={{ width: "24px", height: "24px", color: "#32c1c1" }}
-      />
-    ),
   },
   {
     path: "/trainees",
@@ -99,7 +92,7 @@ const routes = [
   {
     path: "/tasks",
     name: "Tasks",
-    icon: <AutoAwesomeIcon sx={{ color: "primary.main" }} />,
+    icon: <TaskAltIcon sx={{ color: "primary.main" }} />,
   },
   {
     path: "/form-templates",
@@ -122,6 +115,7 @@ export default function TemporaryDrawer({ state, setState, toggleDrawer }) {
   const { user } = useAuth();
   const { appUserDto } = user;
   const { userFirstName, userLastName } = appUserDto;
+  const theme = useTheme();
 
   const list = (anchor) => (
     <Box
@@ -130,8 +124,7 @@ export default function TemporaryDrawer({ state, setState, toggleDrawer }) {
       onClick={toggleDrawer(anchor, false)}
       onKeyDown={toggleDrawer(anchor, false)}
     >
-      <Box sx={{ backgroundColor: "#e0f7fa"}}>
-
+      <Box sx={{ backgroundColor: "#e0f7fa" }}>
         <Box
           display="flex"
           justifyContent="center"
@@ -142,15 +135,17 @@ export default function TemporaryDrawer({ state, setState, toggleDrawer }) {
             src="./EXALT_LOGO2.png"
             alt="EXALT_LOGO"
             style={{
-              height: "60px", 
-              marginBottom: "5px", 
+              height: "60px",
+              marginBottom: "5px",
               marginRight: "2px",
+              animation: "slideIn 1s ease-in-out",
               transition: "transform 0.3s ease-in-out",
               "&:hover": {
                 transform: "scale(1.05)", // Slightly enlarge on hover
               },
             }}
           />
+          
         </Box>
         <Typography
           align="center"
@@ -173,7 +168,11 @@ export default function TemporaryDrawer({ state, setState, toggleDrawer }) {
             <ListItemButton href={route.path}>
               <ListItemIcon>{route.icon}</ListItemIcon>
               <ListItemText
-                sx={{ fontFamily: '"Concert One", sans-serif' }}
+                sx={{
+                  fontFamily: '"Concert One", sans-serif',
+                  fontWeight: "bold",
+                  animation: "slideIn 1s ease-in-out",
+                }}
                 primary={route.name}
               />
             </ListItemButton>

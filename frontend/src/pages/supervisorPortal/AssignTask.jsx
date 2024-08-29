@@ -249,7 +249,7 @@ const AssignTask = () => {
             Back
           </Button>
         </Box>
-        <Typography className="concert-one-regular"  sx={{ marginBottom: '2rem' }} align="center">
+        <Typography className="concert-one-regular"  sx={{ color: theme.palette.primary.dark, marginBottom: '2rem'}}   align="center">
           &nbsp;Create Task&nbsp;<AddTaskIcon sx={{fontSize:'30px'}} />
         </Typography>
         <Box sx={{ display: "flex", flexWrap: "wrap", gap: 2 }}>

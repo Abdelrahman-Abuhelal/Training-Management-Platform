@@ -51,9 +51,13 @@ export default function SupervisorButtonAppBar() {
           </IconButton>
           <Link to="/" style={{ textDecoration: 'none', color: 'inherit', flexGrow: 1 }}>
             <Typography variant="h6" component="div" sx={{ fontSize: { xs: '1.0rem', sm: '1.5rem' } }}>
-              EXALT Training Platform
+              EXALT Training Platform 
+            </Typography>
+            <Typography variant="h9"  sx={{ fontSize: '1rem' }}>
+              Supervisor Portal
             </Typography>
           </Link>
+   
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
             <AccountCircle sx={{ mr: 1 }} />
             <Typography variant="body1" sx={{ mr: 2 }}>

@@ -78,7 +78,7 @@ const Supervisor_Trainees_List = () => {
       renderCell: (params) => (
           <Button
             color="primary"
-            variant="outlined"
+            variant="contained"
             startIcon={<AccountBoxIcon />}
             onClick={() => handleViewProfile(params.row)}
             sx={{ ml: 1, minWidth:'150px' }} // Adds margin to the left
@@ -100,7 +100,7 @@ const Supervisor_Trainees_List = () => {
         >
           <Button
             color="primary"
-            variant="contained"
+            variant="outlined"
             startIcon={<AutoAwesomeIcon />}
             onClick={() => handleAddSkills(params.row)}
             sx={{mt:'0.5rem'}}

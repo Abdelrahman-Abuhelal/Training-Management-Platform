@@ -26,6 +26,8 @@ public class TrainingPlanController {
     private TrainingPlanService trainingPlanService;
 
     @PostMapping
+    @PreAuthorize("hasAnyRole('SUPER_ADMIN','SUPERVISOR')")
+    @Operation(summary = "Create training plan " , security =  @SecurityRequirement(name = "loginAuth"))
     public TrainingPlanResponseDTO createTrainingPlan(@RequestBody TrainingPlanCreateRequestDTO trainingPlanCreateRequestDTO) {
         return trainingPlanService.createTrainingPlan(trainingPlanCreateRequestDTO);
     }

@@ -92,7 +92,8 @@ export default function TemporaryDrawer({state, setState, toggleDrawer}) {
             <ListItemButton href={route.path}>
               <ListItemIcon>{route.icon}</ListItemIcon>
               <ListItemText
-                sx={{ fontFamily: '"Concert One", sans-serif' }}
+                sx={{ fontFamily: '"Concert One", sans-serif' ,                  animation: "slideIn 1s ease-in-out",
+                }}
                 primary={route.name}
               />
             </ListItemButton>
