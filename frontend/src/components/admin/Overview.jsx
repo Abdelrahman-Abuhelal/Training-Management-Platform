@@ -130,6 +130,17 @@ const Overview = () => {
       </Grid>
       <Grid item xs={12} sm={4} md={4}>
         <Paper elevation={3} style={paperStyle}>
+          <Typography className="concert-one-regular" variant='inherit' sx={{ color: theme.palette.primary.dark }} >User Management</Typography>
+          <Typography variant="h4" sx={{ color: theme.palette.primary.dark }}>{}</Typography>
+          <Box mt={2}>
+            <Button variant="contained" color="primary" onClick={() => navigate('/users')}>
+            <AdminPanelSettingsIcon fontSize='small'/> View
+            </Button>
+          </Box>
+        </Paper>
+      </Grid>
+      <Grid item xs={12} sm={4} md={4}>
+        <Paper elevation={3} style={paperStyle}>
           <Typography className="concert-one-regular" variant='inherit' sx={{ color: theme.palette.primary.dark }} >Forms</Typography>
           <Typography variant="h4" sx={{ color: theme.palette.primary.dark }}>{}</Typography>
           <Box mt={2}>
@@ -150,17 +161,7 @@ const Overview = () => {
           </Box>
         </Paper>
       </Grid>
-      <Grid item xs={12} sm={4} md={4}>
-        <Paper elevation={3} style={paperStyle}>
-          <Typography className="concert-one-regular" variant='inherit' sx={{ color: theme.palette.primary.dark }} >User Management</Typography>
-          <Typography variant="h4" sx={{ color: theme.palette.primary.dark }}>{}</Typography>
-          <Box mt={2}>
-            <Button variant="contained" color="primary" onClick={() => navigate('/users')}>
-            <AdminPanelSettingsIcon fontSize='small'/> View
-            </Button>
-          </Box>
-        </Paper>
-      </Grid>
+
       <Grid item xs={12} sm={4} md={4}>
         <Paper elevation={3} style={paperStyle}>
           <Typography className="concert-one-regular" variant='inherit' sx={{ color: theme.palette.primary.dark }} >Job Hunt</Typography>
