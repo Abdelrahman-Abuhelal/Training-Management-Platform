@@ -6,6 +6,8 @@ The primary goal of this application is to provide a centralized platform for HR
 - Project Duration : +6 months.
 - #First_Version Deployed at 14/7/2024.
 
+Video Demo : https://www.loom.com/share/aa6cf05960cf4d38827b2fcefc7f8700
+
 ## Security Features
 - User registration and login with JWT authentication
 - Password encryption using BCrypt
