@@ -188,7 +188,7 @@ function JobDescriptionRanking() {
               style={{ padding: "20px", backgroundColor: "#fff" }}
             >
               <Typography variant="h5" gutterBottom>
-                Recommendations
+                Notes and Recommendation
               </Typography>
               <Box
                 component="pre"

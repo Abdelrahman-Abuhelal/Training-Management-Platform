@@ -8,15 +8,21 @@ import {
   Divider,
   CircularProgress
 } from '@mui/material';
+import { useAuth } from "../../provider/authProvider";
 
 const GroupedTasks = () => {
   const [tasks, setTasks] = useState([]);
   const [loading, setLoading] = useState(true);
-
+  const { user } = useAuth();
+  const { login_token } = user;
   useEffect(() => {
     const fetchTasks = async () => {
       try {
-        const response = await axios.get('http://localhost:8080/api/v1/admin/assigned-tasks');
+        const response = await axios.get(`${baseUrl}/api/v1/forms/${formId}`, {
+          headers: {
+            Authorization: `Bearer ${login_token}`
+          }
+        });
         setTasks(response.data);
         setLoading(false);
       } catch (error) {

@@ -23,7 +23,7 @@ const Overview = () => {
             <Grid item xs={12} sm={4} md={4}>
                 <Paper  elevation={3} style={paperStyle}>
                     <Typography className="concert-one-regular" variant='inherit' sx={{ color: theme.palette.primary.dark }} >My Trainees</Typography>
-                    <Typography variant="h4" sx={{ color: theme.palette.primary.dark }}>{15}</Typography>
+                    <Typography variant="h4" sx={{ color: theme.palette.primary.dark }}>{2}</Typography>
                     <Box mt={2}>
                         <Button variant="contained" color="primary" onClick={() => navigate('/my-trainees')}>
                             View

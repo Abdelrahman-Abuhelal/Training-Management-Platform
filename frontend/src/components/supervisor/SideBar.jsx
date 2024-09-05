@@ -42,15 +42,16 @@ const routes = [
       />
     ),
   },
-  {
-    path: "/tasks",
-    name: "Tasks",
-    icon: <AddTaskIcon sx={{ color: "primary.main" }} />,
-  },
+
   {
     path: "/resources",
     name: "Resources",
     icon: <SourceIcon sx={{ color: "primary.main" }} />,
+  },
+  {
+    path: "/tasks",
+    name: "Tasks",
+    icon: <AddTaskIcon sx={{ color: "primary.main" }} />,
   },
   {
     path: "/skills",

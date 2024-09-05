@@ -335,8 +335,8 @@ const UserManagement = () => {
             rowsPerPageOptions={[5]}
             autoHeight
             disableSelectionOnClick
-            getRowId={(row) => row.userId}
-          />
+            getRowId={(row, index) => row.userId || `row-${index}`}
+            />
         </Paper>
       </Paper>
 
